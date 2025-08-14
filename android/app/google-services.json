@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "200103235347",
+    "project_id": "dividex-4591f",
+    "storage_bucket": "dividex-4591f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200103235347:android:2ee7dac72ddc87d98554e6",
+        "android_client_info": {
+          "package_name": "com.example.dividex_dacn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVzt_6TYFTsVsoDCy1UouNnxkS4DDI2OY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
