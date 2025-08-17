@@ -186,6 +186,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add => 'Add';
 
   @override
+  String get eventNameLabel => 'Event\'s name';
+
+  @override
+  String get eventNameHint => 'Ex: Go out on Sunday';
+
+  @override
+  String get eventGroupLabel => 'Belong to group';
+
+  @override
+  String get eventStartDateLabel => 'Event\'s start day';
+
+  @override
+  String get eventEndDateLabel => 'Event\'s end day';
+
+  @override
+  String get eventMembers => 'Event\'s members';
+
+  @override
+  String get eventDescriptionLabel => 'Event\'s description';
+
+  @override
+  String get eventDescriptionHint => 'Ex: Go out with family on weekend';
+
+  @override
+  String get addGroupImageLabel => 'Group\'s avatar';
+
+  @override
+  String get groupNameLabel => 'Group\'s name';
+
+  @override
+  String get groupNameHint => 'Ex: Class 12L';
+
+  @override
   String get appTitleHome => 'Home';
 
   @override

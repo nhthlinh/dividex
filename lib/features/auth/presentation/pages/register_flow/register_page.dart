@@ -82,15 +82,15 @@ class _RegisterPageState extends State<RegisterPage> {
           theme.scaffoldBackgroundColor, // Ensure background matches theme
       body: Stack(
         children: [
-          Positioned(
-            bottom: 0, // Hoặc top: 0 nếu muốn ở đầu
-            left: 0,
-            right: 0,
+          Align(
+            alignment: Alignment.bottomCenter,
             child: SizedBox(
-              height: 200, // Chiều cao gợn sóng
+              height: 200,
+              width: double.infinity,
               child: CustomPaint(painter: WavePainter()),
             ),
           ),
+
           BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthAuthenticated) {
@@ -152,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
               color: Colors.grey,
             ), // Add name icon
             validator: (value) {
-              return validateName(value, intl);
+              return CustomValidator().validateName(value, intl);
             },
           ),
           const SizedBox(height: 10), // Slightly more spacing
@@ -167,7 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
               color: Colors.grey,
             ), // Add phone icon
             validator: (value) {
-              return validatePhoneNumber(value, intl);
+              return CustomValidator().validatePhoneNumber(value, intl);
             },
           ),
 
@@ -182,7 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
               color: Colors.grey,
             ), // Add email icon
             validator: (value) {
-              return validateEmail(value, intl);
+              return CustomValidator().validateEmail(value, intl);
             },
           ),
           const SizedBox(height: 10), // Slightly more spacing
@@ -209,7 +209,7 @@ class _RegisterPageState extends State<RegisterPage> {
               },
             ),
             validator: (value) {
-              return passwordValidator(value, intl);
+              return CustomValidator().validatePassword(value, intl);
             },
           ),
           const SizedBox(height: 10), // Spacing between password fields
@@ -237,8 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 });
               },
             ),
-            validator: (value) =>
-                confirmPasswordValidator(value, intl, passwordController),
+            validator: (value) => CustomValidator().validateConfirmPassword(value, intl, passwordController),
           ),
           const SizedBox(height: 24), // More spacing before register button
           //Register Button

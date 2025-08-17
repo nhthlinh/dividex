@@ -57,12 +57,11 @@ class _LoginPageState extends State<LoginPage> {
           theme.scaffoldBackgroundColor, // Ensure background matches theme
       body: Stack(
         children: [
-          Positioned(
-            bottom: 0, // Hoặc top: 0 nếu muốn ở đầu
-            left: 0,
-            right: 0,
+          Align(
+            alignment: Alignment.bottomCenter,
             child: SizedBox(
-              height: 200, // Chiều cao gợn sóng
+              height: 200,
+              width: double.infinity,
               child: CustomPaint(painter: WavePainter()),
             ),
           ),
@@ -129,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.grey,
             ), // Add email icon
             validator: (value) {
-              return validateEmail(value, intl);
+              return CustomValidator().validateEmail(value, intl);
             },
           ),
           const SizedBox(height: 20), // Slightly more spacing
@@ -156,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
               },
             ),
             validator: (value) {
-              return passwordValidator(value, intl);
+              return CustomValidator().validatePassword(value, intl);
             },
           ),
           const SizedBox(height: 10),

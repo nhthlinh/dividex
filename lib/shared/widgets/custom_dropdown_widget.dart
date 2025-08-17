@@ -11,9 +11,6 @@ Widget CustomDropdownWidget({
   bool isSmall = false,
 }) {
   final context = navigatorKey.currentContext!;
-  final screenWidth = MediaQuery.of(context).size.width;
-  final isSmallScreen = screenWidth < 300;
-  final double width = isSmallScreen ? screenWidth - 32 : 350; 
 
   // Tìm xem giá trị value có nằm trong items không
   final bool isValueValid =
@@ -32,50 +29,45 @@ Widget CustomDropdownWidget({
     ...items,
   ];
 
-  return SizedBox(
-    width: isSmall ? 100 : width,
-    child: IntrinsicHeight(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          const SizedBox(height: 6),
-          DropdownButtonFormField<String>(
-            value: safeValue,
-            items: displayItems,
-            onChanged: onChanged,
-            decoration: const InputDecoration(
-              // Bỏ qua AppTheme bằng cách set đầy đủ tất cả border
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AppThemes.primary3Color, width: 1),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey, width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppThemes.primary1Color, width: 2),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red, width: 1),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red, width: 2),
-              ),
-              isDense: true,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 14,
-              ),
-            ),
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ],
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        label,
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          color: Theme.of(context).primaryColor,
+        ),
       ),
-    ),
+      const SizedBox(height: 6),
+      DropdownButtonFormField<String>(
+        value: safeValue,
+        items: displayItems,
+        onChanged: onChanged,
+        decoration: const InputDecoration(
+          // Bỏ qua AppTheme bằng cách set đầy đủ tất cả border
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: AppThemes.primary3Color, width: 1),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppThemes.primary1Color, width: 2),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 1),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 2),
+          ),
+          isDense: true,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 14,
+          ),
+        ),
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    ],
   );
 }

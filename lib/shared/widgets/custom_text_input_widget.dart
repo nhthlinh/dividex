@@ -17,7 +17,6 @@ class CustomTextInput extends StatelessWidget {
   final Icon? prefixIcon;
   final TextStyle? style; // Thêm thuộc tính cho icon ở đầu
   final bool autoFocus; // Thêm thuộc tính để tự động focus vào TextFormField
-  final bool isFullWidth;
   final Function(String value)?
   onChanged; // Thêm thuộc tính để xác định hàm khi thay đổi nội dung
 
@@ -37,60 +36,51 @@ class CustomTextInput extends StatelessWidget {
     this.prefixIcon,
     this.style,
     this.autoFocus = false,
-    this.isFullWidth = true,
     this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isSmallScreen = screenWidth < 300;
-    final double width = isSmallScreen
-        ? MediaQuery.of(context).size.width - 32
-        : 350;
 
-    return SizedBox(
-      width: isFullWidth ? width : 230,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (label != null) ...[
-            Text(
-              label!,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Theme.of(context).primaryColor, // Màu chữ của label
-              ),
-            ),
-            const SizedBox(height: 6),
-          ],
-          TextFormField(
-            autofocus: autoFocus,
-            style: style ?? Theme.of(context).textTheme.bodySmall,
-            maxLines: maxLines,
-            readOnly: isReadOnly,
-            keyboardType: keyboardType,
-            controller: controller,
-            obscureText: obscureText,
-            validator: validator,
-            onTap: onTap, // Gán hàm onTap vào TextFormField
-            inputFormatters: inputFormatters,
-            onChanged: onChanged ?? (value) {}, // Đảm bảo luôn có hàm onChanged
-            decoration: InputDecoration(
-              prefixIcon: prefixIcon,
-              hintText: hintText,
-              hintStyle: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey),
-              isDense: true,
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 12,
-              ),
-              suffixIcon: suffixIcon,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (label != null) ...[
+          Text(
+            label!,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Theme.of(context).primaryColor, // Màu chữ của label
             ),
           ),
+          const SizedBox(height: 6),
         ],
-      ),
+        TextFormField(
+          autofocus: autoFocus,
+          style: style ?? Theme.of(context).textTheme.bodySmall,
+          maxLines: maxLines,
+          readOnly: isReadOnly,
+          keyboardType: keyboardType,
+          controller: controller,
+          obscureText: obscureText,
+          validator: validator,
+          onTap: onTap, // Gán hàm onTap vào TextFormField
+          inputFormatters: inputFormatters,
+          onChanged: onChanged ?? (value) {}, // Đảm bảo luôn có hàm onChanged
+          decoration: InputDecoration(
+            prefixIcon: prefixIcon,
+            hintText: hintText,
+            hintStyle: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 12,
+            ),
+            suffixIcon: suffixIcon,
+          ),
+        ),
+      ],
     );
   }
 }

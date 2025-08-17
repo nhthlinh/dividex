@@ -15,8 +15,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:go_router/go_router.dart';
-
 
 Future<void> bootstrap() async {
   runZonedGuarded(() async {
@@ -30,6 +28,8 @@ Future<void> bootstrap() async {
     await getIt.allReady();
     ErrorHandler.setup();
     Bloc.observer = AppBlocObserver();
+
+    //debugPaintSizeEnabled = true;
     
     await FirebaseMessaging.instance.requestPermission(
       alert: true,

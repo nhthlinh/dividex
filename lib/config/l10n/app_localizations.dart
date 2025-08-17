@@ -446,6 +446,72 @@ abstract class AppLocalizations {
   /// **'Add'**
   String get add;
 
+  /// No description provided for @eventNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Event\'s name'**
+  String get eventNameLabel;
+
+  /// No description provided for @eventNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ex: Go out on Sunday'**
+  String get eventNameHint;
+
+  /// No description provided for @eventGroupLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Belong to group'**
+  String get eventGroupLabel;
+
+  /// No description provided for @eventStartDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Event\'s start day'**
+  String get eventStartDateLabel;
+
+  /// No description provided for @eventEndDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Event\'s end day'**
+  String get eventEndDateLabel;
+
+  /// No description provided for @eventMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Event\'s members'**
+  String get eventMembers;
+
+  /// No description provided for @eventDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Event\'s description'**
+  String get eventDescriptionLabel;
+
+  /// No description provided for @eventDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ex: Go out with family on weekend'**
+  String get eventDescriptionHint;
+
+  /// No description provided for @addGroupImageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Group\'s avatar'**
+  String get addGroupImageLabel;
+
+  /// No description provided for @groupNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Group\'s name'**
+  String get groupNameLabel;
+
+  /// No description provided for @groupNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ex: Class 12L'**
+  String get groupNameHint;
+
   /// No description provided for @appTitleHome.
   ///
   /// In en, this message translates to:

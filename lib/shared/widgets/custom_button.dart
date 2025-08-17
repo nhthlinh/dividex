@@ -27,23 +27,21 @@ class CustomButton extends StatelessWidget {
 
     return SizedBox(
       width: width,
-      child: IntrinsicHeight(
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: color ?? AppThemes.primary5Color,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            shadowColor: Colors.grey,
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color ?? AppThemes.primary5Color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
-          onPressed: onPressed,
-          child: Text(
-            buttonText,
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(color: Colors.white),
-          ),
+          shadowColor: Colors.grey,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          buttonText,
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(color: Colors.white),
         ),
       ),
     );

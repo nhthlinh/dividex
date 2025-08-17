@@ -69,7 +69,22 @@
   "expenseDateLabel": "Date",
   "expenseReminderLabel": "Remind",
   "addExpenseImageLabel": "Add image",
-  "add": "Add",
+  "add": "Add", 
+
+  "eventNameLabel": "Event's name",
+  "eventNameHint": "Ex: Go out on Sunday",
+  "eventGroupLabel": "Belong to group",
+  "eventStartDateLabel": "Event's start day",
+  "eventEndDateLabel": "Event's end day",
+  "eventMembers": "Event's members",
+  "eventDescriptionLabel": "Event's description",
+  "eventDescriptionHint": "Ex: Go out with family on weekend",
+
+  "addGroupImageLabel": "Group's avatar",
+  "groupNameLabel": "Group's name",
+  "groupNameHint": "Ex: Class 12L",
+
+
 
   "appTitleHome": "Home",
   "searchTab": "Search",

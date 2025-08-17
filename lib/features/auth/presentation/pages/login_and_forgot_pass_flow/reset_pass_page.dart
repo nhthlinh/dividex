@@ -76,12 +76,11 @@ class _ResetPassPageState extends State<ResetPassPage> {
       ),
       body: Stack(
         children: [
-          Positioned(
-            bottom: 0, // Hoặc top: 0 nếu muốn ở đầu
-            left: 0,
-            right: 0,
+          Align(
+            alignment: Alignment.bottomCenter,
             child: SizedBox(
-              height: 200, // Chiều cao gợn sóng
+              height: 200,
+              width: double.infinity,
               child: CustomPaint(painter: WavePainter()),
             ),
           ),
@@ -171,7 +170,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
               },
             ),
             validator: (value) =>
-                passwordValidator(value, intl), // Use validation function
+                CustomValidator().validatePassword(value, intl), // Use validation function
           ),
           const SizedBox(height: 20), // Spacing between password fields
           // Confirm New Password
@@ -195,7 +194,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
                 });
               },
             ),
-            validator: (value) => confirmPasswordValidator(
+            validator: (value) => CustomValidator().validateConfirmPassword(
               value,
               intl,
               passwordController,

@@ -61,12 +61,11 @@ class _EmailInputPageState extends State<EmailInputPage> {
       ),
       body: Stack(
         children: [
-          Positioned(
-            bottom: 0, // Hoặc top: 0 nếu muốn ở đầu
-            left: 0,
-            right: 0,
+          Align(
+            alignment: Alignment.bottomCenter,
             child: SizedBox(
-              height: 200, // Chiều cao gợn sóng
+              height: 200,
+              width: double.infinity,
               child: CustomPaint(painter: WavePainter()),
             ),
           ),
@@ -125,14 +124,9 @@ class _EmailInputPageState extends State<EmailInputPage> {
           // Forgot password image
           Image.asset(
             'lib/assets/svgs/Forgot-password.png', // Path to your image file
-            height:
-                MediaQuery.of(context).size.height *
-                0.3, // Make it responsive, e.g., 30% of screen height
-            width:
-                MediaQuery.of(context).size.width *
-                0.6, // Make it responsive, e.g., 60% of screen width
-            fit: BoxFit
-                .contain, // Adjusts the image to fit the box while maintaining its aspect ratio
+            height: MediaQuery.of(context).size.height * 0.3,
+            width: MediaQuery.of(context).size.width * 0.6,
+            fit: BoxFit.contain,
           ),
           const SizedBox(height: 32), // Spacing after image
           // Email
@@ -161,7 +155,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
             keyboardType: TextInputType.emailAddress,
             prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),
             validator: (value) {
-              return validateEmail(value, intl);
+              return CustomValidator().validateEmail(value, intl);
             },
           ),
           const SizedBox(height: 32), // More spacing before button

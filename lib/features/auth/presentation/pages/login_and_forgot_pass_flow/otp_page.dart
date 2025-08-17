@@ -121,16 +121,14 @@ class _OTPInputPageState extends State<OTPInputPage> {
       ),
       body: Stack(
         children: [
-          Positioned(
-            bottom: 0, // Hoặc top: 0 nếu muốn ở đầu
-            left: 0,
-            right: 0,
+          Align(
+            alignment: Alignment.bottomCenter,
             child: SizedBox(
-              height: 200, // Chiều cao gợn sóng
+              height: 200,
+              width: double.infinity,
               child: CustomPaint(painter: WavePainter()),
             ),
           ),
-
           BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthOtpSent) {

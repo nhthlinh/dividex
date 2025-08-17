@@ -188,6 +188,39 @@ class AppLocalizationsVi extends AppLocalizations {
   String get add => 'Thêm';
 
   @override
+  String get eventNameLabel => 'Tên sự kiện';
+
+  @override
+  String get eventNameHint => 'Ví dụ: Đi chơi vào thứ 7';
+
+  @override
+  String get eventGroupLabel => 'Thuộc về nhóm';
+
+  @override
+  String get eventStartDateLabel => 'Ngày bắt đầu';
+
+  @override
+  String get eventEndDateLabel => 'Ngày kết thúc';
+
+  @override
+  String get eventMembers => 'Thành viên của sự kiện';
+
+  @override
+  String get eventDescriptionLabel => 'Mô tả sự kiện';
+
+  @override
+  String get eventDescriptionHint => 'Ví dụ: Đi chơi với gia đình cuối tuần';
+
+  @override
+  String get addGroupImageLabel => 'Ảnh đại diện nhóm';
+
+  @override
+  String get groupNameLabel => 'Tên nhóm';
+
+  @override
+  String get groupNameHint => 'Ví dụ: Nhóm lớp 12L';
+
+  @override
   String get appTitleHome => 'Trang chủ';
 
   @override

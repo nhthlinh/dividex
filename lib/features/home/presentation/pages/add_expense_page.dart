@@ -25,11 +25,14 @@ class _AddExpensePageState extends State<AddExpensePage> {
   final TextEditingController expenseAmountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
-  String? _selectedUnit;
-  String? _selectedCategory;
-  String? _selectedEvent;
-  String? _selectedPayer;
-  String? _selectedReminder;
+
+  final ValueNotifier<String?> _selectedUnit = ValueNotifier('VND');
+  final ValueNotifier<String?> _selectedCategory = ValueNotifier('Food');
+  final ValueNotifier<String?> _selectedEvent = ValueNotifier('Birthday');
+  final ValueNotifier<String?> _selectedPayer = ValueNotifier('John Doe');
+  final ValueNotifier<String?> _selectedReminder = ValueNotifier(
+    '1 day before',
+  );
 
   final List<String> _units = ['VND', 'USD', 'EUR'];
   final List<String> _categories = ['Food', 'Transport', 'Entertainment'];
@@ -44,11 +47,12 @@ class _AddExpensePageState extends State<AddExpensePage> {
   @override
   void initState() {
     super.initState();
-    _selectedUnit = 'VND'; // Mặc định là VND
-    _selectedCategory = 'Food'; // Mặc định là Food
-    _selectedEvent = 'Birthday'; // Mặc định là Birthday
-    _selectedPayer = 'John Doe'; // Mặc định là John Doe
-    _selectedReminder = '1 day before'; // Mặc định là 1 day before
+    // TODO: Load existing expense data if editing
+    // Load Unit
+    // Load Category
+    // Load Event
+    // Load Payer
+    // Load Reminder
   }
 
   @override
@@ -89,23 +93,24 @@ class _AddExpensePageState extends State<AddExpensePage> {
       ),
       body: Stack(
         children: [
-          Positioned(
-            bottom: 0, // Hoặc top: 0 nếu muốn ở đầu
-            left: 0,
-            right: 0,
+          Align(
+            alignment: Alignment.bottomCenter,
             child: SizedBox(
-              height: 200, // Chiều cao gợn sóng
+              height: 200,
+              width: double.infinity,
               child: CustomPaint(painter: WavePainter()),
             ),
           ),
 
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 10.0,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: expenseForm(intl),
+                ),
               ),
-              child: expenseForm(intl),
             ),
           ),
         ],
@@ -116,7 +121,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   Form expenseForm(AppLocalizations intl) {
     return Form(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CustomTextInput(
             label: intl.expenseNameLabel,
@@ -125,88 +130,104 @@ class _AddExpensePageState extends State<AddExpensePage> {
             keyboardType: TextInputType.text,
             prefixIcon: const Icon(Icons.person, color: Colors.grey),
             validator: (value) {
-              return validateName(value, intl);
+              return CustomValidator().validateName(value, intl);
             },
           ),
           const SizedBox(height: 16),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomTextInput(
-                label: intl.expenseAmountLabel,
-                hintText: intl.expenseAmountHint,
-                controller: expenseAmountController,
-                keyboardType: TextInputType.number,
-                prefixIcon: const Icon(Icons.attach_money, color: Colors.grey),
-                validator: (value) {
-                  return validateAmount(value, intl);
-                },
-                isFullWidth: false,
+              Expanded(
+                flex: 7, // 70%
+                child: CustomTextInput(
+                  label: intl.expenseAmountLabel,
+                  hintText: intl.expenseAmountHint,
+                  controller: expenseAmountController,
+                  keyboardType: TextInputType.number,
+                  prefixIcon: const Icon(
+                    Icons.attach_money,
+                    color: Colors.grey,
+                  ),
+                  validator: (value) => CustomValidator().validateAmount(value, intl),
+                ),
               ),
               const SizedBox(width: 8),
-              CustomDropdownWidget(
-                isSmall: true,
-                label: intl.expenseUnitLabel,
-                items: _units.map((unit) {
-                  return DropdownMenuItem<String>(
-                    value: unit,
-                    child: Text(unit),
-                  );
-                }).toList(),
-                value: _selectedUnit,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedUnit = newValue;
-                  });
-                },
+              Expanded(
+                flex: 3, // 30%
+                child: ValueListenableBuilder<String?>(
+                  valueListenable: _selectedUnit,
+                  builder: (context, value, _) {
+                    return CustomDropdownWidget(
+                      isSmall: true,
+                      label: intl.expenseUnitLabel,
+                      items: _units.map((unit) {
+                        return DropdownMenuItem<String>(
+                          value: unit,
+                          child: Text(unit),
+                        );
+                      }).toList(),
+                      value: value,
+                      onChanged: (newValue) => _selectedUnit.value = newValue,
+                    );
+                  },
+                ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          CustomDropdownWidget(
-            label: intl.expenseCategoryLabel,
-            items: _categories.map((category) {
-              return DropdownMenuItem<String>(
-                value: category,
-                child: Text(category),
+          ValueListenableBuilder<String?>(
+            valueListenable: _selectedCategory,
+            builder: (context, value, _) {
+              return CustomDropdownWidget(
+                label: intl.expenseCategoryLabel,
+                items: _categories.map((category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                value: value,
+                onChanged: (newValue) => _selectedCategory.value = newValue,
               );
-            }).toList(),
-            value: _selectedCategory,
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedCategory = newValue;
-              });
+            },
+          ), 
+          const SizedBox(height: 16),
+          ValueListenableBuilder<String?>(
+            valueListenable: _selectedEvent,
+            builder: (context, value, _) {
+              return CustomDropdownWidget(
+                label: intl.expenseEventLabel,
+                items: _events.map((event) {
+                  return DropdownMenuItem<String>(
+                    value: event,
+                    child: Text(event),
+                  );
+                }).toList(),
+                value: value,
+                onChanged: (newValue) => _selectedEvent.value = newValue,
+              );
             },
           ),
           const SizedBox(height: 16),
-          CustomDropdownWidget(
-            label: intl.expenseEventLabel,
-            items: _events.map((event) {
-              return DropdownMenuItem<String>(value: event, child: Text(event));
-            }).toList(),
-            value: _selectedEvent,
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedEvent = newValue;
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-          CustomDropdownWidget(
-            label: intl.expensePayerLabel,
-            items: _payers.map((payer) {
-              return DropdownMenuItem<String>(value: payer, child: Text(payer));
-            }).toList(),
-            value: _selectedPayer,
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedPayer = newValue;
-              });
+          ValueListenableBuilder<String?>(
+            valueListenable: _selectedPayer,
+            builder: (context, value, _) {
+              return CustomDropdownWidget(
+                label: intl.expensePayerLabel,
+                items: _payers.map((payer) {
+                  return DropdownMenuItem<String>(
+                    value: payer,
+                    child: Text(payer),
+                  );
+                }).toList(),
+                value: value,
+                onChanged: (newValue) => _selectedPayer.value = newValue,
+              );
             },
           ),
           const SizedBox(height: 16),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomButton(
                 buttonText: intl.expenseSplitEquallyLabel,
@@ -224,9 +245,12 @@ class _AddExpensePageState extends State<AddExpensePage> {
           const SizedBox(height: 16),
           Text(
             intl.addConfigLabel,
-            style: Theme.of(navigatorKey.currentContext!).textTheme.titleSmall,
+            style: Theme.of(navigatorKey.currentContext!).textTheme.titleSmall
+                ?.copyWith(
+                  color: Theme.of(navigatorKey.currentContext!).primaryColor,
+                ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           CustomTextInput(
             label: intl.expenseNoteLabel,
             hintText: intl.expenseNoteLabel,
@@ -246,16 +270,21 @@ class _AddExpensePageState extends State<AddExpensePage> {
             inputFormatters: [DateInputFormatter()],
           ),
           const SizedBox(height: 16),
-          CustomDropdownWidget(
-            label: intl.expenseReminderLabel,
-            value: _selectedReminder,
-            onChanged: (String? newValue) {},
-            items: _reminders.map((remind) {
-              return DropdownMenuItem<String>(
-                value: remind,
-                child: Text(remind),
+          ValueListenableBuilder<String?>(
+            valueListenable: _selectedReminder,
+            builder: (context, value, _) {
+              return CustomDropdownWidget(
+                label: intl.expenseReminderLabel,
+                items: _reminders.map((remind) {
+                  return DropdownMenuItem<String>(
+                    value: remind,
+                    child: Text(remind),
+                  );
+                }).toList(),
+                value: value,
+                onChanged: (newValue) => _selectedReminder.value = newValue,
               );
-            }).toList(),
+            },
           ),
           const SizedBox(height: 16),
           CustomTextButton(
@@ -264,6 +293,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
               // Handle image upload
             },
           ),
+          
           const SizedBox(height: 20),
 
           CustomButton(

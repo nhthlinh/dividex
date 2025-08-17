@@ -66,6 +66,19 @@
   "addExpenseImageLabel": "Thêm ảnh",
   "add": "Thêm",
 
+  "eventNameLabel": "Tên sự kiện",
+  "eventNameHint": "Ví dụ: Đi chơi vào thứ 7",
+  "eventGroupLabel": "Thuộc về nhóm",
+  "eventStartDateLabel": "Ngày bắt đầu",
+  "eventEndDateLabel": "Ngày kết thúc",
+  "eventMembers": "Thành viên của sự kiện",
+  "eventDescriptionLabel": "Mô tả sự kiện",
+  "eventDescriptionHint": "Ví dụ: Đi chơi với gia đình cuối tuần",
+
+  "addGroupImageLabel": "Ảnh đại diện nhóm",
+  "groupNameLabel": "Tên nhóm",
+  "groupNameHint": "Ví dụ: Nhóm lớp 12L",
+
   "appTitleHome": "Trang chủ",
   "searchTab": "Tìm kiếm",
   "appTitleCommunity": "Cộng đồng",
