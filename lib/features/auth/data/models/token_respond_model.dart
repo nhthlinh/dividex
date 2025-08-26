@@ -1,4 +1,5 @@
-import 'package:Dividex/features/auth/data/models/user_model.dart';
+
+import 'package:Dividex/features/user/data/models/user_model.dart';
 
 class AuthResponseModel {
   final String accessToken;

@@ -13,6 +13,7 @@ import 'package:Dividex/shared/bootstrap/notification_initializer.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

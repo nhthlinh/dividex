@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({super.key});
@@ -44,12 +49,16 @@ class _HomeWidgetState extends State<HomeWidget> {
             ),
             SizedBox(height: 16),
             Center(
-              child: CustomButton(
-                buttonText: intl.addGroup,
-                onPressed: () {
-                  // Handle add transaction
-                },
-                isBig: false,
+              child: Column(
+                children: [
+                  CustomButton(
+                    buttonText: intl.addGroup,
+                    onPressed: () {
+                      context.pushNamed(AppRouteNames.addGroup);
+                    },
+                    isBig: false,
+                  ),
+                ],
               ),
             ),
           ],

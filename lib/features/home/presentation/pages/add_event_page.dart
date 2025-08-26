@@ -1,17 +1,21 @@
-import 'dart:math';
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
-import 'package:Dividex/features/home/presentation/widgets/add_button_widget.dart';
+import 'package:Dividex/features/group/data/models/group_model.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_event.dart' as group_event;
+import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/home/presentation/widgets/member_selector_widget.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_event.dart' as user_event;
+import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class AddEventPage extends StatefulWidget {
@@ -24,19 +28,22 @@ class AddEventPage extends StatefulWidget {
 }
 
 class _AddEventPageState extends State<AddEventPage> {
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController eventNameController = TextEditingController();
-  final TextEditingController eventDescriptionController = TextEditingController();
-  final TextEditingController eventStartDateController = TextEditingController();
+  final TextEditingController eventDescriptionController =
+      TextEditingController();
+  final TextEditingController eventStartDateController =
+      TextEditingController();
   final TextEditingController eventEndDateController = TextEditingController();
 
   final ValueNotifier<String?> _selectedGroup = ValueNotifier('Birthday');
-  
-  // Members of event
-  List<Member> selectedMembers = [
-    Member(id: '1', name: 'John Doe', avatarUrl: 'https://example.com/john.jpg'),
-  ];
 
-  final List<String> _groups = ['Birthday', 'Wedding', 'Conference'];
+  // Members of event
+  List<UserModel> selectedMembers = [];
+  String? selectedGroupId;
+
+  List<GroupModel> _groups = [];
 
   @override
   void initState() {
@@ -57,12 +64,27 @@ class _AddEventPageState extends State<AddEventPage> {
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+  void submitEvent() {
+    if (_formKey.currentState!.validate()) {
+      // Submit the event data
+      print('Event Name: ${eventNameController.text}');
+      print('Event Description: ${eventDescriptionController.text}');
+      print('Event Start Date: ${eventStartDateController.text}');
+      print('Event End Date: ${eventEndDateController.text}');
+      print('Selected Group: $selectedGroupId');
+      print('Selected Members: $selectedMembers');
+    }
+  }
+
+  Future<void> _selectDate(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2100),
     );
     if (picked != null) {
       setState(() {
@@ -99,7 +121,14 @@ class _AddEventPageState extends State<AddEventPage> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: eventForm(intl),
+                child: BlocProvider(
+                  create: (context) => LoadedGroupsBloc()..add(group_event.InitialEvent(HiveService.getUser().id ?? '')),
+                  child: BlocBuilder<LoadedGroupsBloc, LoadedGroupsState>(
+                    builder: (context, state) {
+                      return eventForm(intl);
+                    },
+                  ),
+                ),
               ),
             ),
           ),
@@ -110,6 +139,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
   Form eventForm(AppLocalizations intl) {
     return Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -132,25 +162,63 @@ class _AddEventPageState extends State<AddEventPage> {
             prefixIcon: const Icon(Icons.details_outlined, color: Colors.grey),
           ),
           const SizedBox(height: 16),
-          ValueListenableBuilder<String?>(
-            valueListenable: _selectedGroup,
-            builder: (context, value, _) {
-              return CustomDropdownWidget(
-                label: intl.eventGroupLabel,
-                items: _groups.map((group) {
-                  return DropdownMenuItem<String>(
-                    value: group,
-                    child: Text(group),
+          BlocBuilder<LoadedGroupsBloc, LoadedGroupsState>(
+            buildWhen: (p, c) =>
+                p.groups != c.groups || p.isLoading != c.isLoading,
+            builder: (context, state) {
+              if (state.isLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (state.groups.isEmpty) {
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<LoadedGroupsBloc>().add(
+                          group_event.RefreshGroupsEvent(HiveService.getUser().id ?? ''),
+                        );
+                      },
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: SizedBox(
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight,
+                          child: Center(child: Text('Empty')),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+              _groups = state.groups;
+
+              return ValueListenableBuilder<String?>(
+                valueListenable: _selectedGroup,
+                builder: (context, value, _) {
+                  return CustomDropdownWidget(
+                    label: intl.eventGroupLabel,
+                    items: _groups.map((group) {
+                      return DropdownMenuItem<String>(
+                        value: group.id,
+                        child: Text(group.name ?? ''),
+                      );
+                    }).toList(),
+                    value: value,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedGroup.value = newValue;
+                        selectedGroupId = newValue;
+                      });
+                    },
                   );
-                }).toList(),
-                value: value,
-                onChanged: (newValue) => _selectedGroup.value = newValue,
+                },
               );
             },
-          ), 
+          ),
           const SizedBox(height: 16),
           CustomTextInput(
-            label: intl.eventStartDateLabel, 
+            label: intl.eventStartDateLabel,
             hintText: '13/05/2025',
             controller: eventStartDateController,
             isReadOnly: true, // Không cho phép gõ trực tiếp
@@ -161,7 +229,11 @@ class _AddEventPageState extends State<AddEventPage> {
             suffixIcon: const Icon(Icons.calendar_today), // Icon lịch
             inputFormatters: [DateInputFormatter()],
             validator: (value) {
-              return CustomValidator().validateDateForEvent(intl, eventStartDateController, eventEndDateController);
+              return CustomValidator().validateDateForEvent(
+                intl,
+                eventStartDateController,
+                eventEndDateController,
+              );
             },
           ),
           const SizedBox(height: 16),
@@ -177,25 +249,35 @@ class _AddEventPageState extends State<AddEventPage> {
             suffixIcon: const Icon(Icons.calendar_today), // Icon lịch
             inputFormatters: [DateInputFormatter()],
             validator: (value) {
-              return CustomValidator().validateDateForEvent(intl, eventStartDateController, eventEndDateController);
+              return CustomValidator().validateDateForEvent(
+                intl,
+                eventStartDateController,
+                eventEndDateController,
+              );
             },
           ),
           const SizedBox(height: 16),
-          
-          MemberSelector(
-            initialSelectedMembers: selectedMembers,
-            onSelectedMembersChanged: (selected) {
-              setState(() {
-                selectedMembers = selected;
-              });
-            },
-          ),
 
+          if (selectedGroupId != null) ...[
+            BlocProvider(
+              create: (context) => LoadedUsersBloc()..add(user_event.InitialEvent(null, selectedGroupId)),
+              child: MemberSelector(
+                selectorType: MemberSelectorEnum.event,
+                id: selectedGroupId ?? '',
+                initialSelectedMembers: selectedMembers,
+                onSelectedMembersChanged: (selected) {
+                  setState(() {
+                    selectedMembers = selected;
+                  });
+                },
+              ),
+            ),
+          ],
           const SizedBox(height: 30),
           CustomButton(
             buttonText: intl.add,
             onPressed: () {
-              // Handle add expense
+              submitEvent();
             },
           ),
           const SizedBox(height: 30),

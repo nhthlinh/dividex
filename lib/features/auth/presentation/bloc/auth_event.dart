@@ -1,4 +1,4 @@
-import 'package:Dividex/features/auth/data/models/user_model.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthEvent extends Equatable {
@@ -42,36 +42,28 @@ class AuthRegisterRequested extends AuthEvent {
   List<Object?> get props => [userData, password];
 }
 
-class AuthOtpRequested extends AuthEvent {
+class AuthEmailRequested extends AuthEvent {
   final String email;
 
-  const AuthOtpRequested({required this.email});
+  const AuthEmailRequested({required this.email});
 
   @override
   List<Object?> get props => [email];
 }
 
-class AuthOtpCheckRequested extends AuthEvent {
-  final String email;
-  final String otp;
-
-  const AuthOtpCheckRequested({required this.email, required this.otp});
-
-  @override
-  List<Object?> get props => [email, otp];
-}
-
 class AuthResetPasswordRequested extends AuthEvent {
   final String email;
   final String newPassword;
+  final String token; // Optional token for password reset
 
   const AuthResetPasswordRequested({
     required this.email,
     required this.newPassword,
+    required this.token,
   });
 
   @override
-  List<Object?> get props => [email, newPassword];
+  List<Object?> get props => [email, newPassword, token];
 }
 
 class AuthChangePasswordRequested extends AuthEvent {

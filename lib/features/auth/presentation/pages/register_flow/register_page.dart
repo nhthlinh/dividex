@@ -1,17 +1,13 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
-import 'package:Dividex/features/auth/data/models/user_model.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
-import 'package:Dividex/shared/services/local/hive_service.dart';
-import 'package:Dividex/shared/services/local/models/user_local_model.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-import 'package:Dividex/shared/widgets/message_widget.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -170,6 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
               return CustomValidator().validatePhoneNumber(value, intl);
             },
           ),
+          const SizedBox(height: 10), // Slightly more spacing
 
           //Email
           CustomTextInput(

@@ -1,6 +1,6 @@
 import 'package:Dividex/features/auth/data/models/token_respond_model.dart';
-import 'package:Dividex/features/auth/data/models/user_model.dart';
 import 'package:Dividex/features/auth/domain/auth_repository.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -37,17 +37,13 @@ class LogoutUseCase {
 }
 
 @injectable
-class OtpUseCase {
+class EmailUseCase {
   final AuthRepository repository;
 
-  OtpUseCase(this.repository);
+  EmailUseCase(this.repository);
 
-  Future<void> requestOtp(String email) {
-    return repository.requestOtp(email);
-  }
-
-  Future<void> checkOtp(String email, String otp) {
-    return repository.checkOtp(email, otp);
+  Future<void> requestEmail(String email) {
+    return repository.requestEmail(email);
   }
 }
 
@@ -57,8 +53,8 @@ class ResetPasswordUseCase {
 
   ResetPasswordUseCase(this.repository);
 
-  Future<void> resetPassword(String email, String newPassword) {
-    return repository.resetPassword(email, newPassword);
+  Future<void> resetPassword(String email, String newPassword, String token) {
+    return repository.resetPassword(email, newPassword, token);
   }
 
   Future<void> changePassword(String email, String newPassword, String oldPassword) {

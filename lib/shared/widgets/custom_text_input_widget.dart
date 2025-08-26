@@ -48,9 +48,7 @@ class CustomTextInput extends StatelessWidget {
         if (label != null) ...[
           Text(
             label!,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: Theme.of(context).primaryColor, // Màu chữ của label
-            ),
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 6),
         ],

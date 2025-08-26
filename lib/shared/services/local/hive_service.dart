@@ -64,8 +64,8 @@ class HiveService {
     await getTokenBox().put(HiveKey.token, token);
   }
 
-  static TokenLocalModel getToken() {
-    return getTokenBox().get(HiveKey.token) ?? TokenLocalModel(accessToken: '', refreshToken: '');
+  static TokenLocalModel? getToken() {
+    return getTokenBox().get(HiveKey.token);
   }
 
   static Future<void> clearToken() async {
@@ -80,7 +80,7 @@ class HiveService {
   }
 
   static UserLocalModel getUser() {
-    return getUserBox().get(HiveKey.user) ?? UserLocalModel(id: '', name: '', email: '', avatarUrl: '');
+    return getUserBox().get(HiveKey.user) ?? UserLocalModel(id: '', fullName: '', email: '', avatarUrl: '');
   }
 
   static Future<void> clearUser() async {

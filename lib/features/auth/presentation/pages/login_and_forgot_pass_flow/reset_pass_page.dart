@@ -10,11 +10,11 @@ import 'package:Dividex/shared/widgets/message_widget.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Import this for SVG support if you plan to use it
 import 'package:go_router/go_router.dart';
 
 class ResetPassPage extends StatefulWidget {
-  const ResetPassPage({super.key});
+  final String token; // Required token for password reset
+  const ResetPassPage({super.key, required this.token});
 
   @override
   State<ResetPassPage> createState() => _ResetPassPageState();
@@ -52,6 +52,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
         AuthResetPasswordRequested(
           email: userData.email!,
           newPassword: password,
+          token: widget.token,
         ),
       );
     }

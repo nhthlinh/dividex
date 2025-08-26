@@ -29,14 +29,3 @@ Future<void> sendFcmTokenToBackend(bool isLogin) async {
   }
 }
 
-Future<void> sendLanguageToBackend(String languageCode) async {
-  try {
-    // Gọi API update ngôn ngữ lên server
-    final authRemote = await getIt.getAsync<AuthRemoteDataSource>();
-    await authRemote.updateLanguage(languageCode);
-  } catch (e) {
-    // Logging nếu cần
-    debugPrint('Error sending language code: $e');
-  }
-}
-

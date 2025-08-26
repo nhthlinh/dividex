@@ -5,6 +5,7 @@ import 'package:Dividex/features/auth/domain/usecase.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/services/local/models/token_local_model.dart';
+import 'package:Dividex/shared/services/local/models/user_local_model.dart';
 import 'package:Dividex/shared/services/notification/fcm.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/message_widget.dart';
@@ -18,12 +19,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     //Done
     on<AuthRegisterRequested>(_onAuthRegisterRequested);
     on<AuthLoginRequested>(_onAuthLoginRequested);
-
-    //Not done
     on<AuthLogoutRequested>(_onAuthLogoutRequested);
+
     on<AuthCheckRequested>(_onAuthCheckRequested);
-    on<AuthOtpRequested>(_onAuthOtpRequested);
-    on<AuthOtpCheckRequested>(_onAuthOtpChecked);
+    on<AuthEmailRequested>(_onAuthEmailRequested);
     on<AuthResetPasswordRequested>(_onAuthResetPasswordRequested);
     on<AuthChangePasswordRequested>(_onAuthChangePasswordRequested);
   }
@@ -43,6 +42,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         TokenLocalModel(
           accessToken: authResponse.accessToken,
           refreshToken: authResponse.refreshToken,
+        ),
+      );
+
+      await HiveService.saveUser(
+        UserLocalModel(
+          id: authResponse.user.id ?? '123',
+          email: authResponse.user.email ?? '',
+          fullName: authResponse.user.fullName ?? '',
+          avatarUrl: authResponse.user.avatar ?? '',
+          password: event.password,
+          phoneNumber: authResponse.user.phoneNumber ?? '',
         ),
       );
 
@@ -81,14 +91,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ),
       );
 
+      await HiveService.saveUser(
+        UserLocalModel(
+          id: authResponse.user.id ?? '123',
+          email: authResponse.user.email ?? '',
+          fullName: authResponse.user.fullName ?? '',
+          avatarUrl: authResponse.user.avatar ?? '',
+          password: event.password,
+          phoneNumber: authResponse.user.phoneNumber ?? '',
+        ),
+      );
+
       // Gửi FCM token sau khi đăng nhập thành công
       //await sendFcmTokenToBackend(true);
 
       emit(const AuthAuthenticated());
-    } catch (e, stackTrace) {
+    } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
-      print('Error during login: $e\n$stackTrace');
-
       emit(AuthUnauthenticated());
       showCustomToast(intl.error, type: ToastType.error);
     }
@@ -101,6 +120,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // Logic đăng xuất
     emit(AuthLoading());
     try {
+      final logoutUseCase = await getIt.getAsync<LogoutUseCase>();
+      await logoutUseCase.call();
+
       // Xóa token, dữ liệu người dùng, v.v.
       emit(AuthUnauthenticated());
       // await sendFcmTokenToBackend(false);
@@ -123,13 +145,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final token = HiveService.getToken();
 
-      if (token.accessToken != null) {
+      if (token?.accessToken != null) {
         emit(const AuthAuthenticated());
         // // Gửi FCM token sau khi mở app
         // await sendFcmTokenToBackend(true);
-
-        // final settings = HiveService.getSettings();
-        // await sendLanguageToBackend(settings.localeCode);
       } else {
         emit(AuthUnauthenticated());
       }
@@ -141,35 +160,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onAuthOtpRequested(
-    AuthOtpRequested event,
+  Future<void> _onAuthEmailRequested(
+    AuthEmailRequested event,
     Emitter<AuthState> emit,
   ) async {
     try {
-      // final otpUseCase = await getIt.getAsync<OtpUseCase>();
-      //await otpUseCase.requestOtp(event.email);
+      final emailUseCase = await getIt.getAsync<EmailUseCase>();
+      await emailUseCase.requestEmail(event.email);
 
-      emit(AuthOtpSent(email: event.email));
-    } catch (e) {
-      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
-      emit(AuthUnauthenticated());
-      showCustomToast(intl.error, type: ToastType.error);
-    }
-  }
-
-  Future<void> _onAuthOtpChecked(
-    AuthOtpCheckRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    try {
-      emit(AuthOtpChecked(email: event.email, otp: event.otp));
-
-      // final otpUseCase = await getIt.getAsync<OtpUseCase>();
-      // await otpUseCase.checkOtp(event.email, event.otp);
-      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
-      showCustomToast(intl.success, type: ToastType.success);
-
-      emit(AuthOtpSuccess(email: event.email));
+      emit(AuthEmailSent(email: event.email));
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       emit(AuthUnauthenticated());
@@ -183,8 +182,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     try {
-      // final resetPasswordUseCase = await getIt.getAsync<ResetPasswordUseCase>();
-      // await resetPasswordUseCase.resetPassword(event.email, event.newPassword);
+      final resetPasswordUseCase = await getIt.getAsync<ResetPasswordUseCase>();
+      await resetPasswordUseCase.resetPassword(
+        event.email,
+        event.newPassword,
+        event.token,
+      );
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);
     } catch (e) {
@@ -200,8 +203,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     try {
-      // final changePasswordUseCase = await getIt.getAsync<ResetPasswordUseCase>();
-      // await changePasswordUseCase.changePassword(event.email, event.newPassword, event.oldPassword);
+      final changePasswordUseCase = await getIt
+          .getAsync<ResetPasswordUseCase>();
+      await changePasswordUseCase.changePassword(
+        event.email,
+        event.newPassword,
+        event.oldPassword,
+      );
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);
     } catch (e) {

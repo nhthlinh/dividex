@@ -48,6 +48,11 @@ class CustomTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      style: TextButton.styleFrom(
+    padding: EdgeInsets.zero, // bỏ padding mặc định
+    minimumSize: Size(0, 0),  // tránh giữ khoảng trống
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap, 
+  ), 
       onPressed: onPressed,
       child: Text(
         buttonText,

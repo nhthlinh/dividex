@@ -1,11 +1,18 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/features/home/presentation/widgets/member_selector_widget.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-import 'package:Dividex/shared/widgets/text_button.dart';
+import 'package:Dividex/shared/widgets/image_picker_widget.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddGroupPage extends StatefulWidget {
   final int groupId;
@@ -17,21 +24,24 @@ class AddGroupPage extends StatefulWidget {
 }
 
 class _AddGroupPageState extends State<AddGroupPage> {
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController groupNameController = TextEditingController();
+  String? groupImagePath;
+  Uint8List? imageBytes;
 
-  // Members of event
-  List<Member> selectedMembers = [
-    Member(id: '1', name: 'John Doe', avatarUrl: 'https://example.com/john.jpg'),
-  ];
-
-  final List<String> _groups = ['Birthday', 'Wedding', 'Conference'];
+  List<UserModel> selectedMembers = [];
 
   @override
   void initState() {
     super.initState();
-    // TODO: Load existing group data if editing
-    // Load Group
-    // Load Members
+
+    if (widget.groupId != 0) {
+      // Load group details for editing
+      // For example:
+      // groupNameController.text = existingGroup.name;
+      // selectedMembers = existingGroup.members;
+    }
   }
 
   @override
@@ -40,11 +50,17 @@ class _AddGroupPageState extends State<AddGroupPage> {
     super.dispose();
   }
 
+  void submitGroup() {
+    if (_formKey.currentState!.validate()) {
+      print('Group Name: ${groupNameController.text}');
+      print('Group Image Path: $groupImagePath');
+      print('Selected Members: $selectedMembers');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final intl = AppLocalizations.of(
-      context,
-    )!; // Lấy đối tượng AppLocalizations
+    final intl = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -79,6 +95,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
 
   Form groupForm(AppLocalizations intl) {
     return Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -93,28 +110,47 @@ class _AddGroupPageState extends State<AddGroupPage> {
             },
           ),
           const SizedBox(height: 16),
-          CustomTextButton(
-            buttonText: intl.addGroupImageLabel,
-            onPressed: () {
-              // Handle image upload
-            },
+
+          Text(
+            intl.addGroupImageLabel,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
-          
+          const SizedBox(height: 10),
+          Center(
+            child: ImagePickerField(
+              isAvatar: true,
+              onChanged: (paths) {
+                setState(() {
+                  groupImagePath = paths.first;
+                });
+              },
+            ),
+          ),
+
           const SizedBox(height: 16),
-          MemberSelector(
-            initialSelectedMembers: selectedMembers,
-            onSelectedMembersChanged: (selected) {
-              setState(() {
-                selectedMembers = selected;
-              });
-            },
+          BlocProvider(
+            create: (context) => LoadedUsersBloc()..add(InitialEvent(HiveService.getUser().id ?? '', null)),
+            child: BlocBuilder<LoadedUsersBloc, LoadedUsersState>(
+              builder: (context, state) {
+                return MemberSelector(
+                  selectorType: MemberSelectorEnum.group,
+                  id: HiveService.getUser().id ?? '',
+                  initialSelectedMembers: selectedMembers,
+                  onSelectedMembersChanged: (selected) {
+                    setState(() {
+                      selectedMembers = selected;
+                    });
+                  },
+                );
+              },
+            ),
           ),
 
           const SizedBox(height: 30),
           CustomButton(
             buttonText: intl.add,
             onPressed: () {
-              // Handle add expense
+              submitGroup();
             },
           ),
           const SizedBox(height: 30),

@@ -79,21 +79,7 @@ class _OTPInputPageState extends State<OTPInputPage> {
       return;
     }
 
-    context.read<AuthBloc>().add(AuthOtpRequested(email: _userEmail!));
-  }
-
-  Future<void> _submitOtp() async {
-    // if (_userEmail == null || _userEmail!.isEmpty) {
-    //   showCustomToast(
-    //     intl.otpInputError1,
-    //     type: ToastType.error,
-    //   );
-    //   return;
-    // }
-
-    context.read<AuthBloc>().add(
-      AuthOtpCheckRequested(email: _userEmail!, otp: _otpCode),
-    );
+    context.read<AuthBloc>().add(AuthEmailRequested(email: _userEmail!));
   }
 
   String _formatDuration(int totalSeconds) {
@@ -131,13 +117,11 @@ class _OTPInputPageState extends State<OTPInputPage> {
           ),
           BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
-              if (state is AuthOtpSent) {
+              if (state is AuthEmailSent) {
                 // Hiển thị thông báo đã gửi OTP
                 showCustomToast(intl.otpSentSuccess, type: ToastType.success);
-                _startTimer(); // Bắt đầu lại bộ đếm thời gian khi gửi lại OTP
-              } else if (state is AuthOtpSuccess) {
-                context.pushNamed(widget.nextRoute);
-              }
+                _startTimer(); // Bắt đầu lại bộ đếm thời gian khi gửi lại Email
+              } 
             },
             builder: (context, state) {
               return SafeArea(
@@ -235,19 +219,6 @@ class _OTPInputPageState extends State<OTPInputPage> {
                           ],
                         ),
                         const SizedBox(height: 32),
-
-                        // Nút "Tiếp theo"
-                        // Show CircularProgressIndicator when loading
-                        state is AuthLoading
-                            ? const CircularProgressIndicator()
-                            : CustomButton(
-                                buttonText: intl.next,
-                                onPressed: () =>
-                                    _submitOtp(), // Vô hiệu hóa khi còn thời gian
-                              ),
-                        const SizedBox(
-                          height: 24,
-                        ), // Add bottom paddingoảng cách cuối cùng
                       ],
                     ),
                   ),

@@ -1,10 +1,7 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
-import 'package:Dividex/config/themes/app_theme.dart';
-import 'package:Dividex/features/auth/data/models/user_model.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
-import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
@@ -12,7 +9,6 @@ import 'package:Dividex/shared/widgets/message_widget.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Import for SVG support
 import 'package:go_router/go_router.dart';
 
 class EmailInputPage extends StatefulWidget {
@@ -36,8 +32,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
     if (_formKey.currentState!.validate()) {
       String email = emailController.text.trim();
 
-      // Gửi sự kiện đăng ký
-      context.read<AuthBloc>().add(AuthOtpRequested(email: email));
+      context.read<AuthBloc>().add(AuthEmailRequested(email: email));
     }
   }
 
@@ -74,7 +69,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
             child: BlocConsumer<AuthBloc, AuthState>(
               // Use BlocConsumer to handle both listener and builder
               listener: (context, state) {
-                if (state is AuthOtpSent) {
+                if (state is AuthEmailSent) {
                   // Dữ liệu hợp lệ, chuyển sang trang OTP
                   showCustomToast(
                     // Optional: Show success message

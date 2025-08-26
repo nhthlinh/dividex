@@ -20,34 +20,26 @@ class AuthAuthenticated extends AuthState {
 
 class AuthUnauthenticated extends AuthState {}
 
-class AuthOtpSent extends AuthState {
+class AuthEmailSent extends AuthState {
   final String email;
-  const AuthOtpSent({required this.email});
+  const AuthEmailSent({required this.email});
 
   @override
   List<Object?> get props => [email];
 }
 
-class AuthOtpChecked extends AuthState {
+class AuthEmailChecked extends AuthState {
   final String email;
-  final String otp;
-  const AuthOtpChecked({required this.email, required this.otp});
+  final bool isValid;
+  const AuthEmailChecked({required this.email, required this.isValid});
 
   @override
-  List<Object?> get props => [email, otp];
+  List<Object?> get props => [email, isValid];
 }
 
-class AuthOtpSuccess extends AuthState {
+class AuthEmailTimeout extends AuthState {
   final String email;
-  const AuthOtpSuccess({required this.email});
-
-  @override
-  List<Object?> get props => [email];
-}
-
-class AuthOtpTimeout extends AuthState {
-  final String email;
-  const AuthOtpTimeout({required this.email});
+  const AuthEmailTimeout({required this.email});
 
   @override
   List<Object?> get props => [email];

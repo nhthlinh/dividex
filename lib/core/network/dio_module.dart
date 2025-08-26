@@ -37,7 +37,7 @@ abstract class DioModule {
           if (options.path.contains('/auth/refresh')) {
             return handler.next(options);
           }
-          options.headers['Authorization'] = 'Bearer ${token.accessToken?.trim()}';
+          options.headers['Authorization'] = 'Bearer ${token?.accessToken?.trim()}';
                   handler.next(options);
         },
         onError: (DioException err, handler) async {
@@ -47,7 +47,7 @@ abstract class DioModule {
 
           if (err.response?.statusCode == 401) {
             try {
-              final refreshToken = HiveService.getToken().refreshToken;
+              final refreshToken = HiveService.getToken()?.refreshToken;
               debugPrint('🔁 Refresh token: $refreshToken');
 
               // Gọi refresh token bằng chính `dio`

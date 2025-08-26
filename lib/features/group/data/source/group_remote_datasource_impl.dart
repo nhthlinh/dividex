@@ -1,0 +1,77 @@
+import 'package:Dividex/core/network/dio_client.dart';
+import 'package:Dividex/features/group/data/models/group_model.dart';
+
+import 'package:Dividex/features/group/data/source/group_remote_datasource.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/models/paging_model.dart';
+import 'package:injectable/injectable.dart';
+
+@Injectable(as: GroupRemoteDataSource)
+class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
+  final DioClient dio;
+
+  GroupRemoteDatasourceImpl(this.dio);
+
+    @override
+  Future<PagingModel<List<GroupModel>>> getUserGroups(
+    String userId,
+    int page,
+    int pageSize,
+  ) async {
+    if (page == 2) return PagingModel(data: [], totalPage: 2, page: page);
+    await Future.delayed(Duration(seconds: 2));
+    return PagingModel(
+      totalPage: 2,
+      page: page,
+      data: [
+        GroupModel(
+          id: '1',
+          name: 'Group 1',
+          avatarUrl: 'https://example.com/group1.png',
+          createdAt: DateTime.fromMicrosecondsSinceEpoch(1622548800000),
+          members: [],
+          leader: UserModel(
+            id: '1',
+            email: 'john@example.com',
+            fullName: 'John Doe',
+            phoneNumber: '1234567890',
+            avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
+          ),
+          status: StatusEnum.active
+        ),
+        GroupModel(
+          id: '2',
+          name: 'Group 2',
+          avatarUrl: 'https://example.com/group2.png',
+          createdAt: DateTime.fromMicrosecondsSinceEpoch(1622548800000),
+          members: [],
+          leader: UserModel(
+            id: '2',
+            email: 'jane@example.com',
+            fullName: 'Jane Doe',
+            phoneNumber: '0987654321',
+            avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
+          ),
+          status: StatusEnum.active
+        ),
+        GroupModel(
+          id: '3',
+          name: 'Group 3',
+          avatarUrl: 'https://example.com/group3.png',
+          createdAt: DateTime.fromMicrosecondsSinceEpoch(1622548800000),
+          members: [],
+          leader: UserModel(
+            id: '3',
+            email: 'alice@example.com',
+            fullName: 'Alice Smith',
+            phoneNumber: '1122334455',
+            avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
+          ),
+          status: StatusEnum.active
+        )
+      ],
+    );
+  }
+
+}

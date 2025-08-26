@@ -102,9 +102,18 @@ GoRouter buildRouter(BuildContext context) {
             builder: (context, state) => OTPInputPage.fromState(state),
           ),
           GoRoute(
-            path: 'reset-pass',
+            path: '/reset-pass',
             name: AppRouteNames.resetPass,
-            builder: (context, state) => const ResetPassPage(),
+            builder: (context, state) {
+              final token = state.uri.queryParameters['token'];
+              if (token == null) {
+                // Handle the case where token is not provided
+                return const Scaffold(
+                  body: Center(child: Text('Token is required for password reset')),
+                );
+              }
+              return ResetPassPage(token: token);
+            },
           ),
         ],
       ),
@@ -161,27 +170,27 @@ GoRouter buildRouter(BuildContext context) {
       ),
     ],
     redirect: (context, state) {
-      // final authState = authBloc.state;
-      // final loc = state.matchedLocation;
-      // final isSplash = loc == '/';
-      // final isInLoginFlow = loc.startsWith('/login');
-      // final isInRegisterFlow = loc.startsWith('/register');
-      // final isAuthFlow = isInLoginFlow || isInRegisterFlow;
-      // final isAuthenticated = authState is AuthAuthenticated;
-      // final isLoading = authState is AuthLoading || authState is AuthInitial;
+      final authState = authBloc.state;
+      final loc = state.matchedLocation;
+      final isSplash = loc == '/';
+      final isInLoginFlow = loc.startsWith('/login');
+      final isInRegisterFlow = loc.startsWith('/register');
+      final isAuthFlow = isInLoginFlow || isInRegisterFlow;
+      final isAuthenticated = authState is AuthAuthenticated;
+      final isLoading = authState is AuthLoading || authState is AuthInitial;
 
-      // // ✅ Đang loading hoặc init => giữ ở splash
-      // if (isLoading) return isSplash ? null : '/loading';
+      // ✅ Đang loading hoặc init => giữ ở splash
+      if (isLoading) return isSplash ? null : '/loading';
 
-      // // ✅ Nếu chưa login, đang không ở login/register/splash => về login
-      // if (!isAuthenticated && !isAuthFlow && !isSplash && !isLoading && loc != '/loading') {
-      //   return '/login';
-      // }
+      // ✅ Nếu chưa login, đang không ở login/register/splash => về login
+      if (!isAuthenticated && !isAuthFlow && !isSplash && !isLoading && loc != '/loading') {
+        return '/login';
+      }
 
-      // // ✅ Nếu đã login mà lại vào login/register => về home
-      // if (isAuthenticated && isAuthFlow) {
-      //   return '/home';
-      // }
+      // ✅ Nếu đã login mà lại vào login/register => về home
+      if (isAuthenticated && isAuthFlow) {
+        return '/home';
+      }
 
       return null; // không redirect
     },

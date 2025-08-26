@@ -1,7 +1,7 @@
 import 'package:Dividex/features/auth/data/models/token_respond_model.dart';
-import 'package:Dividex/features/auth/data/models/user_model.dart';
 import 'package:Dividex/features/auth/data/source/auth_remote_datasource.dart';
 import 'package:Dividex/features/auth/domain/auth_repository.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:injectable/injectable.dart';
 
 
@@ -27,18 +27,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> requestOtp(String email) {
-    return remoteDataSource.requestOtp(email);
+  Future<void> requestEmail(String email) {
+    return remoteDataSource.requestEmail(email);
   }
 
   @override
-  Future<void> checkOtp(String email, String otp) {
-    return remoteDataSource.checkOtp(email, otp);
-  }
-
-  @override
-  Future<void> resetPassword(String email, String newPassword) {
-    return remoteDataSource.resetPassword(email, newPassword);
+  Future<void> resetPassword(String email, String newPassword, String token) {
+    return remoteDataSource.resetPassword(email, newPassword, token);
   }
 
   @override
