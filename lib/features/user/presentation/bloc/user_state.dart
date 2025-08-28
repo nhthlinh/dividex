@@ -14,8 +14,6 @@ class LoadedUsersState extends Equatable {
   final int totalPage;
   final List<UserModel> users;
 
-  bool get hasMore => page < totalPage;
-
   @override
   List<Object?> get props => [isLoading, page, totalPage, users];
 

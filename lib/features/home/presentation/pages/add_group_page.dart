@@ -11,7 +11,7 @@ import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/image_picker_widget.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddGroupPage extends StatefulWidget {
@@ -129,7 +129,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
 
           const SizedBox(height: 16),
           BlocProvider(
-            create: (context) => LoadedUsersBloc()..add(InitialEvent(HiveService.getUser().id ?? '', null)),
+            create: (context) => LoadedUsersBloc()..add(InitialEvent(HiveService.getUser().id ?? '', LoadUsersAction.getFriends)),
             child: BlocBuilder<LoadedUsersBloc, LoadedUsersState>(
               builder: (context, state) {
                 return MemberSelector(

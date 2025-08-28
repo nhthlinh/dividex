@@ -1,4 +1,3 @@
-import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,6 +19,10 @@ class CustomTextInput extends StatelessWidget {
   final Function(String value)?
   onChanged; // Thêm thuộc tính để xác định hàm khi thay đổi nội dung
 
+  // Autocomplete
+  final FocusNode? focusNode;
+  final VoidCallback? onEditingComplete;
+
   const CustomTextInput({
     super.key,
     this.label,
@@ -37,6 +40,8 @@ class CustomTextInput extends StatelessWidget {
     this.style,
     this.autoFocus = false,
     this.onChanged,
+    this.focusNode,
+    this.onEditingComplete,
   });
 
   @override
@@ -77,6 +82,8 @@ class CustomTextInput extends StatelessWidget {
             ),
             suffixIcon: suffixIcon,
           ),
+          focusNode: focusNode,
+          onEditingComplete: onEditingComplete,
         ),
       ],
     );

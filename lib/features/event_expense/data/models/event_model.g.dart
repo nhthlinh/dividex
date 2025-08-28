@@ -22,6 +22,8 @@ EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
   createdAt: json['createdAt'] == null
       ? null
       : DateTime.parse(json['createdAt'] as String),
+  groupId: json['groupId'] as String?,
+  groupName: json['groupName'] as String?,
 );
 
 Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
@@ -33,4 +35,6 @@ Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
       'eventStart': instance.eventStart?.toIso8601String(),
       'eventEnd': instance.eventEnd?.toIso8601String(),
       'createdAt': instance.createdAt?.toIso8601String(),
+      'groupId': instance.groupId,
+      'groupName': instance.groupName,
     };

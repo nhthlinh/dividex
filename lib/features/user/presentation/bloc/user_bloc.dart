@@ -16,12 +16,13 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
 
   Future _onInitial(InitialEvent event, Emitter emit) async {
     try {
-      bool isForGroup = event.userId != null;
       final useCase = await getIt.getAsync<UserUseCase>();
 
-      final users = isForGroup
-          ? await useCase.getUserForCreateGroup(event.groupId ?? '', 1, 5)
-          : await useCase.getUserForCreateEvent(event.userId ?? '', 1, 5);
+      final users = event.action == LoadUsersAction.getFriends
+          ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5)
+          : event.action == LoadUsersAction.getGroupMembers
+              ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5)
+              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5);
 
       emit(
         state.copyWith(
@@ -39,23 +40,12 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
 
   Future _onLoadMoreUsers(LoadMoreUsersEvent event, Emitter emit) async {
     try {
-      bool isForGroup = event.userId != null;
-      print('Load more');
-      print(event.groupId);
-      print(event.userId);
-      print(isForGroup);
       final useCase = await getIt.getAsync<UserUseCase>();
-      final users = isForGroup
-          ? await useCase.getUserForCreateGroup(
-              event.groupId ?? '',
-              state.page + 1,
-              5,
-            )
-          : await useCase.getUserForCreateEvent(
-              event.userId ?? '',
-              state.page + 1,
-              5,
-            );
+      final users = event.action == LoadUsersAction.getFriends
+          ? await useCase.getUserForCreateGroup(event.id ?? '', state.page + 1, 5)
+          : event.action == LoadUsersAction.getGroupMembers
+              ? await useCase.getUserForCreateEvent(event.id ?? '', state.page + 1, 5)
+              : await useCase.getUserForCreateExpense(event.id ?? '', state.page + 1, 5);
 
       emit(
         state.copyWith(
@@ -76,11 +66,12 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
     try {
       emit(state.copyWith(isLoading: true));
 
-      bool isForGroup = event.userId != null;
       final useCase = await getIt.getAsync<UserUseCase>();
-      final users = isForGroup
-          ? await useCase.getUserForCreateGroup(event.groupId ?? '', 1, 5)
-          : await useCase.getUserForCreateEvent(event.userId ?? '', 1, 5);
+      final users = event.action == LoadUsersAction.getFriends
+          ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5)
+          : event.action == LoadUsersAction.getGroupMembers
+              ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5)
+              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5);
 
       emit(
         state.copyWith(

@@ -36,6 +36,7 @@ import 'package:Dividex/features/event_expense/domain/event_repository.dart'
     as _i720;
 import 'package:Dividex/features/event_expense/domain/expense_repository.dart'
     as _i55;
+import 'package:Dividex/features/event_expense/domain/usecase.dart' as _i433;
 import 'package:Dividex/features/group/data/repositories/group_repository_impl.dart'
     as _i654;
 import 'package:Dividex/features/group/data/source/group_remote_datasource.dart'
@@ -134,6 +135,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i720.EventRepository>(
       () async => _i788.EventRepositoryImpl(
         await getAsync<_i989.EventRemoteDataSource>(),
+      ),
+    );
+    gh.factoryAsync<_i433.ExpenseUseCase>(
+      () async => _i433.ExpenseUseCase(
+        await getAsync<_i55.ExpenseRepository>(),
+        await getAsync<_i720.EventRepository>(),
       ),
     );
     return this;

@@ -59,13 +59,13 @@ abstract class DioModule {
               );
 
               final newAccessToken = refreshResponse.data['data']['accessToken'];
-              //final newRefreshToken = refreshResponse.data['refreshToken'];
+              final newRefreshToken = refreshResponse.data['data']['refreshToken'];
               debugPrint('✅ Got new token: $newAccessToken');
 
               // Lưu vào Hive
               await HiveService.saveToken(TokenLocalModel(
                 accessToken: newAccessToken,
-                refreshToken: refreshToken, // Giữ nguyên refresh token
+                refreshToken: newRefreshToken, // Giữ nguyên refresh token
               ));
 
               // Gắn token mới & retry request cũ

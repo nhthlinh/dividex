@@ -20,6 +20,9 @@ GroupModel _$GroupModelFromJson(Map<String, dynamic> json) => GroupModel(
       ? null
       : UserModel.fromJson(json['leader'] as Map<String, dynamic>),
   status: $enumDecodeNullable(_$StatusEnumEnumMap, json['status']),
+  events: (json['events'] as List<dynamic>?)
+      ?.map((e) => EventModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
 );
 
 Map<String, dynamic> _$GroupModelToJson(GroupModel instance) =>
@@ -31,6 +34,7 @@ Map<String, dynamic> _$GroupModelToJson(GroupModel instance) =>
       'avatarUrl': instance.avatarUrl,
       'createdAt': instance.createdAt?.toIso8601String(),
       'members': instance.members,
+      'events': instance.events,
     };
 
 const _$StatusEnumEnumMap = {

@@ -14,6 +14,8 @@ class EventModel {
   final DateTime? eventStart;
   final DateTime? eventEnd;
   final DateTime? createdAt;
+  final String? groupId;
+  final String? groupName;
 
   EventModel({
     this.id,
@@ -23,6 +25,8 @@ class EventModel {
     this.eventStart,
     this.eventEnd,
     this.createdAt,
+    this.groupId,
+    this.groupName,
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) => _$EventModelFromJson(json);

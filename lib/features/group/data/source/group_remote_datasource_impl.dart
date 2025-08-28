@@ -1,4 +1,5 @@
 import 'package:Dividex/core/network/dio_client.dart';
+import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 
 import 'package:Dividex/features/group/data/source/group_remote_datasource.dart';
@@ -19,7 +20,7 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
     int page,
     int pageSize,
   ) async {
-    if (page == 2) return PagingModel(data: [], totalPage: 2, page: page);
+    if (page == 3) return PagingModel(data: [], totalPage: 3, page: page);
     await Future.delayed(Duration(seconds: 2));
     return PagingModel(
       totalPage: 2,
@@ -38,7 +39,21 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
             phoneNumber: '1234567890',
             avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
           ),
-          status: StatusEnum.active
+          status: StatusEnum.active,
+          events: [
+            EventModel(
+              id: '1',
+              name: 'Event 1',
+              description: 'Description 1',
+              groupId: '1'
+            ),
+            EventModel(
+              id: '2',
+              name: 'Event 2',
+              description: 'Description 2',
+              groupId: '1'
+            ),
+          ],
         ),
         GroupModel(
           id: '2',
@@ -53,7 +68,15 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
             phoneNumber: '0987654321',
             avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
           ),
-          status: StatusEnum.active
+          status: StatusEnum.active,
+          events: [
+            EventModel(
+              id: '3',
+              name: 'Event 3',
+              description: 'Description 3',
+              groupId: '2',
+            ),
+          ],
         ),
         GroupModel(
           id: '3',
@@ -68,7 +91,15 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
             phoneNumber: '1122334455',
             avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
           ),
-          status: StatusEnum.active
+          status: StatusEnum.active,
+          events: [
+            EventModel(
+              id: '4',
+              name: 'Event 4',
+              description: 'Description 4',
+              groupId: '3',
+            ),
+          ],
         )
       ],
     );

@@ -2,12 +2,14 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
-import 'package:Dividex/features/group/presentation/bloc/group_event.dart' as group_event;
+import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
+    as group_event;
 import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/home/presentation/widgets/member_selector_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart' as user_event;
+import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
+    as user_event;
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -122,12 +124,11 @@ class _AddEventPageState extends State<AddEventPage> {
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: BlocProvider(
-                  create: (context) => LoadedGroupsBloc()..add(group_event.InitialEvent(HiveService.getUser().id ?? '')),
-                  child: BlocBuilder<LoadedGroupsBloc, LoadedGroupsState>(
-                    builder: (context, state) {
-                      return eventForm(intl);
-                    },
-                  ),
+                  create: (context) => LoadedGroupsBloc()
+                    ..add(
+                      group_event.InitialEvent(HiveService.getUser().id ?? ''),
+                    ),
+                  child: eventForm(intl),
                 ),
               ),
             ),
@@ -176,17 +177,12 @@ class _AddEventPageState extends State<AddEventPage> {
                     return RefreshIndicator(
                       onRefresh: () async {
                         context.read<LoadedGroupsBloc>().add(
-                          group_event.RefreshGroupsEvent(HiveService.getUser().id ?? ''),
+                          group_event.RefreshGroupsEvent(
+                            HiveService.getUser().id ?? '',
+                          ),
                         );
                       },
-                      child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        child: SizedBox(
-                          width: constraints.maxWidth,
-                          height: constraints.maxHeight,
-                          child: Center(child: Text('Empty')),
-                        ),
-                      ),
+                      child: Center(child: Text('Empty')),
                     );
                   },
                 );
@@ -196,12 +192,39 @@ class _AddEventPageState extends State<AddEventPage> {
               return ValueListenableBuilder<String?>(
                 valueListenable: _selectedGroup,
                 builder: (context, value, _) {
-                  return CustomDropdownWidget(
+                  return CustomDropdownWidget<String?>(
                     label: intl.eventGroupLabel,
                     items: _groups.map((group) {
                       return DropdownMenuItem<String>(
                         value: group.id,
-                        child: Text(group.name ?? ''),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.grey.shade300),
+                            ),
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                            ),
+                          ),
+
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 16,
+                                backgroundImage: NetworkImage(
+                                  group.avatarUrl ?? '',
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                group.name ?? '',
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     }).toList(),
                     value: value,
@@ -216,6 +239,7 @@ class _AddEventPageState extends State<AddEventPage> {
               );
             },
           ),
+
           const SizedBox(height: 16),
           CustomTextInput(
             label: intl.eventStartDateLabel,
@@ -260,7 +284,13 @@ class _AddEventPageState extends State<AddEventPage> {
 
           if (selectedGroupId != null) ...[
             BlocProvider(
-              create: (context) => LoadedUsersBloc()..add(user_event.InitialEvent(null, selectedGroupId)),
+              create: (context) => LoadedUsersBloc()
+                ..add(
+                  user_event.InitialEvent(
+                    selectedGroupId,
+                    user_event.LoadUsersAction.getGroupMembers,
+                  ),
+                ),
               child: MemberSelector(
                 selectorType: MemberSelectorEnum.event,
                 id: selectedGroupId ?? '',

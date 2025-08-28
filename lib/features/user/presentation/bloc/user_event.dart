@@ -1,5 +1,11 @@
 import 'package:equatable/equatable.dart';
 
+enum LoadUsersAction {
+  getFriends,
+  getGroupMembers,
+  getEventParticipants,
+}
+
 abstract class LoadUserEvent extends Equatable {
   const LoadUserEvent();
 
@@ -8,19 +14,19 @@ abstract class LoadUserEvent extends Equatable {
 }
 
 class InitialEvent extends LoadUserEvent {
-  final String? userId;
-  final String? groupId;
-  const InitialEvent(this.userId, this.groupId);
+  final String? id;
+  final LoadUsersAction action;
+  const InitialEvent(this.id, this.action);
 }
 
 class LoadMoreUsersEvent extends LoadUserEvent {
-  final String? userId;
-  final String? groupId;
-  const LoadMoreUsersEvent(this.userId, this.groupId);
+  final String? id;
+  final LoadUsersAction action;
+  const LoadMoreUsersEvent(this.id, this.action);
 }
 
 class RefreshUsersEvent extends LoadUserEvent {
-  final String? userId;
-  final String? groupId;
-  const RefreshUsersEvent(this.userId, this.groupId);
+  final String? id;
+  final LoadUsersAction action;
+  const RefreshUsersEvent(this.id, this.action);
 }

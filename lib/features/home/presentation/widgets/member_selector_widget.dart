@@ -5,10 +5,10 @@ import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum MemberSelectorEnum { group, event }
+enum MemberSelectorEnum { group, event, expense }
 
 class MemberSelector extends StatefulWidget {
   final MemberSelectorEnum selectorType;
@@ -52,9 +52,17 @@ class _MemberSelectorState extends State<MemberSelector> {
 
   void callEvent() {
     if (widget.selectorType == MemberSelectorEnum.event) {
-      context.read<LoadedUsersBloc>().add(RefreshUsersEvent(null, widget.id));
+      context.read<LoadedUsersBloc>().add(
+        RefreshUsersEvent(widget.id, LoadUsersAction.getGroupMembers),
+      );
+    } else if (widget.selectorType == MemberSelectorEnum.expense) {
+      context.read<LoadedUsersBloc>().add(
+        RefreshUsersEvent(widget.id, LoadUsersAction.getEventParticipants),
+      );
     } else {
-      context.read<LoadedUsersBloc>().add(RefreshUsersEvent(widget.id, null));
+      context.read<LoadedUsersBloc>().add(
+        RefreshUsersEvent(HiveService.getUser().id, LoadUsersAction.getFriends),
+      );
     }
   }
 
@@ -122,16 +130,27 @@ class _MemberSelectorState extends State<MemberSelector> {
                 padding: const EdgeInsets.only(bottom: 16),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.users.length + (state.hasMore ? 1 : 0),
+                itemCount: state.users.length + (state.page < state.totalPage ? 1 : 0),
                 itemBuilder: (context, index) {
                   if (index == state.users.length) {
                     if (widget.selectorType == MemberSelectorEnum.event) {
                       context.read<LoadedUsersBloc>().add(
-                        LoadMoreUsersEvent(null, widget.id),
+                        LoadMoreUsersEvent(widget.id, LoadUsersAction.getGroupMembers),
+                      );
+                    } else if (widget.selectorType ==
+                        MemberSelectorEnum.expense) {
+                      context.read<LoadedUsersBloc>().add(
+                        LoadMoreUsersEvent(
+                          widget.id,
+                          LoadUsersAction.getEventParticipants,
+                        ),
                       );
                     } else {
                       context.read<LoadedUsersBloc>().add(
-                        LoadMoreUsersEvent(widget.id, null),
+                        LoadMoreUsersEvent(
+                          HiveService.getUser().id,
+                          LoadUsersAction.getFriends,
+                        ),
                       );
                     }
                     return Padding(
@@ -168,6 +187,7 @@ class _MemberSelectorState extends State<MemberSelector> {
                       onTap: () => _toggleMember(member),
                     ),
                   );
+                
                 },
               ),
             );

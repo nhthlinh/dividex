@@ -167,6 +167,10 @@ enum CurrencyEnum {
   const CurrencyEnum(this.code, this.description);
 }
 
+List<CurrencyEnum> getAllCurrencies() {
+  return CurrencyEnum.values;
+}
+
 enum SplitTypeEnum {
   equal("equal", "Equal split"),
   percentage("percentage", "Percentage split"),

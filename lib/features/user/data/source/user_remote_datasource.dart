@@ -5,4 +5,5 @@ import 'package:Dividex/shared/models/paging_model.dart';
 abstract class UserRemoteDataSource {
   Future<PagingModel<List<UserModel>>> getUserForCreateGroup(String userId, int page, int pageSize);
   Future<PagingModel<List<UserModel>>> getUserForCreateEvent(String groupId, int page, int pageSize);
+  Future<PagingModel<List<UserModel>>> getUserForCreateExpense(String eventId, int page, int pageSize);
 }

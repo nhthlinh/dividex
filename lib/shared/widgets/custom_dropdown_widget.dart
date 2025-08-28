@@ -3,11 +3,11 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 
 // ignore: non_constant_identifier_names
-Widget CustomDropdownWidget({
+Widget CustomDropdownWidget<T>({
   required String label,
-  required String? value,
-  required Function(String?)? onChanged,
-  required List<DropdownMenuItem<String>> items,
+  required T? value,
+  required Function(T?)? onChanged,
+  required List<DropdownMenuItem<T>> items,
   bool isSmall = false,
 }) {
   final context = navigatorKey.currentContext!;
@@ -17,15 +17,15 @@ Widget CustomDropdownWidget({
       value != null && items.any((item) => item.value == value);
 
   // Nếu value không hợp lệ (null hoặc không nằm trong list) → set về null
-  final String? safeValue = isValueValid ? value : null;
+  final T? safeValue = isValueValid ? value : null;
 
   // Thêm item mặc định nếu cần thiết
   final bool hasEmptyItem = items.any(
     (item) => item.value == null || item.value == '',
   );
-  final List<DropdownMenuItem<String>> displayItems = [
+  final List<DropdownMenuItem<T>> displayItems = [
     if (!hasEmptyItem)
-      const DropdownMenuItem<String>(value: '', child: Text('-- --')),
+      DropdownMenuItem<T>(value: null, child: Text('-- --')),
     ...items,
   ];
 
@@ -39,8 +39,8 @@ Widget CustomDropdownWidget({
         ),
       ),
       const SizedBox(height: 6),
-      DropdownButtonFormField<String>(
-        value: safeValue,
+      DropdownButtonFormField<T>(
+        initialValue: safeValue,
         items: displayItems,
         onChanged: onChanged,
         decoration: const InputDecoration(
