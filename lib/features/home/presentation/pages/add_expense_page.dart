@@ -360,8 +360,12 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 p.users != c.users || p.isLoading != c.isLoading,
             builder: (context, state) {
               if (state.isLoading) {
-                return Text('Choose event first');
-                //return Center(child: CircularProgressIndicator());
+                return Text(
+                  intl.expensePayerLabel,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                );
               }
 
               if (state.users.isEmpty) {
@@ -417,6 +421,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                 backgroundImage: NetworkImage(
                                   payer.avatar ?? '',
                                 ),
+                                child: const Icon(Icons.person),
                               ),
                               const SizedBox(width: 8),
                               Text(

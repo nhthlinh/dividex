@@ -147,6 +147,17 @@
   "noTransaction": "Chưa có giao dịch nào",
   "addFirstTransaction": "Hãy thêm giao dịch đầu tiên của bạn trong nhóm!",
 
+  "sumary": "Tổng quan",
+  "recentTransaction": "Giao dịch gần đây",
+  "youOwn": "Bạn nợ",
+  "ownYou": "Nợ bạn",
+
+  "group": "Nhóm",
+  "friend": "Bạn",
+
+  "remind": "Nhắc nhở",
+  "pay": "Trả",
+
   "termsOfServiceTitle": "ĐIỀU KHOẢN SỬ DỤNG",
   "aloboSportsHub": "ALobo Sports Hub",
   "version": "Phiên bản: {versionNumber}",

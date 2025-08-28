@@ -812,6 +812,54 @@ abstract class AppLocalizations {
   /// **'Edit image'**
   String get cropImage;
 
+  /// No description provided for @sumary.
+  ///
+  /// In en, this message translates to:
+  /// **'Sumary'**
+  String get sumary;
+
+  /// No description provided for @recentTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent transaction'**
+  String get recentTransaction;
+
+  /// No description provided for @youOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'You own'**
+  String get youOwn;
+
+  /// No description provided for @ownYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Own you'**
+  String get ownYou;
+
+  /// No description provided for @group.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get group;
+
+  /// No description provided for @friend.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend'**
+  String get friend;
+
+  /// No description provided for @remind.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind'**
+  String get remind;
+
+  /// No description provided for @pay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get pay;
+
   /// No description provided for @termsOfServiceTitle.
   ///
   /// In en, this message translates to:

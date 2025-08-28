@@ -371,6 +371,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cropImage => 'Edit image';
 
   @override
+  String get sumary => 'Sumary';
+
+  @override
+  String get recentTransaction => 'Recent transaction';
+
+  @override
+  String get youOwn => 'You own';
+
+  @override
+  String get ownYou => 'Own you';
+
+  @override
+  String get group => 'Group';
+
+  @override
+  String get friend => 'Friend';
+
+  @override
+  String get remind => 'Remind';
+
+  @override
+  String get pay => 'Pay';
+
+  @override
   String get termsOfServiceTitle => 'TERMS OF SERVICE';
 
   @override

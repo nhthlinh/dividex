@@ -374,6 +374,30 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cropImage => 'Chỉnh sửa ảnh';
 
   @override
+  String get sumary => 'Tổng quan';
+
+  @override
+  String get recentTransaction => 'Giao dịch gần đây';
+
+  @override
+  String get youOwn => 'Bạn nợ';
+
+  @override
+  String get ownYou => 'Nợ bạn';
+
+  @override
+  String get group => 'Nhóm';
+
+  @override
+  String get friend => 'Bạn';
+
+  @override
+  String get remind => 'Nhắc nhở';
+
+  @override
+  String get pay => 'Trả';
+
+  @override
   String get termsOfServiceTitle => 'ĐIỀU KHOẢN SỬ DỤNG';
 
   @override

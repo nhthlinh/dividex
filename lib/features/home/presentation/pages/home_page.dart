@@ -1,15 +1,18 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/routes/router.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_event.dart' as group_event;
 import 'package:Dividex/features/home/presentation/bloc/bottom_nav_visibility_cubit.dart';
 import 'package:Dividex/features/home/presentation/pages/setting_sheet.dart';
 import 'package:Dividex/features/home/presentation/widgets/add_button_widget.dart';
+import 'package:Dividex/features/home/presentation/widgets/comunity_widget.dart';
 import 'package:Dividex/features/home/presentation/widgets/home_widget.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_event.dart' as user_event;
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 int unreadCount = 0; // Đếm số thông báo chưa đọc
 
@@ -35,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   static final List<Widget> _options = <Widget>[
     const HomeWidget(),
     const SizedBox.shrink(),
-    const SizedBox.shrink(),
+    const ComunityWidget(),
     const SizedBox.shrink(),
   ];
 
@@ -126,6 +129,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Logo/Biểu tượng bên trái
             GestureDetector(
@@ -139,6 +143,11 @@ class _HomePageState extends State<HomePage> {
                 width: 100,
                 height: 40,
               ),
+            ),
+            CircleAvatar(
+              backgroundImage: NetworkImage(HiveService.getUser().avatarUrl ?? ''),
+              radius: 25,
+              child: const Icon(Icons.person),
             ),
           ],
         ),

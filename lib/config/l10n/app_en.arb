@@ -148,6 +148,17 @@
   "imagePickerError1": "Image selection failed, please try again",
   "cropImage": "Edit image",
 
+  "sumary": "Sumary",
+  "recentTransaction": "Recent transaction",
+  "youOwn": "You own",
+  "ownYou": "Own you",
+
+  "group": "Group",
+  "friend": "Friend",
+
+  "remind": "Remind",
+  "pay": "Pay",
+
   "termsOfServiceTitle": "TERMS OF SERVICE",
   "aloboSportsHub": "ALobo Sports Hub",
   "version": "Version: {versionNumber}",

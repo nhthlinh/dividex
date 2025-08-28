@@ -215,6 +215,7 @@ class _AddEventPageState extends State<AddEventPage> {
                                 backgroundImage: NetworkImage(
                                   group.avatarUrl ?? '',
                                 ),
+                                child: const Icon(Icons.person),
                               ),
                               const SizedBox(width: 8),
                               Text(

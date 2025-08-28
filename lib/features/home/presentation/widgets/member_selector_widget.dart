@@ -84,6 +84,7 @@ class _MemberSelectorState extends State<MemberSelector> {
               child: Chip(
                 avatar: CircleAvatar(
                   backgroundImage: NetworkImage(m.avatar ?? ''),
+                  child: const Icon(Icons.person),
                 ),
                 label: Text(m.fullName ?? ''),
                 deleteIcon: const Icon(Icons.close),
