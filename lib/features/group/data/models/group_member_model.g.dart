@@ -18,6 +18,8 @@ GroupMemberModel _$GroupMemberModelFromJson(Map<String, dynamic> json) =>
       joinedAt: json['joinedAt'] == null
           ? null
           : DateTime.parse(json['joinedAt'] as String),
+      hasDebt: json['hasDebt'] as bool?,
+      amount: (json['amount'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$GroupMemberModelToJson(GroupMemberModel instance) =>
@@ -26,4 +28,6 @@ Map<String, dynamic> _$GroupMemberModelToJson(GroupMemberModel instance) =>
       'group': instance.group,
       'user': instance.user,
       'joinedAt': instance.joinedAt?.toIso8601String(),
+      'hasDebt': instance.hasDebt,
+      'amount': instance.amount,
     };

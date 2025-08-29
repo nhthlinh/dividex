@@ -168,7 +168,12 @@ class _AddEventPageState extends State<AddEventPage> {
                 p.groups != c.groups || p.isLoading != c.isLoading,
             builder: (context, state) {
               if (state.isLoading) {
-                return Center(child: CircularProgressIndicator());
+                return Text(
+                  intl.eventGroupLabel,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                );
               }
 
               if (state.groups.isEmpty) {

@@ -11,6 +11,8 @@ class UserModel {
   final String? fullName;
   final String? phoneNumber;
   final String? avatar;
+  final bool? hasDebt;
+  final double? amount;
 
   UserModel({
     this.id,
@@ -18,6 +20,8 @@ class UserModel {
     this.fullName,
     this.phoneNumber,
     this.avatar,
+    this.hasDebt,
+    this.amount,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

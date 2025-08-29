@@ -70,6 +70,7 @@ class _ComunityWidgetState extends State<ComunityWidget> {
     return Column(
       children: [
         NavigationBar(
+          height: 60,
           selectedIndex: _selectedIndex, // Thêm dòng này để cập nhật trạng thái
           onDestinationSelected:
               _onItemTapped, // Thêm dòng này để xử lý sự kiện

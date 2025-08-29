@@ -19,10 +19,10 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
       final useCase = await getIt.getAsync<UserUseCase>();
 
       final users = event.action == LoadUsersAction.getFriends
-          ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5)
+          ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5, event.searchQuery)
           : event.action == LoadUsersAction.getGroupMembers
-              ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5)
-              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5);
+              ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5, event.searchQuery)
+              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5, event.searchQuery);
 
       emit(
         state.copyWith(
@@ -42,10 +42,10 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
     try {
       final useCase = await getIt.getAsync<UserUseCase>();
       final users = event.action == LoadUsersAction.getFriends
-          ? await useCase.getUserForCreateGroup(event.id ?? '', state.page + 1, 5)
+          ? await useCase.getUserForCreateGroup(event.id ?? '', state.page + 1, 5, event.searchQuery)
           : event.action == LoadUsersAction.getGroupMembers
-              ? await useCase.getUserForCreateEvent(event.id ?? '', state.page + 1, 5)
-              : await useCase.getUserForCreateExpense(event.id ?? '', state.page + 1, 5);
+              ? await useCase.getUserForCreateEvent(event.id ?? '', state.page + 1, 5, event.searchQuery)
+              : await useCase.getUserForCreateExpense(event.id ?? '', state.page + 1, 5, event.searchQuery);
 
       emit(
         state.copyWith(
@@ -68,10 +68,10 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
 
       final useCase = await getIt.getAsync<UserUseCase>();
       final users = event.action == LoadUsersAction.getFriends
-          ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5)
+          ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5, event.searchQuery)
           : event.action == LoadUsersAction.getGroupMembers
-              ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5)
-              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5);
+              ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5, event.searchQuery)
+              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5, event.searchQuery);
 
       emit(
         state.copyWith(

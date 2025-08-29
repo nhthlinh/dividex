@@ -16,17 +16,20 @@ abstract class LoadUserEvent extends Equatable {
 class InitialEvent extends LoadUserEvent {
   final String? id;
   final LoadUsersAction action;
-  const InitialEvent(this.id, this.action);
+  final String? searchQuery;
+  const InitialEvent(this.id, this.action, {this.searchQuery});
 }
 
 class LoadMoreUsersEvent extends LoadUserEvent {
   final String? id;
   final LoadUsersAction action;
-  const LoadMoreUsersEvent(this.id, this.action);
+  final String? searchQuery;
+  const LoadMoreUsersEvent(this.id, this.action, {this.searchQuery});
 }
 
 class RefreshUsersEvent extends LoadUserEvent {
   final String? id;
   final LoadUsersAction action;
-  const RefreshUsersEvent(this.id, this.action);
+  final String? searchQuery;
+  const RefreshUsersEvent(this.id, this.action, {this.searchQuery});
 }

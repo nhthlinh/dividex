@@ -9,12 +9,16 @@ class GroupMemberModel {
   final GroupModel? group;
   final UserModel? user;
   final DateTime? joinedAt;
+  final bool? hasDebt;
+  final double? amount;
 
   GroupMemberModel({
     this.id,
     this.user,
     this.group,
     this.joinedAt,
+    this.hasDebt,
+    this.amount,
   });
 
   factory GroupMemberModel.fromJson(Map<String, dynamic> json) => _$GroupMemberModelFromJson(json);

@@ -27,12 +27,11 @@ class LoadedCategoriesBloc
         state.copyWith(
           page: categories.page,
           totalPage: categories.totalPage,
-          categories: categories.data,
+          categories: List<String>.from(categories.data),
           isLoading: false,
         ),
       );
-    } catch (e, s) {
-      print(s);
+    } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
     }
@@ -54,7 +53,7 @@ class LoadedCategoriesBloc
         state.copyWith(
           page: categories.page,
           totalPage: categories.totalPage,
-          categories: [...state.categories, ...categories.data],
+          categories: List<String>.from(state.categories)..addAll(categories.data),
         ),
       );
     } catch (e) {
@@ -83,7 +82,7 @@ class LoadedCategoriesBloc
         state.copyWith(
           page: categories.page,
           totalPage: categories.totalPage,
-          categories: categories.data,
+          categories: List<String>.from(categories.data),
           isLoading: false,
         ),
       );

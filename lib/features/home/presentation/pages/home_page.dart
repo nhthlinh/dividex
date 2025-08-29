@@ -36,7 +36,10 @@ class _HomePageState extends State<HomePage> {
 
   // Danh sách các màn hình (ví dụ)
   static final List<Widget> _options = <Widget>[
-    const HomeWidget(),
+    BlocProvider(
+      create: (context) => LoadedUsersBloc()..add(user_event.InitialEvent(HiveService.getUser().id, user_event.LoadUsersAction.getFriends)),
+      child: const HomeWidget(),
+    ),
     const SizedBox.shrink(),
     const ComunityWidget(),
     const SizedBox.shrink(),

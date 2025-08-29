@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/features/event_expense/data/models/event_model.dart';
@@ -9,6 +11,7 @@ import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart'
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
     as group_event;
 import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
+import 'package:Dividex/features/home/presentation/widgets/dropdown_autocomplete_widget.dart';
 import 'package:Dividex/features/home/presentation/widgets/group_dropdown_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
@@ -45,6 +48,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
   final ValueNotifier<String?> _selectedUnit = ValueNotifier(null);
   final ValueNotifier<String?> _selectedCategory = ValueNotifier(null);
+  final TextEditingController _searchCategoryController =
+      TextEditingController();
   final ValueNotifier<EventModel?> _selectedEvent = ValueNotifier(null);
   ValueNotifier<UserModel?> _selectedPayer = ValueNotifier(null);
   final ValueNotifier<String?> _selectedReminder = ValueNotifier(
@@ -53,7 +58,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
   List<String?> imagePaths = [];
 
   final List<String> _units = getAllCurrencies().map((e) => e.name).toList();
-  List<String> _categories = [];
   List<GroupModel> _groups = [];
   List<UserModel> _payers = [];
   final List<String> _reminders = [
@@ -61,6 +65,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
     '1 hour before',
     'No reminder',
   ];
+
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -236,78 +242,22 @@ class _AddExpensePageState extends State<AddExpensePage> {
             ],
           ),
           const SizedBox(height: 16),
-          BlocBuilder<
-            category_event.LoadedCategoriesBloc,
-            category_event.LoadedCategoriesState
-          >(
-            buildWhen: (p, c) =>
-                p.categories != c.categories || p.isLoading != c.isLoading,
-            builder: (context, state) {
-              if (state.isLoading) {
-                return Center(child: CircularProgressIndicator());
-              }
-
-              if (state.categories.isEmpty) {
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        context.read<category_event.LoadedCategoriesBloc>().add(
-                          category_event.RefreshCategoriesEvent(
-                            key: '',
-                            page: 1,
-                            pageSize: 5,
-                          ),
-                        );
-                      },
-                      child: Center(child: Text('Empty')),
-                    );
-                  },
-                );
-              }
-
-              _categories = state.categories;
-
-              return ValueListenableBuilder<String?>(
-                valueListenable: _selectedCategory,
-                builder: (context, value, _) {
-                  return Autocomplete<String>(
-                    initialValue: TextEditingValue(text: value ?? ''),
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return _categories;
-                      }
-                      return _categories.where(
-                        (category) => category.toLowerCase().contains(
-                          textEditingValue.text.toLowerCase(),
-                        ),
-                      );
-                    },
-                    onSelected: (selected) {
-                      _selectedCategory.value = selected;
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                          return CustomTextInput(
-                            controller: controller,
-                            label: intl.expenseCategoryLabel,
-                            focusNode: focusNode,
-                            onEditingComplete: onEditingComplete,
-                          );
-                        },
-                  );
-                },
-              );
+          CategoryAutocompleteWidget(
+            onCategorySelected: (value) {
+              _selectedCategory.value = value;
             },
           ),
           const SizedBox(height: 16),
-
           BlocBuilder<group_event.LoadedGroupsBloc, LoadedGroupsState>(
             buildWhen: (p, c) =>
                 p.groups != c.groups || p.isLoading != c.isLoading,
             builder: (context, state) {
               if (state.isLoading) {
-                return Center(child: CircularProgressIndicator());
+                return GroupDropdownWidget(
+                  initialValue: _selectedEvent.value,
+                  groups: _groups,
+                  onChanged: (event) {},
+                );
               }
 
               if (state.groups.isEmpty) {

@@ -16,7 +16,21 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
     String userId,
     int page,
     int pageSize,
+    String? searchQuery,
   ) async {
+    if (searchQuery == 'm') {
+      return PagingModel(data: [
+        UserModel(
+          id: '1',
+          email: 'john@example.com',
+          fullName: 'John Doe',
+          phoneNumber: '1234567890',
+          hasDebt: false,
+          amount: 25000,
+          avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
+        ),
+      ], totalPage: 1, page: page);
+    }
     if (page == 4) return PagingModel(data: [], totalPage: 4, page: page);
     await Future.delayed(Duration(seconds: 2));
     return PagingModel(
@@ -28,6 +42,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'john@example.com',
           fullName: 'John Doe',
           phoneNumber: '1234567890',
+          hasDebt: true,
+          amount: 23000,
           avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
         ),
         UserModel(
@@ -36,6 +52,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           fullName: 'Jane Smith',
           phoneNumber: '0987654321',
           avatar: 'https://example.com/avatar2.png',
+          hasDebt: false,
+          amount: 35000,
         ),
         UserModel(
           id: '3',
@@ -43,6 +61,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           fullName: 'Bob Johnson',
           phoneNumber: '5555555555',
           avatar: 'https://example.com/avatar3.png',
+          hasDebt: true,
+          amount: 35000,
         ),
         UserModel(
           id: '4',
@@ -50,6 +70,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           fullName: 'Alice Williams',
           phoneNumber: '4444444444',
           avatar: 'https://example.com/avatar4.png',
+          hasDebt: false,
+          amount: 12000,
         ),
         UserModel(
           id: '5',
@@ -57,6 +79,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           fullName: 'Charlie Brown',
           phoneNumber: '3333333333',
           avatar: 'https://example.com/avatar5.png',
+          hasDebt: false,
+          amount: 4000,
         ),
       ],
     );
@@ -67,7 +91,21 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
     String groupId,
     int page,
     int pageSize,
+    String? searchQuery,
   ) async {
+    if (searchQuery == 'm') {
+      return PagingModel(data: [
+        UserModel(
+          id: '1',
+          email: 'john@example.com',
+          fullName: 'John Doe',
+          phoneNumber: '1234567890',
+          hasDebt: false,
+          amount: 15000,
+          avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
+        ),
+      ], totalPage: 1, page: page);
+    }
     if (page == 2) return PagingModel(data: [], totalPage: 2, page: page);
     await Future.delayed(Duration(seconds: 2));
     return PagingModel(
@@ -79,6 +117,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'john@example.com',
           fullName: 'John Doe',
           phoneNumber: '1234567890',
+          hasDebt: false,
+          amount: 25000,
           avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
         ),
         UserModel(
@@ -86,6 +126,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'jane@example.com',
           fullName: 'Jane Smith',
           phoneNumber: '0987654321',
+          hasDebt: false,
+          amount: 25000,
           avatar: 'https://example.com/avatar2.png',
         ),
         UserModel(
@@ -93,6 +135,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'bob@example.com',
           fullName: 'Bob Johnson',
           phoneNumber: '5555555555',
+          hasDebt: true,
+          amount: 25000,
           avatar: 'https://example.com/avatar3.png',
         ),
         UserModel(
@@ -100,6 +144,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'alice@example.com',
           fullName: 'Alice Williams',
           phoneNumber: '4444444444',
+          hasDebt: false,
+          amount: 45000,
           avatar: 'https://example.com/avatar4.png',
         ),
         UserModel(
@@ -107,6 +153,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'charlie@example.com',
           fullName: 'Charlie Brown',
           phoneNumber: '3333333333',
+          hasDebt: false,
+          amount: 20000,
           avatar: 'https://example.com/avatar5.png',
         ),
       ],
@@ -118,7 +166,21 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
     String eventId,
     int page,
     int pageSize,
+    String? searchQuery,
   ) async {
+  if (searchQuery == 'm') {
+      return PagingModel(data: [
+        UserModel(
+          id: '1',
+          email: 'john@example.com',
+          fullName: 'John Doe',
+          phoneNumber: '1234567890',
+          hasDebt: true, 
+          amount: 20.000,
+          avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
+        ),
+      ], totalPage: 1, page: page);
+    }
     if (page == 2) return PagingModel(data: [], totalPage: 2, page: page);
     await Future.delayed(Duration(seconds: 2));
     return PagingModel(
@@ -130,6 +192,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'john@example.com',
           fullName: 'John Doe',
           phoneNumber: '1234567890',
+          hasDebt: false,
+          amount: 25000,
           avatar: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTIT_-HE1YngzdgKr-c3OjckZg3pwZyInO-fGyyfDeTbP0wjryiJ95ABdIOzDJRDhxkMR1LI_-LzS_aYMdkisnol6ZbTZjdos8mGJVnV2-2',
         ),
         UserModel(
@@ -137,6 +201,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'jane@example.com',
           fullName: 'Jane Smith',
           phoneNumber: '0987654321',
+          hasDebt: false,
+          amount: 25000,
           avatar: 'https://example.com/avatar2.png',
         ),
         UserModel(
@@ -144,6 +210,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'bob@example.com',
           fullName: 'Bob Johnson',
           phoneNumber: '5555555555',
+          hasDebt: false,
+          amount: 25000,
           avatar: 'https://example.com/avatar3.png',
         ),
         UserModel(
@@ -151,6 +219,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'alice@example.com',
           fullName: 'Alice Williams',
           phoneNumber: '4444444444',
+          hasDebt: false,
+          amount: 25000,
           avatar: 'https://example.com/avatar4.png',
         ),
         UserModel(
@@ -158,6 +228,8 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           email: 'charlie@example.com',
           fullName: 'Charlie Brown',
           phoneNumber: '3333333333',
+          hasDebt: false,
+          amount: 25000,
           avatar: 'https://example.com/avatar5.png',
         ),
       ],
