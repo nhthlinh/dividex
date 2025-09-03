@@ -158,6 +158,13 @@
   "remind": "Nhắc nhở",
   "pay": "Trả",
 
+  "analytics": "Thống kê",
+  "noFriends": "Bạn không có bạn bè",
+  "addFirstFriend": "Tìm và kết bạn với họ ngay nào",
+
+  "addFriend": "Thêm",
+  "sendFriendRequestSuccess": "Yêu cầu đã được gửi",
+
   "termsOfServiceTitle": "ĐIỀU KHOẢN SỬ DỤNG",
   "aloboSportsHub": "ALobo Sports Hub",
   "version": "Phiên bản: {versionNumber}",

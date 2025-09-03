@@ -22,7 +22,9 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
           ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5, event.searchQuery)
           : event.action == LoadUsersAction.getGroupMembers
               ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5, event.searchQuery)
-              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5, event.searchQuery);
+              : event.action == LoadUsersAction.getEventParticipants
+                ? await useCase.getUserForCreateExpense(event.id ?? '', 1, 5, event.searchQuery)
+                : await useCase.getUserBySearch(event.id ?? '', 1, 5, event.searchQuery);
 
       emit(
         state.copyWith(
@@ -45,7 +47,9 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
           ? await useCase.getUserForCreateGroup(event.id ?? '', state.page + 1, 5, event.searchQuery)
           : event.action == LoadUsersAction.getGroupMembers
               ? await useCase.getUserForCreateEvent(event.id ?? '', state.page + 1, 5, event.searchQuery)
-              : await useCase.getUserForCreateExpense(event.id ?? '', state.page + 1, 5, event.searchQuery);
+              : event.action == LoadUsersAction.getEventParticipants
+                  ? await useCase.getUserForCreateExpense(event.id ?? '', state.page + 1, 5, event.searchQuery)
+                  : await useCase.getUserBySearch(event.id ?? '', state.page + 1, 5, event.searchQuery);
 
       emit(
         state.copyWith(
@@ -71,7 +75,9 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
           ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5, event.searchQuery)
           : event.action == LoadUsersAction.getGroupMembers
               ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5, event.searchQuery)
-              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5, event.searchQuery);
+              : event.action == LoadUsersAction.getEventParticipants
+                  ? await useCase.getUserForCreateExpense(event.id ?? '', 1, 5, event.searchQuery)
+                  : await useCase.getUserBySearch(event.id ?? '', 1, 5, event.searchQuery);
 
       emit(
         state.copyWith(

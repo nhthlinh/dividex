@@ -38,13 +38,46 @@ abstract class DioModule {
             return handler.next(options);
           }
           options.headers['Authorization'] = 'Bearer ${token?.accessToken?.trim()}';
-                  handler.next(options);
+          handler.next(options);
+        },
+        onResponse: (response, handler) async {
+          if (response.data['error_code'] == 401 || response.data['error_code'] == 403) {
+            try {
+              final refreshToken = HiveService.getToken()?.refreshToken;
+              debugPrint('🔁 Refresh token: $refreshToken');
+
+              // Gọi refresh token bằng chính `dio`
+              final refreshResponse = await dio.post(
+                '/auth/refresh',
+                data: {
+                  'refresh_token': refreshToken
+                },
+                options: Options(),
+              );
+
+              final newAccessToken = refreshResponse.data['data']['accessToken'];
+              final newRefreshToken = refreshResponse.data['data']['refreshToken'];
+
+              // Lưu vào Hive
+              await HiveService.saveToken(TokenLocalModel(
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken, // Giữ nguyên refresh token
+              ));
+
+              // Gắn token mới & retry request cũ
+              final requestOptions = response.requestOptions;
+              requestOptions.headers['Authorization'] =
+                  'Bearer ${newAccessToken.trim()}';
+
+              final retriedResponse = await dio.fetch(requestOptions);
+              return handler.resolve(retriedResponse);
+            } catch (e) {
+              return handler.next(response);
+            }
+          }
+          return handler.next(response);
         },
         onError: (DioException err, handler) async {
-          debugPrint(
-            '❗ Dio error: ${err.response?.statusCode} - ${err.requestOptions.path}',
-          );
-
           if (err.response?.statusCode == 401) {
             try {
               final refreshToken = HiveService.getToken()?.refreshToken;
@@ -53,9 +86,10 @@ abstract class DioModule {
               // Gọi refresh token bằng chính `dio`
               final refreshResponse = await dio.post(
                 '/auth/refresh',
-                options: Options(
-                  headers: {'Authorization': 'Bearer $refreshToken'},
-                ),
+                data: {
+                  'refresh_token': refreshToken
+                },
+                options: Options(),
               );
 
               final newAccessToken = refreshResponse.data['data']['accessToken'];

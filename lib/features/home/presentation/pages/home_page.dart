@@ -1,13 +1,16 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
-import 'package:Dividex/features/group/presentation/bloc/group_event.dart' as group_event;
+import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
+    as group_event;
 import 'package:Dividex/features/home/presentation/bloc/bottom_nav_visibility_cubit.dart';
 import 'package:Dividex/features/home/presentation/pages/setting_sheet.dart';
 import 'package:Dividex/features/home/presentation/widgets/add_button_widget.dart';
-import 'package:Dividex/features/home/presentation/widgets/comunity_widget.dart';
+import 'package:Dividex/features/home/presentation/widgets/friend_widget.dart';
+import 'package:Dividex/features/home/presentation/widgets/group_widget.dart';
 import 'package:Dividex/features/home/presentation/widgets/home_widget.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart' as user_event;
+import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
+    as user_event;
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/material.dart';
@@ -37,16 +40,37 @@ class _HomePageState extends State<HomePage> {
   // Danh sách các màn hình (ví dụ)
   static final List<Widget> _options = <Widget>[
     BlocProvider(
-      create: (context) => LoadedUsersBloc()..add(user_event.InitialEvent(HiveService.getUser().id, user_event.LoadUsersAction.getFriends)),
+      create: (context) => LoadedUsersBloc()
+        ..add(
+          user_event.InitialEvent(
+            HiveService.getUser().id,
+            user_event.LoadUsersAction.getFriends,
+          ),
+        ),
       child: const HomeWidget(),
     ),
     const SizedBox.shrink(),
-    const ComunityWidget(),
+    BlocProvider(
+      create: (context) =>
+          LoadedGroupsBloc()
+            ..add(group_event.InitialEvent(HiveService.getUser().id ?? '')),
+      child: const GroupWidget(),
+    ),
+    BlocProvider(
+      create: (context) => LoadedUsersBloc()
+        ..add(
+          user_event.InitialEvent(
+            HiveService.getUser().id ?? '',
+            user_event.LoadUsersAction.getFriends,
+          ),
+        ),
+      child: const FriendWidget(),
+    ),
     const SizedBox.shrink(),
   ];
 
   void _onItemTapped(int index) {
-    if (index == 3) {
+    if (index == 4) {
       _showSettingsSheet(context);
       return;
     }
@@ -127,7 +151,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final intl = AppLocalizations.of(context)!; // Lấy đối tượng AppLocalizations
+    final intl = AppLocalizations.of(
+      context,
+    )!; // Lấy đối tượng AppLocalizations
 
     return Scaffold(
       appBar: AppBar(
@@ -148,7 +174,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             CircleAvatar(
-              backgroundImage: NetworkImage(HiveService.getUser().avatarUrl ?? ''),
+              backgroundImage: NetworkImage(
+                HiveService.getUser().avatarUrl ?? '',
+              ),
               radius: 25,
               child: const Icon(Icons.person),
             ),
@@ -163,9 +191,7 @@ class _HomePageState extends State<HomePage> {
             right: 0,
             child: SizedBox(
               height: 200, // Chiều cao gợn sóng
-              child: CustomPaint(
-                painter: WavePainter(),
-              ),
+              child: CustomPaint(painter: WavePainter()),
             ),
           ),
           PageView(
@@ -190,19 +216,23 @@ class _HomePageState extends State<HomePage> {
                 ? BottomNavigationBar(
                     key: const ValueKey(
                       'visibleNav',
-                    ), // 🔑 để AnimatedSwitcher hoạt động chính xác
+                    ), // để AnimatedSwitcher hoạt động chính xác
                     items: <BottomNavigationBarItem>[
                       BottomNavigationBarItem(
                         icon: const Icon(Icons.home),
                         label: intl.appTitleHome,
                       ),
                       BottomNavigationBarItem(
-                        icon: const Icon(Icons.search),
-                        label: intl.searchTab,
+                        icon: const Icon(Icons.bar_chart),
+                        label: intl.analytics,
                       ),
                       BottomNavigationBarItem(
                         icon: const Icon(Icons.people),
-                        label: intl.appTitleCommunity,
+                        label: intl.group,
+                      ),
+                      BottomNavigationBarItem(
+                        icon: const Icon(Icons.person),
+                        label: intl.friend,
                       ),
                       const BottomNavigationBarItem(
                         icon: Icon(Icons.menu),

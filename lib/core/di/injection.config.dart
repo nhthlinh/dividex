@@ -37,6 +37,15 @@ import 'package:Dividex/features/event_expense/domain/event_repository.dart'
 import 'package:Dividex/features/event_expense/domain/expense_repository.dart'
     as _i55;
 import 'package:Dividex/features/event_expense/domain/usecase.dart' as _i433;
+import 'package:Dividex/features/friend/data/repositories/friend_repository_impl.dart'
+    as _i707;
+import 'package:Dividex/features/friend/data/source/friend_remote_datasource.dart'
+    as _i692;
+import 'package:Dividex/features/friend/data/source/friend_remote_datasource_impl.dart'
+    as _i343;
+import 'package:Dividex/features/friend/domain/friend_repository.dart'
+    as _i1026;
+import 'package:Dividex/features/friend/domain/usecase.dart' as _i126;
 import 'package:Dividex/features/group/data/repositories/group_repository_impl.dart'
     as _i654;
 import 'package:Dividex/features/group/data/source/group_remote_datasource.dart'
@@ -74,6 +83,10 @@ extension GetItInjectableX on _i174.GetIt {
       () async =>
           _i349.AuthRemoteDataSourceImpl(await getAsync<_i305.DioClient>()),
     );
+    gh.factoryAsync<_i692.FriendRemoteDataSource>(
+      () async =>
+          _i343.FriendRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
+    );
     gh.factoryAsync<_i957.GroupRemoteDataSource>(
       () async =>
           _i794.GroupRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
@@ -107,6 +120,11 @@ extension GetItInjectableX on _i174.GetIt {
       () async =>
           _i242.ResetPasswordUseCase(await getAsync<_i143.AuthRepository>()),
     );
+    gh.factoryAsync<_i1026.FriendRepository>(
+      () async => _i707.FriendRepositoryImpl(
+        await getAsync<_i692.FriendRemoteDataSource>(),
+      ),
+    );
     gh.factoryAsync<_i989.EventRemoteDataSource>(
       () async =>
           _i1037.EventRemoteDataSourceImpl(await getAsync<_i305.DioClient>()),
@@ -118,6 +136,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i477.UserRemoteDataSource>(
       () async =>
           _i357.UserRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
+    );
+    gh.factoryAsync<_i126.FriendUseCase>(
+      () async =>
+          _i126.FriendUseCase(await getAsync<_i1026.FriendRepository>()),
     );
     gh.factoryAsync<_i635.UserRepository>(
       () async => _i979.UserRepositoryImpl(

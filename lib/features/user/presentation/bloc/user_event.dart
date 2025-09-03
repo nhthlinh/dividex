@@ -4,6 +4,7 @@ enum LoadUsersAction {
   getFriends,
   getGroupMembers,
   getEventParticipants,
+  getUsersBySearch,
 }
 
 abstract class LoadUserEvent extends Equatable {

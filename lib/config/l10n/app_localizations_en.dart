@@ -395,6 +395,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pay => 'Pay';
 
   @override
+  String get analytics => 'Analytics';
+
+  @override
+  String get noFriends => 'You have no friend';
+
+  @override
+  String get addFirstFriend => 'Find your friend and add them';
+
+  @override
+  String get addFriend => 'Add';
+
+  @override
+  String get sendFriendRequestSuccess => 'Your request has been sent';
+
+  @override
   String get termsOfServiceTitle => 'TERMS OF SERVICE';
 
   @override

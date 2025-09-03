@@ -79,7 +79,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget _buildBalanceCard(ThemeData theme) {
     final intl = AppLocalizations.of(context)!;
     return Card(
-      elevation: 4,
+      elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -169,10 +169,11 @@ class _HomeWidgetState extends State<HomeWidget> {
     final String amountText = isOwedByYou ? intl.youOwn : intl.ownYou;
 
     return Card(
-      elevation: 2,
+      elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
+        
         contentPadding: const EdgeInsets.all(12),
         leading: CircleAvatar(
           backgroundImage: NetworkImage(transaction.avatar ?? ''),

@@ -159,6 +159,13 @@
   "remind": "Remind",
   "pay": "Pay",
 
+  "analytics": "Analytics",
+  "noFriends": "You have no friend",
+  "addFirstFriend": "Find your friend and add them",
+
+  "addFriend": "Add",
+  "sendFriendRequestSuccess": "Your request has been sent",
+
   "termsOfServiceTitle": "TERMS OF SERVICE",
   "aloboSportsHub": "ALobo Sports Hub",
   "version": "Version: {versionNumber}",

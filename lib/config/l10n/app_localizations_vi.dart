@@ -398,6 +398,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String get pay => 'Trả';
 
   @override
+  String get analytics => 'Thống kê';
+
+  @override
+  String get noFriends => 'Bạn không có bạn bè';
+
+  @override
+  String get addFirstFriend => 'Tìm và kết bạn với họ ngay nào';
+
+  @override
+  String get addFriend => 'Thêm';
+
+  @override
+  String get sendFriendRequestSuccess => 'Yêu cầu đã được gửi';
+
+  @override
   String get termsOfServiceTitle => 'ĐIỀU KHOẢN SỬ DỤNG';
 
   @override

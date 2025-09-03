@@ -860,6 +860,36 @@ abstract class AppLocalizations {
   /// **'Pay'**
   String get pay;
 
+  /// No description provided for @analytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analytics;
+
+  /// No description provided for @noFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no friend'**
+  String get noFriends;
+
+  /// No description provided for @addFirstFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Find your friend and add them'**
+  String get addFirstFriend;
+
+  /// No description provided for @addFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addFriend;
+
+  /// No description provided for @sendFriendRequestSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request has been sent'**
+  String get sendFriendRequestSuccess;
+
   /// No description provided for @termsOfServiceTitle.
   ///
   /// In en, this message translates to:

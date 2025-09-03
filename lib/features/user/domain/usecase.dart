@@ -13,6 +13,10 @@ class UserUseCase {
     return repository.getUserForCreateGroup(userId, page, pageSize, searchQuery);
   }
 
+  Future<PagingModel<List<UserModel>>> getUserBySearch(String userId, int page, int pageSize, String? searchQuery) {
+    return repository.getUserBySearch(userId, page, pageSize, searchQuery);
+  }
+
   Future<PagingModel<List<UserModel>>> getUserForCreateEvent(String groupId, int page, int pageSize, String? searchQuery) {
     return repository.getUserForCreateEvent(groupId, page, pageSize, searchQuery);
   }

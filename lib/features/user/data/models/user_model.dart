@@ -1,10 +1,3 @@
-
-
-import 'package:json_annotation/json_annotation.dart';
-
-part 'user_model.g.dart';
-
-@JsonSerializable()
 class UserModel {
   final String? id;
   final String? email;
@@ -24,6 +17,25 @@ class UserModel {
     this.amount,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
-}
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+    id: json['uid'] ?? json['friend_uid'] as String?,
+    email: json['email'] as String?,
+    fullName: json['full_name'] as String?,
+    phoneNumber: json['phone_number'] as String?,
+    avatar: json['avatar_url'] as String?,
+    hasDebt: json['has_debt'] as bool?,
+    amount: (json['amount'] as num?)?.toDouble(),
+  );
+
+    Map<String, dynamic> toJson() => <String, dynamic>{
+      'id': id,
+      'email': email,
+      'full_name': fullName,
+      'phone_number': phoneNumber,
+      'avatar_url': avatar,
+      'has_debt': hasDebt,
+      'amount': amount,
+    };
+
+
+  }

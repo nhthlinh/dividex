@@ -103,10 +103,10 @@ class _GroupWidgetState extends State<GroupWidget> {
             _groupList.clear();
             _groupList.addAll(state.groups);
 
-           // chỉ khởi tạo khi chưa có dữ liệu (tránh reset mỗi lần build)
-if (_selectedMemberIndices.length != _groupList.length) {
-  _selectedMemberIndices = List.filled(_groupList.length, 0);
-}
+            // chỉ khởi tạo khi chưa có dữ liệu (tránh reset mỗi lần build)
+            if (_selectedMemberIndices.length != _groupList.length) {
+              _selectedMemberIndices = List.filled(_groupList.length, 0);
+            }
 
             return Expanded(
               child: ListView.builder(
@@ -140,7 +140,9 @@ if (_selectedMemberIndices.length != _groupList.length) {
                             Row(
                               children: [
                                 CircleAvatar(
-                                  backgroundImage: NetworkImage(group.avatarUrl ?? ''),
+                                  backgroundImage: NetworkImage(
+                                    group.avatarUrl ?? '',
+                                  ),
                                   backgroundColor: Colors.grey,
                                   child: Icon(Icons.group, color: Colors.white),
                                 ),
@@ -177,14 +179,16 @@ if (_selectedMemberIndices.length != _groupList.length) {
                                       backgroundColor: isSelected
                                           ? Colors.blueAccent
                                           : Colors.grey,
-                                      backgroundImage: member.user?.avatar !=
-                                                  null &&
+                                      backgroundImage:
+                                          member.user?.avatar != null &&
                                               member.user!.avatar!.isNotEmpty
                                           ? NetworkImage(member.user!.avatar!)
                                           : null,
                                       child: member.user?.avatar == null
-                                          ? const Icon(Icons.person,
-                                              color: Colors.white)
+                                          ? const Icon(
+                                              Icons.person,
+                                              color: Colors.white,
+                                            )
                                           : null,
                                     ),
                                   );
@@ -219,8 +223,8 @@ if (_selectedMemberIndices.length != _groupList.length) {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
                                       (currentMember.hasDebt ?? false)
-                                          ? Colors.red[700]
-                                          : Colors.green[700],
+                                      ? Colors.red[700]
+                                      : Colors.green[700],
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
@@ -229,14 +233,10 @@ if (_selectedMemberIndices.length != _groupList.length) {
                                   (currentMember.hasDebt ?? false)
                                       ? intl.remind
                                       : intl.pay,
-                                  style:
-                                      const TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
                             ),
-                          
-                            
-                            
                           ],
                         ),
                       ),
