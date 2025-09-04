@@ -16,10 +16,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
     try {
       return dio.post(
         '/friends/request',
-        data: {
-          'receiver_uid': receiverUid,
-          'message': message,
-        },
+        data: {'receiver_uid': receiverUid, 'message': message},
       );
     } catch (e) {
       rethrow;
@@ -28,17 +25,17 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
 
   @override
   Future<void> acceptFriendRequest(String friendshipUid) {
-    return dio.post(
-      '/friends/requests/$friendshipUid/accept',
-    );
+    try {
+      return dio.put('/friends/$friendshipUid');
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
   Future<void> declineFriendRequest(String friendshipUid) {
     try {
-      return dio.delete(
-        '/friends/$friendshipUid',
-      );
+      return dio.delete('/friends/$friendshipUid');
     } catch (e) {
       rethrow;
     }
@@ -46,12 +43,18 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
 
   @override
   Future<PagingModel<List<FriendRequestModel>>> getFriendRequests(
-      FriendRequestType type, String? search, int page, int pageSize) async {
+    FriendRequestType type,
+    String? search,
+    int page,
+    int pageSize,
+  ) async {
     try {
       final response = await dio.get(
-        '/friends/requests',
+        '/friends/request',
         queryParameters: {
-          'type': type == FriendRequestType.received ? 'Received' : 'Sent',
+          'request_type': type == FriendRequestType.received
+              ? 'Received'
+              : 'Sent',
           'search': search,
           'order_by': 'updated_at',
           'page': page,
@@ -75,7 +78,10 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
 
   @override
   Future<PagingModel<List<FriendRequestModel>>> getFriends(
-      String? search, int page, int pageSize) async {
+    String? search,
+    int page,
+    int pageSize,
+  ) async {
     try {
       final response = await dio.get(
         '/friends',
@@ -99,5 +105,37 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
     } catch (e) {
       rethrow;
     }
-  } 
+  }
+
+  @override
+  Future<PagingModel<List<FriendRequestModel>>> searchUsers(
+    String? search,
+    int page,
+    int pageSize,
+  ) async {
+    try {
+      final response = await dio.get(
+        '/users',
+        queryParameters: {
+          'page': page,
+          'page_size': pageSize,
+          'search': search,
+        },
+      );
+      if (response.data['content'] != []) {
+        return PagingModel.fromJson(
+          response.data,
+          (jsonList) => (jsonList['content'] as List)
+              .map((item) => FriendRequestModel.fromJson(item))
+              .toList(),
+        );
+      } else {
+        throw Exception('Failed to load users');
+      }
+    } catch (e, stackTrace) {
+      print('Error: $e');
+      print('Stack trace: $stackTrace');
+      rethrow;
+    }
+  }
 }

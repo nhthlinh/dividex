@@ -165,6 +165,19 @@
   "addFriend": "Thêm",
   "sendFriendRequestSuccess": "Yêu cầu đã được gửi",
 
+  "addFriendMessageHint": "Xin chào, rất vui được làm quen",
+
+  "cancel": "Hủy",
+
+  "tryDifferentKeyword": "Thử từ khóa khác",
+  "noSearchResults": "Không tìm thấy kết quả nào",
+
+  "result": "Kết quả",
+  "addFriendMessage": "Lời mời kết bạn",
+
+  "received": "Đã nhận",
+  "sent": "Đã gửi",
+
   "termsOfServiceTitle": "ĐIỀU KHOẢN SỬ DỤNG",
   "aloboSportsHub": "ALobo Sports Hub",
   "version": "Phiên bản: {versionNumber}",

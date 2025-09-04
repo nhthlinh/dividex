@@ -890,6 +890,54 @@ abstract class AppLocalizations {
   /// **'Your request has been sent'**
   String get sendFriendRequestSuccess;
 
+  /// No description provided for @addFriendMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, nice to meet you'**
+  String get addFriendMessageHint;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @tryDifferentKeyword.
+  ///
+  /// In en, this message translates to:
+  /// **'Try different keyword'**
+  String get tryDifferentKeyword;
+
+  /// No description provided for @noSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Found nothing'**
+  String get noSearchResults;
+
+  /// No description provided for @result.
+  ///
+  /// In en, this message translates to:
+  /// **'Result'**
+  String get result;
+
+  /// No description provided for @addFriendMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend request'**
+  String get addFriendMessage;
+
+  /// No description provided for @received.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get received;
+
+  /// No description provided for @sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get sent;
+
   /// No description provided for @termsOfServiceTitle.
   ///
   /// In en, this message translates to:

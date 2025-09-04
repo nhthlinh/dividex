@@ -44,37 +44,6 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<PagingModel<List<UserModel>>> getUserBySearch(
-    String userId,
-    int page,
-    int pageSize,
-    String? searchQuery,
-  ) async {
-    try {
-      final response = await dio.get(
-        '/users',
-        queryParameters: {
-          'page': page,
-          'page_size': pageSize,
-          'search': searchQuery,
-        },
-      );
-      if (response.data['content'] != []) {
-        return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => UserModel.fromJson(item))
-              .toList(),
-        );
-      } else {
-        throw Exception('Failed to load users');
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
   Future<PagingModel<List<UserModel>>> getUserForCreateEvent(
     String groupId,
     int page,

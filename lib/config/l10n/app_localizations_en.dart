@@ -410,6 +410,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sendFriendRequestSuccess => 'Your request has been sent';
 
   @override
+  String get addFriendMessageHint => 'Hi, nice to meet you';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get tryDifferentKeyword => 'Try different keyword';
+
+  @override
+  String get noSearchResults => 'Found nothing';
+
+  @override
+  String get result => 'Result';
+
+  @override
+  String get addFriendMessage => 'Friend request';
+
+  @override
+  String get received => 'Received';
+
+  @override
+  String get sent => 'Sent';
+
+  @override
   String get termsOfServiceTitle => 'TERMS OF SERVICE';
 
   @override

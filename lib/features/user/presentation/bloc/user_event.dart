@@ -3,8 +3,7 @@ import 'package:equatable/equatable.dart';
 enum LoadUsersAction {
   getFriends,
   getGroupMembers,
-  getEventParticipants,
-  getUsersBySearch,
+  getEventParticipants, search,
 }
 
 abstract class LoadUserEvent extends Equatable {

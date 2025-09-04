@@ -413,6 +413,30 @@ class AppLocalizationsVi extends AppLocalizations {
   String get sendFriendRequestSuccess => 'Yêu cầu đã được gửi';
 
   @override
+  String get addFriendMessageHint => 'Xin chào, rất vui được làm quen';
+
+  @override
+  String get cancel => 'Hủy';
+
+  @override
+  String get tryDifferentKeyword => 'Thử từ khóa khác';
+
+  @override
+  String get noSearchResults => 'Không tìm thấy kết quả nào';
+
+  @override
+  String get result => 'Kết quả';
+
+  @override
+  String get addFriendMessage => 'Lời mời kết bạn';
+
+  @override
+  String get received => 'Đã nhận';
+
+  @override
+  String get sent => 'Đã gửi';
+
+  @override
   String get termsOfServiceTitle => 'ĐIỀU KHOẢN SỬ DỤNG';
 
   @override

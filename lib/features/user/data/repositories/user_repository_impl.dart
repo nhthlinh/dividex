@@ -16,11 +16,6 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<PagingModel<List<UserModel>>> getUserBySearch(String userId, int page, int pageSize, String? searchQuery) {
-    return remoteDataSource.getUserBySearch(userId, page, pageSize, searchQuery);
-  }
-
-  @override
   Future<PagingModel<List<UserModel>>> getUserForCreateEvent(String groupId, int page, int pageSize, String? searchQuery) {
     return remoteDataSource.getUserForCreateEvent(groupId, page, pageSize, searchQuery);
   }

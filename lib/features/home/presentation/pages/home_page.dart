@@ -1,4 +1,11 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/features/friend/domain/usecase.dart';
+import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
+import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
+import 'package:Dividex/features/friend/presentation/bloc/friend_request_bloc.dart'
+    as request_bloc;
+import 'package:Dividex/features/friend/presentation/bloc/search_users_bloc.dart'
+    as search_bloc;
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
     as group_event;
@@ -8,9 +15,6 @@ import 'package:Dividex/features/home/presentation/widgets/add_button_widget.dar
 import 'package:Dividex/features/home/presentation/widgets/friend_widget.dart';
 import 'package:Dividex/features/home/presentation/widgets/group_widget.dart';
 import 'package:Dividex/features/home/presentation/widgets/home_widget.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
-    as user_event;
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/material.dart';
@@ -40,13 +44,8 @@ class _HomePageState extends State<HomePage> {
   // Danh sách các màn hình (ví dụ)
   static final List<Widget> _options = <Widget>[
     BlocProvider(
-      create: (context) => LoadedUsersBloc()
-        ..add(
-          user_event.InitialEvent(
-            HiveService.getUser().id,
-            user_event.LoadUsersAction.getFriends,
-          ),
-        ),
+      create: (context) =>
+          LoadedFriendsBloc()..add(InitialEvent(HiveService.getUser().id)),
       child: const HomeWidget(),
     ),
     const SizedBox.shrink(),
@@ -56,14 +55,23 @@ class _HomePageState extends State<HomePage> {
             ..add(group_event.InitialEvent(HiveService.getUser().id ?? '')),
       child: const GroupWidget(),
     ),
-    BlocProvider(
-      create: (context) => LoadedUsersBloc()
-        ..add(
-          user_event.InitialEvent(
-            HiveService.getUser().id ?? '',
-            user_event.LoadUsersAction.getFriends,
-          ),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<LoadedFriendsBloc>(
+          create: (context) => LoadedFriendsBloc(),
         ),
+        BlocProvider<search_bloc.SearchUsersBloc>(
+          create: (context) => search_bloc.SearchUsersBloc(),
+        ),
+        BlocProvider<request_bloc.FriendRequestBloc>(
+          key: const ValueKey("receivedRequests"),
+          create: (_) => request_bloc.FriendRequestBloc()
+        ),
+        BlocProvider<request_bloc.FriendRequestBloc>(
+          key: const ValueKey("sentRequests"),
+          create: (_) => request_bloc.FriendRequestBloc()
+        ),
+      ],
       child: const FriendWidget(),
     ),
     const SizedBox.shrink(),

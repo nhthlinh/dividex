@@ -166,6 +166,19 @@
   "addFriend": "Add",
   "sendFriendRequestSuccess": "Your request has been sent",
 
+  "addFriendMessageHint": "Hi, nice to meet you",
+  "cancel": "Cancel",
+
+  "tryDifferentKeyword": "Try different keyword",
+  "noSearchResults": "Found nothing",
+
+  "result": "Result",
+  "addFriendMessage": "Friend request",
+
+  "received": "Received",
+  "sent": "Sent",
+
+
   "termsOfServiceTitle": "TERMS OF SERVICE",
   "aloboSportsHub": "ALobo Sports Hub",
   "version": "Version: {versionNumber}",

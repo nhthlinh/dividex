@@ -10,4 +10,5 @@ abstract class FriendRepository {
   Future<void> declineFriendRequest(String friendshipUid);
   Future<PagingModel<List<FriendRequestModel>>> getFriendRequests(FriendRequestType type, String? search, int page, int pageSize);
   Future<PagingModel<List<FriendRequestModel>>> getFriends(String? search, int page, int pageSize);
+  Future<PagingModel<List<FriendRequestModel>>> searchUsers(String? search, int page, int pageSize);
 }

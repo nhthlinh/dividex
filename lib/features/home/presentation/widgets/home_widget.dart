@@ -1,4 +1,7 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/features/friend/data/models/friend_request_model.dart';
+import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
+import 'package:Dividex/features/friend/presentation/bloc/friend_state.dart';
 import 'package:Dividex/features/home/presentation/widgets/format.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
@@ -16,7 +19,7 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
   final double totalOwe = 250000;
   final double totalOwedByOthers = 124000;
-  final List<UserModel> recentTransactions = [];
+  final List<FriendRequestModel> recentTransactions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +35,12 @@ class _HomeWidgetState extends State<HomeWidget> {
           children: [
             _buildBalanceCard(theme),
             const SizedBox(height: 24),
-            BlocBuilder<LoadedUsersBloc, LoadedUsersState>(
+            BlocBuilder<LoadedFriendsBloc, LoadedFriendsState>(
               builder: (context, state) {
                 if (state.isLoading) {
                   return Center(child: CircularProgressIndicator());
                 }
-                if (state.users.isEmpty) {
+                if (state.requests.isEmpty) {
                   if (recentTransactions.isEmpty) {
                     return Center(
                       child: Column(
@@ -66,7 +69,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 }
 
                 recentTransactions.clear();
-                recentTransactions.addAll(state.users);
+                recentTransactions.addAll(state.requests);
                 return _buildRecentTransactionsSection(theme);
               },
             ),
@@ -161,7 +164,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   Widget _buildTransactionItem(
     ThemeData theme,
-    UserModel transaction,
+    FriendRequestModel transaction,
   ) {
     final intl = AppLocalizations.of(context)!;
     final bool isOwedByYou = transaction.hasDebt ?? false;
@@ -176,14 +179,14 @@ class _HomeWidgetState extends State<HomeWidget> {
         
         contentPadding: const EdgeInsets.all(12),
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(transaction.avatar ?? ''),
+          backgroundImage: NetworkImage(transaction.avatarUrl),
           child: Icon(
             Icons.person,
             color: Colors.grey[600],
           ),
         ),
         title: Text(
-          transaction.fullName ?? '',
+          transaction.fullName,
           style: theme.textTheme.bodyMedium!.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -197,7 +200,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               style: theme.textTheme.bodySmall!.copyWith(color: Colors.grey),
             ),
             Text(
-              "${formatCurrency(transaction.amount!)} ₫",
+              "${formatCurrency(transaction.amount ?? 0.0)} ₫",
               style: theme.textTheme.bodyMedium!.copyWith(
                 color: amountColor,
                 fontWeight: FontWeight.bold,
