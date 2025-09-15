@@ -6,9 +6,11 @@ import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_f
 import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/otp_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/reset_pass_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/register_flow/register_page.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/home/presentation/pages/add_event_page.dart';
 import 'package:Dividex/features/home/presentation/pages/add_expense_page.dart';
 import 'package:Dividex/features/home/presentation/pages/add_group_page.dart';
+import 'package:Dividex/features/home/presentation/pages/chat_page.dart';
 import 'package:Dividex/features/home/presentation/pages/home_page.dart';
 import 'package:Dividex/features/home/presentation/pages/term_of_service_page.dart';
 import 'package:Dividex/features/splash/presentation/pages/splash_page.dart';
@@ -37,6 +39,8 @@ class AppRouteNames {
   static const String addExpense = 'add-expense';
   static const String addGroup = 'add-group';
   static const String addEvent = 'add-event';
+
+  static const String chat = 'chat';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -77,122 +81,138 @@ GoRouter buildRouter(BuildContext context) {
           );
         },
       ),
-      GoRoute(
-        path: '/register',
-        name: AppRouteNames.register,
-        builder: (BuildContext context, GoRouterState state) {
-          return const RegisterPage();
-        },
-      ),
-      GoRoute(
-        path: '/login',
-        name: AppRouteNames.login,
-        builder: (BuildContext context, GoRouterState state) {
-          return const LoginPage();
-        },
-        routes: [
-          GoRoute(
-            path: 'request-email',
-            name: AppRouteNames.requestEmail,
-            builder: (context, state) => const EmailInputPage(),
-          ),
-          GoRoute(
-            path: 'otp',
-            name: AppRouteNames.otp,
-            builder: (context, state) => OTPInputPage.fromState(state),
-          ),
-          GoRoute(
-            path: '/reset-pass',
-            name: AppRouteNames.resetPass,
-            builder: (context, state) {
-              final token = state.uri.queryParameters['token'];
-              if (token == null) {
-                // Handle the case where token is not provided
-                return const Scaffold(
-                  body: Center(child: Text('Token is required for password reset')),
-                );
-              }
-              return ResetPassPage(token: token);
-            },
-          ),
-        ],
-      ),
-      GoRoute(
-        path: '/home',
-        name: AppRouteNames.home,
-        builder: (BuildContext context, GoRouterState state) {
-          final extra = state.extra as int?;
-          return HomePage(selectedIndex: extra ?? 0);
-        },
-      ),
-      GoRoute(
-        path: '/add-expense',
-        name: AppRouteNames.addExpense,
-        builder: (BuildContext context, GoRouterState state) {
-          final extra = state.extra as int?;
-          return AddExpensePage(expenseId: extra ?? 0);
-        },
-      ),
-      GoRoute(
-        path: '/add-group',
-        name: AppRouteNames.addGroup,
-        builder: (BuildContext context, GoRouterState state) {
-          final extra = state.extra as int?;
-          return AddGroupPage(groupId: extra ?? 0);
-        },
-      ),
-      GoRoute(
-        path: '/add-event',
-        name: AppRouteNames.addEvent,
-        builder: (BuildContext context, GoRouterState state) {
-          final extra = state.extra as int?;
-          return AddEventPage(eventId: extra ?? 0);
-        },
-      ),
-      GoRoute(
-        path: '/terms-of-use',
-        name: AppRouteNames.termOfUse,
-        builder: (BuildContext context, GoRouterState state) {
-          return TermsOfServicePage();
-        },
-      ),
-      GoRoute(
-        path: '/change-password',
-        name: AppRouteNames.changePass,
-        builder: (BuildContext context, GoRouterState state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(AppLocalizations.of(context)!.settingChangePass), // "Change Password"
-            ),
-            body: SizedBox.shrink()
-          );
-        },
-      ),
+
+      // GoRoute(
+      //   path: '/register',
+      //   name: AppRouteNames.register,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const RegisterPage();
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/login',
+      //   name: AppRouteNames.login,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const LoginPage();
+      //   },
+      //   routes: [
+      //     GoRoute(
+      //       path: 'request-email',
+      //       name: AppRouteNames.requestEmail,
+      //       builder: (context, state) => const EmailInputPage(),
+      //     ),
+      //     GoRoute(
+      //       path: 'otp',
+      //       name: AppRouteNames.otp,
+      //       builder: (context, state) => OTPInputPage.fromState(state),
+      //     ),
+      //     GoRoute(
+      //       path: '/reset-pass',
+      //       name: AppRouteNames.resetPass,
+      //       builder: (context, state) {
+      //         final token = state.uri.queryParameters['token'];
+      //         if (token == null) {
+      //           // Handle the case where token is not provided
+      //           return const Scaffold(
+      //             body: Center(child: Text('Token is required for password reset')),
+      //           );
+      //         }
+      //         return ResetPassPage(token: token);
+      //       },
+      //     ),
+      //   ],
+      // ),
+      // GoRoute(
+      //   path: '/home',
+      //   name: AppRouteNames.home,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     final extra = state.extra as int?;
+      //     return HomePage(selectedIndex: extra ?? 0);
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/add-expense',
+      //   name: AppRouteNames.addExpense,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     final extra = state.extra as int?;
+      //     return AddExpensePage(expenseId: extra ?? 0);
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/add-group',
+      //   name: AppRouteNames.addGroup,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     final extra = state.extra as int?;
+      //     return BlocProvider<LoadedGroupsBloc>(
+      //       create: (context) => LoadedGroupsBloc(),
+      //       child: AddGroupPage(groupId: extra ?? 0),
+      //     );
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/chat',
+      //   name: AppRouteNames.chat,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     final extra = state.extra as int?;
+      //     return BlocProvider<LoadedGroupsBloc>(
+      //       create: (context) => LoadedGroupsBloc(),
+      //       child: ChatScreen(),
+      //     );
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/add-event',
+      //   name: AppRouteNames.addEvent,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     final extra = state.extra as int?;
+      //     return AddEventPage(eventId: extra ?? 0);
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/terms-of-use',
+      //   name: AppRouteNames.termOfUse,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return TermsOfServicePage();
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/change-password',
+      //   name: AppRouteNames.changePass,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return Scaffold(
+      //       appBar: AppBar(
+      //         title: Text(AppLocalizations.of(context)!.settingChangePass), // "Change Password"
+      //       ),
+      //       body: SizedBox.shrink()
+      //     );
+      //   },
+      // ),
     ],
     redirect: (context, state) {
-      final authState = authBloc.state;
-      final loc = state.matchedLocation;
-      final isSplash = loc == '/';
-      final isInLoginFlow = loc.startsWith('/login');
-      final isInRegisterFlow = loc.startsWith('/register');
-      final isAuthFlow = isInLoginFlow || isInRegisterFlow;
-      final isAuthenticated = authState is AuthAuthenticated;
-      final isLoading = authState is AuthLoading || authState is AuthInitial;
+      // final authState = authBloc.state;
+      // final loc = state.matchedLocation;
+      // final isSplash = loc == '/';
+      // final isInLoginFlow = loc.startsWith('/login');
+      // final isInRegisterFlow = loc.startsWith('/register');
+      // final isAuthFlow = isInLoginFlow || isInRegisterFlow;
+      // final isAuthenticated = authState is AuthAuthenticated;
+      // final isLoading = authState is AuthLoading || authState is AuthInitial;
 
-      // ✅ Đang loading hoặc init => giữ ở splash
-      if (isLoading) return isSplash ? null : '/loading';
+      // // ✅ Đang loading hoặc init => giữ ở splash
+      // if (isLoading) return isSplash ? null : '/loading';
 
-      // ✅ Nếu chưa login, đang không ở login/register/splash => về login
-      if (!isAuthenticated && !isAuthFlow && !isSplash && !isLoading && loc != '/loading') {
-        return '/login';
-      }
+      // // ✅ Nếu chưa login, đang không ở login/register/splash => về login
+      // if (!isAuthenticated && !isAuthFlow && !isSplash && !isLoading && loc != '/loading') {
+      //   return '/login';
+      // }
 
-      // ✅ Nếu đã login mà lại vào login/register => về home
-      if (isAuthenticated && isAuthFlow) {
-        return '/home';
-      }
+      // // ✅ Nếu đã login mà lại vào login/register => về home
+      // if (isAuthenticated && isAuthFlow) {
+      //   return '/home';
+      // }
 
-      return null; // không redirect
+      // return null; // không redirect
+      return '/';
     },
     errorBuilder: (context, state) {
       // Xử lý lỗi nếu cần

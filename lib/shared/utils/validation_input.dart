@@ -132,4 +132,14 @@ class CustomValidator {
 
     return null; // hợp lệ
   }
+
+  String? validateNumberInput(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+    if (!RegExp(r'^\d+$').hasMatch(value)) {
+      return 'Please enter a valid number';
+    }
+    return null; // valid
+  }
 }

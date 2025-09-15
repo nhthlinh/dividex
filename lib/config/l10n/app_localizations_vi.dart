@@ -437,6 +437,36 @@ class AppLocalizationsVi extends AppLocalizations {
   String get sent => 'Đã gửi';
 
   @override
+  String get food => 'Ăn uống';
+
+  @override
+  String get transportation => 'Di chuyển';
+
+  @override
+  String get utilities => 'Tiện ích';
+
+  @override
+  String get entertainment => 'Giải trí';
+
+  @override
+  String get housing => 'Nhà ở';
+
+  @override
+  String get healthcare => 'Y tế';
+
+  @override
+  String get shopping => 'Mua sắm';
+
+  @override
+  String get education => 'Giáo dục';
+
+  @override
+  String get savings => 'Tiết kiệm';
+
+  @override
+  String get miscellaneous => 'Khác';
+
+  @override
   String get termsOfServiceTitle => 'ĐIỀU KHOẢN SỬ DỤNG';
 
   @override

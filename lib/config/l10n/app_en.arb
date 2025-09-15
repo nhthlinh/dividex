@@ -178,6 +178,17 @@
   "received": "Received",
   "sent": "Sent",
 
+  "food": "Food",
+  "transportation": "Transportation",
+  "utilities": "Utilities",
+  "entertainment": "Entertainment",
+  "housing": "Housing",
+  "healthcare": "Healthcare",
+  "shopping": "Shopping",
+  "education": "Education",
+  "savings": "Savings",
+  "miscellaneous": "Miscellaneous",
+
 
   "termsOfServiceTitle": "TERMS OF SERVICE",
   "aloboSportsHub": "ALobo Sports Hub",

@@ -1,161 +1,182 @@
-import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/features/home/presentation/widgets/member_selector_widget.dart';
-import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
-import 'package:Dividex/shared/services/local/hive_service.dart';
-import 'package:Dividex/shared/utils/validation_input.dart';
-import 'package:Dividex/shared/widgets/custom_button.dart';
-import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-import 'package:Dividex/shared/widgets/image_picker_widget.dart';
-import 'package:Dividex/shared/widgets/wave_painter.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' hide Action;
-import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:Dividex/config/l10n/app_localizations.dart';
+// import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
+// import 'package:Dividex/features/group/presentation/bloc/group_event.dart' as group_event;
+// import 'package:Dividex/features/home/presentation/widgets/member_selector_widget.dart';
+// import 'package:Dividex/features/user/data/models/user_model.dart';
+// import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
+// import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
+// import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+// import 'package:Dividex/shared/services/local/hive_service.dart';
+// import 'package:Dividex/shared/utils/validation_input.dart';
+// import 'package:Dividex/shared/widgets/custom_button.dart';
+// import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
+// import 'package:Dividex/shared/widgets/image_picker_widget.dart';
+// import 'package:Dividex/shared/widgets/wave_painter.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart' hide Action;
+// import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddGroupPage extends StatefulWidget {
-  final int groupId;
+// class AddGroupPage extends StatefulWidget {
+//   final int groupId;
 
-  const AddGroupPage({super.key, required this.groupId});
+//   const AddGroupPage({super.key, required this.groupId});
 
-  @override
-  State<AddGroupPage> createState() => _AddGroupPageState();
-}
+//   @override
+//   State<AddGroupPage> createState() => _AddGroupPageState();
+// }
 
-class _AddGroupPageState extends State<AddGroupPage> {
-  final _formKey = GlobalKey<FormState>();
+// class _AddGroupPageState extends State<AddGroupPage> {
+//   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController groupNameController = TextEditingController();
-  String? groupImagePath;
-  Uint8List? imageBytes;
+//   final TextEditingController groupNameController = TextEditingController();
+//   String? groupImagePath;
+//   Uint8List? imageBytes;
 
-  List<UserModel> selectedMembers = [];
+//   List<UserModel> selectedMembers = [];
 
-  @override
-  void initState() {
-    super.initState();
+//   @override
+//   void initState() {
+//     super.initState();
 
-    if (widget.groupId != 0) {
-      // Load group details for editing
-      // For example:
-      // groupNameController.text = existingGroup.name;
-      // selectedMembers = existingGroup.members;
-    }
-  }
+//     if (widget.groupId != 0) {
+//       // Load group details for editing
+//       // For example:
+//       // groupNameController.text = existingGroup.name;
+//       // selectedMembers = existingGroup.members;
+//     }
+//   }
 
-  @override
-  void dispose() {
-    groupNameController.dispose();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     groupNameController.dispose();
+//     super.dispose();
+//   }
 
-  void submitGroup() {
-    if (_formKey.currentState!.validate()) {
-      print('Group Name: ${groupNameController.text}');
-      print('Group Image Path: $groupImagePath');
-      print('Selected Members: $selectedMembers');
-    }
-  }
+//   void submitGroup() {
+//     if (_formKey.currentState!.validate()) {
+//       print('Group Name: ${groupNameController.text}');
+//       print('Group Image Path: $groupImagePath');
+//       print('Selected Members: $selectedMembers');
 
-  @override
-  Widget build(BuildContext context) {
-    final intl = AppLocalizations.of(context)!;
+//       context.read<LoadedGroupsBloc>().add(
+//         group_event.CreateGroupEvent(
+//           name: groupNameController.text,
+//           avatarPath: groupImagePath ?? '',
+//           memberIds: selectedMembers
+//               .map((e) => e.id)
+//               .whereType<String>()
+//               .toList(),
+//         ),
+//       );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          intl.addGroup,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ),
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: CustomPaint(painter: WavePainter()),
-            ),
-          ),
+//       Navigator.of(context).pop();
+//     }
+//   }
 
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: groupForm(intl),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     final intl = AppLocalizations.of(context)!;
 
-  Form groupForm(AppLocalizations intl) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          CustomTextInput(
-            label: intl.groupNameLabel,
-            hintText: intl.groupNameHint,
-            controller: groupNameController,
-            keyboardType: TextInputType.text,
-            prefixIcon: const Icon(Icons.event, color: Colors.grey),
-            validator: (value) {
-              return CustomValidator().validateName(value, intl);
-            },
-          ),
-          const SizedBox(height: 16),
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           intl.addGroup,
+//           style: Theme.of(context).textTheme.titleMedium,
+//         ),
+//       ),
+//       body: Stack(
+//         children: [
+//           Align(
+//             alignment: Alignment.bottomCenter,
+//             child: SizedBox(
+//               height: 200,
+//               width: double.infinity,
+//               child: CustomPaint(painter: WavePainter()),
+//             ),
+//           ),
 
-          Text(
-            intl.addGroupImageLabel,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: ImagePickerField(
-              isAvatar: true,
-              onChanged: (paths) {
-                setState(() {
-                  groupImagePath = paths.first;
-                });
-              },
-            ),
-          ),
+//           SafeArea(
+//             child: SingleChildScrollView(
+//               child: Padding(
+//                 padding: const EdgeInsets.all(24.0),
+//                 child: groupForm(intl),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
-          const SizedBox(height: 16),
-          BlocProvider(
-            create: (context) => LoadedUsersBloc()..add(InitialEvent(HiveService.getUser().id ?? '', LoadUsersAction.getFriends)),
-            child: BlocBuilder<LoadedUsersBloc, LoadedUsersState>(
-              builder: (context, state) {
-                return MemberSelector(
-                  selectorType: MemberSelectorEnum.group,
-                  id: HiveService.getUser().id ?? '',
-                  initialSelectedMembers: selectedMembers,
-                  onSelectedMembersChanged: (selected) {
-                    setState(() {
-                      selectedMembers = selected;
-                    });
-                  },
-                );
-              },
-            ),
-          ),
+//   Form groupForm(AppLocalizations intl) {
+//     return Form(
+//       key: _formKey,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.stretch,
+//         children: [
+//           CustomTextInput(
+//             label: intl.groupNameLabel,
+//             hintText: intl.groupNameHint,
+//             controller: groupNameController,
+//             keyboardType: TextInputType.text,
+//             prefixIcon: const Icon(Icons.event, color: Colors.grey),
+//             validator: (value) {
+//               return CustomValidator().validateName(value, intl);
+//             },
+//           ),
+//           const SizedBox(height: 16),
 
-          const SizedBox(height: 30),
-          CustomButton(
-            buttonText: intl.add,
-            onPressed: () {
-              submitGroup();
-            },
-          ),
-          const SizedBox(height: 30),
-        ],
-      ),
-    );
-  }
-}
+//           Text(
+//             intl.addGroupImageLabel,
+//             style: Theme.of(context).textTheme.titleSmall,
+//           ),
+//           const SizedBox(height: 10),
+//           Center(
+//             child: ImagePickerField(
+//               isAvatar: true,
+//               onChanged: (paths) {
+//                 setState(() {
+//                   groupImagePath = paths.first;
+//                 });
+//               },
+//             ),
+//           ),
+
+//           const SizedBox(height: 16),
+//           BlocProvider(
+//             create: (context) => LoadedUsersBloc()
+//               ..add(
+//                 InitialEvent(
+//                   HiveService.getUser().id ?? '',
+//                   LoadUsersAction.getFriends,
+//                 ),
+//               ),
+//             child: BlocBuilder<LoadedUsersBloc, LoadedUsersState>(
+//               builder: (context, state) {
+//                 return MemberSelector(
+//                   selectorType: MemberSelectorEnum.group,
+//                   id: HiveService.getUser().id ?? '',
+//                   initialSelectedMembers: selectedMembers,
+//                   onSelectedMembersChanged: (selected) {
+//                     setState(() {
+//                       selectedMembers = selected;
+//                     });
+//                   },
+//                 );
+//               },
+//             ),
+//           ),
+
+//           const SizedBox(height: 30),
+//           CustomButton(
+//             buttonText: intl.add,
+//             onPressed: () {
+//               submitGroup();
+//             },
+//           ),
+//           const SizedBox(height: 30),
+//         ],
+//       ),
+//     );
+//   }
+// }

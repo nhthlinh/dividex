@@ -1,125 +1,162 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// DONE
 
-class CustomTextInput extends StatelessWidget {
-  final String? label; // Optional label
+import 'package:flutter/material.dart';
+import 'package:Dividex/config/themes/app_theme.dart';
+
+enum InputType {
+  text,
+  number,
+  password,
+  email,
+  phone,
+  date,
+  multiLine,
+}
+
+enum TextInputSize { large, medium, small }
+
+class CustomTextInputWidget<T> extends StatelessWidget {
+  final TextInputSize size;
+  final String? label;
   final String? hintText;
   final TextEditingController controller;
-  final bool obscureText;
-  final String? Function(String?)? validator;
-  final TextInputType? keyboardType;
-  final bool isReadOnly;
-  final int? maxLines;
-  final Widget? suffixIcon; // Thêm thuộc tính cho icon ở cuối
-  final VoidCallback? onTap; // Thêm thuộc tính cho hàm khi tap
-  final List<TextInputFormatter>? inputFormatters;
-  final Icon? prefixIcon;
-  final TextStyle? style; // Thêm thuộc tính cho icon ở đầu
-  final bool autoFocus; // Thêm thuộc tính để tự động focus vào TextFormField
-  final Function(String value)?
-  onChanged; // Thêm thuộc tính để xác định hàm khi thay đổi nội dung
 
-  // Autocomplete
-  final FocusNode? focusNode;
-  final VoidCallback? onEditingComplete;
+  final bool? obscureText; // Ẩn hiện văn bản
+  final String? Function(String?)? validator; // Hàm kiểm tra lỗi
+  final TextInputType keyboardType;
+  final bool isReadOnly; // Chỉ đọc
+  final int? maxLines; // Số dòng tối đa (mặc định là 1)
+  final bool isRequired; // Bắt buộc nhập
+  final Widget? prefixIcon; // Icon ở đầu
+  final Widget? suffixIcon; // Icon ở cuối
+  final ValueChanged<String>? onChanged; // Hàm khi nội dung thay đổi
 
-  const CustomTextInput({
+  const CustomTextInputWidget({
     super.key,
+    required this.size,
     this.label,
     this.hintText,
     required this.controller,
-    this.obscureText = false,
     this.validator,
-    this.keyboardType,
-    this.isReadOnly = false,
+    required this.keyboardType,
+    required this.isReadOnly,
     this.maxLines,
-    this.suffixIcon, // Khởi tạo suffixIcon
-    this.onTap, // Khởi tạo onTap
-    this.inputFormatters,
+    this.suffixIcon,
     this.prefixIcon,
-    this.style,
-    this.autoFocus = false,
     this.onChanged,
-    this.focusNode,
-    this.onEditingComplete,
+    this.isRequired = false,
+    this.obscureText = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Config cho từng size
+    final sizeConfig = {
+      TextInputSize.large: const Size(300, 90),
+      TextInputSize.medium: const Size(130, 90),
+      TextInputSize.small: const Size(70, 90),
+    };
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (label != null) ...[
-          Text(
-            label!,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          const SizedBox(height: 6),
-        ],
-        TextFormField(
-          autofocus: autoFocus,
-          style: style ?? Theme.of(context).textTheme.bodySmall,
-          maxLines: maxLines,
-          readOnly: isReadOnly,
-          keyboardType: keyboardType,
-          controller: controller,
-          obscureText: obscureText,
-          validator: validator,
-          onTap: onTap, // Gán hàm onTap vào TextFormField
-          inputFormatters: inputFormatters,
-          onChanged: onChanged ?? (value) {}, // Đảm bảo luôn có hàm onChanged
-          decoration: InputDecoration(
-            prefixIcon: prefixIcon,
-            hintText: hintText,
-            hintStyle: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: Colors.grey),
-            isDense: true,
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 12,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width < 340
+            ? MediaQuery.of(context).size.width - 32
+            : sizeConfig[size]!.width,
+        minHeight: sizeConfig[size]!.height,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildLabel(context),
+          const SizedBox(height: 8),
+          TextFormField(
+            obscureText: obscureText!,
+            maxLines: maxLines ?? 1,
+            readOnly: isReadOnly,
+            keyboardType: keyboardType,
+            validator:
+                validator ??
+                (isRequired
+                    ? (value) =>
+                          value == null || value.isEmpty ? 'Required' : null
+                    : null),
+            controller: controller,
+            onChanged: onChanged,
+            textInputAction: TextInputAction.next,
+            decoration: inputDeco().copyWith(
+              prefixIcon: prefixIcon,
+              suffixIcon: suffixIcon,
+              hintText: hintText,
+              hintStyle: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppThemes.borderColor),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
+              ),
             ),
-            suffixIcon: suffixIcon,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0,
+            ),
+            errorBuilder: (context, errorText) => Text(
+              errorText,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: AppThemes.errorColor,
+                fontSize: 12,
+              ),
+            ),
           ),
-          focusNode: focusNode,
-          onEditingComplete: onEditingComplete,
-        ),
-      ],
+        ],
+      ),
     );
   }
-}
 
-class DateInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    final text = newValue.text;
-    if (text.isEmpty) {
-      return newValue.copyWith(text: '');
-    }
+  RichText buildLabel(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        text: label,
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          fontSize: 12,
+          letterSpacing: 0,
+          height: 16 / 12,
+          color: Colors.grey,
+        ),
+        children: isRequired
+            ? [
+                const TextSpan(
+                  text: ' *',
+                  style: TextStyle(color: AppThemes.primary3Color),
+                ),
+              ]
+            : [],
+      ),
+    );
+  }
 
-    // dd/MM/yyyy
-    if (text.length == 2 && oldValue.text.length < newValue.text.length) {
-      return newValue.copyWith(
-        text: '$text/',
-        selection: TextSelection.collapsed(offset: text.length + 1),
-      );
-    }
-    if (text.length == 5 && oldValue.text.length < newValue.text.length) {
-      return newValue.copyWith(
-        text: '$text/',
-        selection: TextSelection.collapsed(offset: text.length + 1),
-      );
-    }
-
-    // Loại bỏ các ký tự không phải số hoặc '/'
-    final newText = text.replaceAll(RegExp(r'[^0-9/]'), '');
-    return newValue.copyWith(
-      text: newText,
-      selection: TextSelection.collapsed(offset: newText.length),
+  InputDecoration inputDeco() {
+    return InputDecoration(
+      border: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: AppThemes.borderColor, width: 1),
+      ),
+      enabledBorder: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: AppThemes.borderColor, width: 1),
+      ),
+      focusedBorder: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: AppThemes.primary3Color, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: AppThemes.errorColor, width: 1),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: AppThemes.errorColor, width: 2),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
     );
   }
 }

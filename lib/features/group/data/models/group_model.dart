@@ -12,7 +12,7 @@ part 'group_model.g.dart';
 class GroupModel {
   final String? id;
   final String? name;
-  final UserModel? leader;
+  final String? leader;
   final StatusEnum? status;
   final String? avatarUrl;
   final DateTime? createdAt;

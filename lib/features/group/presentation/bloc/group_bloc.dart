@@ -4,7 +4,7 @@ import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
-import 'package:Dividex/shared/widgets/message_widget.dart';
+import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
@@ -12,6 +12,8 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
     on<InitialEvent>(_onInitial);
     on<LoadMoreGroupsEvent>(_onLoadMoreGroups);
     on<RefreshGroupsEvent>(_onRefreshGroups);
+    on<CreateGroupEvent>(_onCreateGroup);
+    on<EditGroupEvent>(_onEditGroup);
   }
 
   Future _onInitial(InitialEvent event, Emitter emit) async {
@@ -69,6 +71,37 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
           isLoading: false,
         ),
       );
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future _onCreateGroup(CreateGroupEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      await useCase.createGroup(name: event.name, avatarPath: event.avatarPath, memberIds: event.memberIds);
+
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future _onEditGroup(EditGroupEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      await useCase.editGroup(
+        groupId: event.groupId,
+        name: event.name,
+        avatarPath: event.avatarPath,
+        memberIds: event.memberIds,
+      );
+
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.success, type: ToastType.success);
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);

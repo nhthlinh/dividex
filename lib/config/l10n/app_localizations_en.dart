@@ -434,6 +434,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sent => 'Sent';
 
   @override
+  String get food => 'Food';
+
+  @override
+  String get transportation => 'Transportation';
+
+  @override
+  String get utilities => 'Utilities';
+
+  @override
+  String get entertainment => 'Entertainment';
+
+  @override
+  String get housing => 'Housing';
+
+  @override
+  String get healthcare => 'Healthcare';
+
+  @override
+  String get shopping => 'Shopping';
+
+  @override
+  String get education => 'Education';
+
+  @override
+  String get savings => 'Savings';
+
+  @override
+  String get miscellaneous => 'Miscellaneous';
+
+  @override
   String get termsOfServiceTitle => 'TERMS OF SERVICE';
 
   @override

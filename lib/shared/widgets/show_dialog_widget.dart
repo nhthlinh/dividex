@@ -2,46 +2,56 @@ import 'package:flutter/material.dart';
 
 Future<void> showCustomDialog({
   required BuildContext context,
-  String? title,
-  required Widget child,
+  required String label, // luôn có label
+  required Widget content, // nội dung chính
+  List<Widget>? actions, // tuỳ chọn thêm nút (OK, Cancel, ...)
 }) {
   final theme = Theme.of(context);
-  final isDark = theme.brightness == Brightness.dark;
-  final backgroundColor = isDark ? Colors.black : Colors.white;
 
   return showDialog(
     context: context,
-    barrierDismissible: true,
-    barrierColor: const Color.fromARGB(25, 0, 0, 0), // Làm mờ nền
-    builder: (context) => Center( // Center giúp dialog không bị full chiều cao
-      child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Theme.of(context).primaryColor, width: 1),
+    builder: (context) => Dialog(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      insetPadding: const EdgeInsets.all(24),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 400,
+          maxHeight: 600,
         ),
-        backgroundColor: backgroundColor,
-        insetPadding: const EdgeInsets.all(24), // tránh sát viền
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 350,
-            maxHeight: 600,
-          ),
-          child: SingleChildScrollView( // ngăn nội dung quá dài gây vỡ layout
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (title != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Text(title, style: theme.textTheme.titleSmall),
-                    ),
-                  child,
-                ],
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Label (luôn có)
+              Text(
+                label,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
+              const SizedBox(height: 12),
+
+              /// Nội dung chính
+              Flexible(
+                child: SingleChildScrollView(
+                  child: content,
+                ),
+              ),
+
+              /// Các nút hành động (nếu có)
+              if (actions != null && actions.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: actions,
+                ),
+              ],
+            ],
           ),
         ),
       ),

@@ -12,4 +12,30 @@ class GroupUseCase {
   Future<PagingModel<List<GroupModel>>> getUserGroups(String userId, int page, int pageSize) {
     return repository.getUserGroups(userId, page, pageSize);
   }
+
+  Future<void> createGroup({
+    required String name,
+    required String avatarPath,
+    required List<String> memberIds,
+  }) {
+    return repository.createGroup(
+      name: name,
+      avatarPath: avatarPath,
+      memberIds: memberIds,
+    );
+  }
+
+  Future<void> editGroup({
+    required String groupId,
+    required String name,
+    required String avatarPath,
+    required List<String> memberIds,
+  }) {
+    return repository.editGroup(
+      groupId: groupId,
+      name: name,
+      avatarPath: avatarPath,
+      memberIds: memberIds,
+    );
+  }
 }

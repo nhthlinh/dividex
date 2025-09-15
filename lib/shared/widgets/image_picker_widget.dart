@@ -1,131 +1,191 @@
+// DONE
+
+import 'dart:io' as io;
+import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/image_edit_widget.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImagePickerField extends StatefulWidget {
-  final bool isAvatar;
-  final bool multiple; // true = nhiều ảnh
-  final void Function(List<String> imagePaths)? onChanged; // callback trả link/path
+enum PickerType { avatar, gallery }
 
-  const ImagePickerField({
+class ImagePickerWidget extends StatefulWidget {
+  final PickerType type;
+  final void Function(List<Uint8List> files) onFilesPicked;
+
+  const ImagePickerWidget({
     super.key,
-    this.isAvatar = false,
-    this.multiple = false,
-    this.onChanged,
+    required this.type,
+    required this.onFilesPicked,
   });
 
   @override
-  State<ImagePickerField> createState() => _ImagePickerFieldState();
+  State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
 }
 
-class _ImagePickerFieldState extends State<ImagePickerField> {
-  final ImagePicker _picker = ImagePicker();
-  List<String> _imagePaths = []; // path hoặc link
-  List<Uint8List> _webImages = []; // dành cho web (bytes để hiển thị)
+class _ImagePickerWidgetState extends State<ImagePickerWidget> {
+  List<Uint8List> _previewFiles = [];
 
-  Future<void> _pickImages() async {
-    try {
-      final List<XFile> images;
-
-      if (widget.multiple) {
-        images = await _picker.pickMultiImage() ?? [];
-      } else {
-        final XFile? img = await _picker.pickImage(source: ImageSource.gallery);
-        images = img != null ? [img] : [];
+  Future<void> _pickFiles() async {
+    if (kIsWeb) {
+      // --- WEB: dùng FilePicker
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: widget.type == PickerType.gallery,
+      );
+      if (result != null) {
+        setState(() {
+          _previewFiles = result.files.map((file) => file.bytes!).toList();
+        });
+        widget.onFilesPicked(_previewFiles);
       }
-
-      if (images.isNotEmpty) {
-        _imagePaths = images.map((e) => e.path).toList();
-        _webImages.clear();
-
-        if (kIsWeb) {
-          for (final img in images) {
-            final bytes = await img.readAsBytes();
-            _webImages.add(bytes);
-          }
+    } else {
+      // --- MOBILE: dùng ImagePicker
+      final picker = ImagePicker();
+      if (widget.type == PickerType.avatar) {
+        final XFile? file = await picker.pickImage(source: ImageSource.gallery);
+        if (file != null) {
+          final bytes = await io.File(file.path).readAsBytes();
+          setState(() => _previewFiles = [bytes]);
+          widget.onFilesPicked(_previewFiles);
         }
-
-        setState(() {});
-        widget.onChanged?.call(_imagePaths);
+      } else {
+        final List<XFile> files = await picker.pickMultiImage();
+        if (files.isNotEmpty) {
+          final data = await Future.wait(
+            files.map((f) => io.File(f.path).readAsBytes()),
+          );
+          setState(() => _previewFiles = data);
+          widget.onFilesPicked(_previewFiles);
+        }
       }
-    } catch (e) {
-      debugPrint("Image pick error: $e");
     }
   }
+
+  /// Xóa ảnh
+  void _removeImage(int index) {
+    setState(() {
+      _previewFiles.removeAt(index);
+    });
+    widget.onFilesPicked(_previewFiles);
+  }
+
+  Future<void> _editImage(int index) async {
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => SimpleImageEditorPage(
+        imageBytes: _previewFiles[index],
+      ),
+    ),
+  );
+
+  if (result != null && result is Uint8List) {
+    setState(() {
+      _previewFiles[index] = result;
+    });
+    widget.onFilesPicked(List<Uint8List>.from(_previewFiles));
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isAvatar) {
-      return GestureDetector(
-        onTap: _pickImages,
-        child: CircleAvatar(
-          radius: 50,
-          backgroundImage: _buildAvatarProvider(),
-          child: _imagePaths.isEmpty && _webImages.isEmpty
-              ? const Icon(Icons.person, size: 50)
-              : null,
+    final isAvatar = widget.type == PickerType.avatar;
+
+    return Column(
+      children: [
+        Text(
+          "Please upload image, size less than 100KB",
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppThemes.borderColor, fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
         ),
-      );
-    }
-
-    return GestureDetector(
-      onTap: _pickImages,
-      child: Container(
-        height: 150,
-        width: double.infinity,
-        color: Colors.grey[300],
-        child: _buildGallery(),
-      ),
+        const SizedBox(height: 8),
+    
+        // Upload button + status
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomButton(text: "Choose File", onPressed: _pickFiles, type: ButtonType.secondary, size: ButtonSize.medium),
+            const SizedBox(width: 8),
+            Text(
+              _previewFiles.isEmpty
+                  ? "No File Chosen"
+                  : "${_previewFiles.length} file(s) chosen",
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+    
+        // Preview
+        if (_previewFiles.isEmpty)
+          Container(
+            width: isAvatar ? 120 : 160,
+            height: isAvatar ? 120 : 160,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              shape: isAvatar ? BoxShape.circle : BoxShape.rectangle,
+            ),
+            child: const Icon(Icons.image, size: 50, color: Colors.grey),
+          )
+        else if (isAvatar)
+          Stack(
+            children: [
+              InkWell(
+                onTap: () => _editImage(0),
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundImage: MemoryImage(_previewFiles.first),
+                ),
+              ),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.close, color: AppThemes.borderColor),
+                      onPressed: () => _removeImage(0),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+        else
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(_previewFiles.length, (i) {
+              return Stack(
+                children: [
+                  InkWell(
+                    onTap: () => _editImage(i),
+                    child: Image.memory(
+                      _previewFiles[i],
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.close, color: AppThemes.borderColor),
+                          onPressed: () => _removeImage(i),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }),
+          ),
+      ],
     );
-  }
-
-  ImageProvider? _buildAvatarProvider() {
-    if (kIsWeb) {
-      if (_webImages.isNotEmpty) {
-        return MemoryImage(_webImages.first);
-      }
-    } else {
-      if (_imagePaths.isNotEmpty) {
-        if (_imagePaths.first.startsWith("http")) {
-          return NetworkImage(_imagePaths.first);
-        } else {
-          return AssetImage(_imagePaths.first); // tạm coi như local asset
-        }
-      }
-    }
-    return null;
-  }
-
-  Widget _buildGallery() {
-    if (_imagePaths.isEmpty && _webImages.isEmpty) {
-      return const Center(child: Icon(Icons.photo_camera, size: 40));
-    }
-
-    final children = <Widget>[];
-    if (kIsWeb) {
-      children.addAll(_webImages.map(
-        (bytes) => Image.memory(bytes, fit: BoxFit.cover),
-      ));
-    } else {
-      children.addAll(_imagePaths.map(
-        (path) => path.startsWith("http")
-            ? Image.network(path, fit: BoxFit.cover)
-            : Image.asset(path, fit: BoxFit.cover),
-      ));
-    }
-
-    if (widget.multiple) {
-      return ListView(
-        scrollDirection: Axis.horizontal,
-        children: children
-            .map((e) => Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SizedBox(width: 120, child: e),
-                ))
-            .toList(),
-      );
-    } else {
-      return children.first;
-    }
   }
 }

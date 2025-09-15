@@ -178,6 +178,17 @@
   "received": "Đã nhận",
   "sent": "Đã gửi",
 
+  "food": "Ăn uống",
+  "transportation": "Di chuyển",
+  "utilities": "Tiện ích",
+  "entertainment": "Giải trí",
+  "housing": "Nhà ở",
+  "healthcare": "Y tế",
+  "shopping": "Mua sắm",
+  "education": "Giáo dục",
+  "savings": "Tiết kiệm",
+  "miscellaneous": "Khác",
+
   "termsOfServiceTitle": "ĐIỀU KHOẢN SỬ DỤNG",
   "aloboSportsHub": "ALobo Sports Hub",
   "version": "Phiên bản: {versionNumber}",

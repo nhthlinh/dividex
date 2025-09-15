@@ -1,5 +1,5 @@
 import 'package:Dividex/config/routes/router.dart';
-import 'package:Dividex/shared/widgets/message_widget.dart';
+import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:flutter/material.dart';
 
 /// Hiển thị một thông báo tùy chỉnh không tự tắt.

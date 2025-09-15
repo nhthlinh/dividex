@@ -4,7 +4,7 @@ import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/friend/domain/usecase.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_state.dart';
-import 'package:Dividex/shared/widgets/message_widget.dart';
+import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoadedFriendsBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {

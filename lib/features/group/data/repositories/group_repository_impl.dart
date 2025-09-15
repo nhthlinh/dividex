@@ -15,4 +15,32 @@ class GroupRepositoryImpl implements GroupRepository {
     return remoteDataSource.getUserGroups(userId, page, pageSize);
   }
 
+  @override
+  Future<void> createGroup({
+    required String name,
+    required String avatarPath,
+    required List<String> memberIds,
+  }) {
+    return remoteDataSource.createGroup(
+      name: name,
+      avatarPath: avatarPath,
+      memberIds: memberIds,
+    );
+  }
+
+  @override
+  Future<void> editGroup({  
+    required String groupId,
+    required String name,
+    required String avatarPath,
+    required List<String> memberIds,
+  }) {
+    return remoteDataSource.editGroup(
+      groupId: groupId,
+      name: name,
+      avatarPath: avatarPath,
+      memberIds: memberIds,
+    );
+  }
+
 }

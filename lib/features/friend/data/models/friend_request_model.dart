@@ -1,3 +1,8 @@
+enum FriendRequestStatus {
+  none,
+  accepted,
+}
+
 class FriendRequestModel {
   final String friendUid;
   final String fullName;
@@ -6,6 +11,7 @@ class FriendRequestModel {
   final String? messageRequest;
   final bool? hasDebt;
   final double? amount;
+  final FriendRequestStatus? status;
 
   FriendRequestModel({
     required this.friendUid,
@@ -15,6 +21,7 @@ class FriendRequestModel {
     this.messageRequest,
     this.hasDebt,
     this.amount,
+    this.status,
   });
 
   factory FriendRequestModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +33,9 @@ class FriendRequestModel {
       messageRequest: json['message_request'] as String?,
       hasDebt: json['has_debt'] as bool?,
       amount: (json['amount'] as num?)?.toDouble(),
+      status: json['status'] == 'ACCEPTED'
+          ? FriendRequestStatus.accepted
+          : FriendRequestStatus.none,
     );
   }
 
@@ -38,6 +48,7 @@ class FriendRequestModel {
       'message_request': messageRequest,
       'has_debt': hasDebt,
       'amount': amount,
+      'status': status == FriendRequestStatus.accepted ? 'ACCEPTED' : 'NONE',
     };
   }
 }

@@ -938,6 +938,66 @@ abstract class AppLocalizations {
   /// **'Sent'**
   String get sent;
 
+  /// No description provided for @food.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get food;
+
+  /// No description provided for @transportation.
+  ///
+  /// In en, this message translates to:
+  /// **'Transportation'**
+  String get transportation;
+
+  /// No description provided for @utilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Utilities'**
+  String get utilities;
+
+  /// No description provided for @entertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment'**
+  String get entertainment;
+
+  /// No description provided for @housing.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing'**
+  String get housing;
+
+  /// No description provided for @healthcare.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare'**
+  String get healthcare;
+
+  /// No description provided for @shopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get shopping;
+
+  /// No description provided for @education.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get education;
+
+  /// No description provided for @savings.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings'**
+  String get savings;
+
+  /// No description provided for @miscellaneous.
+  ///
+  /// In en, this message translates to:
+  /// **'Miscellaneous'**
+  String get miscellaneous;
+
   /// No description provided for @termsOfServiceTitle.
   ///
   /// In en, this message translates to:

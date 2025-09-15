@@ -73,6 +73,10 @@ dependencies:
   google_sign_in: ^7.1.1
   url_launcher: ^6.3.2
   marquee: ^2.3.0
+  
+  google_fonts: ^6.2.1
+  file_picker: ^8.0.7
+  image_editor_plus: ^1.0.6
 
 dev_dependencies:
   flutter_test:
