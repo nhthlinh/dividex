@@ -238,3 +238,198 @@
 //     );
 //   }
 // }
+
+import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/location/locale_cubit.dart';
+import 'package:Dividex/config/routes/router.dart';
+import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/config/themes/theme_cubit.dart';
+import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
+import 'package:Dividex/features/home/presentation/pages/app_shell.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/layout.dart';
+import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+class SettingPage extends StatelessWidget {
+  const SettingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final intl = AppLocalizations.of(context)!;
+
+    return AppShell(
+      currentIndex: 3,
+      child: Layout(
+        title: intl.settings,
+        showAvatar: true,
+        avatarUrl: HiveService.getUser().avatarUrl,
+        child: Column(
+          children: [
+            Center(
+              child: Text(
+                HiveService.getUser().fullName ?? '',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: AppThemes.primary3Color,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            settingOption(
+              intl.settingChangePass,
+              context,
+              onTap: () {
+                context.pushNamed(AppRouteNames.changePass);
+              },
+            ),
+            settingOption(
+              intl.settingTheme,
+              context,
+              onTap: () {
+                showCustomDialog(
+                  context: context,
+                  label: intl.settingChooseTheme,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      settingOption(
+                        intl.settingChooseDark, context,
+                        onTap: () { 
+                          final themeBloc = context.read<ThemeCubit>();
+                          themeBloc.setThemeFromString(
+                            'dark',
+                          ); // Handle dark theme selection
+                          // close the dialog after selection
+                          Navigator.pop(context); // Close the dialog
+                        },
+                      ),
+                      settingOption(
+                        intl.settingChooseLight, context,
+                        onTap: () {
+                          final themeBloc = context.read<ThemeCubit>();
+                          themeBloc.setThemeFromString(
+                            'light',
+                          ); // Handle light theme selection
+                          // close the dialog after selection
+                          Navigator.pop(context); // Close the dialog
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            settingOption(
+              intl.settingLanguage,
+              context,
+              onTap: () {
+                showCustomDialog(
+                  context: context,
+                  label: intl.settingChooseLanguage,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      settingOption(
+                        intl.settingChooseEng, context,
+                        onTap: () { 
+                          final localeBloc = context.read<LocaleCubit>();
+                          localeBloc.changeLocale('en');
+                          // close the dialog after selection
+                          Navigator.pop(context); // Close the dialog
+                        },
+                      ),
+                      settingOption(
+                        intl.settingChooseVie, context,
+                        onTap: () {
+                          final localeBloc = context.read<LocaleCubit>();
+                          localeBloc.changeLocale(
+                            'vi',
+                          ); // Handle Vietnamese selection
+                          // close the dialog after selection
+                          Navigator.pop(context); // Close the dialog
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            settingOption(
+              intl.settingTerm,
+              context,
+              onTap: () {
+                context.pushNamed(AppRouteNames.termOfUse);
+              },
+            ),
+            settingOption(
+              intl.profileSetting,
+              context,
+              onTap: () {
+                // Handle profile action
+              },
+            ),
+            settingOption(
+              intl.qrCode,
+              context,
+              onTap: () {
+                // Handle QR code scanning action
+              },
+            ),
+
+          Center(
+            child: CustomButton(
+              text: intl.signOut,
+              onPressed: () {
+                final authBloc = context.read<AuthBloc>();
+                authBloc.add(const AuthLogoutRequested());
+                context.goNamed(AppRouteNames.splash2);
+              },
+              customColor: AppThemes.errorColor,
+              size: ButtonSize.medium,
+            ),
+          ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  InkWell settingOption(
+    String label,
+    BuildContext context, {
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap ?? () {},
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                label,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: AppThemes.borderColor,
+              ),
+            ],
+          ),
+          const Divider(height: 32, color: AppThemes.borderColor),
+        ],
+      ),
+    );
+  }
+}

@@ -1,6 +1,6 @@
 // import 'package:Dividex/config/l10n/app_localizations.dart';
 // import 'package:Dividex/config/themes/app_theme.dart';
-// import 'package:Dividex/features/friend/data/models/friend_request_model.dart';
+// import 'package:Dividex/features/friend/data/models/friend_model.dart';
 // import 'package:Dividex/features/friend/domain/usecase.dart';
 // import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 // import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
@@ -9,7 +9,6 @@
 // import 'package:Dividex/features/friend/presentation/bloc/friend_state.dart';
 // import 'package:Dividex/features/friend/presentation/bloc/search_users_bloc.dart'
 //     as search_bloc;
-// import 'package:Dividex/features/home/presentation/widgets/friend_card_widget.dart';
 // import 'package:Dividex/shared/services/local/hive_service.dart';
 // import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 // import 'package:flutter/material.dart';
@@ -239,7 +238,7 @@
 //   ) {
 //     return Column(
 //       children: [
-//         const SizedBox(height: 8),
+//         const SizedBox(height: 16),
 //         Align(
 //           alignment: Alignment.centerLeft,
 //           child: Text(
@@ -249,7 +248,7 @@
 //             ).textTheme.titleMedium?.copyWith(color: AppThemes.primary3Color),
 //           ),
 //         ),
-//         const SizedBox(height: 4),
+//         const SizedBox(height: 8),
 //         ListView.builder(
 //           padding: EdgeInsets.zero,
 //           shrinkWrap: true,

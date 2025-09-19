@@ -58,8 +58,12 @@ class CustomButton extends StatelessWidget {
     const Color primaryText = Colors.white;
 
     // Secondary
-    final Color secondaryBorder = isDisabled ? AppThemes.primary6Color : baseColor;
-    final Color secondaryText = isDisabled ? AppThemes.primary6Color : baseColor;
+    final Color secondaryBorder = isDisabled
+        ? AppThemes.primary6Color
+        : baseColor;
+    final Color secondaryText = isDisabled
+        ? AppThemes.primary6Color
+        : baseColor;
     final Color secondaryBg = Colors.white;
 
     // Style nút
@@ -77,7 +81,7 @@ class CustomButton extends StatelessWidget {
       backgroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return type == ButtonType.primary
-              ? AppThemes.primary1Color
+              ? primaryBg // dùng cái đã tính ở trên
               : secondaryBg;
         }
         return type == ButtonType.primary ? primaryBg : secondaryBg;

@@ -6,8 +6,6 @@ class InfoCard extends StatelessWidget {
   final String? subtitle;
   final Widget? trailing;
   final VoidCallback? onTap;
-  final EdgeInsetsGeometry padding;
-  final double borderRadius;
 
   const InfoCard({
     super.key,
@@ -16,21 +14,19 @@ class InfoCard extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.onTap,
-    this.padding = const EdgeInsets.all(16),
-    this.borderRadius = 15,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(borderRadius),
+      borderRadius: BorderRadius.circular(15),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: padding,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius),
+          borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
               color: const Color.fromARGB(255, 240, 240, 240),

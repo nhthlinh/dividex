@@ -52,9 +52,9 @@ class CustomTextInputWidget<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     // Config cho từng size
     final sizeConfig = {
-      TextInputSize.large: const Size(300, 90),
-      TextInputSize.medium: const Size(130, 90),
-      TextInputSize.small: const Size(70, 90),
+      TextInputSize.large: const Size(320, 70),
+      TextInputSize.medium: const Size(130, 70),
+      TextInputSize.small: const Size(70, 70),
     };
 
     return ConstrainedBox(
@@ -67,8 +67,11 @@ class CustomTextInputWidget<T> extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildLabel(context),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
+          if (label != null) ...[
+            buildLabel(context),
+            const SizedBox(height: 4),
+          ],
           TextFormField(
             obscureText: obscureText!,
             maxLines: maxLines ?? 1,
@@ -107,6 +110,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 6),
         ],
       ),
     );

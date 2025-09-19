@@ -1,6 +1,7 @@
 import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/auth/data/models/token_respond_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'auth_remote_datasource.dart';
 
@@ -24,72 +25,150 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to register: ${response.statusCode}');
-      } else if (response.statusCode == 409 ||
-          response.data['error_code'] == 409) {
-        if (response.data != null) {
-          final serverMessage = response.data['message_code'] ?? response;
-          throw Exception(serverMessage);
-        }
       }
 
       return AuthResponseModel.fromJson(response.data['data']);
+    } on DioException catch (dioError) {
+      if (dioError.response != null) {
+        final data = dioError.response?.data;
+        final message = data['message'] ?? 'Unknown error';
+        final messageCode = data['message_code'] ?? '';
+        throw Exception('$messageCode: $message');
+      } else {
+        throw Exception('Network error: ${dioError.message}');
+      }
     } catch (e) {
-      throw Exception('Error during register: $e');
+      throw Exception('Unexpected error: $e');
     }
   }
 
   @override
   Future<AuthResponseModel> login(String email, String password) async {
-    final response = await dio.post(
-      '/auth/login', // hoặc URI thật
-      data: {'email': email, 'password': password},
-    );
-    if (response.statusCode != 200 && response.statusCode != 201) {
-      throw Exception('Failed to login: ${response.statusCode}');
+    try {
+      final response = await dio.post(
+        '/auth/login',
+        data: {'email': email, 'password': password},
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to login: ${response.statusCode}');
+      }
+      return AuthResponseModel.fromJson(response.data['data']);
+    } on DioException catch (dioError) {
+      if (dioError.response != null) {
+        final data = dioError.response?.data;
+        final message = data['message'] ?? 'Unknown error';
+        final messageCode = data['message_code'] ?? '';
+        throw Exception('$messageCode: $message');
+      } else {
+        throw Exception('Network error: ${dioError.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
     }
-    return AuthResponseModel.fromJson(response.data['data']);
   }
 
   @override
   Future<void> logout() async {
-    return;
+    final response = await dio.put('/auth/logout');
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to logout: ${response.statusCode}');
+    }
   }
 
   @override
   Future<void> requestEmail(String email) async {
-    final response = await dio.post('/password/forget', data: {'email': email});
-    if (response.statusCode != 200 && response.statusCode != 201) {
-      throw Exception('Failed to request OTP: ${response.statusCode}');
+    try {
+      final response = await dio.post(
+        '/auth/password/forget',
+        data: {'email': email},
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to request OTP: ${response.statusCode}');
+      }
+    } on DioException catch (dioError) {
+      if (dioError.response != null) {
+        final data = dioError.response?.data;
+        final message = data['message'] ?? 'Unknown error';
+        final messageCode = data['message_code'] ?? '';
+        throw Exception('$messageCode: $message');
+      } else {
+        throw Exception('Network error: ${dioError.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
     }
   }
 
   @override
-  Future<void> resetPassword(
-    String email,
-    String newPassword,
-    String token,
-  ) async {
-    final response = await dio.post(
-      '/password/reset',
-      data: {'new_password': newPassword, 'token': token},
-    );
-    if (response.statusCode != 200 && response.statusCode != 201) {
-      throw Exception('Failed to reset password: ${response.statusCode}');
+  Future<String> checkEmailExists(String email, String otp) async {
+    try {
+      final response = await dio.post(
+        '/auth/password/otp',
+        data: {'email': email, 'otp': otp},
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to verify OTP: ${response.statusCode}');
+      }
+      return response.data['data']['token'];
+    } on DioException catch (dioError) {
+      if (dioError.response != null) {
+        final data = dioError.response?.data;
+        final message = data['message'] ?? 'Unknown error';
+        final messageCode = data['message_code'] ?? '';
+        throw Exception('$messageCode: $message');
+      } else {
+        throw Exception('Network error: ${dioError.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
     }
   }
 
   @override
-  Future<void> changePassword(
-    String email,
-    String newPassword,
-    String oldPassword,
-  ) async {
-    final response = await dio.post(
-      '/password/change',
-      data: {'new_password': newPassword, 'old_password': oldPassword},
-    );
-    if (response.statusCode != 200 && response.statusCode != 201) {
-      throw Exception('Failed to change password: ${response.statusCode}');
+  Future<void> resetPassword(String newPassword, String token) async {
+    try {
+      final response = await dio.put(
+        '/auth/password/reset',
+        data: {'new_password': newPassword, 'token': token},
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to reset password: ${response.statusCode}');
+      }
+    } on DioException catch (dioError) {
+      if (dioError.response != null) {
+        final data = dioError.response?.data;
+        final message = data['message'] ?? 'Unknown error';
+        final messageCode = data['message_code'] ?? '';
+        throw Exception('$messageCode: $message');
+      } else {
+        throw Exception('Network error: ${dioError.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  @override
+  Future<void> changePassword(String newPassword, String oldPassword) async {
+    try {
+      final response = await dio.put(
+        '/auth/password/change',
+        data: {'new_password': newPassword, 'old_password': oldPassword},
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to change password: ${response.statusCode}');
+      }
+    } on DioException catch (dioError) {
+      if (dioError.response != null) {
+        final data = dioError.response?.data;
+        final message = data['message'] ?? 'Unknown error';
+        final messageCode = data['message_code'] ?? '';
+        throw Exception('$messageCode: $message');
+      } else {
+        throw Exception('Network error: ${dioError.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
     }
   }
 

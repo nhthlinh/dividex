@@ -155,7 +155,7 @@ abstract class AppLocalizations {
   /// No description provided for @emailLabel.
   ///
   /// In en, this message translates to:
-  /// **'Email'**
+  /// **'Type your email '**
   String get emailLabel;
 
   /// No description provided for @passwordLabel.
@@ -233,7 +233,7 @@ abstract class AppLocalizations {
   /// No description provided for @otpInputError1.
   ///
   /// In en, this message translates to:
-  /// **'Email not found. Please try again.'**
+  /// **'Please enter the OTP code'**
   String get otpInputError1;
 
   /// No description provided for @resetPassPageTitle.
@@ -335,7 +335,7 @@ abstract class AppLocalizations {
   /// No description provided for @userNotFound.
   ///
   /// In en, this message translates to:
-  /// **'User not found'**
+  /// **'Can not find account with this email. Please create a new one!'**
   String get userNotFound;
 
   /// No description provided for @noTransaction.
@@ -529,6 +529,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Community'**
   String get appTitleCommunity;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @qrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Qr code'**
+  String get qrCode;
 
   /// No description provided for @profileSetting.
   ///
@@ -1004,11 +1016,11 @@ abstract class AppLocalizations {
   /// **'TERMS OF SERVICE'**
   String get termsOfServiceTitle;
 
-  /// No description provided for @aloboSportsHub.
+  /// No description provided for @dIVIDEXApp.
   ///
   /// In en, this message translates to:
-  /// **'ALobo Sports Hub'**
-  String get aloboSportsHub;
+  /// **'DIVIDEX'**
+  String get dIVIDEXApp;
 
   /// No description provided for @version.
   ///
@@ -1031,19 +1043,19 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeMessage.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to ALobo Sports Hub (\"Application\", \"Service\", \"we\" or \"ALobo\").'**
+  /// **'Welcome to DIVIDEX (\"App\", \"Service\", \"we\", or \"DIVIDEX\").'**
   String get welcomeMessage;
 
   /// No description provided for @agreementText.
   ///
   /// In en, this message translates to:
-  /// **'By accessing, downloading, installing or using this application, you agree to comply with and be bound by these terms of service (\"Terms\").'**
+  /// **'By accessing, downloading, installing, or using the App, you agree to be bound by these Terms of Service (\"Terms\").'**
   String get agreementText;
 
   /// No description provided for @disagreementText.
   ///
   /// In en, this message translates to:
-  /// **'If you do not agree with any part of these terms, please do not use our service.'**
+  /// **'If you do not agree with any part of these Terms, please do not use our Service.'**
   String get disagreementText;
 
   /// No description provided for @serviceDescription.
@@ -1052,59 +1064,53 @@ abstract class AppLocalizations {
   /// **'2. SERVICE DESCRIPTION'**
   String get serviceDescription;
 
-  /// No description provided for @aloboDescription.
+  /// No description provided for @dIVIDEXDescription.
   ///
   /// In en, this message translates to:
-  /// **'ALobo Sports Hub is a sports community application that allows users to:'**
-  String get aloboDescription;
+  /// **'DIVIDEX is an application designed to help users manage and share group expenses, offering the following features:'**
+  String get dIVIDEXDescription;
 
-  /// No description provided for @profileCreation.
+  /// No description provided for @createGroups.
   ///
   /// In en, this message translates to:
-  /// **'Create personal profiles and share information about sports skills'**
-  String get profileCreation;
+  /// **'Create and manage expense-sharing groups.'**
+  String get createGroups;
 
-  /// No description provided for @postContent.
+  /// No description provided for @trackExpenses.
   ///
   /// In en, this message translates to:
-  /// **'Post content about sports activities with images, hashtags and friend tagging'**
-  String get postContent;
+  /// **'Track and record shared expenses.'**
+  String get trackExpenses;
+
+  /// No description provided for @splitPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'Split and allocate costs among group members.'**
+  String get splitPayments;
+
+  /// No description provided for @sendReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending payment reminders.'**
+  String get sendReminders;
+
+  /// No description provided for @generateReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate expense reports for groups.'**
+  String get generateReports;
 
   /// No description provided for @socialInteractions.
   ///
   /// In en, this message translates to:
-  /// **'Social interactions through likes, comments, follows and friendships'**
+  /// **'Interact with group members through comments and notifications.'**
   String get socialInteractions;
-
-  /// No description provided for @searchUsers.
-  ///
-  /// In en, this message translates to:
-  /// **'Search and discover other users by sport, skill and location'**
-  String get searchUsers;
-
-  /// No description provided for @createJoinGroups.
-  ///
-  /// In en, this message translates to:
-  /// **'Create and join sports groups'**
-  String get createJoinGroups;
-
-  /// No description provided for @organizeEvents.
-  ///
-  /// In en, this message translates to:
-  /// **'Organize and attend sports events'**
-  String get organizeEvents;
 
   /// No description provided for @receiveNotifications.
   ///
   /// In en, this message translates to:
-  /// **'Receive notifications about related activities'**
+  /// **'Receive notifications about transactions and related activities.'**
   String get receiveNotifications;
-
-  /// No description provided for @earnAchievements.
-  ///
-  /// In en, this message translates to:
-  /// **'Earn achievements in the achievement system'**
-  String get earnAchievements;
 
   /// No description provided for @accountRegistrationSecurity.
   ///
@@ -1121,25 +1127,25 @@ abstract class AppLocalizations {
   /// No description provided for @ageRequirement.
   ///
   /// In en, this message translates to:
-  /// **'You must be 13 years or older to use the service'**
+  /// **'You must be at least 13 years old to use the Service.'**
   String get ageRequirement;
 
   /// No description provided for @accurateInfo.
   ///
   /// In en, this message translates to:
-  /// **'Registration information must be accurate, complete and up-to-date'**
+  /// **'Registration information must be accurate, complete, and kept up to date.'**
   String get accurateInfo;
 
   /// No description provided for @oneUniqueAccount.
   ///
   /// In en, this message translates to:
-  /// **'Each person may only create one unique account'**
+  /// **'Each user may only create one unique account.'**
   String get oneUniqueAccount;
 
   /// No description provided for @emailVerification.
   ///
   /// In en, this message translates to:
-  /// **'You need to verify your email through OTP code'**
+  /// **'You must verify your email via OTP code.'**
   String get emailVerification;
 
   /// No description provided for @accountSecurity.
@@ -1151,19 +1157,19 @@ abstract class AppLocalizations {
   /// No description provided for @passwordProtection.
   ///
   /// In en, this message translates to:
-  /// **'You are responsible for protecting your password and login information'**
+  /// **'You are responsible for protecting your password and login credentials.'**
   String get passwordProtection;
 
   /// No description provided for @unauthorizedUse.
   ///
   /// In en, this message translates to:
-  /// **'Notify us immediately if you detect unauthorized use of your account'**
+  /// **'Notify us immediately if you detect unauthorized use of your account.'**
   String get unauthorizedUse;
 
   /// No description provided for @noSharingResponsibility.
   ///
   /// In en, this message translates to:
-  /// **'We are not responsible for damages due to sharing login information'**
+  /// **'We are not responsible for damages caused by sharing login information.'**
   String get noSharingResponsibility;
 
   /// No description provided for @useOfService.
@@ -1187,14 +1193,14 @@ abstract class AppLocalizations {
   /// No description provided for @accessUsePersonal.
   ///
   /// In en, this message translates to:
-  /// **'Access and use the application for personal, non-commercial purposes'**
+  /// **'Access and use the App for personal, non-commercial purposes.'**
   String get accessUsePersonal;
 
-  /// No description provided for @createShareContent.
+  /// No description provided for @manageShareExpenses.
   ///
   /// In en, this message translates to:
-  /// **'Create and share content in accordance with these terms'**
-  String get createShareContent;
+  /// **'Manage and share group expenses in accordance with these Terms.'**
+  String get manageShareExpenses;
 
   /// No description provided for @usageRestrictions.
   ///
@@ -1205,43 +1211,43 @@ abstract class AppLocalizations {
   /// No description provided for @mayNot.
   ///
   /// In en, this message translates to:
-  /// **'You MAY NOT:'**
+  /// **'You MUST NOT:'**
   String get mayNot;
 
   /// No description provided for @illegalPurposes.
   ///
   /// In en, this message translates to:
-  /// **'Use the service for illegal or unauthorized purposes'**
+  /// **'Use the Service for illegal or unauthorized purposes.'**
   String get illegalPurposes;
 
   /// No description provided for @fakeAccounts.
   ///
   /// In en, this message translates to:
-  /// **'Create fake accounts or provide false information'**
+  /// **'Create fake accounts or provide false information.'**
   String get fakeAccounts;
 
   /// No description provided for @spamHarass.
   ///
   /// In en, this message translates to:
-  /// **'Spam, harass or abuse other users'**
+  /// **'Send spam, harass, or abuse other users.'**
   String get spamHarass;
 
-  /// No description provided for @copyrightViolation.
+  /// No description provided for @manipulateData.
   ///
   /// In en, this message translates to:
-  /// **'Upload content that violates copyright or intellectual property rights'**
-  String get copyrightViolation;
+  /// **'Manipulate or provide false expense information.'**
+  String get manipulateData;
 
   /// No description provided for @botsScripts.
   ///
   /// In en, this message translates to:
-  /// **'Use bots, scripts or automated tools to access the service'**
+  /// **'Use bots, scripts, or automated tools to access the Service.'**
   String get botsScripts;
 
   /// No description provided for @hackSabotage.
   ///
   /// In en, this message translates to:
-  /// **'Attempt to hack, sabotage the system or collect data illegally'**
+  /// **'Attempt to hack, sabotage, or illegally collect data from the system.'**
   String get hackSabotage;
 
   /// No description provided for @userContent.
@@ -1259,14 +1265,14 @@ abstract class AppLocalizations {
   /// No description provided for @retainOwnership.
   ///
   /// In en, this message translates to:
-  /// **'You retain ownership of content you create'**
+  /// **'You retain ownership of the content you create (e.g., expense details, comments).'**
   String get retainOwnership;
 
-  /// No description provided for @aloboContentRights.
+  /// No description provided for @dIVIDEXContentRights.
   ///
   /// In en, this message translates to:
-  /// **'By posting, you grant ALobo the right to use, display, distribute that content on the platform'**
-  String get aloboContentRights;
+  /// **'By providing content, you grant DIVIDEX the right to use, display, and distribute that content within the App.'**
+  String get dIVIDEXContentRights;
 
   /// No description provided for @contentStandards.
   ///
@@ -1277,37 +1283,37 @@ abstract class AppLocalizations {
   /// No description provided for @mustNot.
   ///
   /// In en, this message translates to:
-  /// **'Posted content MUST NOT:'**
+  /// **'Content provided MUST NOT:'**
   String get mustNot;
 
   /// No description provided for @falseInfo.
   ///
   /// In en, this message translates to:
-  /// **'Contain false, fraudulent information or spam'**
+  /// **'Contain false, fraudulent, or misleading information.'**
   String get falseInfo;
 
   /// No description provided for @violatePrivacy.
   ///
   /// In en, this message translates to:
-  /// **'Violate others\' privacy or copyright'**
+  /// **'Violate the privacy rights of others.'**
   String get violatePrivacy;
 
-  /// No description provided for @pornographicContent.
+  /// No description provided for @offensiveContent.
   ///
   /// In en, this message translates to:
-  /// **'Contain pornographic, violent or discriminatory content'**
-  String get pornographicContent;
+  /// **'Contain offensive, violent, or discriminatory content.'**
+  String get offensiveContent;
 
   /// No description provided for @unauthorizedAdvertising.
   ///
   /// In en, this message translates to:
-  /// **'Include unauthorized advertising or sales'**
+  /// **'Include unauthorized advertising or sales.'**
   String get unauthorizedAdvertising;
 
   /// No description provided for @sharePersonalWithoutConsent.
   ///
   /// In en, this message translates to:
-  /// **'Share others\' personal information without consent'**
+  /// **'Share others\' personal information without consent.'**
   String get sharePersonalWithoutConsent;
 
   /// No description provided for @moderationRights.
@@ -1319,19 +1325,13 @@ abstract class AppLocalizations {
   /// No description provided for @reviewRemoveContent.
   ///
   /// In en, this message translates to:
-  /// **'We have the right (but not obligation) to review and remove violating content'**
+  /// **'We reserve the right to review and remove violating content without prior notice.'**
   String get reviewRemoveContent;
-
-  /// No description provided for @contentDeletedNotice.
-  ///
-  /// In en, this message translates to:
-  /// **'Content may be deleted without prior notice'**
-  String get contentDeletedNotice;
 
   /// No description provided for @moderationDecisionsFinal.
   ///
   /// In en, this message translates to:
-  /// **'Our moderation decisions are final'**
+  /// **'Our moderation decisions are final.'**
   String get moderationDecisionsFinal;
 
   /// No description provided for @privacyDataProtection.
@@ -1349,31 +1349,25 @@ abstract class AppLocalizations {
   /// No description provided for @collectProcessInfo.
   ///
   /// In en, this message translates to:
-  /// **'We collect and process personal information according to our Privacy Policy, including:'**
+  /// **'We collect and process personal information in accordance with our Privacy Policy, including:'**
   String get collectProcessInfo;
 
   /// No description provided for @profileInfo.
   ///
   /// In en, this message translates to:
-  /// **'Profile information (name, email, avatar)'**
+  /// **'Profile information (name, email, avatar).'**
   String get profileInfo;
 
-  /// No description provided for @postInteractions.
+  /// No description provided for @expenseData.
   ///
   /// In en, this message translates to:
-  /// **'Post content and interactions'**
-  String get postInteractions;
-
-  /// No description provided for @locationData.
-  ///
-  /// In en, this message translates to:
-  /// **'Location data (when permitted)'**
-  String get locationData;
+  /// **'Expense and transaction data for groups.'**
+  String get expenseData;
 
   /// No description provided for @appUsageInfo.
   ///
   /// In en, this message translates to:
-  /// **'Application usage information'**
+  /// **'App usage information.'**
   String get appUsageInfo;
 
   /// No description provided for @informationSharing.
@@ -1385,19 +1379,19 @@ abstract class AppLocalizations {
   /// No description provided for @infoDisplayedPublicly.
   ///
   /// In en, this message translates to:
-  /// **'Your information may be displayed publicly according to privacy settings'**
+  /// **'Your information (e.g., group expenses) may be displayed publicly within groups based on privacy settings.'**
   String get infoDisplayedPublicly;
 
   /// No description provided for @noSellToThirdParties.
   ///
   /// In en, this message translates to:
-  /// **'We do not sell personal information to third parties'**
+  /// **'We do not sell personal information to third parties.'**
   String get noSellToThirdParties;
 
   /// No description provided for @sharedWithPartners.
   ///
   /// In en, this message translates to:
-  /// **'Information may be shared with service partners to operate the application'**
+  /// **'Information may be shared with service partners to operate the App.'**
   String get sharedWithPartners;
 
   /// No description provided for @freePaidFeatures.
@@ -1415,55 +1409,49 @@ abstract class AppLocalizations {
   /// No description provided for @basicFeaturesFree.
   ///
   /// In en, this message translates to:
-  /// **'Basic application features are provided free of charge, including:'**
+  /// **'The App’s basic features are provided free of charge, including:'**
   String get basicFeaturesFree;
 
-  /// No description provided for @createProfilesPosts.
+  /// No description provided for @createGroupsExpenses.
   ///
   /// In en, this message translates to:
-  /// **'Creating profiles and posting content'**
-  String get createProfilesPosts;
+  /// **'Creating groups and recording expenses.'**
+  String get createGroupsExpenses;
 
-  /// No description provided for @basicSocialInteractions.
+  /// No description provided for @basicSplitPayments.
   ///
   /// In en, this message translates to:
-  /// **'Basic social interactions'**
-  String get basicSocialInteractions;
+  /// **'Basic cost-splitting functionality.'**
+  String get basicSplitPayments;
 
-  /// No description provided for @joinGroupsEvents.
+  /// No description provided for @basicReports.
   ///
   /// In en, this message translates to:
-  /// **'Joining groups and events'**
-  String get joinGroupsEvents;
-
-  /// No description provided for @userSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'User search'**
-  String get userSearch;
+  /// **'Generating basic expense reports.'**
+  String get basicReports;
 
   /// No description provided for @paidFeatures.
   ///
   /// In en, this message translates to:
-  /// **'7.2 Paid Features (if any)'**
+  /// **'7.2 Paid Features'**
   String get paidFeatures;
 
   /// No description provided for @premiumFeaturesPayment.
   ///
   /// In en, this message translates to:
-  /// **'Premium features may require payment'**
+  /// **'Premium features (e.g., advanced reports or payment integrations) may require payment.'**
   String get premiumFeaturesPayment;
 
   /// No description provided for @transactionsNotified.
   ///
   /// In en, this message translates to:
-  /// **'All transactions will be clearly notified before execution'**
+  /// **'All transactions will be clearly notified before completion.'**
   String get transactionsNotified;
 
   /// No description provided for @refundPolicyPublished.
   ///
   /// In en, this message translates to:
-  /// **'Refund policy will be published separately'**
+  /// **'Refund policies will be published separately.'**
   String get refundPolicyPublished;
 
   /// No description provided for @intellectualProperty.
@@ -1472,22 +1460,22 @@ abstract class AppLocalizations {
   /// **'8. INTELLECTUAL PROPERTY'**
   String get intellectualProperty;
 
-  /// No description provided for @alobosRights.
+  /// No description provided for @dIVIDEXsRights.
   ///
   /// In en, this message translates to:
-  /// **'8.1 ALobo\'s Rights'**
-  String get alobosRights;
+  /// **'8.1 DIVIDEX’s Rights'**
+  String get dIVIDEXsRights;
 
   /// No description provided for @appInterfaceLogoOwned.
   ///
   /// In en, this message translates to:
-  /// **'The application, interface, logo and materials are owned by ALobo'**
+  /// **'The App, interface, logo, and materials are owned by DIVIDEX.'**
   String get appInterfaceLogoOwned;
 
   /// No description provided for @copyingProhibited.
   ///
   /// In en, this message translates to:
-  /// **'Copying, distributing or creating derivative products is strictly prohibited'**
+  /// **'Copying, distributing, or creating derivative works is strictly prohibited.'**
   String get copyingProhibited;
 
   /// No description provided for @respectingCopyright.
@@ -1499,13 +1487,13 @@ abstract class AppLocalizations {
   /// No description provided for @respectOthersRights.
   ///
   /// In en, this message translates to:
-  /// **'We respect others\' intellectual property rights'**
+  /// **'We respect the intellectual property rights of others.'**
   String get respectOthersRights;
 
   /// No description provided for @handleInfringement.
   ///
   /// In en, this message translates to:
-  /// **'Will handle copyright infringement complaints according to legal regulations'**
+  /// **'We will address copyright infringement claims in accordance with applicable law.'**
   String get handleInfringement;
 
   /// No description provided for @serviceTermination.
@@ -1523,49 +1511,49 @@ abstract class AppLocalizations {
   /// No description provided for @deleteAccount.
   ///
   /// In en, this message translates to:
-  /// **'You may delete your account at any time through application settings'**
+  /// **'You may delete your account at any time through the App’s settings.'**
   String get deleteAccount;
 
   /// No description provided for @infoRetainedLaw.
   ///
   /// In en, this message translates to:
-  /// **'Some information may be retained as required by law'**
+  /// **'Some information may be retained as required by law.'**
   String get infoRetainedLaw;
 
-  /// No description provided for @terminationByAlobo.
+  /// No description provided for @terminationByDIVIDEX.
   ///
   /// In en, this message translates to:
-  /// **'9.2 Termination by ALobo'**
-  String get terminationByAlobo;
+  /// **'9.2 Termination by DIVIDEX'**
+  String get terminationByDIVIDEX;
 
   /// No description provided for @suspendTerminateAccounts.
   ///
   /// In en, this message translates to:
-  /// **'We have the right to suspend or terminate accounts if:'**
+  /// **'We reserve the right to suspend or terminate accounts if:'**
   String get suspendTerminateAccounts;
 
   /// No description provided for @violatingTerms.
   ///
   /// In en, this message translates to:
-  /// **'Violating terms of service'**
+  /// **'You violate these Terms.'**
   String get violatingTerms;
 
   /// No description provided for @illegalHarmfulActivities.
   ///
   /// In en, this message translates to:
-  /// **'Illegal or harmful activities'**
+  /// **'You engage in illegal or harmful activities.'**
   String get illegalHarmfulActivities;
 
   /// No description provided for @lawEnforcementRequests.
   ///
   /// In en, this message translates to:
-  /// **'Requests from law enforcement'**
+  /// **'Requested by law enforcement authorities.'**
   String get lawEnforcementRequests;
 
   /// No description provided for @discontinuingService.
   ///
   /// In en, this message translates to:
-  /// **'Discontinuing service provision'**
+  /// **'The Service is discontinued.'**
   String get discontinuingService;
 
   /// No description provided for @disclaimer.
@@ -1577,19 +1565,19 @@ abstract class AppLocalizations {
   /// No description provided for @asIsService.
   ///
   /// In en, this message translates to:
-  /// **'10.1 \"As Is\" Service'**
+  /// **'10.1 Service “As Is”'**
   String get asIsService;
 
   /// No description provided for @serviceProvidedAsIs.
   ///
   /// In en, this message translates to:
-  /// **'Service is provided \"as is\" and \"as available\"'**
+  /// **'The Service is provided “as is” and “as available”.'**
   String get serviceProvidedAsIs;
 
   /// No description provided for @noGuaranteeOperation.
   ///
   /// In en, this message translates to:
-  /// **'No guarantee of continuous, error-free or absolutely secure operation'**
+  /// **'We do not guarantee uninterrupted, error-free, or fully secure operation.'**
   String get noGuaranteeOperation;
 
   /// No description provided for @limitationOfLiability.
@@ -1601,19 +1589,19 @@ abstract class AppLocalizations {
   /// No description provided for @noResponsibilityUserContent.
   ///
   /// In en, this message translates to:
-  /// **'ALobo is not responsible for user-generated content'**
+  /// **'DIVIDEX is not responsible for user-generated content or transactions.'**
   String get noResponsibilityUserContent;
 
   /// No description provided for @noGuaranteeAccuracy.
   ///
   /// In en, this message translates to:
-  /// **'Does not guarantee accuracy of information from other users'**
+  /// **'We do not guarantee the accuracy of expense information provided by other users.'**
   String get noGuaranteeAccuracy;
 
   /// No description provided for @noResponsibilityIndirectDamages.
   ///
   /// In en, this message translates to:
-  /// **'Not responsible for indirect, incidental or consequential damages'**
+  /// **'We are not liable for indirect, incidental, or consequential damages.'**
   String get noResponsibilityIndirectDamages;
 
   /// No description provided for @disputeResolution.
@@ -1631,7 +1619,7 @@ abstract class AppLocalizations {
   /// No description provided for @resolveThroughNegotiation.
   ///
   /// In en, this message translates to:
-  /// **'Disputes will be resolved through good faith negotiation first.'**
+  /// **'Disputes will be resolved through good-faith negotiation first.'**
   String get resolveThroughNegotiation;
 
   /// No description provided for @applicableLaw.
@@ -1643,7 +1631,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsGovernedByLaw.
   ///
   /// In en, this message translates to:
-  /// **'These terms are governed by the laws of Vietnam.'**
+  /// **'These Terms are governed by the laws of Vietnam.'**
   String get termsGovernedByLaw;
 
   /// No description provided for @courtJurisdiction.
@@ -1655,7 +1643,7 @@ abstract class AppLocalizations {
   /// No description provided for @competentCourtsResolve.
   ///
   /// In en, this message translates to:
-  /// **'Competent courts in Vietnam will resolve disputes that cannot be reconciled.'**
+  /// **'Competent courts in Vietnam will resolve disputes that cannot be settled through negotiation.'**
   String get competentCourtsResolve;
 
   /// No description provided for @termsUpdates.
@@ -1673,13 +1661,13 @@ abstract class AppLocalizations {
   /// No description provided for @updateTerms.
   ///
   /// In en, this message translates to:
-  /// **'We have the right to update these terms at any time'**
+  /// **'We reserve the right to update these Terms at any time.'**
   String get updateTerms;
 
   /// No description provided for @notificationsSent.
   ///
   /// In en, this message translates to:
-  /// **'Notifications will be sent through the application or registered email'**
+  /// **'Notifications will be sent via the App or registered email.'**
   String get notificationsSent;
 
   /// No description provided for @acceptingChanges.
@@ -1691,13 +1679,13 @@ abstract class AppLocalizations {
   /// No description provided for @continuedUseMeansAgreement.
   ///
   /// In en, this message translates to:
-  /// **'Continued use of the service after updates means you agree to the new terms'**
+  /// **'Continued use of the Service after updates means you agree to the new Terms.'**
   String get continuedUseMeansAgreement;
 
   /// No description provided for @disagreeStopUse.
   ///
   /// In en, this message translates to:
-  /// **'If you disagree, please stop using the service'**
+  /// **'If you disagree, please stop using the Service.'**
   String get disagreeStopUse;
 
   /// No description provided for @contactInformation.
@@ -1709,14 +1697,14 @@ abstract class AppLocalizations {
   /// No description provided for @questionsContact.
   ///
   /// In en, this message translates to:
-  /// **'If you have any questions about these terms, please contact:'**
+  /// **'If you have any questions about these Terms, please contact:'**
   String get questionsContact;
 
-  /// No description provided for @aloboTeam.
+  /// No description provided for @dIVIDEXTeam.
   ///
   /// In en, this message translates to:
-  /// **'ALobo Sports Hub Team'**
-  String get aloboTeam;
+  /// **'DIVIDEX Team'**
+  String get dIVIDEXTeam;
 
   /// No description provided for @email.
   ///
@@ -1751,7 +1739,7 @@ abstract class AppLocalizations {
   /// No description provided for @invalidTerm.
   ///
   /// In en, this message translates to:
-  /// **'If any term is deemed invalid, the remaining terms remain in effect.'**
+  /// **'If any Term is deemed invalid, the remaining Terms remain in effect.'**
   String get invalidTerm;
 
   /// No description provided for @entireAgreement.
@@ -1763,13 +1751,13 @@ abstract class AppLocalizations {
   /// No description provided for @entireAgreementText.
   ///
   /// In en, this message translates to:
-  /// **'These terms constitute the entire agreement between you and ALobo regarding use of the service.'**
+  /// **'These Terms constitute the entire agreement between you and DIVIDEX regarding the use of the Service.'**
   String get entireAgreementText;
 
   /// No description provided for @thankYouMessage.
   ///
   /// In en, this message translates to:
-  /// **'Thank you for using ALobo Sports Hub - Where Sports Communities Connect!'**
+  /// **'Thank you for using DIVIDEX - Your Platform for Group Expense Sharing!'**
   String get thankYouMessage;
 
   /// No description provided for @lastUpdated.
@@ -1777,6 +1765,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last Updated: {date}'**
   String lastUpdated(Object date);
+
+  /// No description provided for @acceptancePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing, you accept our '**
+  String get acceptancePrompt;
+
+  /// No description provided for @termsOfServiceLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfServiceLink;
+
+  /// No description provided for @andConjunction.
+  ///
+  /// In en, this message translates to:
+  /// **' and '**
+  String get andConjunction;
+
+  /// No description provided for @privacyPolicyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyLink;
+
+  /// No description provided for @splashPage2Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dividex is a powerful tool that allows you to easily share your bill with friends'**
+  String get splashPage2Subtitle;
+
+  /// No description provided for @createAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your\nDividex account'**
+  String get createAccountPrompt;
+
+  /// No description provided for @welcomeNewMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to DIVIDEX,'**
+  String get welcomeNewMessage;
+
+  /// No description provided for @createNewAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello there, create New account'**
+  String get createNewAccountPrompt;
+
+  /// No description provided for @welcomeBackMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back,'**
+  String get welcomeBackMessage;
+
+  /// No description provided for @signInAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello there, sign in to continue'**
+  String get signInAccountPrompt;
+
+  /// No description provided for @emailVerificationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We texted you a code to verify your email'**
+  String get emailVerificationMessage;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @numberInputError1.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get numberInputError1;
+
+  /// No description provided for @numberInputError2.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid number'**
+  String get numberInputError2;
+
+  /// No description provided for @otpInputError2.
+  ///
+  /// In en, this message translates to:
+  /// **'The OTP code must be a 6-digit number'**
+  String get otpInputError2;
+
+  /// No description provided for @otpLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your code'**
+  String get otpLabel;
+
+  /// No description provided for @emailVerificationCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'We texted you a code to verify your email'**
+  String get emailVerificationCodeSent;
+
+  /// No description provided for @codeExpirationNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'This code will expire 5 minutes after this message. If you don’t get a message, please choose resend after 5 minutes'**
+  String get codeExpirationNotice;
+
+  /// No description provided for @otpInputPageChangeEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Change email'**
+  String get otpInputPageChangeEmail;
+
+  /// No description provided for @emailOrPasswordIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Email or password is incorrect'**
+  String get emailOrPasswordIncorrect;
+
+  /// No description provided for @passwordIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is incorrect'**
+  String get passwordIncorrect;
+
+  /// No description provided for @invalidOrExpiredOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP is expired, please try again!'**
+  String get invalidOrExpiredOtp;
+
+  /// Greet the user by name
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome {userName}!'**
+  String welcomeUser(Object userName);
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transfer;
+
+  /// No description provided for @withdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get withdraw;
+
+  /// No description provided for @transactionReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction report'**
+  String get transactionReport;
 }
 
 class _AppLocalizationsDelegate

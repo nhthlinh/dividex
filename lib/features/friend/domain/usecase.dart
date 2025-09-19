@@ -1,4 +1,4 @@
-import 'package:Dividex/features/friend/data/models/friend_request_model.dart';
+import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:Dividex/features/friend/domain/friend_repository.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
@@ -24,15 +24,15 @@ class FriendUseCase {
     await repository.declineFriendRequest(friendshipUid);
   }
 
-  Future<PagingModel<List<FriendRequestModel>>> getFriendRequests(FriendRequestType type, String? search, int page, int pageSize) async {
+  Future<PagingModel<List<FriendModel>>> getFriendRequests(FriendRequestType type, String? search, int page, int pageSize) async {
     return await repository.getFriendRequests(type, search, page, pageSize);
   }
 
-  Future<PagingModel<List<FriendRequestModel>>> getFriends(String? search, int page, int pageSize) async {
+  Future<PagingModel<List<FriendModel>>> getFriends(String? search, int page, int pageSize) async {
     return await repository.getFriends(search, page, pageSize);
   }
 
-  Future<PagingModel<List<FriendRequestModel>>> searchUsers(String? search, int page, int pageSize) async {
+  Future<PagingModel<List<FriendModel>>> searchUsers(String? search, int page, int pageSize) async {
     return await repository.searchUsers(search, page, pageSize);
   }
 }

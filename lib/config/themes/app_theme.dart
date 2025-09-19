@@ -27,21 +27,20 @@ class AppThemes {
       brightness: Brightness.light,
     ),
     scaffoldBackgroundColor: Colors.white,
-    textTheme: GoogleFonts.poppinsTextTheme(
-      const TextTheme(
-        bodySmall: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
-        bodyMedium: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
+    fontFamily: 'Poppins',
+    textTheme: TextTheme(
+      bodySmall: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      bodyMedium: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400, fontFamilyFallback: ['Roboto', 'NotoSans'],),
 
-        bodyLarge: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
-        
-        titleSmall: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
-        
-        titleMedium: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
-        titleLarge: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),
-        headlineSmall: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w700),
-        headlineMedium: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w700),
-        headlineLarge: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w700),
-      ),
+      bodyLarge: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+
+      titleSmall: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      
+      titleMedium: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      titleLarge: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      headlineSmall: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w700, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      headlineMedium: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w700, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      headlineLarge: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w700, fontFamilyFallback: ['Roboto', 'NotoSans'],),
     ),
   );
 
@@ -53,20 +52,20 @@ class AppThemes {
       brightness: Brightness.dark,
     ),
     scaffoldBackgroundColor: const Color(0xFF121212),
-    textTheme: GoogleFonts.poppinsTextTheme(
-      const TextTheme(
-        bodySmall: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
-        bodyMedium: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
+    fontFamily: 'Poppins',
+    textTheme: TextTheme(
+      bodySmall: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      bodyMedium: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400, fontFamilyFallback: ['Roboto', 'NotoSans'],),
 
-        bodyLarge: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400),
-        
-        titleSmall: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
-        titleMedium: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
-        titleLarge: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
-        headlineSmall: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
-        headlineMedium: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),
-        headlineLarge: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
-      ),
+      bodyLarge: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      
+      titleSmall: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      titleMedium: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      titleLarge: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      headlineSmall: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      headlineMedium: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700, fontFamilyFallback: ['Roboto', 'NotoSans'],),
+      headlineLarge: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700, fontFamilyFallback: ['Roboto', 'NotoSans'],),
     ),
+    
   );
 }

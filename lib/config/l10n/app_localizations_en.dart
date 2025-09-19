@@ -37,7 +37,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.';
 
   @override
-  String get emailLabel => 'Email';
+  String get emailLabel => 'Type your email ';
 
   @override
   String get passwordLabel => 'Password';
@@ -76,7 +76,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get otpInputPageResend => 'Resend';
 
   @override
-  String get otpInputError1 => 'Email not found. Please try again.';
+  String get otpInputError1 => 'Please enter the OTP code';
 
   @override
   String get resetPassPageTitle => 'Reset Password';
@@ -128,7 +128,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailNotFound => 'Email not found';
 
   @override
-  String get userNotFound => 'User not found';
+  String get userNotFound =>
+      'Can not find account with this email. Please create a new one!';
 
   @override
   String get noTransaction => 'You have no transactions';
@@ -226,6 +227,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appTitleCommunity => 'Community';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get qrCode => 'Qr code';
 
   @override
   String get profileSetting => 'Profile setting';
@@ -467,7 +474,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get termsOfServiceTitle => 'TERMS OF SERVICE';
 
   @override
-  String get aloboSportsHub => 'ALobo Sports Hub';
+  String get dIVIDEXApp => 'DIVIDEX';
 
   @override
   String version(Object versionNumber) {
@@ -484,51 +491,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeMessage =>
-      'Welcome to ALobo Sports Hub (\"Application\", \"Service\", \"we\" or \"ALobo\").';
+      'Welcome to DIVIDEX (\"App\", \"Service\", \"we\", or \"DIVIDEX\").';
 
   @override
   String get agreementText =>
-      'By accessing, downloading, installing or using this application, you agree to comply with and be bound by these terms of service (\"Terms\").';
+      'By accessing, downloading, installing, or using the App, you agree to be bound by these Terms of Service (\"Terms\").';
 
   @override
   String get disagreementText =>
-      'If you do not agree with any part of these terms, please do not use our service.';
+      'If you do not agree with any part of these Terms, please do not use our Service.';
 
   @override
   String get serviceDescription => '2. SERVICE DESCRIPTION';
 
   @override
-  String get aloboDescription =>
-      'ALobo Sports Hub is a sports community application that allows users to:';
+  String get dIVIDEXDescription =>
+      'DIVIDEX is an application designed to help users manage and share group expenses, offering the following features:';
 
   @override
-  String get profileCreation =>
-      'Create personal profiles and share information about sports skills';
+  String get createGroups => 'Create and manage expense-sharing groups.';
 
   @override
-  String get postContent =>
-      'Post content about sports activities with images, hashtags and friend tagging';
+  String get trackExpenses => 'Track and record shared expenses.';
+
+  @override
+  String get splitPayments => 'Split and allocate costs among group members.';
+
+  @override
+  String get sendReminders => 'Sending payment reminders.';
+
+  @override
+  String get generateReports => 'Generate expense reports for groups.';
 
   @override
   String get socialInteractions =>
-      'Social interactions through likes, comments, follows and friendships';
-
-  @override
-  String get searchUsers =>
-      'Search and discover other users by sport, skill and location';
-
-  @override
-  String get createJoinGroups => 'Create and join sports groups';
-
-  @override
-  String get organizeEvents => 'Organize and attend sports events';
+      'Interact with group members through comments and notifications.';
 
   @override
   String get receiveNotifications =>
-      'Receive notifications about related activities';
-
-  @override
-  String get earnAchievements => 'Earn achievements in the achievement system';
+      'Receive notifications about transactions and related activities.';
 
   @override
   String get accountRegistrationSecurity =>
@@ -539,34 +540,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ageRequirement =>
-      'You must be 13 years or older to use the service';
+      'You must be at least 13 years old to use the Service.';
 
   @override
   String get accurateInfo =>
-      'Registration information must be accurate, complete and up-to-date';
+      'Registration information must be accurate, complete, and kept up to date.';
 
   @override
   String get oneUniqueAccount =>
-      'Each person may only create one unique account';
+      'Each user may only create one unique account.';
 
   @override
-  String get emailVerification =>
-      'You need to verify your email through OTP code';
+  String get emailVerification => 'You must verify your email via OTP code.';
 
   @override
   String get accountSecurity => '3.2 Account Security';
 
   @override
   String get passwordProtection =>
-      'You are responsible for protecting your password and login information';
+      'You are responsible for protecting your password and login credentials.';
 
   @override
   String get unauthorizedUse =>
-      'Notify us immediately if you detect unauthorized use of your account';
+      'Notify us immediately if you detect unauthorized use of your account.';
 
   @override
   String get noSharingResponsibility =>
-      'We are not responsible for damages due to sharing login information';
+      'We are not responsible for damages caused by sharing login information.';
 
   @override
   String get useOfService => '4. USE OF SERVICE';
@@ -580,40 +580,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accessUsePersonal =>
-      'Access and use the application for personal, non-commercial purposes';
+      'Access and use the App for personal, non-commercial purposes.';
 
   @override
-  String get createShareContent =>
-      'Create and share content in accordance with these terms';
+  String get manageShareExpenses =>
+      'Manage and share group expenses in accordance with these Terms.';
 
   @override
   String get usageRestrictions => '4.2 Usage Restrictions';
 
   @override
-  String get mayNot => 'You MAY NOT:';
+  String get mayNot => 'You MUST NOT:';
 
   @override
   String get illegalPurposes =>
-      'Use the service for illegal or unauthorized purposes';
+      'Use the Service for illegal or unauthorized purposes.';
 
   @override
   String get fakeAccounts =>
-      'Create fake accounts or provide false information';
+      'Create fake accounts or provide false information.';
 
   @override
-  String get spamHarass => 'Spam, harass or abuse other users';
+  String get spamHarass => 'Send spam, harass, or abuse other users.';
 
   @override
-  String get copyrightViolation =>
-      'Upload content that violates copyright or intellectual property rights';
+  String get manipulateData =>
+      'Manipulate or provide false expense information.';
 
   @override
   String get botsScripts =>
-      'Use bots, scripts or automated tools to access the service';
+      'Use bots, scripts, or automated tools to access the Service.';
 
   @override
   String get hackSabotage =>
-      'Attempt to hack, sabotage the system or collect data illegally';
+      'Attempt to hack, sabotage, or illegally collect data from the system.';
 
   @override
   String get userContent => '5. USER CONTENT';
@@ -622,49 +622,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contentOwnership => '5.1 Content Ownership';
 
   @override
-  String get retainOwnership => 'You retain ownership of content you create';
+  String get retainOwnership =>
+      'You retain ownership of the content you create (e.g., expense details, comments).';
 
   @override
-  String get aloboContentRights =>
-      'By posting, you grant ALobo the right to use, display, distribute that content on the platform';
+  String get dIVIDEXContentRights =>
+      'By providing content, you grant DIVIDEX the right to use, display, and distribute that content within the App.';
 
   @override
   String get contentStandards => '5.2 Content Standards';
 
   @override
-  String get mustNot => 'Posted content MUST NOT:';
+  String get mustNot => 'Content provided MUST NOT:';
 
   @override
-  String get falseInfo => 'Contain false, fraudulent information or spam';
+  String get falseInfo =>
+      'Contain false, fraudulent, or misleading information.';
 
   @override
-  String get violatePrivacy => 'Violate others\' privacy or copyright';
+  String get violatePrivacy => 'Violate the privacy rights of others.';
 
   @override
-  String get pornographicContent =>
-      'Contain pornographic, violent or discriminatory content';
+  String get offensiveContent =>
+      'Contain offensive, violent, or discriminatory content.';
 
   @override
   String get unauthorizedAdvertising =>
-      'Include unauthorized advertising or sales';
+      'Include unauthorized advertising or sales.';
 
   @override
   String get sharePersonalWithoutConsent =>
-      'Share others\' personal information without consent';
+      'Share others\' personal information without consent.';
 
   @override
   String get moderationRights => '5.3 Moderation Rights';
 
   @override
   String get reviewRemoveContent =>
-      'We have the right (but not obligation) to review and remove violating content';
+      'We reserve the right to review and remove violating content without prior notice.';
 
   @override
-  String get contentDeletedNotice =>
-      'Content may be deleted without prior notice';
-
-  @override
-  String get moderationDecisionsFinal => 'Our moderation decisions are final';
+  String get moderationDecisionsFinal => 'Our moderation decisions are final.';
 
   @override
   String get privacyDataProtection => '6. PRIVACY AND DATA PROTECTION';
@@ -674,34 +672,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get collectProcessInfo =>
-      'We collect and process personal information according to our Privacy Policy, including:';
+      'We collect and process personal information in accordance with our Privacy Policy, including:';
 
   @override
-  String get profileInfo => 'Profile information (name, email, avatar)';
+  String get profileInfo => 'Profile information (name, email, avatar).';
 
   @override
-  String get postInteractions => 'Post content and interactions';
+  String get expenseData => 'Expense and transaction data for groups.';
 
   @override
-  String get locationData => 'Location data (when permitted)';
-
-  @override
-  String get appUsageInfo => 'Application usage information';
+  String get appUsageInfo => 'App usage information.';
 
   @override
   String get informationSharing => '6.2 Information Sharing';
 
   @override
   String get infoDisplayedPublicly =>
-      'Your information may be displayed publicly according to privacy settings';
+      'Your information (e.g., group expenses) may be displayed publicly within groups based on privacy settings.';
 
   @override
   String get noSellToThirdParties =>
-      'We do not sell personal information to third parties';
+      'We do not sell personal information to third parties.';
 
   @override
   String get sharedWithPartners =>
-      'Information may be shared with service partners to operate the application';
+      'Information may be shared with service partners to operate the App.';
 
   @override
   String get freePaidFeatures => '7. FREE AND PAID FEATURES';
@@ -711,58 +706,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get basicFeaturesFree =>
-      'Basic application features are provided free of charge, including:';
+      'The App’s basic features are provided free of charge, including:';
 
   @override
-  String get createProfilesPosts => 'Creating profiles and posting content';
+  String get createGroupsExpenses => 'Creating groups and recording expenses.';
 
   @override
-  String get basicSocialInteractions => 'Basic social interactions';
+  String get basicSplitPayments => 'Basic cost-splitting functionality.';
 
   @override
-  String get joinGroupsEvents => 'Joining groups and events';
+  String get basicReports => 'Generating basic expense reports.';
 
   @override
-  String get userSearch => 'User search';
+  String get paidFeatures => '7.2 Paid Features';
 
   @override
-  String get paidFeatures => '7.2 Paid Features (if any)';
-
-  @override
-  String get premiumFeaturesPayment => 'Premium features may require payment';
+  String get premiumFeaturesPayment =>
+      'Premium features (e.g., advanced reports or payment integrations) may require payment.';
 
   @override
   String get transactionsNotified =>
-      'All transactions will be clearly notified before execution';
+      'All transactions will be clearly notified before completion.';
 
   @override
   String get refundPolicyPublished =>
-      'Refund policy will be published separately';
+      'Refund policies will be published separately.';
 
   @override
   String get intellectualProperty => '8. INTELLECTUAL PROPERTY';
 
   @override
-  String get alobosRights => '8.1 ALobo\'s Rights';
+  String get dIVIDEXsRights => '8.1 DIVIDEX’s Rights';
 
   @override
   String get appInterfaceLogoOwned =>
-      'The application, interface, logo and materials are owned by ALobo';
+      'The App, interface, logo, and materials are owned by DIVIDEX.';
 
   @override
   String get copyingProhibited =>
-      'Copying, distributing or creating derivative products is strictly prohibited';
+      'Copying, distributing, or creating derivative works is strictly prohibited.';
 
   @override
   String get respectingCopyright => '8.2 Respecting Copyright';
 
   @override
   String get respectOthersRights =>
-      'We respect others\' intellectual property rights';
+      'We respect the intellectual property rights of others.';
 
   @override
   String get handleInfringement =>
-      'Will handle copyright infringement complaints according to legal regulations';
+      'We will address copyright infringement claims in accordance with applicable law.';
 
   @override
   String get serviceTermination => '9. SERVICE TERMINATION';
@@ -772,59 +765,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccount =>
-      'You may delete your account at any time through application settings';
+      'You may delete your account at any time through the App’s settings.';
 
   @override
   String get infoRetainedLaw =>
-      'Some information may be retained as required by law';
+      'Some information may be retained as required by law.';
 
   @override
-  String get terminationByAlobo => '9.2 Termination by ALobo';
+  String get terminationByDIVIDEX => '9.2 Termination by DIVIDEX';
 
   @override
   String get suspendTerminateAccounts =>
-      'We have the right to suspend or terminate accounts if:';
+      'We reserve the right to suspend or terminate accounts if:';
 
   @override
-  String get violatingTerms => 'Violating terms of service';
+  String get violatingTerms => 'You violate these Terms.';
 
   @override
-  String get illegalHarmfulActivities => 'Illegal or harmful activities';
+  String get illegalHarmfulActivities =>
+      'You engage in illegal or harmful activities.';
 
   @override
-  String get lawEnforcementRequests => 'Requests from law enforcement';
+  String get lawEnforcementRequests =>
+      'Requested by law enforcement authorities.';
 
   @override
-  String get discontinuingService => 'Discontinuing service provision';
+  String get discontinuingService => 'The Service is discontinued.';
 
   @override
   String get disclaimer => '10. DISCLAIMER';
 
   @override
-  String get asIsService => '10.1 \"As Is\" Service';
+  String get asIsService => '10.1 Service “As Is”';
 
   @override
   String get serviceProvidedAsIs =>
-      'Service is provided \"as is\" and \"as available\"';
+      'The Service is provided “as is” and “as available”.';
 
   @override
   String get noGuaranteeOperation =>
-      'No guarantee of continuous, error-free or absolutely secure operation';
+      'We do not guarantee uninterrupted, error-free, or fully secure operation.';
 
   @override
   String get limitationOfLiability => '10.2 Limitation of Liability';
 
   @override
   String get noResponsibilityUserContent =>
-      'ALobo is not responsible for user-generated content';
+      'DIVIDEX is not responsible for user-generated content or transactions.';
 
   @override
   String get noGuaranteeAccuracy =>
-      'Does not guarantee accuracy of information from other users';
+      'We do not guarantee the accuracy of expense information provided by other users.';
 
   @override
   String get noResponsibilityIndirectDamages =>
-      'Not responsible for indirect, incidental or consequential damages';
+      'We are not liable for indirect, incidental, or consequential damages.';
 
   @override
   String get disputeResolution => '11. DISPUTE RESOLUTION';
@@ -834,21 +829,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resolveThroughNegotiation =>
-      'Disputes will be resolved through good faith negotiation first.';
+      'Disputes will be resolved through good-faith negotiation first.';
 
   @override
   String get applicableLaw => '11.2 Applicable Law';
 
   @override
   String get termsGovernedByLaw =>
-      'These terms are governed by the laws of Vietnam.';
+      'These Terms are governed by the laws of Vietnam.';
 
   @override
   String get courtJurisdiction => '11.3 Court Jurisdiction';
 
   @override
   String get competentCourtsResolve =>
-      'Competent courts in Vietnam will resolve disputes that cannot be reconciled.';
+      'Competent courts in Vietnam will resolve disputes that cannot be settled through negotiation.';
 
   @override
   String get termsUpdates => '12. TERMS UPDATES';
@@ -858,32 +853,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateTerms =>
-      'We have the right to update these terms at any time';
+      'We reserve the right to update these Terms at any time.';
 
   @override
   String get notificationsSent =>
-      'Notifications will be sent through the application or registered email';
+      'Notifications will be sent via the App or registered email.';
 
   @override
   String get acceptingChanges => '12.2 Accepting Changes';
 
   @override
   String get continuedUseMeansAgreement =>
-      'Continued use of the service after updates means you agree to the new terms';
+      'Continued use of the Service after updates means you agree to the new Terms.';
 
   @override
   String get disagreeStopUse =>
-      'If you disagree, please stop using the service';
+      'If you disagree, please stop using the Service.';
 
   @override
   String get contactInformation => '13. CONTACT INFORMATION';
 
   @override
   String get questionsContact =>
-      'If you have any questions about these terms, please contact:';
+      'If you have any questions about these Terms, please contact:';
 
   @override
-  String get aloboTeam => 'ALobo Sports Hub Team';
+  String get dIVIDEXTeam => 'DIVIDEX Team';
 
   @override
   String email(Object emailAddress) {
@@ -908,21 +903,108 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalidTerm =>
-      'If any term is deemed invalid, the remaining terms remain in effect.';
+      'If any Term is deemed invalid, the remaining Terms remain in effect.';
 
   @override
   String get entireAgreement => '14.2 Entire Agreement';
 
   @override
   String get entireAgreementText =>
-      'These terms constitute the entire agreement between you and ALobo regarding use of the service.';
+      'These Terms constitute the entire agreement between you and DIVIDEX regarding the use of the Service.';
 
   @override
   String get thankYouMessage =>
-      'Thank you for using ALobo Sports Hub - Where Sports Communities Connect!';
+      'Thank you for using DIVIDEX - Your Platform for Group Expense Sharing!';
 
   @override
   String lastUpdated(Object date) {
     return 'Last Updated: $date';
   }
+
+  @override
+  String get acceptancePrompt => 'By continuing, you accept our ';
+
+  @override
+  String get termsOfServiceLink => 'Terms of Service';
+
+  @override
+  String get andConjunction => ' and ';
+
+  @override
+  String get privacyPolicyLink => 'Privacy Policy';
+
+  @override
+  String get splashPage2Subtitle =>
+      'Dividex is a powerful tool that allows you to easily share your bill with friends';
+
+  @override
+  String get createAccountPrompt => 'Create your\nDividex account';
+
+  @override
+  String get welcomeNewMessage => 'Welcome to DIVIDEX,';
+
+  @override
+  String get createNewAccountPrompt => 'Hello there, create New account';
+
+  @override
+  String get welcomeBackMessage => 'Welcome back,';
+
+  @override
+  String get signInAccountPrompt => 'Hello there, sign in to continue';
+
+  @override
+  String get emailVerificationMessage =>
+      'We texted you a code to verify your email';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get numberInputError1 => 'This field is required';
+
+  @override
+  String get numberInputError2 => 'Please enter a valid number';
+
+  @override
+  String get otpInputError2 => 'The OTP code must be a 6-digit number';
+
+  @override
+  String get otpLabel => 'Type your code';
+
+  @override
+  String get emailVerificationCodeSent =>
+      'We texted you a code to verify your email';
+
+  @override
+  String get codeExpirationNotice =>
+      'This code will expire 5 minutes after this message. If you don’t get a message, please choose resend after 5 minutes';
+
+  @override
+  String get otpInputPageChangeEmail => 'Change email';
+
+  @override
+  String get emailOrPasswordIncorrect => 'Email or password is incorrect';
+
+  @override
+  String get passwordIncorrect => 'Password is incorrect';
+
+  @override
+  String get invalidOrExpiredOtp => 'OTP is expired, please try again!';
+
+  @override
+  String welcomeUser(Object userName) {
+    return 'Welcome $userName!';
+  }
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get transfer => 'Transfer';
+
+  @override
+  String get withdraw => 'Withdraw';
+
+  @override
+  String get transactionReport => 'Transaction report';
 }

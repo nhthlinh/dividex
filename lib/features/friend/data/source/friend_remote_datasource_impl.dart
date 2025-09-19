@@ -1,5 +1,5 @@
 import 'package:Dividex/core/network/dio_client.dart';
-import 'package:Dividex/features/friend/data/models/friend_request_model.dart';
+import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:Dividex/features/friend/data/source/friend_remote_datasource.dart';
 import 'package:Dividex/features/friend/domain/usecase.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
@@ -42,7 +42,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
   }
 
   @override
-  Future<PagingModel<List<FriendRequestModel>>> getFriendRequests(
+  Future<PagingModel<List<FriendModel>>> getFriendRequests(
     FriendRequestType type,
     String? search,
     int page,
@@ -65,7 +65,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)
-              .map((item) => FriendRequestModel.fromJson(item))
+              .map((item) => FriendModel.fromJson(item))
               .toList(),
         );
       } else {
@@ -77,7 +77,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
   }
 
   @override
-  Future<PagingModel<List<FriendRequestModel>>> getFriends(
+  Future<PagingModel<List<FriendModel>>> getFriends(
     String? search,
     int page,
     int pageSize,
@@ -96,7 +96,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)
-              .map((item) => FriendRequestModel.fromJson(item))
+              .map((item) => FriendModel.fromJson(item))
               .toList(),
         );
       } else {
@@ -108,7 +108,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
   }
 
   @override
-  Future<PagingModel<List<FriendRequestModel>>> searchUsers(
+  Future<PagingModel<List<FriendModel>>> searchUsers(
     String? search,
     int page,
     int pageSize,
@@ -126,15 +126,13 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)
-              .map((item) => FriendRequestModel.fromJson(item))
+              .map((item) => FriendModel.fromJson(item))
               .toList(),
         );
       } else {
         throw Exception('Failed to load users');
       }
-    } catch (e, stackTrace) {
-      print('Error: $e');
-      print('Stack trace: $stackTrace');
+    } catch (e) {
       rethrow;
     }
   }

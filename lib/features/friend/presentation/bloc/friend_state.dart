@@ -1,4 +1,4 @@
-import 'package:Dividex/features/friend/data/models/friend_request_model.dart';
+import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:equatable/equatable.dart';
 
 class LoadedFriendsState extends Equatable {
@@ -12,7 +12,7 @@ class LoadedFriendsState extends Equatable {
   final bool isLoading;
   final int page;
   final int totalPage;
-  final List<FriendRequestModel> requests;
+  final List<FriendModel> requests;
 
   @override
   List<Object?> get props => [isLoading, page, totalPage, requests];
@@ -21,7 +21,7 @@ class LoadedFriendsState extends Equatable {
     bool? isLoading,
     int? page,
     int? totalPage,
-    List<FriendRequestModel>? requests,
+    List<FriendModel>? requests,
   }) {
     return LoadedFriendsState(
       isLoading: isLoading ?? this.isLoading,
@@ -46,8 +46,8 @@ class LoadedFriendRequestsState extends Equatable {
   final bool isLoading;
   final int page;
   final int totalPage;
-  final List<FriendRequestModel> received;
-  final List<FriendRequestModel> sent;
+  final List<FriendModel> received;
+  final List<FriendModel> sent;
 
   @override
   List<Object?> get props => [isLoading, page, totalPage, received, sent];
@@ -56,8 +56,8 @@ class LoadedFriendRequestsState extends Equatable {
     bool? isLoading,
     int? page,
     int? totalPage,
-    List<FriendRequestModel>? received,
-    List<FriendRequestModel>? sent,
+    List<FriendModel>? received,
+    List<FriendModel>? sent,
   }) {
     return LoadedFriendRequestsState(
       isLoading: isLoading ?? this.isLoading,

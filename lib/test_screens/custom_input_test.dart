@@ -78,7 +78,7 @@ class _InputTestScreenState extends State<InputTestScreen> {
                 isReadOnly: false,
                 hintText: "Enter number",
                 isRequired: true,
-                validator: CustomValidator().validateNumberInput,
+                validator: (value) => CustomValidator().validateNumberInput(value, AppLocalizations.of(context)!),
               ),
               const SizedBox(height: 16),
               CustomTextInputWidget(

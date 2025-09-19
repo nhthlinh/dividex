@@ -6,7 +6,6 @@ import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/services/local/models/token_local_model.dart';
 import 'package:Dividex/shared/services/local/models/user_local_model.dart';
-import 'package:Dividex/shared/services/notification/fcm.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:equatable/equatable.dart';
@@ -25,6 +24,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEmailRequested>(_onAuthEmailRequested);
     on<AuthResetPasswordRequested>(_onAuthResetPasswordRequested);
     on<AuthChangePasswordRequested>(_onAuthChangePasswordRequested);
+
+    on<AuthOtpSubmitted>(_onAuthOtpSubmitted);
   }
 
   Future<void> _onAuthRegisterRequested(
@@ -108,8 +109,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthAuthenticated());
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+
       emit(AuthUnauthenticated());
-      showCustomToast(intl.error, type: ToastType.error);
+
+      if (e.toString().contains(MessageCode.emailOrPasswordIncorrect)) {
+        showCustomToast(intl.emailOrPasswordIncorrect, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
     }
   }
 
@@ -164,15 +171,45 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthEmailRequested event,
     Emitter<AuthState> emit,
   ) async {
+    emit(AuthLoading());
     try {
       final emailUseCase = await getIt.getAsync<EmailUseCase>();
       await emailUseCase.requestEmail(event.email);
 
       emit(AuthEmailSent(email: event.email));
+      HiveService.saveUser(
+        UserLocalModel(id: '', email: event.email, fullName: '', avatarUrl: ''),
+      );
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       emit(AuthUnauthenticated());
-      showCustomToast(intl.error, type: ToastType.error);
+
+      if (e.toString().contains(MessageCode.userNotFound)) {
+        showCustomToast(intl.userNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future<void> _onAuthOtpSubmitted(
+    AuthOtpSubmitted event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      final emailUseCase = await getIt.getAsync<EmailUseCase>();
+      final token = await emailUseCase.checkEmailExists(event.email, event.otp);
+
+      emit(AuthEmailChecked(email: event.email, token: token, isValid: true));
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      emit(AuthUnauthenticated());
+       if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
+        showCustomToast(intl.invalidOrExpiredOtp, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
     }
   }
 
@@ -183,17 +220,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       final resetPasswordUseCase = await getIt.getAsync<ResetPasswordUseCase>();
-      await resetPasswordUseCase.resetPassword(
-        event.email,
-        event.newPassword,
-        event.token,
-      );
+      await resetPasswordUseCase.resetPassword(event.newPassword, event.token);
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);
+      emit(AuthUnauthenticated());
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       emit(AuthUnauthenticated());
-      showCustomToast(intl.error, type: ToastType.error);
+       if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
+        showCustomToast(intl.invalidOrExpiredOtp, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
     }
   }
 
@@ -206,16 +244,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final changePasswordUseCase = await getIt
           .getAsync<ResetPasswordUseCase>();
       await changePasswordUseCase.changePassword(
-        event.email,
         event.newPassword,
         event.oldPassword,
       );
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);
+
+      emit(AuthAuthenticated());
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
-      emit(AuthUnauthenticated());
-      showCustomToast(intl.error, type: ToastType.error);
+      emit(AuthAuthenticated());
+
+      if (e.toString().contains(MessageCode.passwordIncorrect)) {
+        showCustomToast(intl.passwordIncorrect, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
     }
   }
 }

@@ -45,6 +45,10 @@ class EmailUseCase {
   Future<void> requestEmail(String email) {
     return repository.requestEmail(email);
   }
+
+  Future<String> checkEmailExists(String email, String otp) {
+    return repository.checkEmailExists(email, otp);
+  } 
 }
 
 @injectable
@@ -53,12 +57,12 @@ class ResetPasswordUseCase {
 
   ResetPasswordUseCase(this.repository);
 
-  Future<void> resetPassword(String email, String newPassword, String token) {
-    return repository.resetPassword(email, newPassword, token);
+  Future<void> resetPassword(String newPassword, String token) {
+    return repository.resetPassword(newPassword, token);
   }
 
-  Future<void> changePassword(String email, String newPassword, String oldPassword) {
-    return repository.changePassword(email, newPassword, oldPassword);
+  Future<void> changePassword(String newPassword, String oldPassword) {
+    return repository.changePassword(newPassword, oldPassword);
   }
 
   Future<void> updateFcmToken(String fcmToken) {

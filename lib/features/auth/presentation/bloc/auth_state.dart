@@ -30,11 +30,12 @@ class AuthEmailSent extends AuthState {
 
 class AuthEmailChecked extends AuthState {
   final String email;
+  final String token;
   final bool isValid;
-  const AuthEmailChecked({required this.email, required this.isValid});
+  const AuthEmailChecked({required this.email, required this.token, required this.isValid});
 
   @override
-  List<Object?> get props => [email, isValid];
+  List<Object?> get props => [email, token, isValid];
 }
 
 class AuthEmailTimeout extends AuthState {
@@ -44,4 +45,6 @@ class AuthEmailTimeout extends AuthState {
   @override
   List<Object?> get props => [email];
 }
+
+
 

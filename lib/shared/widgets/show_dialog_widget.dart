@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showCustomDialog({
   required BuildContext context,
-  required String label, // luôn có label
+  String? label, // luôn có label
   required Widget content, // nội dung chính
   List<Widget>? actions, // tuỳ chọn thêm nút (OK, Cancel, ...)
 }) {
@@ -28,13 +28,15 @@ Future<void> showCustomDialog({
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Label (luôn có)
-              Text(
-                label,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+              if (label != null && label.isNotEmpty) ...[
+                Text(
+                  label,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
+                const SizedBox(height: 20),
+              ],
 
               /// Nội dung chính
               Flexible(

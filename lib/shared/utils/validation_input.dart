@@ -133,12 +133,22 @@ class CustomValidator {
     return null; // hợp lệ
   }
 
-  String? validateNumberInput(String? value) {
+  String? validateNumberInput(String? value, AppLocalizations intl) {
     if (value == null || value.isEmpty) {
-      return 'This field is required';
+      return intl.numberInputError1;
     }
     if (!RegExp(r'^\d+$').hasMatch(value)) {
-      return 'Please enter a valid number';
+      return intl.numberInputError2;
+    }
+    return null; // valid
+  }
+
+  String? validateOtp(String? value, AppLocalizations intl) {
+    if (value == null || value.isEmpty) {
+      return intl.otpInputError1;
+    }
+    if (!RegExp(r'^\d{6}$').hasMatch(value)) {
+      return intl.otpInputError2;
     }
     return null; // valid
   }

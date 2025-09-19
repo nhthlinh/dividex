@@ -1,244 +1,200 @@
-// import 'package:Dividex/config/l10n/app_localizations.dart';
-// import 'package:Dividex/config/routes/router.dart';
-// import 'package:Dividex/config/themes/app_theme.dart';
-// import 'package:Dividex/features/auth/data/source/firebase_login.dart';
-// import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
-// import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
-// import 'package:Dividex/shared/utils/validation_input.dart';
-// import 'package:Dividex/shared/widgets/custom_button.dart';
-// import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-// import 'package:Dividex/shared/widgets/message_widget.dart';
-// import 'package:Dividex/shared/widgets/text_button.dart';
-// import 'package:Dividex/shared/widgets/wave_painter.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:go_router/go_router.dart';
+import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
+import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
+import 'package:Dividex/shared/utils/validation_input.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
+import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
+import 'package:Dividex/shared/widgets/layout.dart';
+import 'package:Dividex/shared/widgets/text_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-// class LoginPage extends StatefulWidget {
-//   const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
-//   @override
-//   State<LoginPage> createState() => _LoginPageState();
-// }
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-// class _LoginPageState extends State<LoginPage> {
-//   final _formKey = GlobalKey<FormState>();
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
-//   bool _obscurePassword = true; // State to toggle password visibility
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool _obscurePassword = true; // State to toggle password visibility
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadAccount();
-//   }
+  @override
+  void initState() {
+    super.initState();
+  }
 
-//   Future<void> loadAccount() async {
-//     // final account = await HiveService.getAccount();
-//     // if (account != null) {
-//     //   emailController.text = account;
-//     // }
-//   }
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
-//   @override
-//   void dispose() {
-//     emailController.dispose();
-//     passwordController.dispose();
-//     super.dispose();
-//   }
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context); // Get current theme
+    final intl = AppLocalizations.of(context)!; // Get the localization instance
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final theme = Theme.of(context); // Get current theme
-//     final intl = AppLocalizations.of(context)!; // Get the localization instance
+    return Layout(
+      title: intl.login,
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthAuthenticated) {
+            // Navigate to home page on successful authentication
+            context.goNamed(AppRouteNames.home);
+          } 
+        },
+        child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      intl.welcomeBackMessage,
+                      style: theme.textTheme.headlineLarge?.copyWith(
+                        color: AppThemes.primary3Color,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      intl.signInAccountPrompt,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-//     return Scaffold(
-//       backgroundColor:
-//           theme.scaffoldBackgroundColor, // Ensure background matches theme
-//       body: Stack(
-//         children: [
-//           Align(
-//             alignment: Alignment.bottomCenter,
-//             child: SizedBox(
-//               height: 200,
-//               width: double.infinity,
-//               child: CustomPaint(painter: WavePainter()),
-//             ),
-//           ),
+              const SizedBox(height: 16), // Spacing before logo
 
-//           BlocBuilder<AuthBloc, AuthState>(
-//             builder: (context, state) {
-//               if (state is AuthAuthenticated) {
-//                 WidgetsBinding.instance.addPostFrameCallback((_) {
-//                   context.goNamed(AppRouteNames.home);
-//                 });
-//               }
+              Image.asset(
+                'lib/assets/images/login_image.png',
+                width: 220,
+                height: 170,
+              ),
+              const SizedBox(height: 8), // Spacing after logo
 
-//               return SafeArea(
-//                 child: Center(
-//                   child: SingleChildScrollView(
-//                     padding: const EdgeInsets.symmetric(
-//                       horizontal: 24.0,
-//                       vertical: 32.0,
-//                     ),
-//                     child: Column(
-//                       mainAxisSize: MainAxisSize.min,
-//                       children: [
-//                         // Increased top padding for better visual balance
-//                         const SizedBox(height: 30),
+              loginForm(intl, context, theme),
+            ],
+          ),
+      ),
+    );
+  }
 
-//                         Image.asset(
-//                           'lib/assets/images/Logo_no_background.png',
-//                           width: 180, // Reduced logo size
-//                           height: 180, // Reduced logo size
-//                         ),
-//                         const SizedBox(height: 23), // Spacing after logo
+  CustomFormWrapper loginForm(
+    AppLocalizations intl,
+    BuildContext context,
+    ThemeData theme,
+  ) {
+    return CustomFormWrapper(
+      fields: [
+        FormFieldConfig(controller: emailController, isRequired: true),
+        FormFieldConfig(controller: passwordController, isRequired: true),
+      ],
+      formKey: _formKey,
+      builder: (isValid) {
+        return Column(
+          children: [
+            //Email
+            CustomTextInputWidget(
+              label: intl.emailLabel,
+              isRequired: true,
+              hintText: intl.emailLabel,
+              controller: emailController,
+              keyboardType: TextInputType
+                  .emailAddress, // Suggest email keyboard// Add email icon
+              validator: (value) {
+                return CustomValidator().validateEmail(value, intl);
+              },
+              size: TextInputSize.large,
+              isReadOnly: false,
+            ),
+            //Password
+            CustomTextInputWidget(
+              label: intl.passwordLabel,
+              isRequired: true,
+              hintText: intl.passwordLabel,
+              controller: passwordController,
+              obscureText: _obscurePassword,
+              keyboardType: TextInputType.visiblePassword,
+              maxLines: 1, // Add lock icon
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+              ),
+              validator: (value) {
+                return CustomValidator().validatePassword(value, intl);
+              },
+              size: TextInputSize.large,
+              isReadOnly: false,
+            ),
+            
+            const SizedBox(height: 12), // Spacing between password fields
+            // forgot password
+            Align(
+              // Use Align to push to right
+              alignment: Alignment.centerRight,
+              child: CustomTextButton(
+                label: intl.forgotPassword,
+                onPressed: () {
+                  context.pushNamed(AppRouteNames.requestEmail);
+                },
+              ),
+            ),
 
-//                         loginForm(intl, context, state, theme),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
+            const SizedBox(height: 12), // More spacing before login button
+            //Login Button
+            CustomButton(
+              text: intl.login,
+              onPressed: (!isValid)
+                  ? null
+                  : () {
+                      if (_formKey.currentState!.validate()) {
+                        // If the form is valid, proceed with login
+                        final email = emailController.text.trim();
+                        final password = passwordController.text.trim();
 
-//   Form loginForm(
-//     AppLocalizations intl,
-//     BuildContext context,
-//     AuthState state,
-//     ThemeData theme,
-//   ) {
-//     return Form(
-//       key: _formKey,
-//       child: Column(
-//         children: [
-//           //Email
-//           CustomTextInput(
-//             label: 'Email', // Add label for email
-//             hintText: intl.emailLabel,
-//             controller: emailController,
-//             keyboardType: TextInputType.emailAddress, // Suggest email keyboard
-//             prefixIcon: const Icon(
-//               Icons.email_outlined,
-//               color: Colors.grey,
-//             ), // Add email icon
-//             validator: (value) {
-//               return CustomValidator().validateEmail(value, intl);
-//             },
-//           ),
-//           const SizedBox(height: 20), // Slightly more spacing
-//           //Password
-//           CustomTextInput(
-//             label: intl.passwordLabel, // Add label for password
-//             hintText: intl.passwordInputDescription,
-//             controller: passwordController,
-//             obscureText: _obscurePassword,
-//             maxLines: 1,
-//             prefixIcon: const Icon(
-//               Icons.lock_outline,
-//               color: Colors.grey,
-//             ), // Add lock icon
-//             suffixIcon: IconButton(
-//               icon: Icon(
-//                 _obscurePassword ? Icons.visibility_off : Icons.visibility,
-//                 color: Colors.grey,
-//               ),
-//               onPressed: () {
-//                 setState(() {
-//                   _obscurePassword = !_obscurePassword;
-//                 });
-//               },
-//             ),
-//             validator: (value) {
-//               return CustomValidator().validatePassword(value, intl);
-//             },
-//           ),
-//           const SizedBox(height: 10),
+                        // Trigger the login event in AuthBloc
+                        context.read<AuthBloc>().add(
+                          AuthLoginRequested(email: email, password: password),
+                        );
+                      }
+                    },
+            ),
 
-//           // forgot password
-//           Align(
-//             // Use Align to push to right
-//             alignment: Alignment.centerRight,
-//             child: TestButtonWithDes(
-//               label: intl.forgotPassword,
-//               onPressed: () {
-//                 context.pushNamed(AppRouteNames.requestEmail);
-//               },
-//             ),
-//           ),
+            const SizedBox(height: 16),
 
-//           const SizedBox(height: 32), // More spacing before login button
-//           //Login Button
-//           CustomButton(
-//             buttonText: intl.login,
-//             onPressed: () {
-//               if (state is AuthLoading) return;
-//               if (_formKey.currentState!.validate()) {
-//                 BlocProvider.of<AuthBloc>(context).add(
-//                   AuthLoginRequested(
-//                     email: emailController.text.trim(),
-//                     password: passwordController.text.trim(),
-//                   ),
-//                 );
-//               }
-//             },
-//           ),
-//           const SizedBox(height: 32), // More spacing
-//           //Or
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               const Expanded(child: Divider(color: Colors.grey, thickness: 1)),
-//               const SizedBox(width: 8),
-//               Text(
-//                 intl.or,
-//                 style: theme.textTheme.bodyMedium?.copyWith(
-//                   color: Colors.grey, // Match divider color
-//                   fontWeight: FontWeight.w400,
-//                 ),
-//               ),
-//               const SizedBox(width: 8),
-//               const Expanded(child: Divider(color: Colors.grey, thickness: 1)),
-//             ],
-//           ),
-
-//           const SizedBox(height: 16), // Spacing after "Or"
-//           //Login with google Button
-//           CustomButton(
-//             buttonText: intl.loginWithGoogle,
-//             onPressed: () async {
-//               if (state is AuthLoading) return;
-//               // final userCredential = await signInWithGoogle();
-//               // if (userCredential != null) {
-//               //   context.goNamed(AppRouteNames.home);
-//               // } else {
-//               //   showCustomToast(
-//               //     intl.setUp1PageError4,
-//               //     type: ToastType.error,
-//               //   );
-//               // }
-//             },
-//           ),
-
-//           const SizedBox(height: 10), // Spacing after "Or"
-//           // Don't have account? Register
-//           TestButtonWithDes(
-//             description: intl.loginPageToRegister, // "Don't have account?"
-//             label: intl.register, // "Register"
-//             onPressed: () {
-//               WidgetsBinding.instance.addPostFrameCallback((_) {
-//                 context.goNamed(AppRouteNames.register);
-//               });
-//             },
-//           ),
-//           const SizedBox(height: 16), // Add bottom padding
-//         ],
-//       ),
-//     );
-//   }
-// }
+            // Don't have account? Register
+            CustomTextButton(
+              description: intl.loginPageToRegister, // "Don't have account?"
+              label: intl.register, // "Register"
+              onPressed: () {
+                context.pushNamed(AppRouteNames.register);
+              },
+            ),
+            const SizedBox(height: 16), // Add bottom padding
+          ],
+        );
+      },
+    );
+  }
+}

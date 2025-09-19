@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 /// Nút dạng TextButton có thể kèm mô tả bên cạnh.
-class LabeledTextButton extends StatelessWidget {
+class CustomTextButton extends StatelessWidget {
   final String? label;              // nội dung nút
   final String description;         // mô tả đi kèm (nếu có)
   final VoidCallback? onPressed;    // callback khi bấm
   final Color? textColor;           // màu chữ của nút
 
-  const LabeledTextButton({
+  const CustomTextButton({
     super.key,
     this.label,
     this.description = '',
@@ -39,7 +39,8 @@ class LabeledTextButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             label ?? '',
-            style: theme.textTheme.titleSmall?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.w500,
               color: textColor ?? theme.primaryColor,
             ),
           ),

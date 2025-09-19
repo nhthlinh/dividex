@@ -43,7 +43,7 @@ abstract class DioModule {
         onRequest: (options, handler) async {
           final token = HiveService.getToken();
           debugPrint(
-            "🟡 Interceptor token: ${token?.accessToken}, refresh: ${token?.refreshToken}",
+            "Interceptor token: ${token?.accessToken}, refresh: ${token?.refreshToken}",
           );
 
           // BỎ QUA nếu là request refresh
@@ -55,162 +55,77 @@ abstract class DioModule {
 
           handler.next(options);
         },
-        onResponse: (response, handler) async {
-          if ((response.data['error_code'] == 401 ||
-                  response.data['error_code'] == 403) &&
-              !isRefreshing) {
-            isRefreshing = true;
-
-            try {
-              final refreshToken = HiveService.getToken()?.refreshToken;
-              debugPrint('🔁 Refresh token: $refreshToken');
-
-              final refreshResponse = await dio.post(
-                '/auth/refresh',
-                data: {'refresh_token': refreshToken},
-              );
-
-              final newAccessToken =
-                  refreshResponse.data['data']['access_token'];
-              final newRefreshToken =
-                  refreshResponse.data['data']['refresh_token'];
-
-              await HiveService.saveToken(
-                TokenLocalModel(
-                  accessToken: newAccessToken,
-                  refreshToken: newRefreshToken,
-                ),
-              );
-
-              // chạy lại các request trong queue
-              for (final queued in refreshQueue) {
-                queued(newAccessToken);
-              }
-              refreshQueue.clear();
-
-              isRefreshing = false;
-
-              // retry request hiện tại
-              // copy headers cũ + headers global
-              final requestOptions = response.requestOptions;
-
-              final headers = Map<String, dynamic>.from(requestOptions.headers)
-                ..addAll(dio.options.headers) // giữ Accept-Language
-                ..['Authorization'] = 'Bearer ${newAccessToken.trim()}';
-
-              requestOptions.headers = headers;
-
-              final retriedResponse = await dio.fetch(requestOptions);
-              return handler.resolve(retriedResponse);
-            } catch (e) {
-              debugPrint('❌ Refresh token failed: $e');
-
-              // ép logout: clear Hive + điều hướng về login
-              await HiveService.clearToken();
-              final context = navigatorKey.currentContext!;
-              final authBloc = context.read<AuthBloc>();
-              authBloc.add(const AuthLogoutRequested());
-              context.goNamed(AppRouteNames.login);
-
-              refreshQueue.clear();
-              isRefreshing = false;
-
-              return handler.next(response);
-            }
-          } else if (response.data['error_code'] == 401 ||
-              response.data['error_code'] == 403 && isRefreshing) {
-            // Nếu đang refresh thì push request này vào queue
-            final completer = Completer<Response>();
-
-            refreshQueue.add((String newAccessToken) async {
-              final requestOptions = response.requestOptions;
-              requestOptions.headers['Authorization'] =
-                  'Bearer ${newAccessToken.trim()}';
-              final retriedResponse = await dio.fetch(requestOptions);
-              completer.complete(retriedResponse);
-            });
-
-            return handler.resolve(await completer.future);
-          }
-          return handler.next(response);
-        },
         onError: (DioException err, handler) async {
-          final response = err.response!;
+          final response = err.response;
 
-          if ((response.data['error_code'] == 401 ||
-                  response.data['error_code'] == 403) &&
-              !isRefreshing) {
-            isRefreshing = true;
+          if (response != null) {
+            final errorCode = response.data['error_code'];
+            final messageCode = response.data['message_code'];
 
-            try {
-              final refreshToken = HiveService.getToken()?.refreshToken;
-              debugPrint('🔁 Refresh token: $refreshToken');
+            // Trường hợp token hết hạn
+            final isTokenExpired =
+                (errorCode == 403 && messageCode == "TOKEN_EXPIRED");
 
-              final refreshResponse = await dio.post(
-                '/auth/refresh',
-                data: {'refresh_token': refreshToken},
-              );
+            if (isTokenExpired && !isRefreshing) {
+              isRefreshing = true;
 
-              final newAccessToken =
-                  refreshResponse.data['data']['access_token'];
-              final newRefreshToken =
-                  refreshResponse.data['data']['refresh_token'];
+              try {
+                final refreshToken = HiveService.getToken()?.refreshToken;
+                final refreshResponse = await dio.post(
+                  '/auth/refresh',
+                  data: {'refresh_token': refreshToken},
+                );
 
-              await HiveService.saveToken(
-                TokenLocalModel(
-                  accessToken: newAccessToken,
-                  refreshToken: newRefreshToken,
-                ),
-              );
+                final newAccessToken =
+                    refreshResponse.data['data']['access_token'];
+                final newRefreshToken =
+                    refreshResponse.data['data']['refresh_token'];
 
-              // chạy lại các request trong queue
-              for (final queued in refreshQueue) {
-                queued(newAccessToken);
+                await HiveService.saveToken(
+                  TokenLocalModel(
+                    accessToken: newAccessToken,
+                    refreshToken: newRefreshToken,
+                  ),
+                );
+
+                // chạy lại queue
+                for (final queued in refreshQueue) {
+                  queued(newAccessToken);
+                }
+                refreshQueue.clear();
+                isRefreshing = false;
+
+                // retry request hiện tại
+                final requestOptions = response.requestOptions;
+                requestOptions.headers['Authorization'] =
+                    'Bearer ${newAccessToken.trim()}';
+                final retriedResponse = await dio.fetch(requestOptions);
+                return handler.resolve(retriedResponse);
+              } catch (e) {
+                await HiveService.clearToken();
+                final context = navigatorKey.currentContext!;
+                context.goNamed(AppRouteNames.splash2);
+
+                refreshQueue.clear();
+                isRefreshing = false;
+                return handler.next(err);
               }
-              refreshQueue.clear();
+            } else if (isRefreshing && isTokenExpired) {
+              // Nếu đang refresh thì push request này vào queue
+              final completer = Completer<Response>();
+              refreshQueue.add((String newAccessToken) async {
+                final requestOptions = response.requestOptions;
+                requestOptions.headers['Authorization'] =
+                    'Bearer ${newAccessToken.trim()}';
+                final retriedResponse = await dio.fetch(requestOptions);
+                completer.complete(retriedResponse);
+              });
 
-              isRefreshing = false;
-
-              // retry request hiện tại
-              // copy headers cũ + headers global
-              final requestOptions = response.requestOptions;
-
-              final headers = Map<String, dynamic>.from(requestOptions.headers)
-                ..addAll(dio.options.headers) // giữ Accept-Language
-                ..['Authorization'] = 'Bearer ${newAccessToken.trim()}';
-
-              requestOptions.headers = headers;
-
-              final retriedResponse = await dio.fetch(requestOptions);
-              return handler.resolve(retriedResponse);
-            } catch (e) {
-              debugPrint('❌ Refresh token failed: $e');
-
-              // ép logout: clear Hive + điều hướng về login
-              await HiveService.clearToken();
-              final context = navigatorKey.currentContext!;
-              context.goNamed(AppRouteNames.login);
-
-              refreshQueue.clear();
-              isRefreshing = false;
-
-              return handler.next(err);
+              return handler.resolve(await completer.future);
             }
-          } else if (response.data['error_code'] == 401 ||
-              response.data['error_code'] == 403 && isRefreshing) {
-            // Nếu đang refresh thì push request này vào queue
-            final completer = Completer<Response>();
-
-            refreshQueue.add((String newAccessToken) async {
-              final requestOptions = response.requestOptions;
-              requestOptions.headers['Authorization'] =
-                  'Bearer ${newAccessToken.trim()}';
-              final retriedResponse = await dio.fetch(requestOptions);
-              completer.complete(retriedResponse);
-            });
-
-            return handler.resolve(await completer.future);
           }
+
+          // Các lỗi 401 khác (ví dụ sai mật khẩu) → để UI xử lý
           return handler.next(err);
         },
       ),

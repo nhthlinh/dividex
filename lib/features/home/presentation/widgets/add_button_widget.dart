@@ -1,104 +1,95 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/routes/router.dart';
-import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-class AddButton extends StatefulWidget {
-  const AddButton({super.key});
-
-  @override
-  State<AddButton> createState() => _AddButtonState();
-}
-
-class _AddButtonState extends State<AddButton> {
-  bool _isExpanded = false;
+class AddButtonPopup extends StatelessWidget {
+  const AddButtonPopup({super.key});
 
   @override
   Widget build(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
 
-    return SizedBox.expand(
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          // Nút chính
-          Positioned(
-            bottom: 16.0,
-            right: 16.0,
-            child: FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                });
-              },
-              child: Icon(_isExpanded ? Icons.close : Icons.add),
+    // List item động
+    final items = [
+      _PopupItem(
+        iconPath: 'lib/assets/icons/group.png',
+        label: intl.addGroup,
+        onTap: () {
+          
+        },
+      ),
+      _PopupItem(
+        iconPath: 'lib/assets/icons/event.png',
+        label: intl.addEvent,
+        onTap: () {
+          
+        },
+      ),
+      _PopupItem(
+        iconPath: 'lib/assets/icons/money-transfer.png',
+        label: intl.addExpense,
+        onTap: () {
+          
+        },
+      ),
+      // 👉 bạn có thể thêm bao nhiêu item tuỳ ý ở đây
+    ];
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.close),
+        ),
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: items.map((item) {
+            return _buildPopupItem(context, item.iconPath, item.label, item.onTap);
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPopupItem(
+    BuildContext context,
+    String iconImagePath,
+    String label,
+    Function()? onTap,
+  ) {
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(
+        width: 100, // giữ ô cân đối
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(iconImagePath, width: 40, height: 40),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
-          ),
-      
-          // Các nút con
-          if (_isExpanded) ...[
-            Positioned(
-              bottom: 80.0, // Khoảng cách từ nút chính
-              right: 16.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppThemes.primary3Color,
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                child: Column(
-                  children: [
-                    Tooltip(
-                      message: intl.addExpense, // Sử dụng intl để lấy chuỗi
-                      preferBelow: false, // Hiển thị tooltip bên trên
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          context.pushNamed(AppRouteNames.addExpense, extra: 0);
-                        },
-                        heroTag: 'expenseButton',
-                        backgroundColor: Colors.transparent,
-                        elevation: 0, // 🔹 Tắt shadow
-                        highlightElevation: 0, // 🔹 Tắt shadow khi nhấn
-                        child: const Icon(Icons.attach_money_outlined),
-                      ),
-                    ),
-                    const SizedBox(height: 8.0), // Khoảng cách giữa các nút
-                    Tooltip(
-                      message: intl.addEvent, // Sử dụng intl để lấy chuỗi
-                      preferBelow: false, // Hiển thị tooltip bên trên
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          context.pushNamed(AppRouteNames.addEvent, extra: 0);
-                        },
-                        heroTag: 'eventButton',
-                        backgroundColor: Colors.transparent,
-                        elevation: 0, // 🔹 Tắt shadow
-                        highlightElevation: 0, // 🔹 Tắt shadow khi nhấn
-                        child: const Icon(Icons.event),
-                      ),
-                    ),
-                    const SizedBox(height: 8.0), // Khoảng cách giữa các nút
-                    Tooltip(
-                      message: intl.addGroup, // Sử dụng intl để lấy chuỗi
-                      preferBelow: false, // Hiển thị tooltip bên trên
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          context.pushNamed(AppRouteNames.addGroup, extra: 0);
-                        },
-                        heroTag: 'groupButton',
-                        backgroundColor: Colors.transparent,
-                        elevation: 0, // 🔹 Tắt shadow
-                        highlightElevation: 0, // 🔹 Tắt shadow khi nhấn
-                        child: const Icon(Icons.group),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ), 
           ],
-        ],
+        ),
       ),
     );
   }
+}
+
+class _PopupItem {
+  final String iconPath;
+  final String label;
+  final Function()? onTap;
+
+  _PopupItem({
+    required this.iconPath,
+    required this.label,
+    required this.onTap,
+  });
 }

@@ -1,4 +1,4 @@
-import 'package:Dividex/features/friend/data/models/friend_request_model.dart';
+import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:Dividex/features/friend/data/source/friend_remote_datasource.dart';
 import 'package:Dividex/features/friend/domain/friend_repository.dart';
 import 'package:Dividex/features/friend/domain/usecase.dart';
@@ -27,17 +27,17 @@ class FriendRepositoryImpl implements FriendRepository {
   }
 
   @override
-  Future<PagingModel<List<FriendRequestModel>>> getFriendRequests(FriendRequestType type, String? search, int page, int pageSize) {
+  Future<PagingModel<List<FriendModel>>> getFriendRequests(FriendRequestType type, String? search, int page, int pageSize) {
     return remoteDataSource.getFriendRequests(type, search, page, pageSize);
   }
 
   @override
-  Future<PagingModel<List<FriendRequestModel>>> getFriends(String? search, int page, int pageSize) {
+  Future<PagingModel<List<FriendModel>>> getFriends(String? search, int page, int pageSize) {
     return remoteDataSource.getFriends(search, page, pageSize);
   }
 
   @override
-  Future<PagingModel<List<FriendRequestModel>>> searchUsers(String? search, int page, int pageSize) {
+  Future<PagingModel<List<FriendModel>>> searchUsers(String? search, int page, int pageSize) {
     return remoteDataSource.searchUsers(search, page, pageSize);
   }
 }

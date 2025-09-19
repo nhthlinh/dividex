@@ -6,8 +6,9 @@ abstract class AuthRepository {
   Future<AuthResponseModel> login(String email, String password);
   Future<void> logout();
   Future<void> requestEmail(String email);
-  Future<void> resetPassword(String email, String newPassword, String token);
-  Future<void> changePassword(String email, String newPassword, String oldPassword);
+  Future<String> checkEmailExists(String email, String otp);
+  Future<void> resetPassword(String newPassword, String token);
+  Future<void> changePassword(String newPassword, String oldPassword);
 
   Future<void> updateFcmToken(String fcmToken);
 }

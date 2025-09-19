@@ -6,6 +6,15 @@ class MessageCode {
   static const String emailAlreadyExists = 'EMAIL_ALREADY_EXISTS';
   static const String phoneNumberAlreadyExists = 'PHONE_NUMBER_ALREADY_EXISTS';
 
+  // Login
+  static const String emailOrPasswordIncorrect = 'EMAIL_OR_PASSWORD_INCORRECT';
+
+  // Change password
+  static const String passwordIncorrect = 'PASSWORD_INCORRECT';
+
+  // Create reset password token
+  static const String invalidOrExpiredOtp = 'INVALID_OR_EXPIRED_OTP';
+
   // More
   static const String emailNotFound = 'EMAIL_NOT_FOUND';
   static const String userNotFound = 'USER_NOT_FOUND';
@@ -21,6 +30,10 @@ class MessageCode {
         return intl.emailNotFound;
       case userNotFound:
         return intl.userNotFound;
+      case emailOrPasswordIncorrect:
+        return intl.emailOrPasswordIncorrect;
+      case passwordIncorrect:
+        return intl.passwordIncorrect;
       default:
         return 'Unknown error';
     }

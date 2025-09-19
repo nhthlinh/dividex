@@ -14,7 +14,7 @@ class LabeledTextButtonTestPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text("Case 1: Có description + nút mặc định"),
-            LabeledTextButton(
+            CustomTextButton(
               description: "Mô tả:",
               label: "Xem chi tiết",
               onPressed: () {
@@ -26,7 +26,7 @@ class LabeledTextButtonTestPage extends StatelessWidget {
             const Divider(),
 
             const Text("Case 2: Không có description"),
-            LabeledTextButton(
+            CustomTextButton(
               label: "Chỉ có nút",
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -37,7 +37,7 @@ class LabeledTextButtonTestPage extends StatelessWidget {
             const Divider(),
 
             const Text("Case 3: Đổi màu nút"),
-            LabeledTextButton(
+            CustomTextButton(
               description: "Trạng thái:",
               label: "Đặc biệt",
               textColor: Colors.red,

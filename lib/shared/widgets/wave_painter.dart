@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class WavePainter extends CustomPainter {
   // Màu sắc của sóng
-  final Color color = AppThemes.primary5Color.withAlpha(200);
+  final Color color = AppThemes.primary6Color;
 
   WavePainter();
 
