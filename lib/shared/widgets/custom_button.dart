@@ -29,7 +29,7 @@ class CustomButton extends StatelessWidget {
     final sizeConfig = {
       ButtonSize.large: const Size(300, 44),
       ButtonSize.medium: const Size(140, 44),
-      ButtonSize.small: const Size(70, 25),
+      ButtonSize.small: const Size(80, 25),
     };
 
     // Config text style

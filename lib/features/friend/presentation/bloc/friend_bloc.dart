@@ -25,6 +25,7 @@ class LoadedFriendsBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {
           page: friends.page,
           totalPage: friends.totalPage,
           requests: friends.data,
+          totalItems: friends.totalItems,
           isLoading: false,
         ),
       );
@@ -42,6 +43,7 @@ class LoadedFriendsBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {
         state.copyWith(
           page: friends.page,
           totalPage: friends.totalPage,
+          totalItems: friends.totalItems,
           requests: [...state.requests, ...friends.data],
         ),
       );
@@ -58,13 +60,14 @@ class LoadedFriendsBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {
       emit(state.copyWith(isLoading: true));
 
       final useCase = await getIt.getAsync<FriendUseCase>();
-      final friends = await useCase.getFriends('', 1, 5);
+      final friends = await useCase.getFriends(event.searchQuery, 1, 5);
 
       emit(
         state.copyWith(
           page: friends.page,
           totalPage: friends.totalPage,
           requests: friends.data,
+          totalItems: friends.totalItems,
           isLoading: false,
         ),
       );

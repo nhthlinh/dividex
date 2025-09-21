@@ -380,6 +380,37 @@
   "account": "Tài khoản",
   "transfer": "Chuyển tiền",
   "withdraw": "Rút tiền",
-  "transactionReport": "Báo cáo"
+  "transactionReport": "Báo cáo",
+
+  "friendRequest": "Yêu cầu của {userName} ",
+  "@friendRequest": {
+    "placeholders": {
+      "userName": {}
+    }
+  },
+
+  "you": "Bạn",
+  "your": "của bạn",
+
+  "transaction": "Giao dịch",
+  "searchTransactionSubtitle": "Tìm kiếm các khoản chi tiêu chung, hóa đơn hoặc khoản thanh toán trong nhóm",
+  "user": "Người dùng",
+  "searchUserSubtitle": "Tìm kiếm người dùng để thêm làm bạn bè hoặc tham gia vào chi tiêu",
+  "search": "Tìm kiếm",
+  "searchTransaction": "Tìm giao dịch",
+  "searchUser": "Tìm người dùng",
+
+  "addGroupSubtitle": "Tạo một group để quản lý chi tiêu với bạn bè",
+  "addMembers": "Chọn thành viên",
+
+  "refreshFail": "Phiên đăng nhập đã hết, vui lòng đăng nhập lại",
+  "uploadImageHint": "Hãy tải ảnh lên, chú ý dung lượng nhỏ hơn 100Kb",
+  "chooseFile": "Chọn file",
+  "fileChosen": "file đã chọn",
+  "noFileChosen": "0 file đã chọn",
+  "members": "Thành viên",
+
+  "addEventSubtitle": "Tạo một sự kiện để quản lý và chia sẻ chi tiêu dễ dàng"
+
 
 }

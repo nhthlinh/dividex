@@ -14,12 +14,12 @@ class EventRemoteDataSourceImpl implements EventRemoteDataSource {
   Future<PagingModel<List<EventModel>>> getEvents(int groupId, int page, int pageSize) async {
     await Future.delayed(const Duration(seconds: 1));
     if (page > 1) {
-      return PagingModel(page: page, totalPage: 1, data: []);
+      return PagingModel(page: page, totalPage: 1, data: [], totalItems: 2);
     }
     return PagingModel(page: page, totalPage: 1, data: [
       EventModel(id: '1', name: 'Event 1'),
       EventModel(id: '2', name: 'Event 2'),
-    ]);
+    ], totalItems: 2);
   }
 
 }

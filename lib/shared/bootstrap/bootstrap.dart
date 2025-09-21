@@ -10,6 +10,7 @@ import 'package:Dividex/shared/bloc/app_bloc_observer.dart';
 import 'package:Dividex/shared/bootstrap/error_handler.dart';
 import 'package:Dividex/shared/bootstrap/firebase_service.dart';
 import 'package:Dividex/shared/bootstrap/notification_initializer.dart';
+import 'package:Dividex/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ Future<void> bootstrap() async {
         providers: [
           BlocProvider(create: (_) => BottomNavVisibilityCubit()),
           BlocProvider(create: (_) => AuthBloc()),
+          BlocProvider(create: (_) => NotificationBloc()),
           BlocProvider(create: (_) => LocaleCubit()..loadLocale()),
           BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
         ],

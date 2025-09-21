@@ -52,6 +52,8 @@ class FriendRequestBloc
         state.copyWith(
           page: friends.page,
           totalPage: friends.totalPage,
+          totalReceived: event.type == FriendRequestType.received ? friends.totalItems : state.totalReceived,
+          totalSent: event.type == FriendRequestType.sent ? friends.totalItems : state.totalSent,
           received: event.type == FriendRequestType.received
               ? friends.data
               : state.received,
@@ -80,6 +82,8 @@ class FriendRequestBloc
         state.copyWith(
           page: friends.page,
           totalPage: friends.totalPage,
+          totalReceived: event.type == FriendRequestType.received ? friends.totalItems : state.totalReceived,
+          totalSent: event.type == FriendRequestType.sent ? friends.totalItems : state.totalSent,
           received: event.type == FriendRequestType.received
               ? [...state.received, ...friends.data]
               : state.received,
@@ -107,6 +111,8 @@ class FriendRequestBloc
         state.copyWith(
           page: friends.page,
           totalPage: friends.totalPage,
+          totalReceived: event.type == FriendRequestType.received ? friends.totalItems : state.totalReceived,
+          totalSent: event.type == FriendRequestType.sent ? friends.totalItems : state.totalSent,
           isLoading: false,
           received: event.type == FriendRequestType.received
               ? friends.data

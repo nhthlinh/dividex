@@ -52,8 +52,8 @@ class CustomTextInputWidget<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     // Config cho từng size
     final sizeConfig = {
-      TextInputSize.large: const Size(320, 70),
-      TextInputSize.medium: const Size(130, 70),
+      TextInputSize.large: const Size(340, 70),
+      TextInputSize.medium: const Size(150, 70),
       TextInputSize.small: const Size(70, 70),
     };
 

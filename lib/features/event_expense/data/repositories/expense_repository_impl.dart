@@ -30,10 +30,4 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   Future<List<ExpenseModel>> getExpenses() async {
     return await remoteDataSource.getExpenses();
   }
-
-  @override
-  Future<PagingModel<List<String>>> getCategories(int page, int pageSize, String key) async {
-    return await remoteDataSource.getCategories(page, pageSize, key);
-  }
-
 }

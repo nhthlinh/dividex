@@ -98,7 +98,6 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
                         controller: searchController,
                         onChanged: onSearchChanged,
                         decoration: inputDeco().copyWith(
-                          hintText: "Search...",
                           hintStyle: Theme.of(context)
                               .textTheme
                               .bodySmall

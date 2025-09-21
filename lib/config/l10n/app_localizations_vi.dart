@@ -1010,4 +1010,67 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get transactionReport => 'Báo cáo';
+
+  @override
+  String friendRequest(Object userName) {
+    return 'Yêu cầu của $userName ';
+  }
+
+  @override
+  String get you => 'Bạn';
+
+  @override
+  String get your => 'của bạn';
+
+  @override
+  String get transaction => 'Giao dịch';
+
+  @override
+  String get searchTransactionSubtitle =>
+      'Tìm kiếm các khoản chi tiêu chung, hóa đơn hoặc khoản thanh toán trong nhóm';
+
+  @override
+  String get user => 'Người dùng';
+
+  @override
+  String get searchUserSubtitle =>
+      'Tìm kiếm người dùng để thêm làm bạn bè hoặc tham gia vào chi tiêu';
+
+  @override
+  String get search => 'Tìm kiếm';
+
+  @override
+  String get searchTransaction => 'Tìm giao dịch';
+
+  @override
+  String get searchUser => 'Tìm người dùng';
+
+  @override
+  String get addGroupSubtitle => 'Tạo một group để quản lý chi tiêu với bạn bè';
+
+  @override
+  String get addMembers => 'Chọn thành viên';
+
+  @override
+  String get refreshFail => 'Phiên đăng nhập đã hết, vui lòng đăng nhập lại';
+
+  @override
+  String get uploadImageHint =>
+      'Hãy tải ảnh lên, chú ý dung lượng nhỏ hơn 100Kb';
+
+  @override
+  String get chooseFile => 'Chọn file';
+
+  @override
+  String get fileChosen => 'file đã chọn';
+
+  @override
+  String get noFileChosen => '0 file đã chọn';
+
+  @override
+  String get members => 'Thành viên';
+
+  @override
+  String get addEventSubtitle =>
+      'Tạo một sự kiện để quản lý và chia sẻ chi tiêu dễ dàng';
 }

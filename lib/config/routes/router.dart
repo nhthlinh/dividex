@@ -7,19 +7,31 @@ import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_f
 import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/otp_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/reset_pass_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/register_flow/register_page.dart';
-import 'package:Dividex/features/home/presentation/pages/app_shell.dart';
-import 'package:Dividex/features/home/presentation/pages/change_pass_page.dart';
+import 'package:Dividex/features/event_expense/presentation/pages/add_event_page.dart';
+import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
+import 'package:Dividex/features/friend/presentation/bloc/friend_request_bloc_and_event.dart'
+    as request_bloc;
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
+import 'package:Dividex/features/group/presentation/pages/add_group_page.dart';
+import 'package:Dividex/features/search/presentation/bloc/search_users_bloc.dart'
+    as search_bloc;
+import 'package:Dividex/features/friend/presentation/pages/friend_page.dart';
+import 'package:Dividex/features/search/presentation/pages/search_page.dart';
+import 'package:Dividex/features/search/presentation/pages/search_user_page.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
+import 'package:Dividex/shared/pages/choose_members_page.dart';
+import 'package:Dividex/features/auth/presentation/pages/change_pass_page.dart';
 import 'package:Dividex/features/home/presentation/pages/home_page.dart';
 import 'package:Dividex/features/home/presentation/pages/setting_page.dart';
 import 'package:Dividex/features/home/presentation/pages/term_of_service_page.dart';
 import 'package:Dividex/features/splash/presentation/pages/splash_page.dart';
 import 'package:Dividex/features/splash/presentation/pages/splash_page_2.dart';
-import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:animations/animations.dart';
 
 // Định nghĩa các tên route để sử dụng Type-safe routing
 class AppRouteNames {
@@ -35,7 +47,8 @@ class AppRouteNames {
   static const String resetPass = 'reset-pass';
 
   static const String home = 'home';
-  static const String search = 'search';
+  static const String friend = 'friend';
+
   static const String mail = 'mail';
   static const String settings = 'settings';
 
@@ -44,9 +57,16 @@ class AppRouteNames {
 
   static const String loading = 'loading';
 
+  static const String search = 'search';
+  static const String searchUser = 'search-user';
+  static const String searchTransaction = 'search-transaction';
+  // static const String chat = 'chat';
+
   // static const String addExpense = 'add-expense';
-  // static const String addGroup = 'add-group';
-  // static const String addEvent = 'add-event';
+  static const String addGroup = 'add-group';
+  static const String addEvent = 'add-event';
+
+  static const String chooseMember = 'choose-member';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -126,67 +146,87 @@ GoRouter buildRouter(BuildContext context) {
           ),
         ],
       ),
+
       GoRoute(
         path: '/home',
         name: AppRouteNames.home,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return buildPageWithDefaultTransition(child: const HomePage());
         },
+        routes: [
+          GoRoute(
+            path: 'friend',
+            name: AppRouteNames.friend,
+            pageBuilder: (context, state) => buildPageWithDefaultTransition(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<LoadedFriendsBloc>(
+                    create: (context) => LoadedFriendsBloc(),
+                  ),
+                  BlocProvider<search_bloc.SearchUsersBloc>(
+                    create: (context) => search_bloc.SearchUsersBloc(),
+                  ),
+                  BlocProvider<request_bloc.FriendRequestBloc>(
+                    key: const ValueKey("receivedRequests"),
+                    create: (_) => request_bloc.FriendRequestBloc(),
+                  ),
+                  BlocProvider<request_bloc.FriendRequestBloc>(
+                    key: const ValueKey("sentRequests"),
+                    create: (_) => request_bloc.FriendRequestBloc(),
+                  ),
+                ],
+                child: const FriendPage(),
+              ),
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: '/search',
         name: AppRouteNames.search,
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return buildPageWithDefaultTransition(
-            child: AppShell(
-              currentIndex: 1,
-              child: Layout(
-                title: "Trang tìm kiếm",
-                child: Column(
-                  children: const [
-                    Text("Nội dung trang tìm kiếm"),
-                    SizedBox(height: 16),
-                    Text("Thêm nội dung khác ở đây"),
-                    SizedBox(height: 16),
-                    Text("V.v..."),
-                    SizedBox(height: 16),
-                    Text("Nội dung bổ sung"),
-                    SizedBox(height: 16),
-                    Text("Và nhiều hơn nữa"),
-                  ],
-                ),
+          return buildPageWithDefaultTransition(child: const SearchPage());
+        },
+        routes: [
+          GoRoute(
+            path: 'search-user',
+            name: AppRouteNames.searchUser,
+            pageBuilder: (context, state) => buildPageWithDefaultTransition(
+              child: BlocProvider(
+                create: (context) => search_bloc.SearchUsersBloc(),
+                child: const SearchUserPage(),
               ),
             ),
-          );
-        },
+          ),
+        ],
       ),
-      GoRoute(
-        path: '/mail',
-        name: AppRouteNames.mail,
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return buildPageWithDefaultTransition(
-            child: AppShell(
-              currentIndex: 2,
-              child: Layout(
-                title: "Trang mail",
-                child: Column(
-                  children: const [
-                    Text("Nội dung trang mail"),
-                    SizedBox(height: 16),
-                    Text("Thêm nội dung khác ở đây"),
-                    SizedBox(height: 16),
-                    Text("V.v..."),
-                    SizedBox(height: 16),
-                    Text("Nội dung bổ sung"),
-                    SizedBox(height: 16),
-                    Text("Và nhiều hơn nữa"),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+      // GoRoute(
+      //   path: '/mail',
+      //   name: AppRouteNames.mail,
+      //   pageBuilder: (BuildContext context, GoRouterState state) {
+      //     return buildPageWithDefaultTransition(
+      //       child: AppShell(
+      //         currentIndex: 2,
+      //         child: Layout(
+      //           title: "Trang mail",
+      //           child: Column(
+      //             children: const [
+      //               Text("Nội dung trang mail"),
+      //               SizedBox(height: 16),
+      //               Text("Thêm nội dung khác ở đây"),
+      //               SizedBox(height: 16),
+      //               Text("V.v..."),
+      //               SizedBox(height: 16),
+      //               Text("Nội dung bổ sung"),
+      //               SizedBox(height: 16),
+      //               Text("Và nhiều hơn nữa"),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     );
+      //   },
+      // ),
       GoRoute(
         path: '/settings',
         name: AppRouteNames.settings,
@@ -203,17 +243,16 @@ GoRouter buildRouter(BuildContext context) {
       //     return AddExpensePage(expenseId: extra ?? 0);
       //   },
       // ),
-      // GoRoute(
-      //   path: '/add-group',
-      //   name: AppRouteNames.addGroup,
-      //   builder: (BuildContext context, GoRouterState state) {
-      //     final extra = state.extra as int?;
-      //     return BlocProvider<LoadedGroupsBloc>(
-      //       create: (context) => LoadedGroupsBloc(),
-      //       child: AddGroupPage(groupId: extra ?? 0),
-      //     );
-      //   },
-      // ),
+      GoRoute(
+        path: '/add-group',
+        name: AppRouteNames.addGroup,
+        builder: (BuildContext context, GoRouterState state) {
+          return BlocProvider<LoadedGroupsBloc>(
+            create: (context) => LoadedGroupsBloc(),
+            child: AddGroupPage(),
+          );
+        },
+      ),
       // GoRoute(
       //   path: '/chat',
       //   name: AppRouteNames.chat,
@@ -225,19 +264,20 @@ GoRouter buildRouter(BuildContext context) {
       //     );
       //   },
       // ),
-      // GoRoute(
-      //   path: '/add-event',
-      //   name: AppRouteNames.addEvent,
-      //   builder: (BuildContext context, GoRouterState state) {
-      //     final extra = state.extra as int?;
-      //     return AddEventPage(eventId: extra ?? 0);
-      //   },
-      // ),
+      GoRoute(
+        path: '/add-event',
+        name: AppRouteNames.addEvent,
+        pageBuilder: (context, state) {
+          return buildPageWithDefaultTransition(child: const AddEventPage());
+        },
+      ),
       GoRoute(
         path: '/terms-of-use',
         name: AppRouteNames.termOfUse,
-        builder: (BuildContext context, GoRouterState state) {
-          return TermsOfServicePage();
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return buildPageWithDefaultTransition(
+            child: const TermsOfServicePage(),
+          );
         },
       ),
       GoRoute(
@@ -245,6 +285,24 @@ GoRouter buildRouter(BuildContext context) {
         name: AppRouteNames.changePass,
         pageBuilder: (context, state) =>
             buildPageWithDefaultTransition(child: ChangePassPage()),
+      ),
+      GoRoute(
+        path: '/choose-members',
+        name: AppRouteNames.chooseMember,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return BlocProvider(
+            create: (context) => LoadedUsersBloc(),
+            child: ChooseMembersPage(
+              id: extra['id'] as String?,
+              type: extra['type'] as LoadType,
+              initialSelectedMembers:
+                  extra['initialSelected'] as List<UserModel>,
+              onSelectedMembersChanged:
+                  extra['onChanged'] as ValueChanged<List<UserModel>>,
+            ),
+          );
+        },
       ),
     ],
     redirect: (context, state) {
@@ -271,6 +329,9 @@ GoRouter buildRouter(BuildContext context) {
       if (authState is AuthUnauthenticated) {
         // đang ở login/register thì cho ở yên
         if (isAuthFlow || isSplash) return null;
+        if (loc == '/terms-of-use') {
+          return null; // cho vào xem điều khoản và đổi mật khẩu
+        }
         // còn lại ép về login
         return '/splash-2';
       }
@@ -278,7 +339,7 @@ GoRouter buildRouter(BuildContext context) {
       // Nếu đổi mật khẩu
       if (authState is AuthEmailSent) {
         return '/login/otp';
-      } 
+      }
       if (authState is AuthEmailChecked) {
         return '/login/reset-pass/${authState.token}';
       }

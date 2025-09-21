@@ -152,7 +152,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final token = HiveService.getToken();
 
-      if (token?.accessToken != null) {
+      if (token?.accessToken != null && token?.refreshToken != null) {
         emit(const AuthAuthenticated());
         // // Gửi FCM token sau khi mở app
         // await sendFcmTokenToBackend(true);
@@ -163,7 +163,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
 
       emit(AuthUnauthenticated());
-      showCustomToast(intl.error, type: ToastType.error);
+      showCustomToast(intl.refreshFail, type: ToastType.error);
     }
   }
 
@@ -205,7 +205,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       emit(AuthUnauthenticated());
-       if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
+      if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
         showCustomToast(intl.invalidOrExpiredOtp, type: ToastType.error);
       } else {
         showCustomToast(intl.error, type: ToastType.error);
@@ -227,7 +227,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       emit(AuthUnauthenticated());
-       if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
+      if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
         showCustomToast(intl.invalidOrExpiredOtp, type: ToastType.error);
       } else {
         showCustomToast(intl.error, type: ToastType.error);

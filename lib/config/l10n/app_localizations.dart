@@ -1927,6 +1927,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transaction report'**
   String get transactionReport;
+
+  /// No description provided for @friendRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'{userName}\'s request '**
+  String friendRequest(Object userName);
+
+  /// No description provided for @you.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// No description provided for @your.
+  ///
+  /// In en, this message translates to:
+  /// **'Your'**
+  String get your;
+
+  /// No description provided for @transaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get transaction;
+
+  /// No description provided for @searchTransactionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for specific shared expenses, bills, or payments within groups'**
+  String get searchTransactionSubtitle;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
+
+  /// No description provided for @searchUserSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for users to add as friends or participants in expenses'**
+  String get searchUserSubtitle;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @searchTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Search transaction'**
+  String get searchTransaction;
+
+  /// No description provided for @searchUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Search user'**
+  String get searchUser;
+
+  /// No description provided for @addGroupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new group to share manage expense with your friend.'**
+  String get addGroupSubtitle;
+
+  /// No description provided for @addMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose members'**
+  String get addMembers;
+
+  /// No description provided for @refreshFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Session expired, please login again'**
+  String get refreshFail;
+
+  /// No description provided for @uploadImageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload image, size less than 100KB'**
+  String get uploadImageHint;
+
+  /// No description provided for @chooseFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file'**
+  String get chooseFile;
+
+  /// No description provided for @fileChosen.
+  ///
+  /// In en, this message translates to:
+  /// **'file chosen'**
+  String get fileChosen;
+
+  /// No description provided for @noFileChosen.
+  ///
+  /// In en, this message translates to:
+  /// **'No file chosen'**
+  String get noFileChosen;
+
+  /// No description provided for @members.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get members;
+
+  /// No description provided for @addEventSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new event to share and manage expense easily.'**
+  String get addEventSubtitle;
 }
 
 class _AppLocalizationsDelegate

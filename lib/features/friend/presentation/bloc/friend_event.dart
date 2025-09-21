@@ -21,7 +21,8 @@ class LoadMoreFriendsEvent extends LoadFriendEvent {
 
 class RefreshFriendsEvent extends LoadFriendEvent {
   final String? id;
-  const RefreshFriendsEvent(this.id);
+  final String? searchQuery;
+  const RefreshFriendsEvent(this.id, {this.searchQuery});
 }
 
 class FriendEvent {}

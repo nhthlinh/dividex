@@ -52,7 +52,7 @@ class SimpleLayout extends StatelessWidget {
               ),
             ),
           ),
-          // Nội dung bo góc ở y = 100
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -64,7 +64,7 @@ class SimpleLayout extends StatelessWidget {
                   vertical: 24,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: Colors.transparent,
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                 ),
                 child: SingleChildScrollView(child: child),

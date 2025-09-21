@@ -25,6 +25,7 @@ class SearchUsersBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {
           page: friends.page,
           totalPage: friends.totalPage,
           requests: friends.data,
+          totalItems: friends.totalItems,
           isLoading: false,
         ),
       );
@@ -42,6 +43,7 @@ class SearchUsersBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {
         state.copyWith(
           page: friends.page,
           totalPage: friends.totalPage,
+          totalItems: friends.totalItems,
           requests: [...state.requests, ...friends.data],
         ),
       );
@@ -65,6 +67,7 @@ class SearchUsersBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {
           page: friends.page,
           totalPage: friends.totalPage,
           requests: friends.data,
+          totalItems: friends.totalItems,
           isLoading: false,
         ),
       );

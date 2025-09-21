@@ -32,17 +32,4 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
         .map((item) => ExpenseModel.fromJson(item))
         .toList();
   }
-
-  @override
-  Future<PagingModel<List<String>>> getCategories(int page, int pageSize, String key) async {
-    await Future.delayed(Duration(seconds: 1)); // Simulate network delay
-    if (key == 'm') {
-      return PagingModel(data: ['Miscellaneous'], totalPage: 2, page: 2);
-    }
-    if (page == 1) {
-      return PagingModel(data: ['Food', 'Transport', 'Utilities'], totalPage: 2, page: 1);
-    } 
-    return PagingModel(data: [], totalPage: 2, page: 2);
-  }
-
 }

@@ -1,6 +1,7 @@
 // DONE
 
 import 'dart:io' as io;
+import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/image_edit_widget.dart';
@@ -94,98 +95,102 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   @override
   Widget build(BuildContext context) {
     final isAvatar = widget.type == PickerType.avatar;
+    final intl = AppLocalizations.of(context)!;
 
-    return Column(
-      children: [
-        Text(
-          "Please upload image, size less than 100KB",
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppThemes.borderColor, fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
-        ),
-        const SizedBox(height: 8),
-    
-        // Upload button + status
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomButton(text: "Choose File", onPressed: _pickFiles, type: ButtonType.secondary, size: ButtonSize.medium),
-            const SizedBox(width: 8),
-            Text(
-              _previewFiles.isEmpty
-                  ? "No File Chosen"
-                  : "${_previewFiles.length} file(s) chosen",
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-    
-        // Preview
-        if (_previewFiles.isEmpty)
-          Container(
-            width: isAvatar ? 120 : 160,
-            height: isAvatar ? 120 : 160,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              shape: isAvatar ? BoxShape.circle : BoxShape.rectangle,
-            ),
-            child: const Icon(Icons.image, size: 50, color: Colors.grey),
-          )
-        else if (isAvatar)
-          Stack(
+    return SizedBox(
+      width: 340,
+      child: Column(
+        children: [
+          Text(
+            intl.uploadImageHint,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppThemes.borderColor, fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 8),
+      
+          // Upload button + status
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(
-                onTap: () => _editImage(0),
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundImage: MemoryImage(_previewFiles.first),
-                ),
-              ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.close, color: AppThemes.borderColor),
-                      onPressed: () => _removeImage(0),
-                    ),
-                  ],
-                ),
+              CustomButton(text: intl.chooseFile, onPressed: _pickFiles, type: ButtonType.secondary, size: ButtonSize.medium),
+              const SizedBox(width: 8),
+              Text(
+                _previewFiles.isEmpty
+                    ? intl.noFileChosen
+                    : '${_previewFiles.length} ${intl.fileChosen}',
               ),
             ],
-          )
-        else
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: List.generate(_previewFiles.length, (i) {
-              return Stack(
-                children: [
-                  InkWell(
-                    onTap: () => _editImage(i),
-                    child: Image.memory(
-                      _previewFiles[i],
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.close, color: AppThemes.borderColor),
-                          onPressed: () => _removeImage(i),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            }),
           ),
-      ],
+          const SizedBox(height: 16),
+      
+          // Preview
+          if (_previewFiles.isEmpty)
+            Container(
+              width: isAvatar ? 120 : 160,
+              height: isAvatar ? 120 : 160,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                shape: isAvatar ? BoxShape.circle : BoxShape.rectangle,
+              ),
+              child: const Icon(Icons.image, size: 50, color: Colors.grey),
+            )
+          else if (isAvatar)
+            Stack(
+              children: [
+                InkWell(
+                  onTap: () => _editImage(0),
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: MemoryImage(_previewFiles.first),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.close, color: AppThemes.borderColor),
+                        onPressed: () => _removeImage(0),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: List.generate(_previewFiles.length, (i) {
+                return Stack(
+                  children: [
+                    InkWell(
+                      onTap: () => _editImage(i),
+                      child: Image.memory(
+                        _previewFiles[i],
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.close, color: AppThemes.borderColor),
+                            onPressed: () => _removeImage(i),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            ),
+        ],
+      ),
     );
   }
 }

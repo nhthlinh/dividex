@@ -246,7 +246,7 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/config/themes/theme_cubit.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
-import 'package:Dividex/features/home/presentation/pages/app_shell.dart';
+import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/layout.dart';

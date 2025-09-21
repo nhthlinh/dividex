@@ -80,6 +80,7 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
   ) async {
     if (searchQuery == 'm') {
       return PagingModel(
+        totalItems: 4,
         data: [
           UserModel(
             id: '1',
@@ -96,9 +97,10 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
         page: page,
       );
     }
-    if (page == 2) return PagingModel(data: [], totalPage: 2, page: page);
+    if (page == 2) return PagingModel(data: [], totalPage: 2, page: page, totalItems: 5);
     await Future.delayed(Duration(seconds: 2));
     return PagingModel(
+      totalItems: 10,
       totalPage: 2,
       page: page,
       data: [

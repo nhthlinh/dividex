@@ -381,6 +381,36 @@
   "account": "Account",
   "transfer": "Transfer",
   "withdraw": "Withdraw",
-  "transactionReport": "Transaction report"
+  "transactionReport": "Transaction report",
+  
+  "friendRequest": "{userName}'s request ",
+  "@friendRequest": {
+    "placeholders": {
+      "userName": {}
+    }
+  },
+
+  "you": "You",
+  "your": "Your",
+
+  "transaction": "Transaction",
+  "searchTransactionSubtitle": "Search for specific shared expenses, bills, or payments within groups",
+  "user": "User",
+  "searchUserSubtitle": "Search for users to add as friends or participants in expenses",
+  "search": "Search",
+  "searchTransaction": "Search transaction",
+  "searchUser": "Search user",
+
+  "addGroupSubtitle": "Add a new group to share manage expense with your friend.",
+  "addMembers": "Choose members",
+  
+  "refreshFail": "Session expired, please login again",
+  "uploadImageHint": "Please upload image, size less than 100KB",
+  "chooseFile": "Choose file",
+  "fileChosen": "file chosen",
+  "noFileChosen": "No file chosen",
+  "members": "Members",
+
+  "addEventSubtitle": "Add a new event to share and manage expense easily."
 
 }

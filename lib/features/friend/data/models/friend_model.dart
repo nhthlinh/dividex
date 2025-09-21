@@ -1,9 +1,9 @@
-enum FriendStatus { none, accepted }
+enum FriendStatus { none, response, pending, accepted }
 
 class FriendModel {
   final String friendUid;
   final String fullName;
-  final String avatarUrl;
+  final String? avatarUrl;
   final String? friendshipUid;
   final String? messageRequest;
   final FriendStatus? status;
@@ -12,7 +12,7 @@ class FriendModel {
   FriendModel({
     required this.friendUid,
     required this.fullName,
-    required this.avatarUrl,
+    this.avatarUrl,
     this.friendshipUid,
     this.messageRequest,
     this.status,
@@ -28,7 +28,11 @@ class FriendModel {
       messageRequest: json['message_request'] as String?,
       status: json['status'] == 'ACCEPTED'
           ? FriendStatus.accepted
-          : FriendStatus.none,
+          : json['status'] == 'PENDING'
+            ? FriendStatus.pending
+            : json['status'] == 'RESPONSE'
+              ? FriendStatus.response
+              : FriendStatus.none,
       info: json['info'] as String?,
     );
   }
@@ -40,7 +44,13 @@ class FriendModel {
       'avatar_url': avatarUrl,
       'friendship_uid': friendshipUid,
       'message_request': messageRequest,
-      'status': status == FriendStatus.accepted ? 'ACCEPTED' : 'NONE',
+      'status': status == FriendStatus.accepted
+          ? 'ACCEPTED'
+          : status == FriendStatus.pending
+            ? 'PENDING'
+            : status == FriendStatus.response
+              ? 'RESPONSE'
+              : 'NONE',
       'info': info,
     };
   }

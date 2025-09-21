@@ -28,10 +28,6 @@ class ExpenseUseCase {
     return await repository.getExpenses();
   }
 
-  Future<PagingModel<List<String>>> getCategories(int page, int pageSize, String key) async {
-    return await repository.getCategories(page, pageSize, key);
-  }
-
   Future<PagingModel<List<EventModel>>> getEvents(int groupId, int page, int pageSize) async {
     return await eventRepository.getEvents(groupId, page, pageSize);
   }

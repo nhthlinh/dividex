@@ -15,23 +15,26 @@ class LoadedGroupsState extends Equatable {
     this.isLoading = true,
     this.page = 0,
     this.totalPage = 0,
+    this.totalItems = 0,
     this.groups = const [],
   });
 
   final bool isLoading;
   final int page;
   final int totalPage;
+  final int totalItems;
   final List<GroupModel> groups;
 
   bool get hasMore => page < totalPage;
 
   @override
-  List<Object?> get props => [isLoading, page, totalPage, groups];
+  List<Object?> get props => [isLoading, page, totalPage, groups, totalItems];
 
   LoadedGroupsState copyWith({
     bool? isLoading,
     int? page,
     int? totalPage,
+    int? totalItems,
     List<GroupModel>? groups,
   }) {
     return LoadedGroupsState(
@@ -39,6 +42,7 @@ class LoadedGroupsState extends Equatable {
       page: page ?? this.page,
       totalPage: totalPage ?? this.totalPage,
       groups: groups ?? this.groups,
+      totalItems: totalItems ?? this.totalItems,
     );
   }
 }

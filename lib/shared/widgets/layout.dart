@@ -1,3 +1,4 @@
+import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:flutter/material.dart';
 
 class Layout extends StatelessWidget {
@@ -6,6 +7,8 @@ class Layout extends StatelessWidget {
   final bool showAvatar; // thêm tùy chọn
   final String? avatarUrl; // url/avatar path
   final bool canBeBack;
+  final Widget? action;
+  final bool isHomePage;
 
   const Layout({
     super.key,
@@ -14,10 +17,14 @@ class Layout extends StatelessWidget {
     this.showAvatar = false,
     this.avatarUrl,
     this.canBeBack = true,
+    this.action,
+    this.isHomePage = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = HiveService.getUser();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -41,20 +48,53 @@ class Layout extends StatelessWidget {
             left: 16,
             right: 16,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (canBeBack)
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
+                Row(
+                  children: [
+                    if (canBeBack)
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    if (isHomePage)
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.grey,
+                        backgroundImage:
+                            (currentUser.avatarUrl != null &&
+                                currentUser.avatarUrl!.isNotEmpty)
+                            ? NetworkImage(currentUser.avatarUrl!)
+                            : null,
+                        child:
+                            (currentUser.avatarUrl == null ||
+                                currentUser.avatarUrl!.isEmpty)
+                            ? const Icon(Icons.person, color: Colors.white)
+                            : null,
+                      ),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 250,
+                      child: Flexible(
+                        child: Text(
+                          title,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                          maxLines: 2,
+                          softWrap: true, // Cho phép xuống dòng
+                          overflow: TextOverflow.visible, // Không cắt chữ
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                if (action != null) action!,
               ],
             ),
           ),
@@ -89,20 +129,13 @@ class Layout extends StatelessWidget {
               right: 0,
               child: CircleAvatar(
                 radius: 50,
-                backgroundColor: Colors.grey[200],
-                child: ClipOval(
-                  child: Image(
-                    image:
-                        (avatarUrl != null &&
-                            avatarUrl!.isNotEmpty &&
-                            Uri.tryParse(avatarUrl!)?.hasAbsolutePath == true)
-                        ? NetworkImage(avatarUrl!)
-                        : const AssetImage('lib/assets/images/Dividex.png'),
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                backgroundColor: Colors.grey,
+                backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
+                    ? NetworkImage(avatarUrl!)
+                    : null,
+                child: (avatarUrl == null || avatarUrl!.isEmpty)
+                    ? const Icon(Icons.person, color: Colors.white)
+                    : null,
               ),
             ),
         ],

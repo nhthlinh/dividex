@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
-class FormFieldConfig {
-  final TextEditingController controller;
+class FormFieldConfig<T> {
+  final TextEditingController? controller;
+  final ValueNotifier<T>? selectedValue;
   final bool isRequired;
 
   FormFieldConfig({
-    required this.controller,
+    this.controller,
+    this.selectedValue,
     this.isRequired = false,
   });
 }
 
 class CustomFormWrapper extends StatefulWidget {
   final List<FormFieldConfig> fields;
-  final Widget Function(bool isValid) builder; // callback: truyền trạng thái hợp lệ
+  final Widget Function(bool isValid)
+  builder; // callback: truyền trạng thái hợp lệ
   final GlobalKey<FormState>? formKey;
 
   const CustomFormWrapper({
@@ -33,7 +36,11 @@ class _CustomFormWrapperState extends State<CustomFormWrapper> {
   void initState() {
     super.initState();
     for (var field in widget.fields) {
-      field.controller.addListener(_validate);
+      if (field.controller != null) {
+        field.controller!.addListener(_validate);
+      } else if (field.selectedValue != null) {
+        field.selectedValue!.addListener(_validate);
+      }
     }
     _validate();
   }
@@ -41,7 +48,11 @@ class _CustomFormWrapperState extends State<CustomFormWrapper> {
   @override
   void dispose() {
     for (var field in widget.fields) {
-      field.controller.removeListener(_validate);
+      if (field.controller != null) {
+        field.controller!.removeListener(_validate);
+      } else if (field.selectedValue != null) {
+        field.selectedValue!.removeListener(_validate);
+      }
     }
     super.dispose();
   }
@@ -49,7 +60,21 @@ class _CustomFormWrapperState extends State<CustomFormWrapper> {
   void _validate() {
     final allRequiredFilled = widget.fields.every((f) {
       if (!f.isRequired) return true;
-      return f.controller.text.trim().isNotEmpty;
+      if (f.controller != null) {
+        return f.controller!.text.trim().isNotEmpty;
+      } else if (f.selectedValue != null) {
+        final value = f.selectedValue!.value;
+        if (value == null) return false;
+
+        // Nếu value là String thì check trim
+        if (value is String) {
+          return value.trim().isNotEmpty;
+        }
+
+        // Nếu value là số, enum, object... thì chỉ cần != null
+        return true;
+      }
+      return false;
     });
 
     if (_isValid != allRequiredFilled) {

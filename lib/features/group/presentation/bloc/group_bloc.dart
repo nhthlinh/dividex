@@ -27,6 +27,7 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
           page: groups.page,
           totalPage: groups.totalPage,
           groups: groups.data,
+          totalItems: groups.totalItems,
           isLoading: false,
         ),
       );
@@ -45,6 +46,7 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
         state.copyWith(
           page: groups.page,
           totalPage: groups.totalPage,
+          totalItems: groups.totalItems,
           groups: [...state.groups, ...groups.data],
         ),
       );
@@ -68,6 +70,7 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
           page: groups.page,
           totalPage: groups.totalPage,
           groups: groups.data,
+          totalItems: groups.totalItems,
           isLoading: false,
         ),
       );

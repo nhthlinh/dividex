@@ -1007,4 +1007,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get transactionReport => 'Transaction report';
+
+  @override
+  String friendRequest(Object userName) {
+    return '$userName\'s request ';
+  }
+
+  @override
+  String get you => 'You';
+
+  @override
+  String get your => 'Your';
+
+  @override
+  String get transaction => 'Transaction';
+
+  @override
+  String get searchTransactionSubtitle =>
+      'Search for specific shared expenses, bills, or payments within groups';
+
+  @override
+  String get user => 'User';
+
+  @override
+  String get searchUserSubtitle =>
+      'Search for users to add as friends or participants in expenses';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get searchTransaction => 'Search transaction';
+
+  @override
+  String get searchUser => 'Search user';
+
+  @override
+  String get addGroupSubtitle =>
+      'Add a new group to share manage expense with your friend.';
+
+  @override
+  String get addMembers => 'Choose members';
+
+  @override
+  String get refreshFail => 'Session expired, please login again';
+
+  @override
+  String get uploadImageHint => 'Please upload image, size less than 100KB';
+
+  @override
+  String get chooseFile => 'Choose file';
+
+  @override
+  String get fileChosen => 'file chosen';
+
+  @override
+  String get noFileChosen => 'No file chosen';
+
+  @override
+  String get members => 'Members';
+
+  @override
+  String get addEventSubtitle =>
+      'Add a new event to share and manage expense easily.';
 }

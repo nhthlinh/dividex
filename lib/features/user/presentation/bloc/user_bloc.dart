@@ -1,9 +1,11 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/core/di/injection.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/domain/usecase.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,21 +16,37 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
     on<RefreshUsersEvent>(_onRefreshUsers);
   }
 
+  Future<PagingModel<List<UserModel>>> getData(
+    LoadType type,
+    String? id,
+    String? searchQuery,
+  ) async {
+    final useCase = await getIt.getAsync<UserUseCase>();
+    switch (type) {
+      case LoadType.friends:
+        return await useCase.getUserForCreateGroup(id ?? '', 1, 5, searchQuery);
+      case LoadType.groupMembers:
+        return await useCase.getUserForCreateEvent(id ?? '', 1, 5, searchQuery);
+      case LoadType.eventParticipants:
+        return await useCase.getUserForCreateExpense(
+          id ?? '',
+          1,
+          5,
+          searchQuery,
+        );
+    }
+  }
+
   Future _onInitial(InitialEvent event, Emitter emit) async {
     try {
-      final useCase = await getIt.getAsync<UserUseCase>();
-
-      final users = event.action == LoadUsersAction.getFriends
-          ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5, event.searchQuery)
-          : event.action == LoadUsersAction.getGroupMembers
-              ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5, event.searchQuery)
-              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5, event.searchQuery);
+      final users = await getData(event.action, event.id, event.searchQuery);
 
       emit(
         state.copyWith(
           page: users.page,
           totalPage: users.totalPage,
           users: users.data,
+          totalItems: users.totalItems,
           isLoading: false,
         ),
       );
@@ -40,17 +58,13 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
 
   Future _onLoadMoreUsers(LoadMoreUsersEvent event, Emitter emit) async {
     try {
-      final useCase = await getIt.getAsync<UserUseCase>();
-      final users = event.action == LoadUsersAction.getFriends
-          ? await useCase.getUserForCreateGroup(event.id ?? '', state.page + 1, 5, event.searchQuery)
-          : event.action == LoadUsersAction.getGroupMembers
-              ? await useCase.getUserForCreateEvent(event.id ?? '', state.page + 1, 5, event.searchQuery)
-              : await useCase.getUserForCreateExpense(event.id ?? '', state.page + 1, 5, event.searchQuery);
+      final users = await getData(event.action, event.id, event.searchQuery);
 
       emit(
         state.copyWith(
           page: users.page,
           totalPage: users.totalPage,
+          totalItems: users.totalItems,
           users: [...state.users, ...users.data],
         ),
       );
@@ -66,18 +80,14 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
     try {
       emit(state.copyWith(isLoading: true));
 
-      final useCase = await getIt.getAsync<UserUseCase>();
-      final users = event.action == LoadUsersAction.getFriends
-          ? await useCase.getUserForCreateGroup(event.id ?? '', 1, 5, event.searchQuery)
-          : event.action == LoadUsersAction.getGroupMembers
-              ? await useCase.getUserForCreateEvent(event.id ?? '', 1, 5, event.searchQuery)
-              : await useCase.getUserForCreateExpense(event.id ?? '', 1, 5, event.searchQuery);
+      final users = await getData(event.action, event.id, event.searchQuery);
 
       emit(
         state.copyWith(
           page: users.page,
           totalPage: users.totalPage,
           users: users.data,
+          totalItems: users.totalItems,
           isLoading: false,
         ),
       );
