@@ -153,7 +153,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get expenseAmountHint => '120.000';
 
   @override
-  String get expenseUnitLabel => 'Đơn vị';
+  String get expenseCurrencyLabel => 'Đơn vị';
 
   @override
   String get expenseCategoryLabel => 'Phân loại';
@@ -1073,4 +1073,50 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get addEventSubtitle =>
       'Tạo một sự kiện để quản lý và chia sẻ chi tiêu dễ dàng';
+
+  @override
+  String get addExpenseSubtitle =>
+      'Thêm một chi tiêu mới để chia tiền với bạn bè dễ dàng hơn và giúp cho mọi thứ được công bằng trong nhóm.';
+
+  @override
+  String get expenseSplitType => 'Chọn kiểu chia:';
+
+  @override
+  String get groupNotFound => 'Không tìm thấy nhóm.';
+
+  @override
+  String get createIsDenied => 'Bạn không có quyền tạo mục này.';
+
+  @override
+  String get updateIsDenied => 'Bạn không có quyền cập nhật mục này.';
+
+  @override
+  String get deleteIsDenied => 'Bạn không có quyền xóa mục này.';
+
+  @override
+  String get eventNotFound => 'Không tìm thấy sự kiện.';
+
+  @override
+  String get expenseNotFound => 'Không tìm thấy chi tiêu';
+
+  @override
+  String get friendRelationAlreadyExists => 'Quan hệ bạn bè này đã tồn tại.';
+
+  @override
+  String get friendRequestNotFound => 'The friend request was not found.';
+
+  @override
+  String get totalAmount => 'Tổng số tiền';
+
+  @override
+  String get amount => 'Số tiền';
+
+  @override
+  String get splitRemainingEqually => 'Chia đều phần còn lại';
+
+  @override
+  String get allocated => 'Đã chia';
+
+  @override
+  String get noEventsInGroup => 'Chưa có sự kiện nào trong nhóm';
 }

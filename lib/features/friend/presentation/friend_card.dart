@@ -54,12 +54,9 @@ class _FriendCardState extends State<FriendCard> {
             (widget.friend.avatarUrl != null &&
                 widget.friend.avatarUrl!.isNotEmpty)
             ? NetworkImage(widget.friend.avatarUrl!)
-            : null,
-        child:
-            (widget.friend.avatarUrl == null ||
-                widget.friend.avatarUrl!.isEmpty)
-            ? const Icon(Icons.person, color: Colors.white)
-            : null,
+            : NetworkImage(
+                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(widget.friend.fullName ?? 'User')}&background=random&color=fff&size=128',
+              ),
       ),
       onTap: () {
         // Navigate to friend's profile
@@ -260,11 +257,9 @@ class _FriendCardState extends State<FriendCard> {
         backgroundImage:
             (ava != null && ava.isNotEmpty)
             ? NetworkImage(ava)
-            : null,
-        child:
-            (ava == null || ava.isEmpty)
-            ? const Icon(Icons.person, color: Colors.white)
-            : null,
+            : NetworkImage(
+                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(name ?? 'User')}&background=random&color=fff&size=128',
+              ),
       ),
         const SizedBox(height: 4),
         Text(

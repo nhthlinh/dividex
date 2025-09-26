@@ -41,10 +41,9 @@ class SquareIconUser extends StatelessWidget {
                 backgroundImage:
                     (user.avatar != null && user.avatar!.isNotEmpty)
                     ? NetworkImage(user.avatar!)
-                    : null,
-                child: (user.avatar == null || user.avatar!.isEmpty)
-                    ? const Icon(Icons.person, color: Colors.white)
-                    : null,
+                    : NetworkImage(
+                        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
+                      ),
               ),
               const SizedBox(height: 8),
               // Label (allow multi-line, centered)

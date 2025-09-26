@@ -30,6 +30,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
   final Widget? prefixIcon; // Icon ở đầu
   final Widget? suffixIcon; // Icon ở cuối
   final ValueChanged<String>? onChanged; // Hàm khi nội dung thay đổi
+  final VoidCallback? onTap; // Hàm khi nhấn vào ô input
 
   const CustomTextInputWidget({
     super.key,
@@ -46,6 +47,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
     this.onChanged,
     this.isRequired = false,
     this.obscureText = false,
+    this.onTap,
   });
 
   @override
@@ -73,6 +75,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
             const SizedBox(height: 4),
           ],
           TextFormField(
+            onTap: onTap ?? () {},
             obscureText: obscureText!,
             maxLines: maxLines ?? 1,
             readOnly: isReadOnly,

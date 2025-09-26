@@ -1,18 +1,21 @@
-
+import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 
 abstract class GroupRepository {
-  Future<PagingModel<List<GroupModel>>> getUserGroups(String userId, int page, int pageSize);
-  Future<void> createGroup({
+  Future<String> createGroup({
     required String name,
-    required String avatarPath,
     required List<String> memberIds,
   });
-  Future<void> editGroup({
-    required String groupId,
-    required String name,
-    required String avatarPath,
-    required List<String> memberIds,
-  });
+  Future<GroupModel?> getGroupDetail(String groupId);
+  Future<void> deleteGroup(String groupId);
+  Future<void> leaveGroup(String groupId);
+  
+  Future<PagingModel<List<EventModel>>> listEvents(
+    int page,
+    int pageSize,
+    String groupId,
+    String searchQuery,
+  );
+  Future<PagingModel<List<GroupModel>>> listGroups(int page, int pageSize, String searchQuery);
 }

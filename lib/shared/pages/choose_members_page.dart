@@ -4,6 +4,7 @@ import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
@@ -17,13 +18,15 @@ class ChooseMembersPage extends StatefulWidget {
   final String? id;
   final LoadType type;
   final ValueChanged<List<UserModel>> onSelectedMembersChanged;
-  final List<UserModel> initialSelectedMembers;
+  final List<UserModel>? initialSelectedMembers;
+  final bool isMultiSelect;
   const ChooseMembersPage({
     super.key,
     required this.type,
     required this.onSelectedMembersChanged,
     required this.initialSelectedMembers,
     required this.id,
+    required this.isMultiSelect,
   });
 
   @override
@@ -35,13 +38,17 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
   final List<UserModel> _selectedUsers = []; // <-- lưu user đã chọn
 
   @override
-  void initState() {
+  void initState() { 
     super.initState();
-    _selectedUsers.addAll(widget.initialSelectedMembers);
+    _selectedUsers.addAll(widget.initialSelectedMembers ?? []);
     context.read<LoadedUsersBloc>().add(InitialEvent(widget.id, widget.type));
   }
 
   void _toggleUser(UserModel user) {
+    if (!widget.isMultiSelect) {
+      // Nếu không phải multi-select, clear danh sách trước khi thêm
+      _selectedUsers.clear();
+    }
     setState(() {
       if (_selectedUsers.any((u) => u.id == user.id)) {
         // Nếu đã chọn thì remove
@@ -107,12 +114,16 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
                 }
 
                 final hasMore = state.users.length < state.totalItems;
+                final String myId = HiveService.getUser().id ?? '';
+                final usersWithoutMyself = state.users
+                    .where((user) => user.id != myId)
+                    .toList();
 
                 return listResults(
                   intl,
                   hasMore,
                   state.totalItems,
-                  state.users,
+                  usersWithoutMyself,
                 );
               },
             ),
@@ -208,10 +219,9 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
                 backgroundImage:
                     (user.avatar != null && user.avatar!.isNotEmpty)
                     ? NetworkImage(user.avatar!)
-                    : null,
-                child: (user.avatar == null || user.avatar!.isEmpty)
-                    ? const Icon(Icons.person, color: Colors.white)
-                    : null,
+                    : NetworkImage(
+                            'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
+                          ),
               ),
               onTap: () {
                 // Navigate to friend's profile

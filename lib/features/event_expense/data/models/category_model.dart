@@ -12,41 +12,41 @@ class CategoryModel {
 
   // Static list of all financial categories
   static List<CategoryModel> get categories => [
-        CategoryModel(id: '1', key: 'category.food'),
-        CategoryModel(id: '2', key: 'category.transportation'),
-        CategoryModel(id: '3', key: 'category.utilities'),
-        CategoryModel(id: '4', key: 'category.entertainment'),
-        CategoryModel(id: '5', key: 'category.housing'),
-        CategoryModel(id: '6', key: 'category.healthcare'),
-        CategoryModel(id: '7', key: 'category.shopping'),
-        CategoryModel(id: '8', key: 'category.education'),
-        CategoryModel(id: '9', key: 'category.savings'),
-        CategoryModel(id: '10', key: 'category.miscellaneous'),
+        CategoryModel(id: '1', key: 'food'),
+        CategoryModel(id: '2', key: 'transportation'),
+        CategoryModel(id: '3', key: 'utilities'),
+        CategoryModel(id: '4', key: 'entertainment'),
+        CategoryModel(id: '5', key: 'housing'),
+        CategoryModel(id: '6', key: 'healthcare'),
+        CategoryModel(id: '7', key: 'shopping'),
+        CategoryModel(id: '8', key: 'education'),
+        CategoryModel(id: '9', key: 'savings'),
+        CategoryModel(id: '10', key: 'miscellaneous'),
       ];
 
   String localizedName(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
 
     switch (key) {
-      case 'category.food':
+      case 'food':
         return intl.food;
-      case 'category.transportation':
+      case 'transportation':
         return intl.transportation;
-      case 'category.utilities':
+      case 'utilities':
         return intl.utilities;
-      case 'category.entertainment':
+      case 'entertainment':
         return intl.entertainment;
-      case 'category.housing':
+      case 'housing':
         return intl.housing;
-      case 'category.healthcare':
+      case 'healthcare':
         return intl.healthcare;
-      case 'category.shopping':
+      case 'shopping':
         return intl.shopping;
-      case 'category.education':
+      case 'education':
         return intl.education;
-      case 'category.savings':
+      case 'savings':
         return intl.savings;
-      case 'category.miscellaneous':
+      case 'miscellaneous':
         return intl.miscellaneous;
       default:
         return key; // fallback

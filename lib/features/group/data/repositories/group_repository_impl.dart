@@ -1,3 +1,4 @@
+import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/domain/group_repository.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
@@ -11,35 +12,56 @@ class GroupRepositoryImpl implements GroupRepository {
   GroupRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<PagingModel<List<GroupModel>>> getUserGroups(String userId, int page, int pageSize) {
-    return remoteDataSource.getUserGroups(userId, page, pageSize);
-  }
-
-  @override
-  Future<void> createGroup({
+  Future<String> createGroup({
     required String name,
-    required String avatarPath,
     required List<String> memberIds,
   }) {
     return remoteDataSource.createGroup(
       name: name,
-      avatarPath: avatarPath,
       memberIds: memberIds,
+    ); 
+  }
+
+  @override
+  Future<PagingModel<List<GroupModel>>> listGroups(
+    int page,
+    int pageSize,
+    String searchQuery,
+  ) {
+    return remoteDataSource.listGroups(
+      page,
+      pageSize,
+      searchQuery,
     );
   }
 
   @override
-  Future<void> editGroup({  
-    required String groupId,
-    required String name,
-    required String avatarPath,
-    required List<String> memberIds,
-  }) {
-    return remoteDataSource.editGroup(
-      groupId: groupId,
-      name: name,
-      avatarPath: avatarPath,
-      memberIds: memberIds,
+  Future<GroupModel?> getGroupDetail(String groupId) {
+    return remoteDataSource.getGroupDetail(groupId);
+  }
+
+  @override
+  Future<void> deleteGroup(String groupId) {
+    return remoteDataSource.deleteGroup(groupId);
+  }
+
+  @override
+  Future<void> leaveGroup(String groupId) { 
+    return remoteDataSource.leaveGroup(groupId);
+  }
+
+  @override
+  Future<PagingModel<List<EventModel>>> listEvents(
+    int page,
+    int pageSize,
+    String groupId,
+    String searchQuery,
+  ) {
+    return remoteDataSource.listEvents(
+      page,
+      pageSize,
+      groupId,
+      searchQuery,
     );
   }
 

@@ -374,11 +374,11 @@ abstract class AppLocalizations {
   /// **'120.000'**
   String get expenseAmountHint;
 
-  /// No description provided for @expenseUnitLabel.
+  /// No description provided for @expenseCurrencyLabel.
   ///
   /// In en, this message translates to:
-  /// **'Unit'**
-  String get expenseUnitLabel;
+  /// **'Currency'**
+  String get expenseCurrencyLabel;
 
   /// No description provided for @expenseCategoryLabel.
   ///
@@ -2041,6 +2041,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add a new event to share and manage expense easily.'**
   String get addEventSubtitle;
+
+  /// No description provided for @addExpenseSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new expense to share costs easily and keep everything fair for the group.'**
+  String get addExpenseSubtitle;
+
+  /// No description provided for @expenseSplitType.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose transaction type:'**
+  String get expenseSplitType;
+
+  /// No description provided for @groupNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The group was not found.'**
+  String get groupNotFound;
+
+  /// No description provided for @createIsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to create this item.'**
+  String get createIsDenied;
+
+  /// No description provided for @updateIsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to update this item.'**
+  String get updateIsDenied;
+
+  /// No description provided for @deleteIsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to delete this item.'**
+  String get deleteIsDenied;
+
+  /// No description provided for @eventNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The event was not found.'**
+  String get eventNotFound;
+
+  /// No description provided for @expenseNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The expense was not found'**
+  String get expenseNotFound;
+
+  /// No description provided for @friendRelationAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'This friend relationship already exists.'**
+  String get friendRelationAlreadyExists;
+
+  /// No description provided for @friendRequestNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The friend request was not found.'**
+  String get friendRequestNotFound;
+
+  /// No description provided for @totalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total amount'**
+  String get totalAmount;
+
+  /// No description provided for @amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amount;
+
+  /// No description provided for @splitRemainingEqually.
+  ///
+  /// In en, this message translates to:
+  /// **'Split remaining equally'**
+  String get splitRemainingEqually;
+
+  /// No description provided for @allocated.
+  ///
+  /// In en, this message translates to:
+  /// **'Allocated'**
+  String get allocated;
+
+  /// No description provided for @noEventsInGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'No events in this group yet'**
+  String get noEventsInGroup;
 }
 
 class _AppLocalizationsDelegate

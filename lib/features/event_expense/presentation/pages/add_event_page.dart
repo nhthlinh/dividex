@@ -1,6 +1,9 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart';
+import 'package:Dividex/features/event_expense/presentation/widgets/date_input_field_widget.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
@@ -9,7 +12,6 @@ import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
     as user_event;
-import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -38,7 +40,7 @@ class _AddEventPageState extends State<AddEventPage> {
   final TextEditingController eventNameController = TextEditingController();
   final TextEditingController eventDescriptionController =
       TextEditingController();
-  final TextEditingController eventStartDateController =
+  final TextEditingController eventStartDateController = 
       TextEditingController();
   final TextEditingController eventEndDateController = TextEditingController();
 
@@ -69,55 +71,40 @@ class _AddEventPageState extends State<AddEventPage> {
       print('Selected Group: ${selectedGroup.value?.name ?? ''}');
       print('Selected Members: $selectedMembers');
 
-      // final DioClient dio = DioClient(Dio(
-      //   BaseOptions(
-      //     baseUrl: dotenv.env['BASE_URL'] ?? '', // Replace with your API base URL
-      //     connectTimeout: const Duration(seconds: 10),
-      //     receiveTimeout: const Duration(seconds: 10),
-      //     headers: {
-      //       'Authorization':
-      //           'Bearer ${HiveService.getToken()?.accessToken?.trim()}',
-      //       'Accept-Language': HiveService.getSettings().localeCode,
-      //     },
-      //   ),
-      // ));
-
-      // try {
-      //   await dio.post('/events', data: {
-      //     'name': eventNameController.text,
-      //     'list_user_uid': selectedMembers.map((e) => e.id).toList(),
-      //     'group_id': selectedGroupId,
-      //     'description': eventDescriptionController.text,
-      //     'event_start': DateFormat("yyyy-MM-dd").format(DateFormat("dd/MM/yyyy").parse(eventStartDateController.text)),
-      //     'event_end': DateFormat("yyyy-MM-dd").format(DateFormat("dd/MM/yyyy").parse(eventEndDateController.text)),
-      //   });
-      // } catch (e) {
-      //   rethrow;
-      // }
-      // final intl = AppLocalizations.of(context)!;
-
-      // showCustomToast(intl.success, type: ToastType.success);
+      context.read<EventBloc>().add(
+        CreateEventEvent(
+          name: eventNameController.text,
+          groupId: selectedGroup.value?.id ?? '',
+          eventStart:  DateFormat("yyyy-MM-dd").format(DateFormat("dd/MM/yyyy").parse(eventStartDateController.text)),
+          eventEnd:  DateFormat("yyyy-MM-dd").format(DateFormat("dd/MM/yyyy").parse(eventEndDateController.text)),
+          description: eventDescriptionController.text,
+          memberIds: selectedMembers
+              .map((e) => e.id)
+              .whereType<String>()
+              .toList(),
+        ),
+      );
 
       Navigator.of(context).pop(); // Go back after submission
     }
   }
 
-  Future<void> _selectDate(
-    BuildContext context,
-    TextEditingController controller,
-  ) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) {
-      setState(() {
-        controller.text = DateFormat('dd/MM/yyyy').format(picked);
-      });
-    }
-  }
+  // Future<void> _selectDate(
+  //   BuildContext context,
+  //   TextEditingController controller,
+  // ) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime(2100),
+  //   );
+  //   if (picked != null) {
+  //     setState(() {
+  //       controller.text = DateFormat('dd/MM/yyyy').format(picked);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +120,7 @@ class _AddEventPageState extends State<AddEventPage> {
         child: BlocProvider(
           create: (context) =>
               LoadedGroupsBloc()
-                ..add(group_event.InitialEvent(HiveService.getUser().id ?? '')),
+                ..add(group_event.InitialEvent('')),
           child: eventForm(intl, theme),
         ),
       ),
@@ -187,58 +174,90 @@ class _AddEventPageState extends State<AddEventPage> {
           ),
           const SizedBox(height: 16),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomTextInputWidget(
-                isRequired: true,
-                size: TextInputSize.medium,
-                keyboardType: TextInputType.datetime,
-                label: intl.eventStartDateLabel,
-                hintText: '13/05/2025',
-                controller: eventStartDateController,
-                isReadOnly: true,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () => _selectDate(
-                    navigatorKey.currentContext!,
-                    eventStartDateController,
-                  ),
-                ), // Mở DatePicker khi tap
-                validator: (value) {
-                  return CustomValidator().validateDateForEvent(
-                    intl,
-                    eventStartDateController,
-                    eventEndDateController,
-                  );
-                },
-              ),
-
-              const SizedBox(width: 8),
-              CustomTextInputWidget(
-                isRequired: true,
-                size: TextInputSize.medium,
-                keyboardType: TextInputType.datetime,
-                label: intl.eventEndDateLabel,
-                hintText: '13/05/2025',
-                controller: eventEndDateController,
-                isReadOnly: true,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () => _selectDate(
-                    navigatorKey.currentContext!,
-                    eventEndDateController,
-                  ),
-                ), // Mở DatePicker khi tap
-                validator: (value) {
-                  return CustomValidator().validateDateForEvent(
-                    intl,
-                    eventStartDateController,
-                    eventEndDateController,
-                  );
-                },
-              ),
-            ],
+          SizedBox(
+            width: 340,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                DateInputField(
+                  label: intl.eventStartDateLabel,
+                  hintText: '13/05/2025',
+                  controller: eventStartDateController,
+                  size: TextInputSize.medium,
+                  isRequired: true,
+                  validator: (value) {
+                    return CustomValidator().validateDateForEvent(
+                      intl,
+                      eventStartDateController,
+                      eventEndDateController,
+                    );
+                  },
+                ),
+                // CustomTextInputWidget(
+                //   isRequired: true,
+                //   size: TextInputSize.medium,
+                //   keyboardType: TextInputType.datetime,
+                //   label: intl.eventStartDateLabel,
+                //   hintText: '13/05/2025',
+                //   controller: eventStartDateController,
+                //   isReadOnly: true,
+                //   suffixIcon: IconButton(
+                //     icon: const Icon(Icons.calendar_today),
+                //     onPressed: () => _selectDate(
+                //       navigatorKey.currentContext!,
+                //       eventStartDateController,
+                //     ),
+                //   ), // Mở DatePicker khi tap
+                //   validator: (value) {
+                //     return CustomValidator().validateDateForEvent(
+                //       intl,
+                //       eventStartDateController,
+                //       eventEndDateController,
+                //     );
+                //   },
+                // ),
+            
+                const SizedBox(width: 8),
+                DateInputField(
+                  label: intl.eventEndDateLabel,
+                  hintText: '13/05/2025',
+                  controller: eventEndDateController,
+                  size: TextInputSize.medium,
+                  isRequired: true,
+                  validator: (value) {
+                    return CustomValidator().validateDateForEvent(
+                      intl,
+                      eventStartDateController,
+                      eventEndDateController,
+                    );
+                  },
+                ),
+                // CustomTextInputWidget(
+                //   isRequired: true,
+                //   size: TextInputSize.medium,
+                //   keyboardType: TextInputType.datetime,
+                //   label: intl.eventEndDateLabel,
+                //   hintText: '13/05/2025',
+                //   controller: eventEndDateController,
+                //   isReadOnly: true,
+                //   suffixIcon: IconButton(
+                //     icon: const Icon(Icons.calendar_today),
+                //     onPressed: () => _selectDate(
+                //       navigatorKey.currentContext!,
+                //       eventEndDateController,
+                //     ),
+                //   ), // Mở DatePicker khi tap
+                //   validator: (value) {
+                //     return CustomValidator().validateDateForEvent(
+                //       intl,
+                //       eventStartDateController,
+                //       eventEndDateController,
+                //     );
+                //   },
+                // ),
+              
+              ],
+            ),
           ),
           const SizedBox(height: 16),
 
@@ -266,6 +285,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
           if (selectedGroup.value != null) ...[
             CustomTextButton(
+              isRequired: true,
               isLeftAligned: true,
               description: intl.members,
               label: intl.addMembers,
@@ -281,6 +301,7 @@ class _AddEventPageState extends State<AddEventPage> {
                         selectedMembers = users;
                       });
                     },
+                    'isMultiSelect': true,
                   },
                 );
               },
@@ -320,10 +341,10 @@ class _AddEventPageState extends State<AddEventPage> {
                       width: 50,
                       height: 50,
                       errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.event),
+                          const Icon(Icons.group),
                     )
                   else
-                    const Icon(Icons.event),
+                    const Icon(Icons.group),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -341,6 +362,7 @@ class _AddEventPageState extends State<AddEventPage> {
             );
           },
           onChanged: (val) {
+            selectedMembers = [];
             setState(() => selectedGroup.value = val);
           },
           isRequired: true,

@@ -16,8 +16,9 @@ class UserUseCase {
   Future<PagingModel<List<UserModel>>> getUserForCreateEvent(String groupId, int page, int pageSize, String? searchQuery) {
     return repository.getUserForCreateEvent(groupId, page, pageSize, searchQuery);
   }
-
-  Future<PagingModel<List<UserModel>>> getUserForCreateExpense(String eventId, int page, int pageSize, String? searchQuery) {
-    return repository.getUserForCreateExpense(eventId, page, pageSize, searchQuery);
+  
+  // List event members
+  Future<PagingModel<List<UserModel>>> getUserForCreateExpense(String eventId, int page, int pageSize, String? searchQuery, {String orderBy = "full_name", String sortType = "asc"}) {
+    return repository.getUserForCreateExpense(eventId, page, pageSize, searchQuery, orderBy: orderBy, sortType: sortType);
   }
 }

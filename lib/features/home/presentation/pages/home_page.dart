@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         isHomePage: true,
         action: notiButton(),
         canBeBack: false,
-        title: intl.welcomeUser(fullName),
+        title: intl.welcomeUser(fullName.split(' ').last),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

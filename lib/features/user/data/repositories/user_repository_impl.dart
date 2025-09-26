@@ -21,7 +21,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<PagingModel<List<UserModel>>> getUserForCreateExpense(String eventId, int page, int pageSize, String? searchQuery) {
-    return remoteDataSource.getUserForCreateExpense(eventId, page, pageSize, searchQuery);
+  Future<PagingModel<List<UserModel>>> getUserForCreateExpense(String eventId, int page, int pageSize, String? searchQuery, {String orderBy = "full_name", String sortType = "asc"}) {
+    return remoteDataSource.getUserForCreateExpense(eventId, page, pageSize, searchQuery, orderBy: orderBy, sortType: sortType);
   }
 }

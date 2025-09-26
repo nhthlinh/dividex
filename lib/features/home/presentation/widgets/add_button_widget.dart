@@ -29,9 +29,10 @@ class AddButtonPopup extends StatelessWidget {
       _PopupItem(
         iconPath: 'lib/assets/icons/money-transfer.png',
         label: intl.addExpense,
-        onTap: () {},
+        onTap: () {
+          context.pushNamed(AppRouteNames.addExpense);
+        },
       ),
-      // 👉 bạn có thể thêm bao nhiêu item tuỳ ý ở đây
     ];
 
     return Column(

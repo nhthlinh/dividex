@@ -40,4 +40,9 @@ class FriendRepositoryImpl implements FriendRepository {
   Future<PagingModel<List<FriendModel>>> searchUsers(String? search, int page, int pageSize) {
     return remoteDataSource.searchUsers(search, page, pageSize);
   }
+
+  @override
+  Future<PagingModel<List<FriendModel>>> listMutualFriends(String friendshipUid, int page, int pageSize) {
+    return remoteDataSource.listMutualFriends(friendshipUid, page, pageSize);
+  }
 }

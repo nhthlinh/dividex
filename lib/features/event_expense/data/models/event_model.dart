@@ -1,21 +1,17 @@
-
-
-import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-part 'event_model.g.dart';
 
 @JsonSerializable()
 class EventModel {
   final String? id;
   final String? name;
-  final UserModel? creator;
+  final String? creator;
   final String? description;
   final DateTime? eventStart;
   final DateTime? eventEnd;
   final DateTime? createdAt;
-  final String? groupId;
+  final String? group;
   final String? groupName;
+  final List<String>? memberIds;
 
   EventModel({
     this.id,
@@ -25,10 +21,41 @@ class EventModel {
     this.eventStart,
     this.eventEnd,
     this.createdAt,
-    this.groupId,
+    this.group,
     this.groupName,
+    this.memberIds,
   });
 
-  factory EventModel.fromJson(Map<String, dynamic> json) => _$EventModelFromJson(json);
-  Map<String, dynamic> toJson() => _$EventModelToJson(this);
+  factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
+    id: json['uid'] as String? ?? json['event_uid'] as String?,
+    name: json['name'] as String? ?? json['event_name'] as String?,
+    creator: json['creator'] as String?,
+    group: json['group'] as String?,
+    description: json['description'] as String? ?? json['event_description'] as String?,
+    eventStart: json['event_start'] == null
+        ? null
+        : DateTime.parse(json['event_start'] as String),
+    eventEnd: json['event_end'] == null
+        ? null
+        : DateTime.parse(json['event_end'] as String),
+    createdAt: json['created_at'] == null
+        ? null
+        : DateTime.parse(json['created_at'] as String),
+    groupName: json['group_name'] as String?,
+    memberIds: (json['member_ids'] as List<dynamic>?)
+        ?.map((e) => e as String)
+        .toList(),
+  );
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'id': id,
+    'name': name,
+    'creator': creator,
+    'description': description,
+    'eventStart': eventStart?.toIso8601String(),
+    'eventEnd': eventEnd?.toIso8601String(),
+    'createdAt': createdAt?.toIso8601String(),
+    'group': group,
+    'groupName': groupName,
+    'memberIds': memberIds,
+  };
 }

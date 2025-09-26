@@ -8,6 +8,7 @@ class CustomTextButton extends StatelessWidget {
   final VoidCallback? onPressed; // callback khi bấm
   final Color? textColor; // màu chữ của nút
   final bool isLeftAligned; // canh trái hay phải
+  final bool isRequired;
 
   const CustomTextButton({
     super.key,
@@ -16,6 +17,7 @@ class CustomTextButton extends StatelessWidget {
     this.onPressed,
     this.textColor,
     this.isLeftAligned = false,
+    this.isRequired = false,
   });
 
   @override
@@ -31,13 +33,23 @@ class CustomTextButton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (description.isNotEmpty) ...[
-            Text(
-              description,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontSize: 12,
-                letterSpacing: 0,
-                height: 16 / 12,
-                color: Colors.grey,
+            RichText(
+              text: TextSpan(
+                text: label,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontSize: 12,
+                  letterSpacing: 0,
+                  height: 16 / 12,
+                  color: Colors.grey,
+                ),
+                children: isRequired
+                    ? [
+                        const TextSpan(
+                          text: ' *',
+                          style: TextStyle(color: AppThemes.primary3Color),
+                        ),
+                      ]
+                    : [],
               ),
             ),
             const SizedBox(width: 8),

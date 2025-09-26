@@ -7,7 +7,14 @@ import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_f
 import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/otp_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/reset_pass_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/register_flow/register_page.dart';
+import 'package:Dividex/features/event_expense/data/models/event_model.dart';
+import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/add_event_page.dart';
+import 'package:Dividex/features/event_expense/presentation/pages/add_expense_page.dart';
+import 'package:Dividex/features/event_expense/presentation/pages/choose_event_page.dart';
+import 'package:Dividex/features/event_expense/presentation/pages/split_page.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_request_bloc_and_event.dart'
     as request_bloc;
@@ -21,6 +28,7 @@ import 'package:Dividex/features/search/presentation/pages/search_user_page.dart
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
+import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/pages/choose_members_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/change_pass_page.dart';
 import 'package:Dividex/features/home/presentation/pages/home_page.dart';
@@ -62,11 +70,13 @@ class AppRouteNames {
   static const String searchTransaction = 'search-transaction';
   // static const String chat = 'chat';
 
-  // static const String addExpense = 'add-expense';
+  static const String addExpense = 'add-expense';
   static const String addGroup = 'add-group';
   static const String addEvent = 'add-event';
 
   static const String chooseMember = 'choose-member';
+  static const String chooseEvent = 'choose-event';
+  static const String customSplit = 'custom-split';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -235,40 +245,40 @@ GoRouter buildRouter(BuildContext context) {
         },
       ),
 
-      // GoRoute(
-      //   path: '/add-expense',
-      //   name: AppRouteNames.addExpense,
-      //   builder: (BuildContext context, GoRouterState state) {
-      //     final extra = state.extra as int?;
-      //     return AddExpensePage(expenseId: extra ?? 0);
-      //   },
-      // ),
       GoRoute(
         path: '/add-group',
         name: AppRouteNames.addGroup,
-        builder: (BuildContext context, GoRouterState state) {
-          return BlocProvider<LoadedGroupsBloc>(
-            create: (context) => LoadedGroupsBloc(),
-            child: AddGroupPage(),
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return buildPageWithDefaultTransition(
+            child: BlocProvider<GroupBloc>(
+              create: (context) => GroupBloc(),
+              child: AddGroupPage(),
+            ),
           );
         },
       ),
-      // GoRoute(
-      //   path: '/chat',
-      //   name: AppRouteNames.chat,
-      //   builder: (BuildContext context, GoRouterState state) {
-      //     final extra = state.extra as int?;
-      //     return BlocProvider<LoadedGroupsBloc>(
-      //       create: (context) => LoadedGroupsBloc(),
-      //       child: ChatScreen(),
-      //     );
-      //   },
-      // ),
+      GoRoute(
+        path: '/add-expense',
+        name: AppRouteNames.addExpense,
+        pageBuilder: (context, state) {
+          return buildPageWithDefaultTransition(
+            child: BlocProvider<ExpenseBloc>(
+              create: (context) => ExpenseBloc(),
+              child: AddExpensePage(),
+            ),
+          );
+        },
+      ),
       GoRoute(
         path: '/add-event',
         name: AppRouteNames.addEvent,
         pageBuilder: (context, state) {
-          return buildPageWithDefaultTransition(child: const AddEventPage());
+          return buildPageWithDefaultTransition(
+            child: BlocProvider<EventBloc>(
+              create: (context) => EventBloc(),
+              child: AddEventPage(),
+            ),
+          );
         },
       ),
       GoRoute(
@@ -297,9 +307,47 @@ GoRouter buildRouter(BuildContext context) {
               id: extra['id'] as String?,
               type: extra['type'] as LoadType,
               initialSelectedMembers:
-                  extra['initialSelected'] as List<UserModel>,
+                  extra['initialSelected'] as List<UserModel>?,
               onSelectedMembersChanged:
                   extra['onChanged'] as ValueChanged<List<UserModel>>,
+              isMultiSelect: extra['isMultiSelect'] as bool,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/choose-event',
+        name: AppRouteNames.chooseEvent,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return BlocProvider(
+            create: (context) => EventDataBloc(),
+            child: ChooseEventPage(
+              initialSelectedEvent:
+                  extra['initialSelected'] as EventModel?,
+              onSelectedEventChanged:
+                  extra['onChanged'] as ValueChanged<EventModel>,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/split', 
+        name: AppRouteNames.customSplit,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return BlocProvider(
+            create: (context) => LoadedUsersBloc(),
+            child: SplitPage( 
+              eventId: extra['eventId'] as String? ?? '',
+              type: extra['type'] as LoadType,
+              initialType: extra['initialType'] as SplitTypeEnum,
+              initialSelected:
+                  extra['initialSelected'] as List<UserDebt>,
+              initialUsers: extra['initialUsers'] as List<UserModel>,
+              onChanged: (list) =>
+                  (extra['onChanged'] as ValueChanged<List<UserDebt>>)(list),
+              amount: extra['amount'] as double,
             ),
           );
         },

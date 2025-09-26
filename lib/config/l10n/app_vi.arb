@@ -53,7 +53,7 @@
   "expenseNameHint": "Ví dụ: Đi ăn tối",
   "expenseAmountLabel": "Tổng chi tiêu",
   "expenseAmountHint": "120.000",
-  "expenseUnitLabel": "Đơn vị",
+  "expenseCurrencyLabel": "Đơn vị",
   "expenseCategoryLabel": "Phân loại",
   "expenseEventLabel": "Thuộc sự kiện",
   "expensePayerLabel": "Người trả",
@@ -410,7 +410,27 @@
   "noFileChosen": "0 file đã chọn",
   "members": "Thành viên",
 
-  "addEventSubtitle": "Tạo một sự kiện để quản lý và chia sẻ chi tiêu dễ dàng"
+  "addEventSubtitle": "Tạo một sự kiện để quản lý và chia sẻ chi tiêu dễ dàng",
+
+  "addExpenseSubtitle": "Thêm một chi tiêu mới để chia tiền với bạn bè dễ dàng hơn và giúp cho mọi thứ được công bằng trong nhóm.",
+  "expenseSplitType": "Chọn kiểu chia:",
+  "groupNotFound": "Không tìm thấy nhóm.",
+  "createIsDenied": "Bạn không có quyền tạo mục này.",
+  "updateIsDenied": "Bạn không có quyền cập nhật mục này.",
+  "deleteIsDenied": "Bạn không có quyền xóa mục này.",
+  "eventNotFound": "Không tìm thấy sự kiện.",
+  "expenseNotFound": "Không tìm thấy chi tiêu",
+  "friendRelationAlreadyExists": "Quan hệ bạn bè này đã tồn tại.",
+  "friendRequestNotFound": "Không tìm thấy lời mời kết bạn.",
+
+  "friendRequestNotFound": "The friend request was not found.",
+  
+  "totalAmount": "Tổng số tiền",
+  "amount": "Số tiền",
+  "splitRemainingEqually": "Chia đều phần còn lại",
+  "allocated": "Đã chia",
+  "noEventsInGroup": "Chưa có sự kiện nào trong nhóm"
+
 
 
 }

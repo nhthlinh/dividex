@@ -34,9 +34,12 @@ import 'package:Dividex/features/event_expense/data/source/expense_remote_dataso
     as _i109;
 import 'package:Dividex/features/event_expense/domain/event_repository.dart'
     as _i720;
+import 'package:Dividex/features/event_expense/domain/event_usecase.dart'
+    as _i140;
 import 'package:Dividex/features/event_expense/domain/expense_repository.dart'
     as _i55;
-import 'package:Dividex/features/event_expense/domain/usecase.dart' as _i433;
+import 'package:Dividex/features/event_expense/domain/expense_usecase.dart'
+    as _i701;
 import 'package:Dividex/features/friend/data/repositories/friend_repository_impl.dart'
     as _i707;
 import 'package:Dividex/features/friend/data/source/friend_remote_datasource.dart'
@@ -151,6 +154,10 @@ extension GetItInjectableX on _i174.GetIt {
         await getAsync<_i947.ExpenseRemoteDataSource>(),
       ),
     );
+    gh.factoryAsync<_i701.ExpenseUseCase>(
+      () async =>
+          _i701.ExpenseUseCase(await getAsync<_i55.ExpenseRepository>()),
+    );
     gh.factoryAsync<_i56.UserUseCase>(
       () async => _i56.UserUseCase(await getAsync<_i635.UserRepository>()),
     );
@@ -159,11 +166,8 @@ extension GetItInjectableX on _i174.GetIt {
         await getAsync<_i989.EventRemoteDataSource>(),
       ),
     );
-    gh.factoryAsync<_i433.ExpenseUseCase>(
-      () async => _i433.ExpenseUseCase(
-        await getAsync<_i55.ExpenseRepository>(),
-        await getAsync<_i720.EventRepository>(),
-      ),
+    gh.factoryAsync<_i140.EventUseCase>(
+      () async => _i140.EventUseCase(await getAsync<_i720.EventRepository>()),
     );
     return this;
   }

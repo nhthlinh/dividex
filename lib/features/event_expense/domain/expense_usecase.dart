@@ -1,18 +1,16 @@
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
-import 'package:Dividex/features/event_expense/data/source/expense_remote_datasource.dart';
 import 'package:Dividex/features/event_expense/domain/expense_repository.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: ExpenseRepository)
-class ExpenseRepositoryImpl implements ExpenseRepository {
-  final ExpenseRemoteDataSource remoteDataSource;
+@injectable
+class ExpenseUseCase {
+  final ExpenseRepository repository;
 
-  ExpenseRepositoryImpl(this.remoteDataSource);
+  ExpenseUseCase(this.repository);
 
-  @override
   Future<void> createExpense(
     String name,
     double totalAmount,
@@ -26,7 +24,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     SplitTypeEnum splitType,
     List<UserDebt> userDebts,
   ) async {
-    await remoteDataSource.createExpense(
+    await repository.createExpense(
       name,
       totalAmount,
       currency,
@@ -41,31 +39,27 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     );
   }
 
-  @override
-  Future<PagingModel<List<ExpenseModel>>> listExpensesInGroup(
-    String groupId,
-    int page,
-    int pageSize,
-  ) async {
-    return await remoteDataSource.listExpensesInGroup(groupId, page, pageSize);
-  }
-
-  @override
   Future<PagingModel<List<ExpenseModel>>> listExpensesInEvent(
     String eventId,
     int page,
     int pageSize,
   ) async {
-    return await remoteDataSource.listExpensesInEvent(eventId, page, pageSize);
+    return await repository.listExpensesInEvent(eventId, page, pageSize);
   }
 
-  @override
+  Future<PagingModel<List<ExpenseModel>>> listExpensesInGroup(
+    String groupId,
+    int page,
+    int pageSize,
+  ) async {
+    return await repository.listExpensesInGroup(groupId, page, pageSize);
+  }
+
   Future<void> updateExpense(ExpenseModel expense) async {
-    await remoteDataSource.updateExpense(expense);
+    await repository.updateExpense(expense);
   }
 
-  @override
   Future<void> deleteExpense(String id) async {
-    await remoteDataSource.deleteExpense(id);
+    await repository.deleteExpense(id);
   }
 }

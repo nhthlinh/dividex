@@ -17,7 +17,6 @@ import 'package:Dividex/shared/widgets/image_picker_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
-import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +33,6 @@ class _AddGroupPageState extends State<AddGroupPage> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController groupNameController = TextEditingController();
-  String? groupImagePath;
   Uint8List? imageBytes;
   List<UserModel> selectedMembers = [];
 
@@ -52,13 +50,12 @@ class _AddGroupPageState extends State<AddGroupPage> {
   void submitGroup() {
     if (_formKey.currentState!.validate()) {
       print('Group Name: ${groupNameController.text}');
-      print('Group Image Path: $groupImagePath');
-      print('Selected Members: $selectedMembers');
+      //print('Group Image: $imageBytes');
+      print('Selected Members: ${selectedMembers.map((e) => e.fullName).toList()}');
 
-      context.read<LoadedGroupsBloc>().add(
+      context.read<GroupBloc>().add(
         group_event.CreateGroupEvent(
           name: groupNameController.text,
-          avatarPath: groupImagePath ?? '',
           memberIds: selectedMembers
               .map((e) => e.id)
               .whereType<String>()
@@ -145,6 +142,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
 
             const SizedBox(height: 24),
             CustomTextButton(
+              isRequired: true,
               isLeftAligned: true,
               description: intl.members,
               label: intl.addMembers,
@@ -160,6 +158,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
                         selectedMembers = users;
                       });
                     },
+                    'isMultiSelect': true,
                   },
                 );
               },

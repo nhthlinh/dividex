@@ -58,7 +58,7 @@
   "expenseNameHint": "Ex: Dinner",
   "expenseAmountLabel": "Amount",
   "expenseAmountHint": "120.000",
-  "expenseUnitLabel": "Unit",
+  "expenseCurrencyLabel": "Currency",
   "expenseCategoryLabel": "Category",
   "expenseEventLabel": "Belong to event",
   "expensePayerLabel": "Payer",
@@ -411,6 +411,25 @@
   "noFileChosen": "No file chosen",
   "members": "Members",
 
-  "addEventSubtitle": "Add a new event to share and manage expense easily."
+  "addEventSubtitle": "Add a new event to share and manage expense easily.",
+
+  "addExpenseSubtitle": "Add a new expense to share costs easily and keep everything fair for the group.",
+  "expenseSplitType": "Choose transaction type:",
+
+  "groupNotFound": "The group was not found.",
+  "createIsDenied": "You do not have permission to create this item.",
+  "updateIsDenied": "You do not have permission to update this item.",
+  "deleteIsDenied": "You do not have permission to delete this item.",
+  "eventNotFound": "The event was not found.",
+  "expenseNotFound": "The expense was not found",
+  "friendRelationAlreadyExists": "This friend relationship already exists.",
+
+  "friendRequestNotFound": "The friend request was not found.",
+  "totalAmount": "Total amount",
+  "amount": "Amount",
+  "splitRemainingEqually": "Split remaining equally",
+  "allocated": "Allocated",
+  "noEventsInGroup": "No events in this group yet"
+
 
 }

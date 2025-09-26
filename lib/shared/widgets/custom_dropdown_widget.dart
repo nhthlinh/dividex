@@ -199,7 +199,7 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
                             Theme.of(context).textTheme.bodySmall!.fontSize!,
                       ),
                     ),
-                    const Icon(Icons.arrow_drop_down),
+                    const Icon(Icons.keyboard_arrow_down, size: 16),
                   ],
                 ),
               ),

@@ -68,16 +68,13 @@ class Layout extends StatelessWidget {
                             (currentUser.avatarUrl != null &&
                                 currentUser.avatarUrl!.isNotEmpty)
                             ? NetworkImage(currentUser.avatarUrl!)
-                            : null,
-                        child:
-                            (currentUser.avatarUrl == null ||
-                                currentUser.avatarUrl!.isEmpty)
-                            ? const Icon(Icons.person, color: Colors.white)
-                            : null,
+                            : NetworkImage(
+                                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(currentUser.fullName ?? 'User')}&background=random&color=fff&size=128',
+                              ),
                       ),
                     const SizedBox(width: 8),
                     SizedBox(
-                      width: 250,
+                      width: 200,
                       child: Flexible(
                         child: Text(
                           title,
@@ -130,12 +127,19 @@ class Layout extends StatelessWidget {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.grey,
-                backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
-                    ? NetworkImage(avatarUrl!)
-                    : null,
-                child: (avatarUrl == null || avatarUrl!.isEmpty)
-                    ? const Icon(Icons.person, color: Colors.white)
-                    : null,
+                // backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
+                //     ? NetworkImage(avatarUrl!)
+                //     : null,
+                child: ClipOval(
+                  child: Image.network(
+                    avatarUrl ?? '',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover, // scale và crop đẹp
+                    errorBuilder: (_, __, ___) =>
+                        const Icon(Icons.person, size: 50, color: Colors.white),
+                  ),
+                ),
               ),
             ),
         ],

@@ -35,4 +35,8 @@ class FriendUseCase {
   Future<PagingModel<List<FriendModel>>> searchUsers(String? search, int page, int pageSize) async {
     return await repository.searchUsers(search, page, pageSize);
   }
+
+  Future<PagingModel<List<FriendModel>>> listMutualFriends(String friendshipUid, int page, int pageSize) async {
+    return await repository.listMutualFriends(friendshipUid, page, pageSize);
+  }
 }

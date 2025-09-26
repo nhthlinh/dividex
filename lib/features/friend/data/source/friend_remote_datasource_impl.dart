@@ -13,32 +13,26 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
 
   @override
   Future<void> sendFriendRequest(String receiverUid, String? message) {
-    try {
+    return apiCallWrapper(() {
       return dio.post(
         '/friends/request',
         data: {'receiver_uid': receiverUid, 'message': message},
       );
-    } catch (e) {
-      rethrow;
-    }
+    });
   }
 
   @override
   Future<void> acceptFriendRequest(String friendshipUid) {
-    try {
+    return apiCallWrapper(() {
       return dio.put('/friends/$friendshipUid');
-    } catch (e) {
-      rethrow;
-    }
+    });
   }
 
   @override
   Future<void> declineFriendRequest(String friendshipUid) {
-    try {
+    return apiCallWrapper(() {
       return dio.delete('/friends/$friendshipUid');
-    } catch (e) {
-      rethrow;
-    }
+    });
   }
 
   @override
@@ -48,7 +42,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
     int page,
     int pageSize,
   ) async {
-    try {
+    return apiCallWrapper(() async {
       final response = await dio.get(
         '/friends/request',
         queryParameters: {
@@ -71,9 +65,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
       } else {
         throw Exception('Failed to load friend requests');
       }
-    } catch (e) {
-      rethrow;
-    }
+    });
   }
 
   @override
@@ -82,7 +74,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
     int page,
     int pageSize,
   ) async {
-    try {
+    return apiCallWrapper(() async {
       final response = await dio.get(
         '/friends',
         queryParameters: {
@@ -102,9 +94,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
       } else {
         throw Exception('Failed to load friends');
       }
-    } catch (e) {
-      rethrow;
-    }
+    });
   }
 
   @override
@@ -113,7 +103,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
     int page,
     int pageSize,
   ) async {
-    try {
+    return apiCallWrapper(() async {
       final response = await dio.get(
         '/users',
         queryParameters: {
@@ -132,8 +122,26 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
       } else {
         throw Exception('Failed to load users');
       }
-    } catch (e) {
-      rethrow;
-    }
+    });
+  }
+
+  @override
+  Future<PagingModel<List<FriendModel>>> listMutualFriends(String friendshipUid, int page, int pageSize) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/friends/$friendshipUid/mutual', queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+      });
+      if (response.data['content'] != []) {
+        return PagingModel.fromJson(
+          response.data,
+          (jsonList) => (jsonList['content'] as List)
+              .map((item) => FriendModel.fromJson(item))
+              .toList(),
+        );
+      } else {
+        throw Exception('Failed to load mutual friends');
+      }
+    });
   }
 }

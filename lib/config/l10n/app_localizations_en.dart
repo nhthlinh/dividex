@@ -151,7 +151,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get expenseAmountHint => '120.000';
 
   @override
-  String get expenseUnitLabel => 'Unit';
+  String get expenseCurrencyLabel => 'Currency';
 
   @override
   String get expenseCategoryLabel => 'Category';
@@ -1070,4 +1070,54 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get addEventSubtitle =>
       'Add a new event to share and manage expense easily.';
+
+  @override
+  String get addExpenseSubtitle =>
+      'Add a new expense to share costs easily and keep everything fair for the group.';
+
+  @override
+  String get expenseSplitType => 'Choose transaction type:';
+
+  @override
+  String get groupNotFound => 'The group was not found.';
+
+  @override
+  String get createIsDenied =>
+      'You do not have permission to create this item.';
+
+  @override
+  String get updateIsDenied =>
+      'You do not have permission to update this item.';
+
+  @override
+  String get deleteIsDenied =>
+      'You do not have permission to delete this item.';
+
+  @override
+  String get eventNotFound => 'The event was not found.';
+
+  @override
+  String get expenseNotFound => 'The expense was not found';
+
+  @override
+  String get friendRelationAlreadyExists =>
+      'This friend relationship already exists.';
+
+  @override
+  String get friendRequestNotFound => 'The friend request was not found.';
+
+  @override
+  String get totalAmount => 'Total amount';
+
+  @override
+  String get amount => 'Amount';
+
+  @override
+  String get splitRemainingEqually => 'Split remaining equally';
+
+  @override
+  String get allocated => 'Allocated';
+
+  @override
+  String get noEventsInGroup => 'No events in this group yet';
 }

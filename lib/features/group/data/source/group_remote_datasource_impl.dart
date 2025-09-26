@@ -1,4 +1,5 @@
 import 'package:Dividex/core/network/dio_client.dart';
+import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 
 import 'package:Dividex/features/group/data/source/group_remote_datasource.dart';
@@ -11,83 +12,121 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
 
   GroupRemoteDatasourceImpl(this.dio);
 
+  // @override
+  // Future<PagingModel<List<GroupModel>>> getUserGroups(
+  //   String userId,
+  //   int page,
+  //   int pageSize,
+  // ) async {
+  //   try {
+  //     final response = await dio.get(
+  //       '/groups',
+  //       queryParameters: {
+  //         'page': page,
+  //         'page_size': pageSize,
+  //         // sai api
+  //       },
+  //     );
+
+  //     final data = response.data['data'] as Map<String, dynamic>;
+  //     final groups = (data['content'] as List)
+  //         .map((e) => GroupModel.fromJson(e))
+  //         .toList();
+
+  //     return PagingModel.fromJson(
+  //         response.data,
+  //         (jsonList) => (jsonList['content'] as List)
+  //             .map((item) => GroupModel.fromJson(item))
+  //             .toList(),
+  //       );
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
+
   @override
-  Future<PagingModel<List<GroupModel>>> getUserGroups(
-    String userId,
+  Future<String> createGroup({
+    required String name,
+    required List<String> memberIds,
+  }) async {
+    return apiCallWrapper(() async {
+      final response = await dio.post(
+        '/groups',
+        data: {'name': name, 'list_user_uids': memberIds},
+      );
+      return response.data['data']['uid'] as String;
+    });
+  }
+
+  @override
+  Future<GroupModel?> getGroupDetail(String groupId) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/groups/$groupId');
+      if (response.data['data'] == null) {
+        return null;
+      }
+      return GroupModel.fromJson(response.data['data']);
+    });
+  }
+
+  @override
+  Future<void> deleteGroup(String groupId) async {
+    return apiCallWrapper(() async {
+      await dio.delete('/groups/$groupId');
+    });
+  }
+
+  @override
+  Future<void> leaveGroup(String groupId) async {
+    return apiCallWrapper(() async {
+      await dio.post('/groups/$groupId/leave');
+    });
+  }
+
+  @override
+  Future<PagingModel<List<EventModel>>> listEvents(
     int page,
     int pageSize,
+    String groupId,
+    String searchQuery,
   ) async {
-    try {
+    return apiCallWrapper(() async {
+      final response = await dio.get(
+        '/groups/$groupId/events',
+        queryParameters: {
+          'page': page,
+          'page_size': pageSize,
+          if (searchQuery.isNotEmpty) 'search': searchQuery,
+        },
+      );
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => (jsonList['content'] as List)
+            .map((item) => EventModel.fromJson(item))
+            .toList(),
+      );
+    });
+  }
+  
+  @override
+  Future<PagingModel<List<GroupModel>>> listGroups(int page, int pageSize, String searchQuery) {
+    return apiCallWrapper(() async {
       final response = await dio.get(
         '/groups',
         queryParameters: {
           'page': page,
           'page_size': pageSize,
-          // sai api
+          if (searchQuery.isNotEmpty) 'search': searchQuery,
         },
       );
-
-      final data = response.data['data'] as Map<String, dynamic>;
-      final groups = (data['content'] as List)
-          .map((e) => GroupModel.fromJson(e))
-          .toList();
 
       return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => GroupModel.fromJson(item))
-              .toList(),
-        );
-
-      // return PagingModel<List<GroupModel>>(
-      //   data: groups,
-      //   page: data['current_page'],
-      //   totalPage: data['total_pages'],
-      //   totalItems: data['total_items'],
-      // );
-    } catch (e, stacktrace) {
-      print(e);
-      print(stacktrace);
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> createGroup({
-    required String name,
-    required String avatarPath,
-    required List<String> memberIds,
-  }) async {
-    try {
-      await dio.post(
-        '/groups',
-        data: {'name': name, 'list_user_uids': memberIds},
+        response.data,
+        (jsonList) => (jsonList['content'] as List)
+            .map((item) => GroupModel.fromJson(item))
+            .toList(),
       );
-
-      // Note: avatarPath is not sent to the server as per the original code
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> editGroup({
-    required String groupId,
-    required String name,
-    required String avatarPath,
-    required List<String> memberIds,
-  }) async {
-    try {
-      await dio.put(
-        '/groups/$groupId',
-        data: {
-          'name': name,
-          'avatar_url': avatarPath,
-          'list_user_uid': memberIds,
-        },
-      );
-    } catch (e) {
-      rethrow;
-    }
+    });
   }
 }
