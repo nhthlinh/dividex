@@ -268,7 +268,7 @@ class SettingPage extends StatelessWidget {
       child: Layout(
         title: intl.settings,
         showAvatar: true,
-        avatarUrl: HiveService.getUser().avatarUrl != '' ? HiveService.getUser().avatarUrl : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(HiveService.getUser().fullName ?? 'User')}&background=random&color=fff&size=128',
+        avatarUrl: HiveService.getUser().avatarUrl?.publicUrl != '' ? HiveService.getUser().avatarUrl?.publicUrl : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(HiveService.getUser().fullName ?? 'User')}&background=random&color=fff&size=128',
         child: Column(
           children: [
             Center(

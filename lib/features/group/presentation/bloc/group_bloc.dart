@@ -4,6 +4,10 @@ import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
+import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
+import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
+import 'package:Dividex/features/image/presentation/bloc/image_event.dart';
+import 'package:Dividex/shared/utils/image_compress.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,6 +106,10 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
 
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);
+
+      if (event.avatar != null) {
+        uploadImage(groupId, [event.avatar!], AttachmentType.group);
+      }
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       if (e.toString().contains(MessageCode.userNotFound)) {

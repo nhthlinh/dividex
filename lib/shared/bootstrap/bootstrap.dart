@@ -32,7 +32,7 @@ Future<void> bootstrap() async {
     Bloc.observer = AppBlocObserver();
 
     //debugPaintSizeEnabled = true;
-    
+
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,

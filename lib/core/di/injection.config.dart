@@ -57,6 +57,14 @@ import 'package:Dividex/features/group/data/source/group_remote_datasource_impl.
     as _i794;
 import 'package:Dividex/features/group/domain/group_repository.dart' as _i1049;
 import 'package:Dividex/features/group/domain/usecase.dart' as _i352;
+import 'package:Dividex/features/image/data/repositories/image_repository_impl.dart'
+    as _i580;
+import 'package:Dividex/features/image/data/source/image_remote_data_source.dart'
+    as _i840;
+import 'package:Dividex/features/image/data/source/image_remote_data_source_impl.dart'
+    as _i41;
+import 'package:Dividex/features/image/domain/image_repository.dart' as _i306;
+import 'package:Dividex/features/image/domain/usecase.dart' as _i111;
 import 'package:Dividex/features/user/data/repositories/user_repository_impl.dart'
     as _i979;
 import 'package:Dividex/features/user/data/source/user_remote_datasource.dart'
@@ -90,6 +98,10 @@ extension GetItInjectableX on _i174.GetIt {
       () async =>
           _i343.FriendRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
     );
+    gh.factoryAsync<_i840.ImageRemoteDataSource>(
+      () async =>
+          _i41.ImageRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
+    );
     gh.factoryAsync<_i957.GroupRemoteDataSource>(
       () async =>
           _i794.GroupRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
@@ -97,6 +109,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i143.AuthRepository>(
       () async => _i898.AuthRepositoryImpl(
         await getAsync<_i1016.AuthRemoteDataSource>(),
+      ),
+    );
+    gh.factoryAsync<_i306.ImageRepository>(
+      () async => _i580.ImageRepositoryImpl(
+        await getAsync<_i840.ImageRemoteDataSource>(),
       ),
     );
     gh.factoryAsync<_i1049.GroupRepository>(
@@ -143,6 +160,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i126.FriendUseCase>(
       () async =>
           _i126.FriendUseCase(await getAsync<_i1026.FriendRepository>()),
+    );
+    gh.factoryAsync<_i111.ImageUseCase>(
+      () async => _i111.ImageUseCase(
+        imageRepository: await getAsync<_i306.ImageRepository>(),
+      ),
     );
     gh.factoryAsync<_i635.UserRepository>(
       () async => _i979.UserRepositoryImpl(

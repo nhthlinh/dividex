@@ -39,8 +39,8 @@ class SquareIconUser extends StatelessWidget {
                 radius: 30,
                 backgroundColor: Colors.grey,
                 backgroundImage:
-                    (user.avatar != null && user.avatar!.isNotEmpty)
-                    ? NetworkImage(user.avatar!)
+                    (user.avatar != null && user.avatar!.publicUrl.isNotEmpty)
+                    ? NetworkImage(user.avatar!.publicUrl)
                     : NetworkImage(
                         'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
                       ),

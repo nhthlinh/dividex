@@ -336,15 +336,13 @@ class _AddEventPageState extends State<AddEventPage> {
               child: Row(
                 children: [
                   if (b.avatarUrl != null)
-                    Image.network(
-                      b.avatarUrl!,
-                      width: 50,
-                      height: 50,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.group),
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(b.avatarUrl!.publicUrl),
+                      backgroundColor: Colors.transparent,
                     )
                   else
-                    const Icon(Icons.group),
+                    SizedBox(width: 40, child: const Icon(Icons.group)),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(

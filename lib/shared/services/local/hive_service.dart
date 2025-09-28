@@ -80,7 +80,7 @@ class HiveService {
   }
 
   static UserLocalModel getUser() {
-    return getUserBox().get(HiveKey.user) ?? UserLocalModel(id: '', fullName: '', email: '', avatarUrl: '');
+    return getUserBox().get(HiveKey.user) ?? UserLocalModel(id: '', fullName: '', email: '', avatarUrl: null);
   }
 
   static Future<void> clearUser() async {

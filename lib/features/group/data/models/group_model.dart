@@ -1,6 +1,8 @@
 import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/group/data/models/group_member_model.dart';
+import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
@@ -9,7 +11,7 @@ class GroupModel {
   final String? name;
   final String? leader;
   final StatusEnum? status;
-  final String? avatarUrl;
+  final ImageModel? avatarUrl;
   final DateTime? createdAt;
   final List<GroupMemberModel>? members;
   final List<EventModel>? events;
@@ -29,7 +31,11 @@ class GroupModel {
     return GroupModel(
       id: json['uid'] as String?,
       name: json['name'] as String? ?? json['group_name'] as String?,
-      avatarUrl: json['avatar_url'] as String? ?? json['group_avatar_url'] as String?,
+      avatarUrl: json['avatar_url'] != null
+          ? ImageModel.fromJson(json['avatar_url'] as Map<String, dynamic>)
+          : (json['group_avatar_url'] != null
+              ? ImageModel.fromJson({'url': json['group_avatar_url']})
+              : null),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),

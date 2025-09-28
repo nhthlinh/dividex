@@ -203,8 +203,8 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
                     radius: 20,
                     backgroundColor: Colors.grey,
                     backgroundImage:
-                        (group.avatarUrl != null && group.avatarUrl!.isNotEmpty)
-                        ? NetworkImage(group.avatarUrl!)
+                        (group.avatarUrl != null && group.avatarUrl!.publicUrl.isNotEmpty)
+                        ? NetworkImage(group.avatarUrl!.publicUrl)
                         : NetworkImage(
                             'https://ui-avatars.com/api/?name=${Uri.encodeComponent(group.name ?? 'Group')}&background=random&color=fff&size=128',
                           ),

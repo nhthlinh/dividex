@@ -1,9 +1,11 @@
+import 'package:Dividex/features/image/data/models/image_model.dart';
+
 enum FriendStatus { none, response, pending, accepted }
 
 class FriendModel {
   final String friendUid;
   final String fullName;
-  final String? avatarUrl;
+  final ImageModel? avatarUrl;
   final String? friendshipUid;
   final String? messageRequest;
   final FriendStatus? status;
@@ -23,7 +25,9 @@ class FriendModel {
     return FriendModel(
       friendUid: json['friend_uid'] ?? json['uid'],
       fullName: json['full_name'],
-      avatarUrl: json['avatar_url'] ?? '',
+      avatarUrl: json['avatar_url'] != null
+          ? ImageModel.fromJson(json['avatar_url'] as Map<String, dynamic>)
+          : null,
       friendshipUid: json['friendship_uid'] as String?,
       messageRequest: json['message_request'] as String?,
       status: json['status'] == 'ACCEPTED'

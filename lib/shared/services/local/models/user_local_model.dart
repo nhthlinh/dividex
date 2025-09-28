@@ -1,3 +1,4 @@
+import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:hive/hive.dart';
 
 @HiveType(typeId: 3)
@@ -12,7 +13,7 @@ class UserLocalModel {
   final String? fullName;
 
   @HiveField(3)
-  final String? avatarUrl;
+  final ImageModel? avatarUrl;
 
   @HiveField(4)
   final String? password;
@@ -44,7 +45,7 @@ class UserLocalModelAdapter extends TypeAdapter<UserLocalModel> {
       id: fields[0] as String?,
       email: fields[1] as String?,
       fullName: fields[2] as String?,
-      avatarUrl: fields[3] as String?,
+      avatarUrl: fields[3] as ImageModel?,
       password: fields[4] as String?,
       phoneNumber: fields[5] as String?,
     );

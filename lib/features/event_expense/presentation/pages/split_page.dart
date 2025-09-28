@@ -348,8 +348,8 @@ class _UserTableWidgetState extends State<UserTableWidget> {
                   backgroundColor: Colors.grey,
                   backgroundImage:
                       (user.user!.avatar != null &&
-                          user.user!.avatar!.isNotEmpty)
-                      ? NetworkImage(user.user!.avatar!)
+                          user.user!.avatar!.publicUrl.isNotEmpty)
+                      ? NetworkImage(user.user!.avatar!.publicUrl)
                       : NetworkImage(
                           'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.user!.fullName ?? 'User')}&background=random&color=fff&size=128',
                         ),

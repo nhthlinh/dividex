@@ -47,7 +47,7 @@ abstract class DioModule {
           );
 
           // BỎ QUA nếu là request refresh
-          if (options.path.contains('/auth/refresh')) {
+          if (options.path.contains('/auth/refresh') || options.path.contains('https://split-expense-s3.s3.amazonaws.com')) {
             return handler.next(options);
           }
           options.headers['Authorization'] =

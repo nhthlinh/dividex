@@ -21,7 +21,7 @@ import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
 import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-import 'package:Dividex/shared/widgets/image_picker_widget.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/two_option_selector_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';

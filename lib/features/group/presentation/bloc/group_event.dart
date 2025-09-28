@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 
 abstract class LoadGroupsEvent extends Equatable {
@@ -22,7 +24,6 @@ class RefreshGroupsEvent extends LoadGroupsEvent {
   const RefreshGroupsEvent(this.searchQuery);
 }
 
-
 class GroupsEvent extends Equatable {
   const GroupsEvent();
 
@@ -33,12 +34,10 @@ class GroupsEvent extends Equatable {
 class CreateGroupEvent extends GroupsEvent {
   final String name;
   final List<String> memberIds;
+  final Uint8List? avatar;
 
-  const CreateGroupEvent({
-    required this.name,
-    required this.memberIds,
-  });
-  
+  const CreateGroupEvent({required this.name, required this.memberIds, this.avatar});
+
   @override
   List<Object?> get props => [name, memberIds];
 }
@@ -69,7 +68,6 @@ class GetGroupDetailEvent extends GroupsEvent {
   @override
   List<Object?> get props => [groupId];
 }
-
 
 class LoadGroupEventsEvent extends Equatable {
   const LoadGroupEventsEvent();

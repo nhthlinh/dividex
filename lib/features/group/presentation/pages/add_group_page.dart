@@ -3,17 +3,17 @@ import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
     as group_event;
+import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
+import 'package:Dividex/features/image/presentation/bloc/image_state.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-import 'package:Dividex/shared/widgets/image_picker_widget.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
@@ -51,10 +51,13 @@ class _AddGroupPageState extends State<AddGroupPage> {
     if (_formKey.currentState!.validate()) {
       print('Group Name: ${groupNameController.text}');
       //print('Group Image: $imageBytes');
-      print('Selected Members: ${selectedMembers.map((e) => e.fullName).toList()}');
+      print(
+        'Selected Members: ${selectedMembers.map((e) => e.fullName).toList()}',
+      );
 
       context.read<GroupBloc>().add(
         group_event.CreateGroupEvent(
+          avatar: imageBytes,
           name: groupNameController.text,
           memberIds: selectedMembers
               .map((e) => e.id)
@@ -127,15 +130,22 @@ class _AddGroupPageState extends State<AddGroupPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                ImagePickerWidget(
-                  type: PickerType.avatar,
-                  onFilesPicked: (imageBytesList) {
-                    setState(() {
-                      imageBytes = imageBytesList.isNotEmpty
-                          ? imageBytesList.first
-                          : null;
-                    });
-                  },
+                BlocProvider(
+                  create: (context) => ImageBloc(),
+                  child: BlocBuilder<ImageBloc, ImageState>(
+                    builder: (context, state) {
+                      return ImagePickerWidget(
+                        type: PickerType.avatar,
+                        onFilesPicked: (imageBytesList) {
+                          setState(() {
+                            imageBytes = imageBytesList.isNotEmpty
+                                ? imageBytesList.first
+                                : null;
+                          });
+                        },
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

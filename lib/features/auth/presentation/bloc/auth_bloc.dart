@@ -51,7 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           id: authResponse.user.id ?? '123',
           email: authResponse.user.email ?? '',
           fullName: authResponse.user.fullName ?? '',
-          avatarUrl: authResponse.user.avatar ?? '',
+          avatarUrl: authResponse.user.avatar,
           password: event.password,
           phoneNumber: authResponse.user.phoneNumber ?? '',
         ),
@@ -97,7 +97,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           id: authResponse.user.id ?? '123',
           email: authResponse.user.email ?? '',
           fullName: authResponse.user.fullName ?? '',
-          avatarUrl: authResponse.user.avatar ?? '',
+          avatarUrl: authResponse.user.avatar,
           password: event.password,
           phoneNumber: authResponse.user.phoneNumber ?? '',
         ),
@@ -178,7 +178,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(AuthEmailSent(email: event.email));
       HiveService.saveUser(
-        UserLocalModel(id: '', email: event.email, fullName: '', avatarUrl: ''),
+        UserLocalModel(id: '', email: event.email, fullName: '', avatarUrl: null),
       );
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;

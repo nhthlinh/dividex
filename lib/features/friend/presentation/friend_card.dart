@@ -3,6 +3,7 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
+import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
@@ -52,10 +53,10 @@ class _FriendCardState extends State<FriendCard> {
         backgroundColor: Colors.grey,
         backgroundImage:
             (widget.friend.avatarUrl != null &&
-                widget.friend.avatarUrl!.isNotEmpty)
-            ? NetworkImage(widget.friend.avatarUrl!)
+                widget.friend.avatarUrl!.publicUrl.isNotEmpty)
+            ? NetworkImage(widget.friend.avatarUrl!.publicUrl)
             : NetworkImage(
-                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(widget.friend.fullName ?? 'User')}&background=random&color=fff&size=128',
+                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(widget.friend.fullName)}&background=random&color=fff&size=128',
               ),
       ),
       onTap: () {
@@ -247,7 +248,7 @@ class _FriendCardState extends State<FriendCard> {
     return const SizedBox();
   }
 
-  Widget _userAvaAndName(String? ava, String? name) {
+  Widget _userAvaAndName(ImageModel? ava, String? name) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -255,8 +256,8 @@ class _FriendCardState extends State<FriendCard> {
         radius: 30,
         backgroundColor: Colors.grey,
         backgroundImage:
-            (ava != null && ava.isNotEmpty)
-            ? NetworkImage(ava)
+            (ava != null && ava.publicUrl.isNotEmpty)
+            ? NetworkImage(ava.publicUrl)
             : NetworkImage(
                 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(name ?? 'User')}&background=random&color=fff&size=128',
               ),

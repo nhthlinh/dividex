@@ -4,7 +4,7 @@ import 'dart:io' as io;
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
-import 'package:Dividex/shared/widgets/image_edit_widget.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_edit_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

@@ -66,8 +66,8 @@ class Layout extends StatelessWidget {
                         backgroundColor: Colors.grey,
                         backgroundImage:
                             (currentUser.avatarUrl != null &&
-                                currentUser.avatarUrl!.isNotEmpty)
-                            ? NetworkImage(currentUser.avatarUrl!)
+                                currentUser.avatarUrl!.publicUrl.isNotEmpty)
+                            ? NetworkImage(currentUser.avatarUrl!.publicUrl)
                             : NetworkImage(
                                 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(currentUser.fullName ?? 'User')}&background=random&color=fff&size=128',
                               ),

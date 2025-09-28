@@ -61,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
             email: email,
             fullName: name,
             phoneNumber: number,
-            avatar: '',
+            avatar: null,
           ),
           password: password,
         ),

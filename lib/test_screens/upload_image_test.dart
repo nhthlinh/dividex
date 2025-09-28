@@ -1,4 +1,4 @@
-import 'package:Dividex/shared/widgets/image_picker_widget.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class UploadDemoPage extends StatelessWidget {
