@@ -147,7 +147,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
         ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: friends?.length != null
               ? (friends!.length + (hasMore ? 1 : 0))
               : 0,

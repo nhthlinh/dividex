@@ -31,11 +31,11 @@ class _EmailInputPageState extends State<EmailInputPage> {
   }
 
   Future<void> _submitEmail() async {
-   if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       String email = emailController.text.trim();
 
       context.read<AuthBloc>().add(AuthEmailRequested(email: email));
-   }
+    }
   }
 
   @override

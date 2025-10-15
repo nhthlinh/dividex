@@ -1,7 +1,6 @@
 import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/auth/data/models/token_respond_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'auth_remote_datasource.dart';
 

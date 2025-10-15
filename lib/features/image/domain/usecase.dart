@@ -20,5 +20,5 @@ class ImageUseCase {
 
   Future<void> completeUpload(String instanceUid, List<String> fileUids) async {
     return await imageRepository.completeUpload(instanceUid, fileUids);
-  }
+  } 
 }

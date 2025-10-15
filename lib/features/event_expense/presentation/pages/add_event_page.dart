@@ -89,23 +89,6 @@ class _AddEventPageState extends State<AddEventPage> {
     }
   }
 
-  // Future<void> _selectDate(
-  //   BuildContext context,
-  //   TextEditingController controller,
-  // ) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime(1900),
-  //     lastDate: DateTime(2100),
-  //   );
-  //   if (picked != null) {
-  //     setState(() {
-  //       controller.text = DateFormat('dd/MM/yyyy').format(picked);
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final intl = AppLocalizations.of(
@@ -120,7 +103,7 @@ class _AddEventPageState extends State<AddEventPage> {
         child: BlocProvider(
           create: (context) =>
               LoadedGroupsBloc()
-                ..add(group_event.InitialEvent('')),
+                ..add(group_event.InitialEvent('', false)),
           child: eventForm(intl, theme),
         ),
       ),
@@ -193,29 +176,6 @@ class _AddEventPageState extends State<AddEventPage> {
                     );
                   },
                 ),
-                // CustomTextInputWidget(
-                //   isRequired: true,
-                //   size: TextInputSize.medium,
-                //   keyboardType: TextInputType.datetime,
-                //   label: intl.eventStartDateLabel,
-                //   hintText: '13/05/2025',
-                //   controller: eventStartDateController,
-                //   isReadOnly: true,
-                //   suffixIcon: IconButton(
-                //     icon: const Icon(Icons.calendar_today),
-                //     onPressed: () => _selectDate(
-                //       navigatorKey.currentContext!,
-                //       eventStartDateController,
-                //     ),
-                //   ), // Mở DatePicker khi tap
-                //   validator: (value) {
-                //     return CustomValidator().validateDateForEvent(
-                //       intl,
-                //       eventStartDateController,
-                //       eventEndDateController,
-                //     );
-                //   },
-                // ),
             
                 const SizedBox(width: 8),
                 DateInputField(
@@ -232,33 +192,10 @@ class _AddEventPageState extends State<AddEventPage> {
                     );
                   },
                 ),
-                // CustomTextInputWidget(
-                //   isRequired: true,
-                //   size: TextInputSize.medium,
-                //   keyboardType: TextInputType.datetime,
-                //   label: intl.eventEndDateLabel,
-                //   hintText: '13/05/2025',
-                //   controller: eventEndDateController,
-                //   isReadOnly: true,
-                //   suffixIcon: IconButton(
-                //     icon: const Icon(Icons.calendar_today),
-                //     onPressed: () => _selectDate(
-                //       navigatorKey.currentContext!,
-                //       eventEndDateController,
-                //     ),
-                //   ), // Mở DatePicker khi tap
-                //   validator: (value) {
-                //     return CustomValidator().validateDateForEvent(
-                //       intl,
-                //       eventStartDateController,
-                //       eventEndDateController,
-                //     );
-                //   },
-                // ),
-              
               ],
             ),
           ),
+          
           const SizedBox(height: 16),
 
           BlocBuilder<LoadedGroupsBloc, LoadedGroupsState>(
@@ -307,7 +244,11 @@ class _AddEventPageState extends State<AddEventPage> {
               },
             ),
             const SizedBox(height: 8),
-            UserGrid(users: selectedMembers),
+            UserGrid(users: selectedMembers, onTap: (user) {
+              setState(() {
+                selectedMembers.remove(user);
+              });
+            }),
           ],
 
           const SizedBox(height: 30),

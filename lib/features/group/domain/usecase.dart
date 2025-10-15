@@ -25,6 +25,11 @@ class GroupUseCase {
     return repository.listGroups(page, pageSize, searchQuery);
   }
 
+  Future<PagingModel<List<GroupModel>>> listGroupsWithDetail(int page, int pageSize, String searchQuery) {
+    return repository.listGroupsWithDetail(page, pageSize, searchQuery);
+  }
+
+
   Future<GroupModel?> getGroupDetail(String groupId) {
     return repository.getGroupDetail(groupId);
   }
@@ -39,5 +44,48 @@ class GroupUseCase {
 
   Future<PagingModel<List<EventModel>>> listEvents(int page, int pageSize, String groupId, String searchQuery) {
     return repository.listEvents(page, pageSize, groupId, searchQuery);
+  }
+
+  Future<String> updateGroup({
+    required String groupId,
+    required String name,
+    required List<String> addMemberIds,
+    required List<String> deleteMemberIds,
+  }) {
+    return repository.updateGroup(
+      groupId: groupId,
+      name: name,
+      addMemberIds: addMemberIds,
+      deleteMemberIds: deleteMemberIds,
+    );
+  }
+
+  Future<void> updateGroupLeader(String groupId, String newLeaderId) {
+    return repository.updateGroupLeader(groupId, newLeaderId);
+  }
+
+  Future<GroupModel?> getGroupReport(String groupId) {
+    return repository.getGroupReport(groupId);
+  }
+
+  Future<List<ChartData>> getChartData(String groupId) async {
+    return repository.getChartData(groupId);
+  }
+}
+
+class ChartData {
+  final String fullName;
+  final double value;
+
+  ChartData({
+    required this.fullName,
+    required this.value,
+  });
+
+  factory ChartData.fromJson(Map<String, dynamic> json) {
+    return ChartData(
+      fullName: json['full_name'] as String,
+      value: double.tryParse((json['percent'] as String).replaceAll('%', '').trim())?.abs() ?? 0.0,
+    );
   }
 }

@@ -1,13 +1,12 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/core/di/injection.dart';
+import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
 import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
-import 'package:Dividex/features/image/presentation/bloc/image_event.dart';
-import 'package:Dividex/shared/utils/image_compress.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +22,9 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
     try {
       final useCase = await getIt.getAsync<GroupUseCase>();
 
-      final groups = await useCase.listGroups(1, 1000, event.searchQuery ?? '');
+      final groups = event.isDetail
+          ? await useCase.listGroupsWithDetail(1, 3, event.searchQuery ?? '')
+          : await useCase.listGroups(1, 1000, event.searchQuery ?? '');
 
       emit(
         state.copyWith(
@@ -43,11 +44,17 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
   Future _onLoadMoreGroups(LoadMoreGroupsEvent event, Emitter emit) async {
     try {
       final useCase = await getIt.getAsync<GroupUseCase>();
-      final groups = await useCase.listGroups(
-        state.page + 1,
-        1000,
-        event.searchQuery ?? '',
-      );
+      final groups = event.isDetail
+          ? await useCase.listGroupsWithDetail(
+              state.page + 1,
+              3,
+              event.searchQuery ?? '',
+            )
+          : await useCase.listGroups(
+              state.page + 1,
+              1000,
+              event.searchQuery ?? '',
+            );
 
       emit(
         state.copyWith(
@@ -70,7 +77,9 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
       emit(state.copyWith(isLoading: true));
 
       final useCase = await getIt.getAsync<GroupUseCase>();
-      final groups = await useCase.listGroups(1, 1000, event.searchQuery ?? '');
+      final groups = event.isDetail
+          ? await useCase.listGroupsWithDetail(1, 3, event.searchQuery ?? '')
+          : await useCase.listGroups(1, 1000, event.searchQuery ?? '');
 
       emit(
         state.copyWith(
@@ -93,7 +102,10 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
     on<CreateGroupEvent>(_onCreateGroup);
     on<DeleteGroupEvent>(_onDeleteGroup);
     on<LeaveGroupEvent>(_onLeaveGroup);
+    on<UpdateGroupEvent>(_onUpdateGroup);
     on<GetGroupDetailEvent>(_onGetGroupDetail);
+    on<UpdateGroupLeaderEvent>(_onUpdateGroupLeader);
+    on<GetGroupReportEvent>(_onGetGroupReport);
   }
 
   Future _onCreateGroup(CreateGroupEvent event, Emitter emit) async {
@@ -114,6 +126,54 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       if (e.toString().contains(MessageCode.userNotFound)) {
         showCustomToast(intl.userNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onUpdateGroup(UpdateGroupEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      final groupId = await useCase.updateGroup(
+        groupId: event.groupId,
+        name: event.name,
+        addMemberIds: event.memberIdsAdd,
+        deleteMemberIds: event.memberIdsRemove
+      );
+
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.success, type: ToastType.success);
+
+      // if (event.avatar != null) {
+      //   uploadImage(groupId, [event.avatar!], AttachmentType.group);
+      // }
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      if (e.toString().contains(MessageCode.userNotFound)) {
+        showCustomToast(intl.userNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onUpdateGroupLeader(UpdateGroupLeaderEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      await useCase.updateGroupLeader(
+        event.groupId,
+        event.newLeaderId,
+      );
+
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      if (e.toString().contains(MessageCode.userNotFound)) {
+        showCustomToast(intl.userNotFound, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.groupNotFound)) {
+        showCustomToast(intl.groupNotFound, type: ToastType.error);
       } else {
         showCustomToast(intl.error, type: ToastType.error);
       }
@@ -148,7 +208,13 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
       showCustomToast(intl.success, type: ToastType.success);
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
-      showCustomToast(intl.error, type: ToastType.error);
+      if (e.toString().contains(MessageCode.groupNotFound)) {
+        showCustomToast(intl.groupNotFound, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.leaveIsDenied)) {
+        showCustomToast(intl.leaveIsDenied, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
     }
   }
 
@@ -167,6 +233,49 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
       }
     }
   }
+
+  Future _onGetGroupReport(GetGroupReportEvent event, Emitter emit) async {
+    try {
+        final useCase = await getIt.getAsync<GroupUseCase>();
+        final results = await Future.wait([
+          useCase.getGroupReport(event.groupId),
+          useCase.getChartData(event.groupId),
+        ]);
+
+        emit(GroupReportState(
+          groupReport: results[0] as GroupModel?,
+          chartData: results[1] as List<ChartData>?,
+        ));
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      if (e.toString().contains(MessageCode.groupNotFound)) {
+        showCustomToast(intl.groupNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  // Future _onGetChartData(GetChartDataEvent event, Emitter emit) async {
+  //   try {
+  //     final useCase = await getIt.getAsync<GroupUseCase>();
+  //     final chartData = await useCase.getChartData(event.groupId);
+
+  //     if (state is GroupReportState) {
+  //       emit((state as GroupReportState).copyWith(chartData: chartData));
+  //     } else {
+  //       emit(GroupReportState(chartData: chartData));
+  //     }
+  //   } catch (e) {
+  //     final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+  //     if (e.toString().contains(MessageCode.groupNotFound)) {
+  //       showCustomToast(intl.groupNotFound, type: ToastType.error);
+  //     } else {
+  //       showCustomToast(intl.error, type: ToastType.error);
+  //     }
+  //   }
+  // }
+
 }
 
 class LoadedGroupsEventsBloc

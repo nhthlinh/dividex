@@ -4,6 +4,7 @@ import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/data/source/expense_remote_datasource.dart';
+import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
@@ -15,7 +16,7 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
   ExpenseRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<void> createExpense(
+  Future<String> createExpense(
     String name,
     double totalAmount,
     String currency,
@@ -25,11 +26,11 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
     String? note,
     String? expenseDate,
     String? remindAt,
-    SplitTypeEnum splitType,
+    SplitTypeEnum splitType, 
     List<UserDebt> userDebts,
   ) async {
-    return apiCallWrapper(() {
-      return dio.post(
+    return apiCallWrapper(() async {
+      final response = await dio.post(
         '/expenses',
         data: {
           'name': name,
@@ -40,15 +41,16 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
           if (paidById != null) 'paid_by': paidById,
           if (note != null) 'note': note,
           if (expenseDate != null) 'expense_date': expenseDate,
-          if (remindAt != null) 'remind_at': remindAt,
+          if (remindAt != null) 'end_date': remindAt,
           'split_type': splitType.toString().split('.').last.toUpperCase(),
           'list_expense_member': userDebts.map((e) => e.toJson()).toList(),
         },
       );
+      
+      return response.data['data']['uid'] as String;
     });
   }
 
-  // API CHƯA HOÀN THIỆN
   @override
   Future<PagingModel<List<ExpenseModel>>> listExpensesInEvent(
     String eventId,
@@ -57,33 +59,39 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
   ) async {
     return apiCallWrapper(() async {
       final response = await dio.get(
-        'expenses/event/$eventId',
+        '/list-expenses/$eventId/event',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       return PagingModel.fromJson(
         response.data,
-        (data) =>
-            (data as List).map((item) => ExpenseModel.fromJson(item)).toList(),
+        (data) => (data['content'] as List)
+            .map((item) => ExpenseModel.fromJson(item))
+            .toList(),
       );
     });
   }
 
-  // API CHƯA HOÀN THIỆN
   @override
   Future<PagingModel<List<ExpenseModel>>> listExpensesInGroup(
     String groupId,
     int page,
     int pageSize,
+    ExpenseStatusEnum status,
   ) async {
     return apiCallWrapper(() async {
       final response = await dio.get(
-        'expenses/group/$groupId',
-        queryParameters: {'page': page, 'page_size': pageSize},
+        '/groups/$groupId/expenses',
+        queryParameters: {
+          'page': page,
+          'page_size': pageSize,
+          'status': status.toString().split('.').last.toUpperCase(),
+        },
       );
       return PagingModel.fromJson(
         response.data,
-        (data) =>
-            (data as List).map((item) => ExpenseModel.fromJson(item)).toList(),
+        (jsonList) => (jsonList['content'] as List)
+            .map((item) => ExpenseModel.fromListExpenseInGroupJson(item))
+            .toList(),
       );
     });
   }
@@ -114,9 +122,31 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
   }
 
   @override
-  Future<void> deleteExpense(String id) async {
+  Future<void> softDeleteExpense(String id) async {
     return apiCallWrapper(() {
-      return dio.delete('/expenses/$id');
+      return dio.put('/expenses/$id/soft');
+    });
+  }
+
+  @override
+  Future<void> hardDeleteExpense(String id) async {
+    return apiCallWrapper(() {
+      return dio.delete('/expenses/$id/hard');
+    });
+  }
+
+  @override
+  Future<ExpenseModel?> getExpenseDetail(String expenseId) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/expenses/$expenseId');
+      return ExpenseModel.fromJson(response.data['data']);
+    });
+  }
+
+  @override
+  Future<void> restoreExpense(String id) async {
+    return apiCallWrapper(() {
+      return dio.put('/expenses/$id/restore');
     });
   }
 }

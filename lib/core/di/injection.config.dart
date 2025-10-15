@@ -57,6 +57,14 @@ import 'package:Dividex/features/group/data/source/group_remote_datasource_impl.
     as _i794;
 import 'package:Dividex/features/group/domain/group_repository.dart' as _i1049;
 import 'package:Dividex/features/group/domain/usecase.dart' as _i352;
+import 'package:Dividex/features/home/data/repositories/account_repository_impl.dart'
+    as _i960;
+import 'package:Dividex/features/home/data/source/account_remote_datasource.dart'
+    as _i859;
+import 'package:Dividex/features/home/data/source/account_remote_datasource_impl.dart'
+    as _i73;
+import 'package:Dividex/features/home/domain/account_repository.dart' as _i525;
+import 'package:Dividex/features/home/domain/usecase.dart' as _i264;
 import 'package:Dividex/features/image/data/repositories/image_repository_impl.dart'
     as _i580;
 import 'package:Dividex/features/image/data/source/image_remote_data_source.dart'
@@ -153,6 +161,10 @@ extension GetItInjectableX on _i174.GetIt {
       () async =>
           _i109.ExpenseRemoteDataSourceImpl(await getAsync<_i305.DioClient>()),
     );
+    gh.factoryAsync<_i859.AccountRemoteDataSource>(
+      () async =>
+          _i73.AccountRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
+    );
     gh.factoryAsync<_i477.UserRemoteDataSource>(
       () async =>
           _i357.UserRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
@@ -187,6 +199,15 @@ extension GetItInjectableX on _i174.GetIt {
       () async => _i788.EventRepositoryImpl(
         await getAsync<_i989.EventRemoteDataSource>(),
       ),
+    );
+    gh.factoryAsync<_i525.AccountRepository>(
+      () async => _i960.AccountRepositoryImpl(
+        await getAsync<_i859.AccountRemoteDataSource>(),
+      ),
+    );
+    gh.factoryAsync<_i264.AccountUseCase>(
+      () async =>
+          _i264.AccountUseCase(await getAsync<_i525.AccountRepository>()),
     );
     gh.factoryAsync<_i140.EventUseCase>(
       () async => _i140.EventUseCase(await getAsync<_i720.EventRepository>()),

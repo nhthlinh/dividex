@@ -2,6 +2,7 @@ import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/data/source/expense_remote_datasource.dart';
 import 'package:Dividex/features/event_expense/domain/expense_repository.dart';
+import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
@@ -13,7 +14,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   ExpenseRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<void> createExpense(
+  Future<String> createExpense(
     String name,
     double totalAmount,
     String currency,
@@ -26,7 +27,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     SplitTypeEnum splitType,
     List<UserDebt> userDebts,
   ) async {
-    await remoteDataSource.createExpense(
+    return await remoteDataSource.createExpense(
       name,
       totalAmount,
       currency,
@@ -46,8 +47,9 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     String groupId,
     int page,
     int pageSize,
+    ExpenseStatusEnum status,
   ) async {
-    return await remoteDataSource.listExpensesInGroup(groupId, page, pageSize);
+    return await remoteDataSource.listExpensesInGroup(groupId, page, pageSize, status);
   }
 
   @override
@@ -65,7 +67,23 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   }
 
   @override
-  Future<void> deleteExpense(String id) async {
-    await remoteDataSource.deleteExpense(id);
+  Future<void> softDeleteExpense(String id) async {
+    await remoteDataSource.softDeleteExpense(id);
   }
+
+  @override
+  Future<void> hardDeleteExpense(String id) async {
+    await remoteDataSource.hardDeleteExpense(id);
+  }
+
+  @override
+  Future<ExpenseModel?> getExpenseDetail(String expenseId) async {
+    return await remoteDataSource.getExpenseDetail(expenseId);
+  }
+
+  @override
+  Future<void> restoreExpense(String id) async {
+    await remoteDataSource.restoreExpense(id);
+  }
+
 }

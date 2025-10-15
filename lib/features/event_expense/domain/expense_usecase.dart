@@ -5,13 +5,15 @@ import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
 
+enum ExpenseStatusEnum { deleted, active }
+
 @injectable
 class ExpenseUseCase {
   final ExpenseRepository repository;
 
   ExpenseUseCase(this.repository);
 
-  Future<void> createExpense(
+  Future<String> createExpense(
     String name,
     double totalAmount,
     String currency,
@@ -24,7 +26,7 @@ class ExpenseUseCase {
     SplitTypeEnum splitType,
     List<UserDebt> userDebts,
   ) async {
-    await repository.createExpense(
+    return await repository.createExpense(
       name,
       totalAmount,
       currency,
@@ -51,15 +53,28 @@ class ExpenseUseCase {
     String groupId,
     int page,
     int pageSize,
+    ExpenseStatusEnum status,
   ) async {
-    return await repository.listExpensesInGroup(groupId, page, pageSize);
+    return await repository.listExpensesInGroup(groupId, page, pageSize, status);
   }
 
   Future<void> updateExpense(ExpenseModel expense) async {
     await repository.updateExpense(expense);
   }
 
-  Future<void> deleteExpense(String id) async {
-    await repository.deleteExpense(id);
+  Future<void> softDeleteExpense(String id) async {
+    await repository.softDeleteExpense(id);
+  }
+
+  Future<void> hardDeleteExpense(String id) async {
+    await repository.hardDeleteExpense(id);
+  }
+
+  Future<ExpenseModel?> getExpenseDetail(String expenseId) async {
+    return await repository.getExpenseDetail(expenseId);
+  }
+
+  Future<void> restoreExpense(String id) async {
+    await repository.restoreExpense(id);
   }
 }

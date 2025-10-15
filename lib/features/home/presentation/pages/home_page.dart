@@ -61,7 +61,9 @@ class _HomePageState extends State<HomePage> {
             height: 28,
           ),
           label: intl.account,
-          onTap: () {},
+          onTap: () {
+            context.pushNamed(AppRouteNames.account);
+          },
         ),
         ButtonItem(
           icon: Image.asset(
@@ -70,7 +72,9 @@ class _HomePageState extends State<HomePage> {
             height: 28,
           ),
           label: intl.transfer,
-          onTap: () {},
+          onTap: () {
+            context.pushNamed(AppRouteNames.transfer);
+          },
         ),
         ButtonItem(
           icon: Image.asset(
@@ -79,7 +83,9 @@ class _HomePageState extends State<HomePage> {
             height: 28,
           ),
           label: intl.withdraw,
-          onTap: () {},
+          onTap: () {
+            context.pushNamed(AppRouteNames.withdraw);
+          },
         ),
         ButtonItem(
           icon: Image.asset(
@@ -99,7 +105,9 @@ class _HomePageState extends State<HomePage> {
             height: 28,
           ),
           label: intl.group,
-          onTap: () {},
+          onTap: () {
+            context.pushNamed(AppRouteNames.group);
+          },
         ),
         ButtonItem(
           icon: Image.asset(

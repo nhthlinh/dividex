@@ -172,7 +172,7 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
         ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: groups?.length != null
               ? (groups!.length + (hasMore ? 1 : 0))
               : 0,
@@ -288,26 +288,7 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
                                   ],
                                 ),
                               );
-
-                              // return InfoCard(
-                              //   title: event.name ?? '',
-                              //   subtitle: event.description ?? '',
-                              //   leading: Icon(
-                              //     Icons.event,
-                              //     color: isSelected
-                              //         ? AppThemes.primary3Color
-                              //         : Colors.grey,
-                              //   ),
-                              //   onTap: () {
-                              //     _toggleEvent(event);
-                              //   },
-                              //   trailing: isSelected
-                              //       ? const Icon(
-                              //           Icons.check_circle,
-                              //           color: AppThemes.primary3Color,
-                              //         )
-                              //       : null,
-                              // );
+                            
                             }).toList()
                           : [
                               Padding(

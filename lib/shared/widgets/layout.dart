@@ -50,32 +50,32 @@ class Layout extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    if (canBeBack)
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
+                Expanded(
+                  child: Row(
+                    children: [
+                      if (canBeBack)
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
                         ),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    if (isHomePage)
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.grey,
-                        backgroundImage:
-                            (currentUser.avatarUrl != null &&
-                                currentUser.avatarUrl!.publicUrl.isNotEmpty)
-                            ? NetworkImage(currentUser.avatarUrl!.publicUrl)
-                            : NetworkImage(
-                                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(currentUser.fullName ?? 'User')}&background=random&color=fff&size=128',
-                              ),
-                      ),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      width: 200,
-                      child: Flexible(
+                      if (isHomePage)
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Colors.grey,
+                          backgroundImage:
+                              (currentUser.avatarUrl != null &&
+                                  currentUser.avatarUrl!.publicUrl.isNotEmpty)
+                              ? NetworkImage(currentUser.avatarUrl!.publicUrl)
+                              : NetworkImage(
+                                  'https://ui-avatars.com/api/?name=${Uri.encodeComponent(currentUser.fullName ?? 'User')}&background=random&color=fff&size=128',
+                                ),
+                        ),
+                      
+                      const SizedBox(width: 8),
+                      Expanded(
                         child: Text(
                           title,
                           style: Theme.of(context).textTheme.titleMedium
@@ -85,11 +85,11 @@ class Layout extends StatelessWidget {
                               ),
                           maxLines: 2,
                           softWrap: true, // Cho phép xuống dòng
-                          overflow: TextOverflow.visible, // Không cắt chữ
+                          overflow: TextOverflow.ellipsis, // Không cắt chữ
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 if (action != null) action!,
               ],
@@ -113,7 +113,7 @@ class Layout extends StatelessWidget {
                     top: Radius.circular(32),
                   ),
                 ),
-                child: Stack(children: [SingleChildScrollView(child: child)]),
+                child: Stack(children: [SingleChildScrollView(child: Center(child: child))]),
               ),
             ),
           ),
@@ -127,17 +127,18 @@ class Layout extends StatelessWidget {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.grey,
-                // backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
-                //     ? NetworkImage(avatarUrl!)
-                //     : null,
                 child: ClipOval(
                   child: Image.network(
                     avatarUrl ?? '',
                     width: 100,
                     height: 100,
                     fit: BoxFit.cover, // scale và crop đẹp
-                    errorBuilder: (_, __, ___) =>
-                        const Icon(Icons.person, size: 50, color: Colors.white),
+                    errorBuilder: (_, __, ___) => Image.network(
+                      'https://ui-avatars.com/api/?name=${Uri.encodeComponent(currentUser.fullName ?? 'User')}&background=random&color=fff&size=128',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),

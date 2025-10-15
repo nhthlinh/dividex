@@ -6,6 +6,7 @@ class SimpleLayout extends StatelessWidget {
   final Widget child;
   final bool showBack;
 
+
   const SimpleLayout({
     super.key,
     required this.title,
@@ -31,11 +32,14 @@ class SimpleLayout extends StatelessWidget {
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -56,7 +60,7 @@ class SimpleLayout extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.only(top: 100),
+              padding: const EdgeInsets.only(top: 70),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
@@ -67,7 +71,9 @@ class SimpleLayout extends StatelessWidget {
                   color: Colors.transparent,
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                 ),
-                child: SingleChildScrollView(child: child),
+                child: SingleChildScrollView(
+                  child: child,
+                )
               ),
             ),
           ),

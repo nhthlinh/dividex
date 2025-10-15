@@ -6,7 +6,6 @@ import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_state.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoadedFriendsBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {

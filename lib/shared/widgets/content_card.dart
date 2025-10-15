@@ -9,27 +9,32 @@ class ContentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(15),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 340),
         child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color ?? Theme.of(context).scaffoldBackgroundColor,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+        
+          child: InkWell(
+            onTap: onTap,
             borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromARGB(255, 240, 240, 240),
-                blurRadius: 12, // độ mờ
-                spreadRadius: 0, // lan rộng
-                offset: const Offset(0, 4), // dịch xuống dưới
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: color ?? Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color.fromARGB(255, 215, 215, 215),
+                    blurRadius: 12, // độ mờ
+                    spreadRadius: 0, // lan rộng
+                    offset: const Offset(0, 4), // dịch xuống dưới
+                  ),
+                ],
               ),
-            ],
+              child: child,
+            ),
           ),
-          child: child,
         ),
       ),
     );

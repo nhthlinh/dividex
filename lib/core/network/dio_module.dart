@@ -66,7 +66,7 @@ abstract class DioModule {
             if ((errorCode == 403 ||
                     messageCode == "INVALID_OR_EXPIRED_TOKEN") &&
                 response.requestOptions.path.contains('/auth/refresh')) {
-              print("Refresh token invalid, force logout");
+                  
               final context = navigatorKey.currentContext!;
               await HiveService.clearToken(); // Xóa token khỏi local storage
               await HiveService.clearUser(); // Xóa dữ liệu người dùng khỏi local storage

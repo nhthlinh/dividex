@@ -27,7 +27,7 @@ class UserModel {
     avatar: json['avatar_url'] != null
         ? ImageModel.fromJson(json['avatar_url'] as Map<String, dynamic>)
         : (json['user_avatar_url'] != null
-            ? ImageModel.fromJson({'url': json['user_avatar_url']})
+            ? ImageModel.fromJson(json['user_avatar_url']) 
             : null),
     hasDebt: json['has_debt'] as bool?,
     amount: (json['amount'] as num?)?.toDouble(),

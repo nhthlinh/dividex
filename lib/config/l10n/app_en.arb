@@ -429,7 +429,71 @@
   "amount": "Amount",
   "splitRemainingEqually": "Split remaining equally",
   "allocated": "Allocated",
-  "noEventsInGroup": "No events in this group yet"
+  "noEventsInGroup": "No events in this group yet",
+  "membersText": "{count, plural, =0{No members} =1{1 member} other{{count} members}}",
+  "@membersText": {
+    "description": "Number of members in a group",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "event": "Event",
+  "expense": "Expense",
+  "groupAddMemberHint": "You can add new members to this group through",
+  "groupAddMemberQr": "Scan QR code",
+  "groupAddMemberFriends": "Add friends (already in app)",
+  "groupChangeLeader": "Change Leader",
+  "groupSettings": "Group's settings",
+  "eventSettings": "Event's settings",
+  "leave": "Leave",
+  "report": "Report",
+  "done": "DONE",
+  "notYet": "NOT YET",
+  "deleteConfirm1": "You can only remove a member after ",
+  "deleteConfirm2": "all debts in the group have been settled.",
+  "delete": "Delete",
+  "from": "from",
+  "leaveIsDenied": "Total amount is not zero, please settle up before leaving", 
+  
+  "overview": "Overview",
+  "totalEvents": "Event attended",
+  "totalExpenses": "Expensed shared",
+  "totalSpending": "Group's total spending",
+  "userSpending": "Your total spending",
+  "contributionRate": "Contribution ratio",
+  "event_not_joined_title": "You haven't joined this event yet",
+  "event_not_joined_message": "Tap 'Join' to become a participant of this event.",
+  "join_button": "Join",
+  "cancel_button": "Cancel",
+  "leader": "Leader",
+  "contributon": "Contribution",
+  "dueDay": "Due day",
+  "billDetail": "Bill detail",
+  "image": "Image",
+  "expenseSplitNotMatch": "Expense split not match, please check again",
+  "accountNumber": "Account number",
+  "branch": "Branch",
+  "accountNumberLabel": "Type your new account number",
+  "chooseBeneficiary": "Choose beneficiary",
+  "findBeneficiary": "Find beneficiary",
+  "confirm": "Confirm",
+  "description": "Description",
+  "binLabel": "Field your bin to verify transfer",
+  "to": "To",
+  "youHaveSuccessfullyTransferred": "You have successfully transferred",
+  "transferSuccessful": "Transfer successful",
+  "youHaveSuccessfullyWithdraw": "You have successfully withdraw",
+  "withdrawSuccessful": "Withdraw successful",
+  "accountCreated": "Save your bank account infor successfully!",
+  "accountDeleted": "Delete your bank account infor successfully!",
+  "accountUpdated": "Update your bank account infor successfully!",
+  "addNewAccount": "Add new account",
+  "addAccountGuide": "Please enter your bank account information here if you wish to withdraw money to your personal account."
+
+
+
 
 
 }

@@ -11,11 +11,17 @@ import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 enum FriendCardType { none, response, pending, acepted }
 
 class FriendCard extends StatefulWidget {
-  const FriendCard({super.key, required this.friend, this.type, this.isSearchPage = false});
+  const FriendCard({
+    super.key,
+    required this.friend,
+    this.type,
+    this.isSearchPage = false,
+  });
 
   final FriendModel friend;
   final FriendCardType? type;
@@ -47,9 +53,11 @@ class _FriendCardState extends State<FriendCard> {
 
     return InfoCard(
       title: widget.friend.fullName,
-      subtitle: widget.friend.info ?? widget.friend.messageRequest,
+      subtitle:
+          widget.friend.messageRequest ??
+          DateFormat.yMMMd().format(widget.friend.startedAt ?? DateTime.now()),
       leading: CircleAvatar(
-        radius: 30,
+        radius: 20,
         backgroundColor: Colors.grey,
         backgroundImage:
             (widget.friend.avatarUrl != null &&
@@ -109,7 +117,11 @@ class _FriendCardState extends State<FriendCard> {
       case FriendCardType.response:
       case FriendCardType.pending:
         if (!widget.isSearchPage) {
-          showFriendRequestDialog(context, intl, widget.type ?? FriendCardType.none);
+          showFriendRequestDialog(
+            context,
+            intl,
+            widget.type ?? FriendCardType.none,
+          );
         }
         break;
       default:
@@ -129,11 +141,13 @@ class _FriendCardState extends State<FriendCard> {
     return showCustomDialog(
       context: context,
       label: intl.friendRequest(
-        isReceived ? widget.friend.fullName : (currentUser.fullName ?? ''),
+        isReceived
+            ? (widget.friend.fullName.split(' ').last)
+            : intl.you,
       ),
       content: Column(
         children: [
-          _buildUserRow(isUser),
+          _buildUserRow(isUser || isSent),
           const SizedBox(height: 8),
           CustomTextInputWidget(
             size: TextInputSize.large,
@@ -149,20 +163,20 @@ class _FriendCardState extends State<FriendCard> {
     );
   }
 
-  Widget _buildUserRow(bool isUser) {
+  Widget _buildUserRow(bool isUserFirst) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _userAvaAndName(
-          isUser ? currentUser.avatarUrl : widget.friend.avatarUrl,
-          isUser ? AppLocalizations.of(context)!.you : widget.friend.fullName,
+          isUserFirst ? currentUser.avatarUrl : widget.friend.avatarUrl,
+          isUserFirst ? AppLocalizations.of(context)!.you : (widget.friend.fullName.split(' ').last),
         ),
         const SizedBox(width: 8),
         Image.asset('lib/assets/images/arrow_image.png', width: 50),
         const SizedBox(width: 8),
         _userAvaAndName(
-          isUser ? widget.friend.avatarUrl : currentUser.avatarUrl,
-          isUser ? widget.friend.fullName : AppLocalizations.of(context)!.you,
+          isUserFirst ? widget.friend.avatarUrl : currentUser.avatarUrl,
+          isUserFirst ? (widget.friend.fullName.split(' ').last) : AppLocalizations.of(context)!.you,
         ),
       ],
     );
@@ -184,6 +198,7 @@ class _FriendCardState extends State<FriendCard> {
               context.read<FriendBloc>().add(
                 DeclineFriendRequestEvent(widget.friend.friendshipUid ?? ''),
               );
+              Navigator.of(context).pop();
             },
             size: ButtonSize.medium,
             customColor: AppThemes.errorColor,
@@ -194,12 +209,13 @@ class _FriendCardState extends State<FriendCard> {
               context.read<FriendBloc>().add(
                 AcceptFriendRequestEvent(widget.friend.friendshipUid ?? ''),
               );
+              Navigator.of(context).pop();
             },
             size: ButtonSize.medium,
             customColor: AppThemes.successColor,
           ),
         ],
-      );
+      ); 
     } else if (isSent) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -210,6 +226,7 @@ class _FriendCardState extends State<FriendCard> {
               context.read<FriendBloc>().add(
                 DeclineFriendRequestEvent(widget.friend.friendshipUid ?? ''),
               );
+              Navigator.of(context).pop();
             },
             size: ButtonSize.medium,
             customColor: AppThemes.errorColor,
@@ -238,6 +255,7 @@ class _FriendCardState extends State<FriendCard> {
                   message: controller.text.isEmpty ? null : controller.text,
                 ),
               );
+              Navigator.of(context).pop();
             },
             size: ButtonSize.medium,
             customColor: AppThemes.primary3Color,
@@ -253,15 +271,14 @@ class _FriendCardState extends State<FriendCard> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircleAvatar(
-        radius: 30,
-        backgroundColor: Colors.grey,
-        backgroundImage:
-            (ava != null && ava.publicUrl.isNotEmpty)
-            ? NetworkImage(ava.publicUrl)
-            : NetworkImage(
-                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(name ?? 'User')}&background=random&color=fff&size=128',
-              ),
-      ),
+          radius: 30,
+          backgroundColor: Colors.grey,
+          backgroundImage: (ava != null && ava.publicUrl.isNotEmpty)
+              ? NetworkImage(ava.publicUrl)
+              : NetworkImage(
+                  'https://ui-avatars.com/api/?name=${Uri.encodeComponent(name ?? 'User')}&background=random&color=fff&size=128',
+                ),
+        ),
         const SizedBox(height: 4),
         Text(
           name ?? '',

@@ -59,4 +59,8 @@ class EventUseCase {
   Future<PagingModel<List<GroupModel>>> listEventsGroups(int page, int pageSize, String searchQuery, {String orderBy = "name", String sortType = "asc"}) async {
     return await repository.listEventsGroups(page, pageSize, searchQuery, orderBy: orderBy, sortType: sortType);
   }
+
+  Future<void> addMembersToEvent(String eventId, List<String> userIds) async {
+    await repository.addMembersToEvent(eventId, userIds);
+  }
 }

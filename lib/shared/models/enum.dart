@@ -1,4 +1,5 @@
 enum CurrencyEnum {
+  vnd("VND", "Vietnamese đồng"),
   aed("AED", "United Arab Emirates dirham"),
   afn("AFN", "Afghan afghani"),
   all("ALL", "Albanian lek"),
@@ -148,7 +149,6 @@ enum CurrencyEnum {
   uyu("UYU", "Uruguayan peso"),
   uzs("UZS", "Uzbekistani som"),
   ves("VES", "Venezuelan bolívar"),
-  vnd("VND", "Vietnamese đồng"),
   vuv("VUV", "Vanuatu vatu"),
   wst("WST", "Samoan tālā"),
   xaf("XAF", "Central African CFA franc"),

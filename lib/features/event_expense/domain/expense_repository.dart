@@ -1,10 +1,11 @@
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
+import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 
 abstract class ExpenseRepository {
-  Future<void> createExpense(
+  Future<String> createExpense(
     String name,
     double totalAmount,
     String currency,
@@ -21,6 +22,7 @@ abstract class ExpenseRepository {
     String groupId,
     int page,
     int pageSize,
+    ExpenseStatusEnum status,
   );
   Future<PagingModel<List<ExpenseModel>>> listExpensesInEvent(
     String eventId,
@@ -28,5 +30,9 @@ abstract class ExpenseRepository {
     int pageSize,
   );
   Future<void> updateExpense(ExpenseModel expense);
-  Future<void> deleteExpense(String id);
+  Future<void> softDeleteExpense(String id);
+  Future<void> hardDeleteExpense(String id);
+
+  Future<ExpenseModel?> getExpenseDetail(String expenseId);
+  Future<void> restoreExpense(String id);
 }

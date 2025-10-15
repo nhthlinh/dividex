@@ -1,7 +1,6 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
-import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,7 @@ class _SearchPageState extends State<SearchPage> {
     return AppShell(
       currentIndex: 1,
       child: SimpleLayout(
-        title: intl.search, 
+        title: intl.search,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

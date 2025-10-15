@@ -53,6 +53,13 @@ class JoinEvent extends EventEvent {
   JoinEvent({required this.eventId, required this.userId});
 }
 
+class AddMembersToEvent extends EventEvent {
+  final String eventId;
+  final List<String> memberIds;
+
+  AddMembersToEvent({required this.eventId, required this.memberIds});
+}
+
 class InitialEvent extends EventEvent {
   int page;
   int pageSize;
@@ -61,7 +68,7 @@ class InitialEvent extends EventEvent {
   String sortType;
 
   InitialEvent({
-    this.page = 0,
+    this.page = 1,
     this.pageSize = 20,
     this.searchQuery = "",
     this.orderBy = "updated_at",
@@ -77,7 +84,7 @@ class LoadMoreEventsGroups extends EventEvent {
   String sortType;
 
   LoadMoreEventsGroups({
-    this.page = 0,
+    this.page = 1,
     this.pageSize = 20,
     this.searchQuery = "",
     this.orderBy = "updated_at",
@@ -93,7 +100,7 @@ class RefreshEventsGroups extends EventEvent {
   String sortType;
 
   RefreshEventsGroups({
-    this.page = 0,
+    this.page = 1,
     this.pageSize = 20,
     this.searchQuery = "",
     this.orderBy = "updated_at",

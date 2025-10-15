@@ -22,6 +22,8 @@ class MessageCode {
   static const String expenseNotFound = 'EXPENSE_NOT_FOUND';
   static const String updateIsDenied = 'UPDATE_IS_DENIED';
   static const String deleteIsDenied = 'DELETE_IS_DENIED';
+  static const String leaveIsDenied = 'LEAVE_IS_DENIED';
+  static const String getIsDenied = 'GET_IS_DENIED';
 
   static const String friendRelationAlreadyExists = 'FRIEND_HAS_RELATION';
   static const String friendRequestNotFound = 'FRIENDSHIP_NOT_FOUND';

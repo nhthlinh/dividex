@@ -1120,4 +1120,175 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noEventsInGroup => 'No events in this group yet';
+
+  @override
+  String membersText(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+      zero: 'No members',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get event => 'Event';
+
+  @override
+  String get expense => 'Expense';
+
+  @override
+  String get groupAddMemberHint =>
+      'You can add new members to this group through';
+
+  @override
+  String get groupAddMemberQr => 'Scan QR code';
+
+  @override
+  String get groupAddMemberFriends => 'Add friends (already in app)';
+
+  @override
+  String get groupChangeLeader => 'Change Leader';
+
+  @override
+  String get groupSettings => 'Group\'s settings';
+
+  @override
+  String get eventSettings => 'Event\'s settings';
+
+  @override
+  String get leave => 'Leave';
+
+  @override
+  String get report => 'Report';
+
+  @override
+  String get done => 'DONE';
+
+  @override
+  String get notYet => 'NOT YET';
+
+  @override
+  String get deleteConfirm1 => 'You can only remove a member after ';
+
+  @override
+  String get deleteConfirm2 => 'all debts in the group have been settled.';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get from => 'from';
+
+  @override
+  String get leaveIsDenied =>
+      'Total amount is not zero, please settle up before leaving';
+
+  @override
+  String get overview => 'Overview';
+
+  @override
+  String get totalEvents => 'Event attended';
+
+  @override
+  String get totalExpenses => 'Expensed shared';
+
+  @override
+  String get totalSpending => 'Group\'s total spending';
+
+  @override
+  String get userSpending => 'Your total spending';
+
+  @override
+  String get contributionRate => 'Contribution ratio';
+
+  @override
+  String get event_not_joined_title => 'You haven\'t joined this event yet';
+
+  @override
+  String get event_not_joined_message =>
+      'Tap \'Join\' to become a participant of this event.';
+
+  @override
+  String get join_button => 'Join';
+
+  @override
+  String get cancel_button => 'Cancel';
+
+  @override
+  String get leader => 'Leader';
+
+  @override
+  String get contributon => 'Contribution';
+
+  @override
+  String get dueDay => 'Due day';
+
+  @override
+  String get billDetail => 'Bill detail';
+
+  @override
+  String get image => 'Image';
+
+  @override
+  String get expenseSplitNotMatch =>
+      'Expense split not match, please check again';
+
+  @override
+  String get accountNumber => 'Account number';
+
+  @override
+  String get branch => 'Branch';
+
+  @override
+  String get accountNumberLabel => 'Type your new account number';
+
+  @override
+  String get chooseBeneficiary => 'Choose beneficiary';
+
+  @override
+  String get findBeneficiary => 'Find beneficiary';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get binLabel => 'Field your bin to verify transfer';
+
+  @override
+  String get to => 'To';
+
+  @override
+  String get youHaveSuccessfullyTransferred =>
+      'You have successfully transferred';
+
+  @override
+  String get transferSuccessful => 'Transfer successful';
+
+  @override
+  String get youHaveSuccessfullyWithdraw => 'You have successfully withdraw';
+
+  @override
+  String get withdrawSuccessful => 'Withdraw successful';
+
+  @override
+  String get accountCreated => 'Save your bank account infor successfully!';
+
+  @override
+  String get accountDeleted => 'Delete your bank account infor successfully!';
+
+  @override
+  String get accountUpdated => 'Update your bank account infor successfully!';
+
+  @override
+  String get addNewAccount => 'Add new account';
+
+  @override
+  String get addAccountGuide =>
+      'Please enter your bank account information here if you wish to withdraw money to your personal account.';
 }

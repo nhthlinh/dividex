@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class LoadedFriendsState extends Equatable {
   const LoadedFriendsState({
     this.isLoading = true,
-    this.page = 0,
+    this.page = 1,
     this.totalPage = 0,
     this.totalItems = 0,
     this.requests = const [],
@@ -41,7 +41,7 @@ class FriendState {}
 class LoadedFriendRequestsState extends Equatable {
   const LoadedFriendRequestsState({
     this.isLoading = true,
-    this.page = 0,
+    this.page = 1,
     this.totalPage = 0,
     this.totalReceived = 0,
     this.totalSent = 0,
@@ -80,5 +80,3 @@ class LoadedFriendRequestsState extends Equatable {
     );
   }
 }
-
-

@@ -14,12 +14,29 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/features/event_expense/presentation/pages/add_event_page.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/add_expense_page.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/choose_event_page.dart';
+import 'package:Dividex/features/event_expense/presentation/pages/event_report.dart';
+import 'package:Dividex/features/event_expense/presentation/pages/event_setting.dart';
+import 'package:Dividex/features/event_expense/presentation/pages/expense_detail_page.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/split_page.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_request_bloc_and_event.dart'
     as request_bloc;
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/pages/add_group_page.dart';
+import 'package:Dividex/features/group/presentation/pages/group_detail.dart';
+import 'package:Dividex/features/group/presentation/pages/group_page.dart';
+import 'package:Dividex/features/group/presentation/pages/group_report.dart';
+import 'package:Dividex/features/group/presentation/pages/group_setting.dart';
+import 'package:Dividex/features/home/data/models/bank_account_model.dart';
+import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
+import 'package:Dividex/features/home/presentation/pages/account_detail_page.dart';
+import 'package:Dividex/features/home/presentation/pages/account_page.dart';
+import 'package:Dividex/features/home/presentation/pages/add_account_page.dart';
+import 'package:Dividex/features/home/presentation/pages/transfer_confirm_page.dart';
+import 'package:Dividex/features/home/presentation/pages/transfer_page.dart';
+import 'package:Dividex/features/home/presentation/pages/transfer_success_page.dart';
+import 'package:Dividex/features/home/presentation/pages/withdraw_page.dart';
+import 'package:Dividex/features/home/presentation/pages/withdraw_success_page.dart';
 import 'package:Dividex/features/search/presentation/bloc/search_users_bloc.dart'
     as search_bloc;
 import 'package:Dividex/features/friend/presentation/pages/friend_page.dart';
@@ -77,6 +94,25 @@ class AppRouteNames {
   static const String chooseMember = 'choose-member';
   static const String chooseEvent = 'choose-event';
   static const String customSplit = 'custom-split';
+
+  static const String group = 'group';
+  static const String groupDetail = 'group-detail';
+  static const String groupReport = 'group-report';
+  static const String groupSetting = 'group-setting';
+  static const String eventReport = 'event-report';
+  static const String eventSetting = 'event-setting';
+  static const String expenseDetail = 'expense-detail';
+
+  static const String account = 'account';
+  static const String addAccount = 'add-account';
+  static const String accountDetail = 'accountDetail';
+
+  static const String transfer = 'transfer';
+  static const String transferConfirm = 'transfer-confirm';
+  static const String transferSuccess = 'transfer-success';
+
+  static const String withdraw = 'withdraw';
+  static const String withdrawSuccess = 'withdraw-success';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -93,14 +129,14 @@ GoRouter buildRouter(BuildContext context) {
         path: '/',
         name: AppRouteNames.splash,
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return buildPageWithDefaultTransition(child: const SplashPage());
+          return buildPageWithDefaultTransition(child: SplashPage());
         },
       ),
       GoRoute(
         path: '/splash-2',
         name: AppRouteNames.splash2,
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return buildPageWithDefaultTransition(child: const SplashPage2());
+          return buildPageWithDefaultTransition(child: SplashPage2());
         },
       ),
       GoRoute(
@@ -126,7 +162,7 @@ GoRouter buildRouter(BuildContext context) {
         path: '/login',
         name: AppRouteNames.login,
         pageBuilder: (context, state) =>
-            buildPageWithDefaultTransition(child: const LoginPage()),
+            buildPageWithDefaultTransition(child: LoginPage()),
         routes: [
           GoRoute(
             path: 'request-email',
@@ -161,9 +197,29 @@ GoRouter buildRouter(BuildContext context) {
         path: '/home',
         name: AppRouteNames.home,
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return buildPageWithDefaultTransition(child: const HomePage());
+          return buildPageWithDefaultTransition(
+            child: HomePage(
+              key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+            ),
+          );
         },
         routes: [
+          GoRoute(
+            path: '/expense/:id',
+            name: AppRouteNames.expenseDetail,
+            pageBuilder: (context, state) {
+              final expenseId = state.pathParameters['id']!;
+              return buildPageWithDefaultTransition(
+                child: BlocProvider<ExpenseBloc>(
+                  create: (context) => ExpenseBloc(),
+                  child: ExpenseDetail(
+                    key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                    expenseId: expenseId,
+                  ),
+                ),
+              );
+            },
+          ),
           GoRoute(
             path: 'friend',
             name: AppRouteNames.friend,
@@ -185,9 +241,290 @@ GoRouter buildRouter(BuildContext context) {
                     create: (_) => request_bloc.FriendRequestBloc(),
                   ),
                 ],
-                child: const FriendPage(),
+                child: FriendPage(
+                  key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                ),
               ),
             ),
+          ),
+          GoRoute(
+            path: 'group',
+            name: AppRouteNames.group,
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return buildPageWithDefaultTransition(
+                child: BlocProvider<LoadedGroupsBloc>(
+                  create: (context) => LoadedGroupsBloc(),
+                  child: GroupPage(
+                    key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                  ),
+                ),
+              );
+            },
+            routes: [
+              GoRoute(
+                path: 'report/:groupId',
+                name: AppRouteNames.groupReport,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  final groupId = state.pathParameters['groupId']!;
+                  final extra = state.extra as Map<String, dynamic>?;
+                  final groupName = extra?['groupName'] as String?;
+                  final groupAvatar = extra?['groupAvatar'] as String?;
+
+                  return buildPageWithDefaultTransition(
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider<ExpenseDataBloc>(
+                          create: (context) => ExpenseDataBloc(),
+                        ),
+                        BlocProvider<GroupBloc>(
+                          create: (context) => GroupBloc(),
+                        ),
+                      ],
+                      child: GroupReportPage(
+                        key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                        groupId: groupId,
+                        groupName: groupName ?? '',
+                        groupAvatarUrl: groupAvatar ?? '',
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              GoRoute(
+                path: 'setting/:groupId',
+                name: AppRouteNames.groupSetting,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  final groupId = state.pathParameters['groupId']!;
+                  final extra = state.extra as Map<String, dynamic>?;
+                  final groupName = extra?['groupName'] as String?;
+                  final groupAvatar = extra?['groupAvatar'] as String?;
+                  final leaderId = extra?['leaderId'] as String?;
+                  return buildPageWithDefaultTransition(
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider<LoadedUsersBloc>(
+                          create: (context) => LoadedUsersBloc(),
+                        ),
+                        BlocProvider<GroupBloc>(
+                          create: (context) => GroupBloc(),
+                        ),
+                      ],
+                      child: GroupSettingPage(
+                        groupId: groupId,
+                        groupLeaderId: leaderId ?? '',
+                        groupName: groupName ?? '',
+                        groupAvatarUrl: groupAvatar ?? '',
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              GoRoute(
+                path: ':groupId',
+                name: AppRouteNames.groupDetail,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  final groupId = state.pathParameters['groupId']!;
+                  return buildPageWithDefaultTransition(
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider<LoadedUsersBloc>(
+                          create: (context) => LoadedUsersBloc(),
+                        ),
+                        BlocProvider<LoadedGroupsEventsBloc>(
+                          create: (context) => LoadedGroupsEventsBloc(),
+                        ),
+                        BlocProvider<GroupBloc>(
+                          create: (context) => GroupBloc(),
+                        ),
+                      ],
+                      child: GroupDetailPage(
+                        key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                        groupId: groupId,
+                      ),
+                    ),
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    path: 'setting/:eventId',
+                    name: AppRouteNames.eventSetting,
+                    pageBuilder: (BuildContext context, GoRouterState state) {
+                      final eventId = state.pathParameters['eventId']!;
+                      final groupId = state.pathParameters['groupId'];
+
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final eventName = extra?['eventName'] as String?;
+                      return buildPageWithDefaultTransition(
+                        child: MultiBlocProvider(
+                          providers: [
+                            BlocProvider<LoadedUsersBloc>(
+                              create: (context) => LoadedUsersBloc(),
+                            ),
+                            BlocProvider<EventBloc>(
+                              create: (context) => EventBloc(),
+                            ),
+                          ],
+                          child: EventSettingPage(
+                            eventId: eventId,
+                            groupId: groupId ?? '',
+                            eventName: eventName ?? '',
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: ':eventId',
+                    name: AppRouteNames.eventReport,
+                    pageBuilder: (BuildContext context, GoRouterState state) {
+                      final eventId = state.pathParameters['eventId']!;
+                      final groupId = state.pathParameters['groupId'];
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final eventName = extra?['eventName'] as String?;
+                      final groupName = extra?['groupName'] as String?;
+                      final groupAvatar = extra?['groupAvatar'] as String?;
+                      return buildPageWithDefaultTransition(
+                        child: MultiBlocProvider(
+                          providers: [
+                            BlocProvider<ExpenseDataBloc>(
+                              create: (context) => ExpenseDataBloc(),
+                            ),
+                          ],
+                          child: EventReportPage(
+                            key: ValueKey(
+                              DateTime.now().millisecondsSinceEpoch,
+                            ),
+                            eventId: eventId,
+                            groupId: groupId ?? '',
+                            eventName: eventName ?? '',
+                            groupName: groupName ?? '',
+                            groupAvatarUrl: groupAvatar ?? '',
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          GoRoute(
+            path: 'account',
+            name: AppRouteNames.account,
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return buildPageWithDefaultTransition(child: BlocProvider(
+                create: (context) => AccountBloc(),
+                child: AccountPage(
+                  key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                ),
+              ));
+            },
+            routes: [
+              GoRoute(
+                path: 'add-account',
+                name: AppRouteNames.addAccount,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  return buildPageWithDefaultTransition(
+                    child: BlocProvider<AccountBloc>(
+                      create: (context) => AccountBloc(),
+                      child: AddAccountPage(),
+                    ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'account-detail/:id',
+                name: AppRouteNames.accountDetail,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  final id = state.pathParameters['id']!;
+                  final account = state.extra as BankAccount?; 
+                  return buildPageWithDefaultTransition(
+                    child: BlocProvider<AccountBloc>(
+                      create: (context) => AccountBloc(),
+                      child: AccountDetailPage(id: id, account: account),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+
+          GoRoute(
+            path: 'transfer',
+            name: AppRouteNames.transfer,
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return buildPageWithDefaultTransition(
+                child: BlocProvider<LoadedFriendsBloc>(
+                  create: (context) => LoadedFriendsBloc(),
+                  child: TransferPage(
+                    key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                  ),
+                ),
+              );
+            },
+            routes: [
+              GoRoute(
+                path: 'confirm',
+                name: AppRouteNames.transferConfirm,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  final extra = state.extra as Map<String, dynamic>?;
+                  final toUser = extra?['toUser'] as UserModel;
+                  final amount = extra?['amount'] as double;
+                  final description = extra?['description'] as String?;
+
+                  return buildPageWithDefaultTransition(
+                    child: TransferConfirmPage(
+                      toUser: toUser,
+                      amount: amount,
+                      description: description,
+                    ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'transfer-success',
+                name: AppRouteNames.transferSuccess,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  final extra = state.extra as Map<String, dynamic>?;
+                  final toUser = extra?['toUser'] as UserModel;
+                  final amount = extra?['amount'] as double;
+                  return buildPageWithDefaultTransition(
+                    child: TransferSuccessPage(toUser: toUser, amount: amount),
+                  );
+                },
+              ),
+            ],
+          ),
+
+          GoRoute(
+            path: '/withdraw',
+            name: AppRouteNames.withdraw,
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return buildPageWithDefaultTransition(
+                child: WithdrawPage(),
+              );
+            },
+            routes: [
+              GoRoute(
+                path: 'withdraw-success',
+                name: AppRouteNames.withdrawSuccess,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  final extra = state.extra as Map<String, dynamic>?;
+                  final toAccount = extra?['toAccount'] as Account;
+                  final amount = extra?['amount'] as double;
+
+                  return buildPageWithDefaultTransition(
+                    child: WithdrawSuccessPage(
+                      toAccount: toAccount,
+                      amount: amount,
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),
@@ -195,7 +532,7 @@ GoRouter buildRouter(BuildContext context) {
         path: '/search',
         name: AppRouteNames.search,
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return buildPageWithDefaultTransition(child: const SearchPage());
+          return buildPageWithDefaultTransition(child: SearchPage());
         },
         routes: [
           GoRoute(
@@ -204,7 +541,9 @@ GoRouter buildRouter(BuildContext context) {
             pageBuilder: (context, state) => buildPageWithDefaultTransition(
               child: BlocProvider(
                 create: (context) => search_bloc.SearchUsersBloc(),
-                child: const SearchUserPage(),
+                child: SearchUserPage(
+                  key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                ),
               ),
             ),
           ),
@@ -285,16 +624,17 @@ GoRouter buildRouter(BuildContext context) {
         path: '/terms-of-use',
         name: AppRouteNames.termOfUse,
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return buildPageWithDefaultTransition(
-            child: const TermsOfServicePage(),
-          );
+          return buildPageWithDefaultTransition(child: TermsOfServicePage());
         },
       ),
       GoRoute(
         path: '/change-password',
         name: AppRouteNames.changePass,
-        pageBuilder: (context, state) =>
-            buildPageWithDefaultTransition(child: ChangePassPage()),
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          child: ChangePassPage(
+            key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+          ),
+        ),
       ),
       GoRoute(
         path: '/choose-members',
@@ -323,8 +663,7 @@ GoRouter buildRouter(BuildContext context) {
           return BlocProvider(
             create: (context) => EventDataBloc(),
             child: ChooseEventPage(
-              initialSelectedEvent:
-                  extra['initialSelected'] as EventModel?,
+              initialSelectedEvent: extra['initialSelected'] as EventModel?,
               onSelectedEventChanged:
                   extra['onChanged'] as ValueChanged<EventModel>,
             ),
@@ -332,18 +671,18 @@ GoRouter buildRouter(BuildContext context) {
         },
       ),
       GoRoute(
-        path: '/split', 
+        path: '/split',
         name: AppRouteNames.customSplit,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
+
           return BlocProvider(
             create: (context) => LoadedUsersBloc(),
-            child: SplitPage( 
+            child: SplitPage(
               eventId: extra['eventId'] as String? ?? '',
               type: extra['type'] as LoadType,
               initialType: extra['initialType'] as SplitTypeEnum,
-              initialSelected:
-                  extra['initialSelected'] as List<UserDebt>,
+              initialSelected: extra['initialSelected'] as List<UserDebt>,
               initialUsers: extra['initialUsers'] as List<UserModel>,
               onChanged: (list) =>
                   (extra['onChanged'] as ValueChanged<List<UserDebt>>)(list),

@@ -1,57 +1,116 @@
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
+import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
 
-@JsonSerializable()
+enum ExpenseStatus { done, notYet }
+
 class ExpenseModel {
   final String? id;
+  final DateTime? updatedAt;
   final String? name;
   final String? event;
   final CurrencyEnum? currency;
   final double? totalAmount;
   final String? note;
   final String? paidBy;
+  final UserModel? paidByUser;
   final SplitTypeEnum? splitType;
   final DateTime? expenseDate;
   final DateTime? remindAt;
   final String? category;
   final List<UserDebt>? userDebts;
+  final List<UserDeptInfo>? userDebtInfos;
+  final List<ImageModel>? images;
+  final ExpenseStatus? status;
 
   ExpenseModel({
     this.id,
+    this.updatedAt,
     this.name,
     this.event,
     this.currency,
     this.totalAmount,
     this.note,
     this.paidBy,
+    this.paidByUser,
     this.splitType,
     this.expenseDate,
     this.remindAt,
     this.category,
     this.userDebts,
+    this.images,
+    this.userDebtInfos,
+    this.status,
   });
 
   factory ExpenseModel.fromJson(Map<String, dynamic> json) => ExpenseModel(
     id: json['uid'] as String?,
+    updatedAt: json['updated_at'] == null
+        ? null
+        : DateTime.parse(json['updated_at'] as String),
     name: json['name'] as String?,
-    event: json['event'] as String?,
-    currency: $enumDecodeNullable(_$CurrencyEnumEnumMap, json['currency']),
-    totalAmount: (json['total_amount'] as num?)?.toDouble(),
+    currency: json['currency'] == null
+        ? null
+        : $enumDecodeNullable(
+            $CurrencyEnumEnumMap,
+            json['currency'].toString().toLowerCase(),
+          ),
+    totalAmount: (json['total_amount'] as num? ?? json['amount'] as num?)?.toDouble(),
     note: json['note'] as String?,
-    paidBy: json['paid_by'] as String?,
-    splitType: $enumDecodeNullable(_$SplitTypeEnumEnumMap, json['splitType']),
+    category: json['category'] as String?,
     expenseDate: json['expense_date'] == null
         ? null
         : DateTime.parse(json['expense_date'] as String),
-    remindAt: json['remind_at'] == null
+    remindAt: json['end_date'] == null
         ? null
-        : DateTime.parse(json['remind_at'] as String),
-    category: json['category'] as String?,
+        : DateTime.parse(json['end_date'] as String),
+    paidByUser: json['paid_by'] == null
+        ? null
+        : UserModel.fromJson(json['paid_by'] as Map<String, dynamic>),
+    splitType: $enumDecodeNullable(_$SplitTypeEnumEnumMap, json['splitType']),
+    event: json['event'] as String?,
+    images: (json['receipt_url'] as List<dynamic>?)
+        ?.map((e) => ImageModel.fromJson(e as Map<String, dynamic>))
+        .toList(),
     userDebts: (json['list_expense_member'] as List<dynamic>?)
         ?.map((e) => UserDebt.fromJson(e as Map<String, dynamic>))
         .toList(),
+    userDebtInfos: (json['list_user'] as List<dynamic>?)
+        ?.map((e) => UserDeptInfo.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
+
+  factory ExpenseModel.fromListExpenseInGroupJson(Map<String, dynamic> json) {
+    final eventName = json['event'] as String?;
+    final expenseList = json['expense'] as List<dynamic>? ?? [];
+
+    return ExpenseModel(
+      event: eventName,
+      id: expenseList.isNotEmpty ? expenseList.first['uid'] as String? : null,
+      name: expenseList.isNotEmpty
+          ? expenseList.first['name'] as String?
+          : null,
+      currency: expenseList.isNotEmpty
+          ? $enumDecodeNullable(
+              $CurrencyEnumEnumMap,
+              expenseList.first['currency'].toString().toLowerCase(),
+            )
+          : null,
+      totalAmount: expenseList.isNotEmpty
+          ? (expenseList.first['amount'] != null
+                ? (expenseList.first['amount'] as num).toDouble()
+                : null)
+          : null,
+      status: expenseList.isNotEmpty
+          ? $enumDecodeNullable(
+              _$ExpenseStatusEnumMap,
+              expenseList.first['status'],
+            )
+          : null,
+    );
+  }
 
   Map<String, dynamic> $ExpenseModelToJson(
     ExpenseModel instance,
@@ -59,7 +118,7 @@ class ExpenseModel {
     'id': instance.id,
     'name': instance.name,
     'event': instance.event,
-    'currency': _$CurrencyEnumEnumMap[instance.currency],
+    'currency': $CurrencyEnumEnumMap[instance.currency],
     'totalAmount': instance.totalAmount,
     'description': instance.note,
     'paidBy': instance.paidBy,
@@ -71,13 +130,18 @@ class ExpenseModel {
   };
 }
 
+const _$ExpenseStatusEnumMap = {
+  ExpenseStatus.done: 'DONE',
+  ExpenseStatus.notYet: 'NOTYET',
+};
+
 const _$SplitTypeEnumEnumMap = {
   SplitTypeEnum.equal: 'equal',
   SplitTypeEnum.percentage: 'percentage',
   SplitTypeEnum.custom: 'custom',
 };
 
-const _$CurrencyEnumEnumMap = {
+const $CurrencyEnumEnumMap = {
   CurrencyEnum.aed: 'aed',
   CurrencyEnum.afn: 'afn',
   CurrencyEnum.all: 'all',

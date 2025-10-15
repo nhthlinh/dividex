@@ -26,7 +26,7 @@ class TwoOptionSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 340,
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           RichText(
@@ -47,8 +47,8 @@ class TwoOptionSelector extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Wrap(
-            spacing: 8,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildOption(
                 context: context,

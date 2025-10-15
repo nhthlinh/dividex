@@ -9,7 +9,7 @@ class ImageModel {
     required this.publicUrl,
   });
 
-  factory ImageModel.fromJson(Map<String, dynamic> json) {
+  factory ImageModel.fromJson(Map<String, dynamic> json) {    
     return ImageModel(
       uid: json['uid'],
       originalName: json['original_name'],

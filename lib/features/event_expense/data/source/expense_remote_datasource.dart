@@ -1,10 +1,11 @@
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
+import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 
 abstract class ExpenseRemoteDataSource {
-  Future<void> createExpense(
+  Future<String> createExpense(
     String name,
     double totalAmount,
     String currency,
@@ -28,7 +29,13 @@ abstract class ExpenseRemoteDataSource {
     String groupId,
     int page,
     int pageSize,
+    ExpenseStatusEnum status,
   );
   Future<void> updateExpense(ExpenseModel expense);
-  Future<void> deleteExpense(String id);
+  Future<void> softDeleteExpense(String id);
+  Future<void> hardDeleteExpense(String id);
+
+
+  Future<ExpenseModel?> getExpenseDetail(String expenseId);
+  Future<void> restoreExpense(String id);
 }

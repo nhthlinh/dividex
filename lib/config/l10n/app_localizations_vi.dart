@@ -1119,4 +1119,174 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get noEventsInGroup => 'Chưa có sự kiện nào trong nhóm';
+
+  @override
+  String membersText(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thành viên',
+      one: '1 thành viên',
+      zero: 'Không có thành viên',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get event => 'Sự kiện';
+
+  @override
+  String get expense => 'Chi tiêu';
+
+  @override
+  String get groupAddMemberHint =>
+      'Bạn có thể thêm thành viên mới vào nhóm thông qua';
+
+  @override
+  String get groupAddMemberQr => 'Quét mã QR';
+
+  @override
+  String get groupAddMemberFriends => 'Thêm bạn bè (đã có trong ứng dụng)';
+
+  @override
+  String get groupChangeLeader => 'Đổi Trưởng nhóm';
+
+  @override
+  String get groupSettings => 'Cài đặt nhóm';
+
+  @override
+  String get eventSettings => 'Cài đặt sự kiện';
+
+  @override
+  String get leave => 'Rời';
+
+  @override
+  String get report => 'Báo cáo';
+
+  @override
+  String get done => 'XONG';
+
+  @override
+  String get notYet => 'CHƯA XONG';
+
+  @override
+  String get deleteConfirm1 => 'Bạn chỉ có thể xóa thành viên sau khi ';
+
+  @override
+  String get deleteConfirm2 => 'tất cả nợ của thành viên đã được giải quyết.';
+
+  @override
+  String get delete => 'Xóa';
+
+  @override
+  String get from => 'trong';
+
+  @override
+  String get leaveIsDenied =>
+      'Tổng số dư không bằng 0, hãy giải quyết hết nợ trước khi rời nhóm';
+
+  @override
+  String get overview => 'Tổng quan';
+
+  @override
+  String get totalEvents => 'Sự kiện tham gia';
+
+  @override
+  String get totalExpenses => 'Chi tiêu chia sẻ';
+
+  @override
+  String get totalSpending => 'Nhóm đã chi';
+
+  @override
+  String get userSpending => 'Bạn đã chi';
+
+  @override
+  String get contributionRate => 'Tỷ lệ đóng góp';
+
+  @override
+  String get event_not_joined_title => 'Bạn chưa tham gia sự kiện này';
+
+  @override
+  String get event_not_joined_message =>
+      'Nhấn \'Tham gia\' để tham gia sự kiện.';
+
+  @override
+  String get join_button => 'Tham gia';
+
+  @override
+  String get cancel_button => 'Hủy';
+
+  @override
+  String get leader => 'Nhóm trưởng';
+
+  @override
+  String get contributon => 'Đóng góp';
+
+  @override
+  String get dueDay => 'Ngày tới hạn';
+
+  @override
+  String get billDetail => 'Thông tin bill';
+
+  @override
+  String get image => 'Ảnh';
+
+  @override
+  String get expenseSplitNotMatch =>
+      'Số tiền chia không khớp, vui lòng kiểm tra lại';
+
+  @override
+  String get accountNumber => 'Số tài khoản';
+
+  @override
+  String get branch => 'Chi nhánh';
+
+  @override
+  String get accountNumberLabel => 'Nhập số tài khoản mới của bạn';
+
+  @override
+  String get chooseBeneficiary => 'Chọn người thụ hưởng';
+
+  @override
+  String get findBeneficiary => 'Tìm người thụ hưởng';
+
+  @override
+  String get confirm => 'Xác nhận';
+
+  @override
+  String get description => 'Mô tả';
+
+  @override
+  String get binLabel => 'Nhập mã pin để xác nhận chuyển khoản';
+
+  @override
+  String get to => 'đén';
+
+  @override
+  String get youHaveSuccessfullyTransferred => 'Bạn đã chuyển thành công';
+
+  @override
+  String get transferSuccessful => 'Chuyển tiền thành công';
+
+  @override
+  String get youHaveSuccessfullyWithdraw => 'Bạn đã rút thành công';
+
+  @override
+  String get withdrawSuccessful => 'Rút tiền thành công';
+
+  @override
+  String get accountCreated => 'Lưu thông tin tài khoản thành công!';
+
+  @override
+  String get accountDeleted => 'Xóa thông tin tài khoản thành công!';
+
+  @override
+  String get accountUpdated => 'Cập nhật thông tin tài khoản thành công!';
+
+  @override
+  String get addNewAccount => 'Thêm tài khoản mới';
+
+  @override
+  String get addAccountGuide =>
+      'Vui lòng nhập thông tin tài khoản ngân hàng của bạn tại đây nếu bạn muốn rút tiền về tài khoản cá nhân.';
 }

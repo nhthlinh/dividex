@@ -79,4 +79,9 @@ class EventRepositoryImpl implements EventRepository {
       sortType: sortType,
     );
   }
+
+  @override
+  Future<void> addMembersToEvent(String eventId, List<String> userIds) async {
+    return await remoteDataSource.addMembersToEvent(eventId, userIds);
+  }
 }

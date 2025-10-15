@@ -38,7 +38,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
   final List<UserModel> _selectedUsers = []; // <-- lưu user đã chọn
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _selectedUsers.addAll(widget.initialSelectedMembers ?? []);
     context.read<LoadedUsersBloc>().add(InitialEvent(widget.id, widget.type));
@@ -185,7 +185,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
         ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: users?.length != null
               ? (users!.length + (hasMore ? 1 : 0))
               : 0,
@@ -203,7 +203,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
               return Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Center(
-                  child: SpinKitFadingCircle(color: const Color(0xFF08AE02)),
+                  child: SpinKitFadingCircle(color: AppThemes.primary3Color),
                 ),
               );
             }
@@ -214,13 +214,14 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
             return InfoCard(
               title: user.fullName ?? '',
               leading: CircleAvatar(
-                radius: 30,
+                radius: 20,
                 backgroundColor: Colors.grey,
-                backgroundImage: (user.avatar != null && user.avatar!.publicUrl.isNotEmpty)
+                backgroundImage:
+                    (user.avatar != null && user.avatar!.publicUrl.isNotEmpty)
                     ? NetworkImage(user.avatar!.publicUrl)
                     : NetworkImage(
-                            'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
-                          ),
+                        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
+                      ),
               ),
               onTap: () {
                 // Navigate to friend's profile
@@ -229,7 +230,9 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
               trailing: CustomButton(
                 size: ButtonSize.small,
                 text: isSelected ? intl.cancel : intl.add,
-                customColor: isSelected ? AppThemes.errorColor : AppThemes.primary3Color,
+                customColor: isSelected
+                    ? AppThemes.errorColor
+                    : AppThemes.primary3Color,
                 onPressed: () => _toggleUser(user),
               ),
             );

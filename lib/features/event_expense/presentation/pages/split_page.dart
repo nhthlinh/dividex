@@ -6,10 +6,12 @@ import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SplitPage extends StatefulWidget {
   final String eventId;
@@ -91,6 +93,15 @@ class _SplitPageState extends State<SplitPage> {
               users: widget.initialUsers,
               totalAmount: widget.amount,
               onChanged: _onUsersChanged,
+            ),
+
+            const SizedBox(height: 16),
+
+            CustomButton(
+              text: intl.accept,
+              onPressed: () {
+                context.pop(_currentDebts);
+              },
             ),
           ],
         ),

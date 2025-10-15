@@ -11,17 +11,21 @@ abstract class LoadGroupsEvent extends Equatable {
 
 class InitialEvent extends LoadGroupsEvent {
   final String? searchQuery;
-  const InitialEvent(this.searchQuery);
+  final bool isDetail;
+  const InitialEvent(this.searchQuery, this.isDetail);
 }
 
 class LoadMoreGroupsEvent extends LoadGroupsEvent {
   final String? searchQuery;
-  const LoadMoreGroupsEvent(this.searchQuery);
+  final bool isDetail;
+  const LoadMoreGroupsEvent(this.searchQuery, this.isDetail);
 }
 
 class RefreshGroupsEvent extends LoadGroupsEvent {
   final String? searchQuery;
-  const RefreshGroupsEvent(this.searchQuery);
+  final bool isDetail;
+
+  const RefreshGroupsEvent(this.searchQuery, this.isDetail);
 }
 
 class GroupsEvent extends Equatable {
@@ -36,10 +40,46 @@ class CreateGroupEvent extends GroupsEvent {
   final List<String> memberIds;
   final Uint8List? avatar;
 
-  const CreateGroupEvent({required this.name, required this.memberIds, this.avatar});
+  const CreateGroupEvent({
+    required this.name,
+    required this.memberIds,
+    this.avatar,
+  });
 
   @override
   List<Object?> get props => [name, memberIds];
+}
+
+class UpdateGroupEvent extends GroupsEvent {
+  final String groupId;
+  final String name;
+  final List<String> memberIdsAdd;
+  final List<String> memberIdsRemove;
+  final Uint8List? avatar;
+
+  const UpdateGroupEvent({
+    required this.groupId,
+    required this.name,
+    required this.memberIdsAdd,
+    required this.memberIdsRemove,
+    this.avatar,
+  });
+
+  @override
+  List<Object?> get props => [name, memberIdsAdd, memberIdsRemove];
+}
+
+class UpdateGroupLeaderEvent extends GroupsEvent {
+  final String groupId;
+  final String newLeaderId;
+
+  const UpdateGroupLeaderEvent({
+    required this.groupId,
+    required this.newLeaderId,
+  });
+
+  @override
+  List<Object?> get props => [groupId, newLeaderId];
 }
 
 class DeleteGroupEvent extends GroupsEvent {
@@ -64,6 +104,15 @@ class GetGroupDetailEvent extends GroupsEvent {
   final String groupId;
 
   const GetGroupDetailEvent(this.groupId);
+
+  @override
+  List<Object?> get props => [groupId];
+}
+
+class GetGroupReportEvent extends GroupsEvent {
+  final String groupId;
+
+  const GetGroupReportEvent(this.groupId);
 
   @override
   List<Object?> get props => [groupId];

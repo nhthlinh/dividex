@@ -48,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       await HiveService.saveUser(
         UserLocalModel(
-          id: authResponse.user.id ?? '123',
+          id: authResponse.user.id ?? '',
           email: authResponse.user.email ?? '',
           fullName: authResponse.user.fullName ?? '',
           avatarUrl: authResponse.user.avatar,
@@ -94,7 +94,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       await HiveService.saveUser(
         UserLocalModel(
-          id: authResponse.user.id ?? '123',
+          id: authResponse.user.id ?? '',
           email: authResponse.user.email ?? '',
           fullName: authResponse.user.fullName ?? '',
           avatarUrl: authResponse.user.avatar,

@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class LoadedUsersState extends Equatable {
   const LoadedUsersState({
     this.isLoading = true,
-    this.page = 0,
+    this.page = 1,
     this.totalPage = 0,
     this.totalItems = 0,
     this.users = const [],

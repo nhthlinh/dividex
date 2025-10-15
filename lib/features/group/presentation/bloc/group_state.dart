@@ -1,5 +1,6 @@
 import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
+import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:equatable/equatable.dart';
 
 class GroupState extends Equatable {
@@ -17,20 +18,33 @@ class GroupDetailState extends GroupState {
   @override
   List<Object?> get props => [groupDetail];
 
-  GroupDetailState copyWith({
-    GroupModel? groupDetail,
+  GroupDetailState copyWith({GroupModel? groupDetail}) {
+    return GroupDetailState(groupDetail: groupDetail ?? this.groupDetail);
+  }
+}
+
+class GroupReportState extends GroupState {
+  final GroupModel? groupReport;
+  final List<ChartData>? chartData;
+
+
+  const GroupReportState({this.groupReport, this.chartData});
+
+  GroupReportState copyWith({
+    GroupModel? groupReport,
+    List<ChartData>? chartData,
   }) {
-    return GroupDetailState(
-      groupDetail: groupDetail ?? this.groupDetail,
+    return GroupReportState(
+      groupReport: groupReport ?? this.groupReport,
+      chartData: chartData ?? this.chartData,
     );
   }
 }
 
-
 class LoadedGroupsState extends Equatable {
   const LoadedGroupsState({
     this.isLoading = true,
-    this.page = 0,
+    this.page = 1,
     this.totalPage = 0,
     this.totalItems = 0,
     this.groups = const [],
@@ -64,11 +78,10 @@ class LoadedGroupsState extends Equatable {
   }
 }
 
-
 class LoadedGroupsEventsState extends Equatable {
   const LoadedGroupsEventsState({
     this.isLoading = true,
-    this.page = 0,
+    this.page = 1,
     this.totalPage = 0,
     this.totalItems = 0,
     this.events = const [],
@@ -101,4 +114,3 @@ class LoadedGroupsEventsState extends Equatable {
     );
   }
 }
-

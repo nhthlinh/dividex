@@ -1,5 +1,4 @@
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
-import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:equatable/equatable.dart';
 
 class ExpenseState {}
@@ -13,7 +12,7 @@ class ExpenseLoadedState extends ExpenseState {
 class ExpenseDataState extends Equatable {
   const ExpenseDataState({
     this.isLoading = true,
-    this.page = 0,
+    this.page = 1,
     this.totalPage = 0,
     this.totalItems = 0,
     this.expenses = const [],

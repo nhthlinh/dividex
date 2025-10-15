@@ -9,6 +9,7 @@ class DateInputField extends StatefulWidget {
   final bool isRequired;
   final FormFieldValidator<String>? validator;
   final TextInputSize size;
+  final bool isPickedHour;
 
   const DateInputField({
     super.key,
@@ -18,6 +19,7 @@ class DateInputField extends StatefulWidget {
     this.isRequired = false,
     this.validator,
     required this.size,
+    this.isPickedHour = false,
   });
 
   @override
@@ -32,11 +34,36 @@ class _DateInputFieldState extends State<DateInputField> {
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );
-    if (picked != null) {
+
+    if (picked == null) return;
+
+    if (widget.isPickedHour) {
+      final TimeOfDay? timePicked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (timePicked == null) return;
+
+      final DateTime combinedDateTime = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+        timePicked.hour,
+        timePicked.minute,
+      );
+
+      setState(() {
+        widget.controller.text = DateFormat('h:mm a - dd/MM/yyyy').format(combinedDateTime);
+      });
+      return;
+    } else {
       setState(() {
         widget.controller.text = DateFormat('dd/MM/yyyy').format(picked);
       });
     }
+
+    
   }
 
   @override
@@ -46,7 +73,7 @@ class _DateInputFieldState extends State<DateInputField> {
       size: widget.size,
       keyboardType: TextInputType.datetime,
       label: widget.label,
-      hintText: '13/05/2025',
+      hintText: widget.hintText,
       controller: widget.controller,
       isReadOnly: true,
       suffixIcon: IconButton(

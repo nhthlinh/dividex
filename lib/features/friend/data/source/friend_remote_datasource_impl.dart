@@ -24,7 +24,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
   @override
   Future<void> acceptFriendRequest(String friendshipUid) {
     return apiCallWrapper(() {
-      return dio.put('/friends/$friendshipUid');
+      return dio.put('/friends/$friendshipUid/accept');
     });
   }
 

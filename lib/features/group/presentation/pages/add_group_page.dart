@@ -49,12 +49,6 @@ class _AddGroupPageState extends State<AddGroupPage> {
 
   void submitGroup() {
     if (_formKey.currentState!.validate()) {
-      print('Group Name: ${groupNameController.text}');
-      //print('Group Image: $imageBytes');
-      print(
-        'Selected Members: ${selectedMembers.map((e) => e.fullName).toList()}',
-      );
-
       context.read<GroupBloc>().add(
         group_event.CreateGroupEvent(
           avatar: imageBytes,
@@ -174,7 +168,11 @@ class _AddGroupPageState extends State<AddGroupPage> {
               },
             ),
             const SizedBox(height: 8),
-            UserGrid(users: selectedMembers),
+            UserGrid(users: selectedMembers, onTap: (user) {
+              setState(() {
+                selectedMembers.remove(user);
+              });
+            }),
 
             const SizedBox(height: 30),
             CustomButton(

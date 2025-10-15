@@ -22,6 +22,7 @@ import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
 import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
+import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/two_option_selector_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
@@ -42,7 +43,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController expenseAmountController = TextEditingController();
-  final ValueNotifier<CurrencyEnum?> _selectedCurrency = ValueNotifier(null);
+  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(CurrencyEnum.vnd);
   final ValueNotifier<CategoryModel?> _selectedCategory = ValueNotifier(null);
   final TextEditingController selectedEventTextEditingController =
       TextEditingController();
@@ -57,6 +58,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   SplitTypeEnum splitType = SplitTypeEnum.equal;
   List<UserDebt> userDebts = [];
   List<UserModel> users = [];
+  List<UserModel> usersInEvent = [];
 
   final List<CurrencyEnum> _units = getAllCurrencies().map((e) => e).toList();
 
@@ -79,30 +81,40 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
   void submitExpense() {
     if (formKey.currentState?.validate() ?? false) {
-      print('Expense Name: ${expenseNameController.text}');
-      print(
-        'Expense Amount: ${expenseAmountController.text} ${_selectedCurrency.value}',
-      );
-      print('Category: ${_selectedCategory.value?.id}');
-      print('Event: ${_selectedEvent?.name ?? ''}');
-      print('Payer: ${_selectedPayer?.fullName ?? ''}');
-      print('Note: ${noteController.text}');
-      print('Date: ${dateController.text}');
-      print('Reminder: ${reminderController.text}');
-      print('Images: $images');
-      print('Split Type: $splitType');
-      print(
-        'User Debts: ${userDebts.map((e) => '${e.userId}: ${e.amount}').join(', ')}',
-      );
+      final intl = AppLocalizations.of(context)!;
+      final formattedDate = DateFormat(
+        "yyyy-MM-dd HH:mm",
+      ).format(DateFormat("h:mm a - dd/MM/yyyy").parse(dateController.text));
 
-      String formattedDate = DateFormat(
-        "yyyy-MM-dd",
-      ).format(DateFormat("dd/MM/yyyy").parse(dateController.text));
       String formattedReminder = reminderController.text.isNotEmpty
           ? DateFormat(
               "yyyy-MM-dd",
             ).format(DateFormat("dd/MM/yyyy").parse(reminderController.text))
           : '';
+
+      if (userDebts.isEmpty) {
+        return;
+      }
+
+      if (splitType == SplitTypeEnum.equal && userDebts.isNotEmpty) {
+        userDebts = calculateUserDebts(
+          usersInEvent,
+          double.tryParse(expenseAmountController.text) ?? 0,
+        );
+      }
+
+      if (splitType == SplitTypeEnum.custom && userDebts.isNotEmpty) {
+        final totalDebt = userDebts.fold<double>(
+          0,
+          (previousValue, element) => previousValue + (element.amount),
+        );
+        final totalAmount = double.tryParse(expenseAmountController.text) ?? 0;
+        if (totalDebt != totalAmount) {
+          showCustomToast(intl.expenseSplitNotMatch, type: ToastType.error);
+          return;
+        }
+        
+      }
 
       context.read<ExpenseBloc>().add(
         CreateExpenseEvent(
@@ -117,6 +129,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
           formattedReminder,
           splitType,
           userDebts,
+          images.whereType<Uint8List>().toList()
         ),
       );
 
@@ -203,7 +216,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 const SizedBox(width: 8),
                 Expanded(
                   flex: 3, // 30%
-                  child: ValueListenableBuilder<CurrencyEnum?>(
+                  child: ValueListenableBuilder<CurrencyEnum>(
                     valueListenable: _selectedCurrency,
                     builder: (context, value, _) {
                       return CustomDropdownWidget<CurrencyEnum>(
@@ -264,7 +277,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                           );
                         },
                         onChanged: (val) {
-                          _selectedCurrency.value = val;
+                          _selectedCurrency.value = val!;
                         },
                         isRequired: true,
                       );
@@ -375,7 +388,15 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 );
               },
             ),
-            UserGrid(users: _selectedPayer != null ? [_selectedPayer!] : []),
+            UserGrid(
+              users: _selectedPayer != null ? [_selectedPayer!] : [],
+              onTap: (user) {
+                setState(() {
+                  _selectedPayer = null;
+                  selectedPayerTextEditingController.text = '';
+                });
+              },
+            ),
           ],
 
           const SizedBox(height: 8),
@@ -398,11 +419,12 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   flex: 6, // 60%
                   child: DateInputField(
                     label: intl.expenseDateLabel,
-                    hintText: '13/05/2025',
+                    hintText: '4:30 p.m - 13/05/2025',
                     controller: dateController,
                     size: TextInputSize.large,
                     isRequired: true,
                     validator: null,
+                    isPickedHour: true,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -413,7 +435,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     hintText: '13/05/2025',
                     controller: reminderController,
                     size: TextInputSize.medium,
-                    isRequired: false,
+                    isRequired: true,
                     validator: null,
                   ),
                 ),
@@ -488,10 +510,14 @@ class _AddExpensePageState extends State<AddExpensePage> {
         }
 
         final members = state.users; // giả sử trong state có field này
-        userDebts = calculateUserDebts(
-          members,
-          double.tryParse(expenseAmountController.text) ?? 0,
-        );
+        usersInEvent = members;
+
+        if (splitType == SplitTypeEnum.equal) {
+          userDebts = calculateUserDebts(
+            members,
+            double.tryParse(expenseAmountController.text) ?? 0,
+          );
+        }
 
         return TwoOptionSelector(
           label: intl.expenseSplitType,
@@ -499,7 +525,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
           leftIcon: 'lib/assets/icons/balance.png',
           rightLabel: intl.expenseSplitCustomLabel,
           rightIcon: 'lib/assets/icons/unbalance.png',
-          onSelectionChanged: (value) {
+          onSelectionChanged: (value) async {
             double totalEntered = double.parse(expenseAmountController.text);
             if (totalEntered.isNaN || totalEntered <= 0) {
               return;
@@ -508,7 +534,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
             if (value == 2) {
               splitType = SplitTypeEnum.custom;
               // Trang chia bill
-              context.pushNamed(
+              final result = await context.pushNamed(
                 AppRouteNames.customSplit,
                 extra: {
                   'id': _selectedEvent?.id,
@@ -520,29 +546,25 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     setState(() {
                       userDebts = value;
                     });
-
-                    print(
-                      'User Debts: ${userDebts.map((e) => '${e.userId}: ${e.amount}').join(', ')}',
-                    );
                   },
                   'amount': double.parse(expenseAmountController.text),
                 },
               );
+
+              if (result is List<UserDebt>) {
+                setState(() {
+                  userDebts = result;
+                });
+              }
             } else {
               splitType = SplitTypeEnum.equal;
               // Chia đều
               setState(() {
                 splitType = SplitTypeEnum.equal;
-                userDebts = users
-                    .map(
-                      (e) => UserDebt(
-                        userId: e.id ?? '',
-                        amount:
-                            double.parse(expenseAmountController.text) /
-                            users.length,
-                      ),
-                    )
-                    .toList();
+                userDebts = calculateUserDebts(
+                  members,
+                  double.tryParse(expenseAmountController.text) ?? 0,
+                );
               });
             }
           },

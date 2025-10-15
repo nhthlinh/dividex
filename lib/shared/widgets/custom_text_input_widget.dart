@@ -69,7 +69,6 @@ class CustomTextInputWidget<T> extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 6),
           if (label != null) ...[
             buildLabel(context),
             const SizedBox(height: 4),

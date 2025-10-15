@@ -93,8 +93,8 @@ class EventRemoteDataSourceImpl implements EventRemoteDataSource {
       '/events/$eventId',
       data: {
         if (name != null) 'name': name,
-        if (eventStart != null) 'eventStart': eventStart,
-        if (eventEnd != null) 'eventEnd': eventEnd,
+        if (eventStart != null) 'event_start': eventStart,
+        if (eventEnd != null) 'event_end': eventEnd,
         if (description != null) 'description': description,
       },
     );
@@ -144,6 +144,18 @@ class EventRemoteDataSourceImpl implements EventRemoteDataSource {
         totalItems: events.length,
         totalPage: 1,
         page: page,
+      );
+    });
+  }
+
+  @override
+  Future<void> addMembersToEvent(String eventId, List<String> userIds) async {
+    return apiCallWrapper(() async {
+      await dio.post(
+        '/events/$eventId/add',
+        data: {
+          'user_uids': userIds,
+        },
       );
     });
   }

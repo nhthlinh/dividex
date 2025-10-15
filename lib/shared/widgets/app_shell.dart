@@ -23,24 +23,30 @@ class _AppShellState extends State<AppShell> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    final direction = _scrollController.position.userScrollDirection;
-
-    if (direction == ScrollDirection.reverse && _isBottomNavVisible) {
-      setState(() => _isBottomNavVisible = false);
-    } else if (direction == ScrollDirection.forward && !_isBottomNavVisible) {
-      setState(() => _isBottomNavVisible = true);
-    }
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  bool _isRefreshing = false;
+
+  void _triggerRefresh() async {
+    if (_isRefreshing) return; // tránh gọi trùng
+    
+    _isRefreshing = true;
+
+    await _onRefresh();
+
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    _isRefreshing = false;
+  }
+
+  Future<void> _onRefresh() async {  
+    GoRouter.of(context).refresh();
   }
 
   @override
@@ -52,15 +58,22 @@ class _AppShellState extends State<AppShell> {
         }
       },
       child: Scaffold(
-        body: NotificationListener<UserScrollNotification>(
+        body: NotificationListener<ScrollNotification>(
           onNotification: (notification) {
-            if (notification.direction == ScrollDirection.reverse &&
+            if (notification is UserScrollNotification &&
+                notification.direction == ScrollDirection.reverse &&
                 _isBottomNavVisible) {
               setState(() => _isBottomNavVisible = false);
-            } else if (notification.direction == ScrollDirection.forward &&
+            } else if (notification is UserScrollNotification &&
+                notification.direction == ScrollDirection.forward &&
                 !_isBottomNavVisible) {
               setState(() => _isBottomNavVisible = true);
             }
+            if (notification is OverscrollNotification &&
+                notification.overscroll < - 10) {
+              _triggerRefresh();
+            }
+
             return false;
           },
           child: widget.child,

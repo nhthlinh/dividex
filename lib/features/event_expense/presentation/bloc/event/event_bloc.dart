@@ -16,6 +16,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     on<UpdateEventEvent>(_onUpdateEvent);
     on<DeleteEventEvent>(_onDeleteEvent);
     on<JoinEvent>(_onJoinEvent);
+    on<AddMembersToEvent>(_onAddMembersToEvent);
   }
 
   Future _onCreateEvent(CreateEventEvent event, Emitter emit) async {
@@ -117,6 +118,24 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     try {
       final useCase = await getIt.getAsync<EventUseCase>();
       await useCase.joinEvent(event.eventId, event.userId);
+
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+
+      if (e.toString().contains(MessageCode.eventNotFound)) {
+        showCustomToast(intl.eventNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onAddMembersToEvent(AddMembersToEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<EventUseCase>();
+      await useCase.addMembersToEvent(event.eventId, event.memberIds);
 
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);

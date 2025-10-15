@@ -32,4 +32,6 @@ abstract class EventRepository {
     String orderBy = "name",
     String sortType = "asc",
   });
+
+  Future<void> addMembersToEvent(String eventId, List<String> userIds);
 }

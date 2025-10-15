@@ -116,6 +116,7 @@ class _FriendPageState extends State<FriendPage> {
                 );
               },
             ),
+           
           ],
         ),
       ),
@@ -237,7 +238,7 @@ class _FriendPageState extends State<FriendPage> {
         ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
             itemCount: friends?.length != null
               ? (friends!.length + (hasMore ? 1 : 0))
               : 0,
@@ -265,6 +266,7 @@ class _FriendPageState extends State<FriendPage> {
             );
           },
         ),
+      
       ],
     );
   }

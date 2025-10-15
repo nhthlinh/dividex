@@ -9,6 +9,7 @@ class FriendModel {
   final String? friendshipUid;
   final String? messageRequest;
   final FriendStatus? status;
+  final DateTime? startedAt;
   final String? info;
 
   FriendModel({
@@ -19,6 +20,7 @@ class FriendModel {
     this.messageRequest,
     this.status,
     this.info,
+    this.startedAt,
   });
 
   factory FriendModel.fromJson(Map<String, dynamic> json) {
@@ -33,11 +35,16 @@ class FriendModel {
       status: json['status'] == 'ACCEPTED'
           ? FriendStatus.accepted
           : json['status'] == 'PENDING'
-            ? FriendStatus.pending
-            : json['status'] == 'RESPONSE'
-              ? FriendStatus.response
-              : FriendStatus.none,
+          ? FriendStatus.pending
+          : json['status'] == 'RESPONSE'
+          ? FriendStatus.response
+          : FriendStatus.none,
       info: json['info'] as String?,
+      startedAt: json['start'] == null
+          ? json['date_joined'] == null
+              ? null
+              : DateTime.parse(json['date_joined'] as String)
+          : DateTime.parse(json['start'] as String),
     );
   }
 
@@ -51,10 +58,10 @@ class FriendModel {
       'status': status == FriendStatus.accepted
           ? 'ACCEPTED'
           : status == FriendStatus.pending
-            ? 'PENDING'
-            : status == FriendStatus.response
-              ? 'RESPONSE'
-              : 'NONE',
+          ? 'PENDING'
+          : status == FriendStatus.response
+          ? 'RESPONSE'
+          : 'NONE',
       'info': info,
     };
   }
