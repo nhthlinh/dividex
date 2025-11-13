@@ -54,4 +54,32 @@ class ImageRemoteDatasourceImpl implements ImageRemoteDataSource {
       );
     });
   }
+
+  @override
+  Future<List<ImagePresignUrlResponseModel>> updateImages(List<ImagePresignUrlInputModel> newFiles, List<String> deletedImageUids) {
+    return apiCallWrapper(() async {
+      final response = await dio.put(
+        '/attachments/image',
+        data: {
+          'files': newFiles.map((e) => e.toJson()).toList(),
+          'list_deleted_uids': deletedImageUids,
+        },
+      );
+
+      final data = response.data['data'] as List;
+      return data.map((e) => ImagePresignUrlResponseModel.fromJson(e)).toList();
+    });
+  }
+
+  @override
+  Future<void> deleteImages(List<String> deletedImageUids) {
+    return apiCallWrapper(() async {
+      await dio.delete(
+        '/attachments',
+        data: {
+          'list_uids': deletedImageUids,
+        },
+      );
+    });
+  }
 }

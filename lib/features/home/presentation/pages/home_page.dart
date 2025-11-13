@@ -116,7 +116,20 @@ class _HomePageState extends State<HomePage> {
             height: 28,
           ),
           label: intl.transactionReport,
-          onTap: () {},
+          onTap: () {
+            context.pushNamed(AppRouteNames.transactionReport);
+          },
+        ),
+        ButtonItem(
+          icon: Image.asset(
+            'lib/assets/icons/wallet_report.png',
+            width: 28,
+            height: 28,
+          ),
+          label: intl.walletReport,
+          onTap: () {
+            context.pushNamed(AppRouteNames.walletReport);
+          },
         ),
       ],
     );

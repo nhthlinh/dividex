@@ -84,6 +84,7 @@ class FriendBloc extends Bloc<FriendEvent, FriendState> {
     on<SendFriendRequestEvent>(_onSendFriendRequest);
     on<AcceptFriendRequestEvent>(_onAcceptFriendRequest);
     on<DeclineFriendRequestEvent>(_onDeclineFriendRequest);
+    on<GetFriendOverviewEvent>(_onGetFriendOverview);
   }
 
   Future _onSendFriendRequest(SendFriendRequestEvent event, Emitter emit) async {
@@ -141,4 +142,93 @@ class FriendBloc extends Bloc<FriendEvent, FriendState> {
     }
   }
 
+  Future _onGetFriendOverview(GetFriendOverviewEvent event, Emitter emit) async {
+    if (state is FriendOverviewState && (state as FriendOverviewState).isLoading) return;
+
+    try {
+      emit(FriendOverviewState(isLoading: true, overview: null));
+
+      final useCase = await getIt.getAsync<FriendUseCase>();
+      final overview = await useCase.getFriendOverview(event.friendId);
+
+      emit(FriendOverviewState(isLoading: false, overview: overview));
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+      emit(FriendOverviewState(isLoading: false, overview: null));
+    }
+  }
 }
+
+
+class LoadFriendDeptBloc extends Bloc<LoadFriendEvent, LoadFriendDeptState> {
+  LoadFriendDeptBloc() : super((const LoadFriendDeptState())) {
+    on<InitialEvent>(_onInitial);
+    on<LoadMoreFriendsEvent>(_onLoadMoreFriends);
+    on<RefreshFriendsEvent>(_onRefreshFriends);
+  }
+
+  Future _onInitial(InitialEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<FriendUseCase>();
+
+      final friends = await useCase.getFriendDepts(event.id ?? '', 1, 5);
+
+      emit(
+        state.copyWith(
+          page: friends.page,
+          totalPage: friends.totalPage,
+          depts: friends.data,
+          totalItems: friends.totalItems,
+          isLoading: false,
+        ),
+      );
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future _onLoadMoreFriends(LoadMoreFriendsEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<FriendUseCase>();
+      final friends = await useCase.getFriendDepts(event.id ?? '', state.page + 1, 5);
+      emit(
+        state.copyWith(
+          page: friends.page,
+          totalPage: friends.totalPage,
+          totalItems: friends.totalItems,
+          depts: [...state.depts, ...friends.data],
+        ),
+      );
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future _onRefreshFriends(RefreshFriendsEvent event, Emitter emit) async {
+    if (state.isLoading) return;
+
+    try {
+      emit(state.copyWith(isLoading: true));
+
+      final useCase = await getIt.getAsync<FriendUseCase>();
+      final friends = await useCase.getFriendDepts(event.id ?? '', 1, 5);
+
+      emit(
+        state.copyWith(
+          page: friends.page,
+          totalPage: friends.totalPage,
+          depts: friends.data,
+          totalItems: friends.totalItems,
+          isLoading: false,
+        ),
+      );
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+}
+

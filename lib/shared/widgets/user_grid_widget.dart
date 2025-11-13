@@ -1,3 +1,4 @@
+import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -26,23 +27,31 @@ class _SquareIconUserState extends State<SquareIconUser> {
 
   @override
   Widget build(BuildContext context) {
+    Color? backgroundColor = widget.backgroundColor;
+
     if (isSelected) {
       return const SizedBox.shrink();
     }
     return InkWell(
       onTap: () {
-        setState(() {
-          isSelected = true;
-        });
-        if (widget.onTap != null) {
-          widget.onTap!();
+        if (widget.isSelectable) {
+          setState(() {
+            isSelected = true;
+          });
+          if (widget.onTap != null) {
+            widget.onTap!();
+          }
+        } else {
+          setState(() {
+            backgroundColor = AppThemes.primary4Color;
+          });
         }
       },
       child: SizedBox(
         width: widget.size,
         height: widget.size + 20,
         child: Material(
-          color: widget.backgroundColor ?? Colors.transparent,
+          color: backgroundColor ?? Colors.transparent,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: BoxDecoration(
@@ -84,7 +93,9 @@ class _SquareIconUserState extends State<SquareIconUser> {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: widget.backgroundColor != null ? Colors.white : Colors.black,
+                          color: widget.backgroundColor != null
+                              ? Colors.white
+                              : Colors.black,
                         ),
                       ),
                     ),

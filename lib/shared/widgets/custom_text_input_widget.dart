@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:flutter/services.dart';
 
 enum InputType {
   text,
@@ -31,6 +32,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
   final Widget? suffixIcon; // Icon ở cuối
   final ValueChanged<String>? onChanged; // Hàm khi nội dung thay đổi
   final VoidCallback? onTap; // Hàm khi nhấn vào ô input
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextInputWidget({
     super.key,
@@ -48,6 +50,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
     this.isRequired = false,
     this.obscureText = false,
     this.onTap,
+    this.inputFormatters,
   });
 
   @override
@@ -111,6 +114,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
+            inputFormatters: inputFormatters,
           ),
           const SizedBox(height: 6),
         ],

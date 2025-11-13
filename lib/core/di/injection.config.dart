@@ -73,6 +73,15 @@ import 'package:Dividex/features/image/data/source/image_remote_data_source_impl
     as _i41;
 import 'package:Dividex/features/image/domain/image_repository.dart' as _i306;
 import 'package:Dividex/features/image/domain/usecase.dart' as _i111;
+import 'package:Dividex/features/recharge/data/repositories/recharge_repository_impl.dart'
+    as _i210;
+import 'package:Dividex/features/recharge/data/source/recharge_remote_data_source.dart'
+    as _i134;
+import 'package:Dividex/features/recharge/data/source/recharge_remote_data_source_impl.dart'
+    as _i209;
+import 'package:Dividex/features/recharge/domain/recharge_repository.dart'
+    as _i778;
+import 'package:Dividex/features/recharge/domain/usecase.dart' as _i115;
 import 'package:Dividex/features/user/data/repositories/user_repository_impl.dart'
     as _i979;
 import 'package:Dividex/features/user/data/source/user_remote_datasource.dart'
@@ -157,6 +166,10 @@ extension GetItInjectableX on _i174.GetIt {
       () async =>
           _i1037.EventRemoteDataSourceImpl(await getAsync<_i305.DioClient>()),
     );
+    gh.factoryAsync<_i134.RechargeRemoteDataSource>(
+      () async =>
+          _i209.RechargeRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
+    );
     gh.factoryAsync<_i947.ExpenseRemoteDataSource>(
       () async =>
           _i109.ExpenseRemoteDataSourceImpl(await getAsync<_i305.DioClient>()),
@@ -176,6 +189,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i111.ImageUseCase>(
       () async => _i111.ImageUseCase(
         imageRepository: await getAsync<_i306.ImageRepository>(),
+      ),
+    );
+    gh.factoryAsync<_i778.RechargeRepository>(
+      () async => _i210.RechargeRepositoryImpl(
+        await getAsync<_i134.RechargeRemoteDataSource>(),
       ),
     );
     gh.factoryAsync<_i635.UserRepository>(
@@ -208,6 +226,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i264.AccountUseCase>(
       () async =>
           _i264.AccountUseCase(await getAsync<_i525.AccountRepository>()),
+    );
+    gh.factoryAsync<_i115.RechargeUseCase>(
+      () async => _i115.RechargeUseCase(
+        rechargeRepository: await getAsync<_i778.RechargeRepository>(),
+      ),
     );
     gh.factoryAsync<_i140.EventUseCase>(
       () async => _i140.EventUseCase(await getAsync<_i720.EventRepository>()),

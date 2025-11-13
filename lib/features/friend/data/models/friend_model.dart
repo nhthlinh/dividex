@@ -1,4 +1,5 @@
 import 'package:Dividex/features/image/data/models/image_model.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
 
 enum FriendStatus { none, response, pending, accepted }
 
@@ -64,5 +65,42 @@ class FriendModel {
           : 'NONE',
       'info': info,
     };
+  }
+}
+
+class FriendOverviewModel {
+  final UserModel friend;
+  final String? message;
+  final String? status;
+  final String? friendshipUid;
+  final int mutualGroups;
+  final int sharedEvents;
+  final int sharedExpenses;
+  final double totalDebt;
+
+  FriendOverviewModel({
+    required this.friend,
+    this.message,
+    this.status,
+    this.friendshipUid,
+    required this.mutualGroups,
+    required this.sharedEvents,
+    required this.sharedExpenses,
+    required this.totalDebt,
+  });
+
+  factory FriendOverviewModel.fromJson(Map<String, dynamic> json) {
+    return FriendOverviewModel(
+      friend: UserModel.fromJson(json['friend'] as Map<String, dynamic>),
+      message: json['message'] as String?,
+      status: json['status'] as String?,
+      friendshipUid: json['friendship_uid'] as String?,
+      mutualGroups: json['mutual_groups'] ?? 0,
+      sharedEvents: json['shared_events'] ?? 0,
+      sharedExpenses: json['shared_expenses'] ?? 0,
+      totalDebt: (json['total_debt'] != null)
+          ? double.tryParse(json['total_debt'].toString()) ?? 0.0
+          : 0.0,
+    );
   }
 }

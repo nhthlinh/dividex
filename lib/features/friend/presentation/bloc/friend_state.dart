@@ -1,3 +1,4 @@
+import 'package:Dividex/features/friend/data/models/friend_dept.dart';
 import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -36,7 +37,6 @@ class LoadedFriendsState extends Equatable {
   }
 }
 
-class FriendState {}
 
 class LoadedFriendRequestsState extends Equatable {
   const LoadedFriendRequestsState({
@@ -80,3 +80,73 @@ class LoadedFriendRequestsState extends Equatable {
     );
   }
 }
+
+class FriendState extends Equatable {
+  const FriendState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class FriendOverviewState extends FriendState {
+  final bool isLoading;
+  final FriendOverviewModel? overview;
+  final String? error;
+
+  const FriendOverviewState({
+    this.isLoading = false,
+    this.overview,
+    this.error,
+  });
+
+  @override
+  List<Object?> get props => [isLoading, overview, error];
+
+  FriendOverviewState copyWith({
+    bool? isLoading,
+    FriendOverviewModel? overview,
+    String? error,
+  }) {
+    return FriendOverviewState(
+      isLoading: isLoading ?? this.isLoading,
+      overview: overview ?? this.overview,
+      error: error ?? this.error,
+    );
+  }
+}
+
+class LoadFriendDeptState extends Equatable {
+  const LoadFriendDeptState({
+    this.isLoading = true,
+    this.page = 1,
+    this.totalPage = 0,
+    this.totalItems = 0, 
+    this.depts = const [],
+  });
+
+  final bool isLoading;
+  final int page;
+  final int totalPage;
+  final int totalItems;
+  final List<FriendDept> depts;
+
+  @override
+  List<Object?> get props => [isLoading, page, totalPage, totalItems, depts];
+
+  LoadFriendDeptState copyWith({
+    bool? isLoading,
+    int? page,
+    int? totalPage,
+    int? totalItems,
+    List<FriendDept>? depts,
+  }) {
+    return LoadFriendDeptState(
+      isLoading: isLoading ?? this.isLoading,
+      page: page ?? this.page,
+      totalPage: totalPage ?? this.totalPage,
+      depts: depts ?? this.depts,
+      totalItems: totalItems ?? this.totalItems,
+    );
+  }
+}
+

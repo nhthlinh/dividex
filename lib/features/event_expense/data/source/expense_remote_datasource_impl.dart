@@ -1,13 +1,14 @@
-import 'dart:math';
-
 import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/data/source/expense_remote_datasource.dart';
 import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
+import 'package:Dividex/features/group/domain/usecase.dart';
+import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 
 @Injectable(as: ExpenseRemoteDataSource)
 class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
@@ -26,7 +27,7 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
     String? note,
     String? expenseDate,
     String? remindAt,
-    SplitTypeEnum splitType, 
+    SplitTypeEnum splitType,
     List<UserDebt> userDebts,
   ) async {
     return apiCallWrapper(() async {
@@ -46,7 +47,7 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
           'list_expense_member': userDebts.map((e) => e.toJson()).toList(),
         },
       );
-      
+
       return response.data['data']['uid'] as String;
     });
   }
@@ -60,12 +61,53 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
     return apiCallWrapper(() async {
       final response = await dio.get(
         '/list-expenses/$eventId/event',
-        queryParameters: {'page': page, 'page_size': pageSize},
+        queryParameters: {
+          'page': page,
+          'page_size': pageSize,
+          'status': 'ACTIVE',
+        },
       );
       return PagingModel.fromJson(
         response.data,
         (data) => (data['content'] as List)
             .map((item) => ExpenseModel.fromJson(item))
+            .toList(),
+      );
+    });
+  }
+
+  @override
+  Future<PagingModel<List<ExpenseModel>>> listAllExpenses(
+    int page,
+    int pageSize,
+    ExpenseFilterArguments? filter,
+  ) async {
+    return apiCallWrapper(() async {
+      final queryParams = {
+        'page': page,
+        'page_size': pageSize,
+        if (filter?.status != null) 'status': filter!.status!.name else 'status': 'ACTIVE',
+        if (filter?.start != null) 'start': filter!.start!.toIso8601String(),
+        if (filter?.end != null) 'end': filter!.end!.toIso8601String(),
+        if (filter?.minAmount != null) 'min_amount': filter!.minAmount,
+        if (filter?.maxAmount != null) 'max_amount': filter!.maxAmount,
+        if (filter?.eventId?.isNotEmpty ?? false)
+          'event_id': filter!.eventId,
+        if (filter?.groupId?.isNotEmpty ?? false)
+          'group_id': filter!.groupId,
+        if (filter?.category?.isNotEmpty ?? false) 'category': filter!.category,
+        if (filter?.name?.isNotEmpty ?? false) 'name': filter!.name,
+      };
+
+      final response = await dio.get(
+        '/list-expenses/transaction',
+        queryParameters: queryParams,
+      );
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => (jsonList['content'] as List)
+            .map((item) => ExpenseModel.fromListExpenseInGroupJson(item))
             .toList(),
       );
     });
@@ -99,23 +141,31 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
   @override
   Future<void> updateExpense(ExpenseModel expense) async {
     return apiCallWrapper(() async {
+      final formattedDate = expense.expenseDate != null
+          ? DateFormat("yyyy-MM-dd HH:mm").format(expense.expenseDate!)
+          : null;
+      final formattedRemindAt = expense.remindAt != null
+          ? DateFormat("yyyy-MM-dd HH:mm").format(expense.remindAt!)
+          : null;
       await dio.put(
         '/expenses/${expense.id}',
         data: {
           'name': expense.name,
           'total_amount': expense.totalAmount,
-          'currency': expense.currency,
+          'currency': expense.currency?.code,
           'category': expense.category,
           if (expense.paidBy != null) 'paid_by': expense.paidBy!,
           if (expense.note != null) 'note': expense.note,
-          if (expense.expenseDate != null) 'expense_date': expense.expenseDate,
-          if (expense.remindAt != null) 'remind_at': expense.remindAt,
+          if (formattedDate != null) 'expense_date': formattedDate,
+          if (formattedRemindAt != null) 'end_date': formattedRemindAt,
           'split_type': expense.splitType
               .toString()
               .split('.')
               .last
               .toUpperCase(),
-          'user_debts': expense.userDebts?.map((e) => e.toJson()).toList(),
+          'list_expense_member': expense.userDebts
+              ?.map((e) => e.toJson())
+              .toList(),
         },
       );
     });
@@ -147,6 +197,22 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
   Future<void> restoreExpense(String id) async {
     return apiCallWrapper(() {
       return dio.put('/expenses/$id/restore');
+    });
+  }
+
+  @override
+  Future<List<CustomBarChartData>> getBarChartData(int year) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get(
+        '/list-expenses/transaction-chart',
+        queryParameters: {'year': year},
+      );
+      if (response.data['data'] == null) {
+        return [];
+      }
+      return (response.data['data'] as List)
+          .map((item) => CustomBarChartData.fromJson(item))
+          .toList();
     });
   }
 }

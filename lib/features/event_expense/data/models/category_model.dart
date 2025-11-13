@@ -24,6 +24,33 @@ class CategoryModel {
         CategoryModel(id: '10', key: 'miscellaneous'),
       ];
 
+  String getImage() {
+    switch (key) {
+      case 'food':
+        return 'lib/assets/category/food.png';
+      case 'transportation':
+        return 'lib/assets/category/transportation.png';
+      case 'utilities':
+        return 'lib/assets/category/utilities.png';
+      case 'entertainment':
+        return 'lib/assets/category/entertainment.png';
+      case 'housing':
+        return 'lib/assets/category/housing.png';
+      case 'healthcare':
+        return 'lib/assets/category/healthcare.png';
+      case 'shopping':
+        return 'lib/assets/category/shopping.png';
+      case 'education':
+        return 'lib/assets/category/education.png';
+      case 'savings':
+        return 'lib/assets/category/savings.png';
+      case 'miscellaneous':
+        return 'lib/assets/category/miscellaneous.png';
+      default:
+        return 'lib/assets/category/miscellaneous.png'; // fallback
+    }
+  }
+
   String localizedName(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
 
@@ -58,3 +85,12 @@ class CategoryModel {
     return key;
   }
 }
+
+
+  CategoryModel? getCategoryByKey(String key) {
+    try {
+      return CategoryModel.categories.firstWhere((category) => category.key == key);
+    } catch (e) {
+      return null;
+    }
+  }

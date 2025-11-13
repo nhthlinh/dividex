@@ -22,7 +22,7 @@ class InfoCard extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 340),
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
+          margin: const EdgeInsets.only(top: 4, bottom: 8),
         
           child: InkWell(
             onTap: onTap,

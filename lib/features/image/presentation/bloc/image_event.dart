@@ -24,3 +24,16 @@ class CompleteUploadEvent extends ImageEvent {
 
   CompleteUploadEvent({required this.instanceUid, required this.fileUids});
 }
+
+class UpdateImageEvent extends ImageEvent {
+  final List<ImagePresignUrlInputModel> newFiles;
+  final List<String> deletedImageUids;
+
+  UpdateImageEvent({required this.newFiles, required this.deletedImageUids});
+}
+
+class DeleteImageEvent extends ImageEvent {
+  final List<String> deletedImageUids;
+
+  DeleteImageEvent({required this.deletedImageUids});
+}

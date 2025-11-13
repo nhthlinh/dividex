@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
@@ -12,7 +14,9 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
 import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
+import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -29,6 +33,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     on<SoftDeleteExpenseEvent>(_onSoftDeleteEvent);
     on<HardDeleteExpenseEvent>(_onHardDeleteEvent);
     on<GetExpenseDetail>(_onGetExpenseDetailEvent);
+    on<RestoreExpenseEvent>(_onRestoreExpenseEvent);
+    on<GetBarChartData>(_onGetBarChartDataEvent);
   }
 
   Future _onCreateEvent(CreateExpenseEvent event, Emitter emit) async {
@@ -164,6 +170,38 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       }
     }
   }
+
+  Future _onRestoreExpenseEvent(RestoreExpenseEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<ExpenseUseCase>();
+      await useCase.restoreExpense(event.expenseId);
+
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+
+      if (e.toString().contains(MessageCode.updateIsDenied)) {
+        showCustomToast(intl.updateIsDenied, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.expenseNotFound)) {
+        showCustomToast(intl.expenseNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onGetBarChartDataEvent(GetBarChartData event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<ExpenseUseCase>();
+      final data = await useCase.getBarChartData(event.year);
+
+      emit(ExpenseBarChartData(data: data));
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
 }
 
 class ExpenseDataBloc extends Bloc<ExpenseEvent, ExpenseDataState> {
@@ -173,22 +211,47 @@ class ExpenseDataBloc extends Bloc<ExpenseEvent, ExpenseDataState> {
     on<RefreshExpenses>(_onRefreshExpenses);
   }
 
+  Future<PagingModel<List<ExpenseModel>>> getExpenses(
+    String id,
+    int page,
+    int pageSize,
+    LoadExpenseType type,
+    ExpenseStatusEnum? status,
+  ) async {
+    switch (type) {
+      case LoadExpenseType.group:
+        final useCase = await getIt.getAsync<ExpenseUseCase>();
+        return await useCase.listExpensesInGroup(id, page, pageSize, status!);
+      case LoadExpenseType.event:
+        final useCase = await getIt.getAsync<ExpenseUseCase>();
+        return await useCase.listExpensesInEvent(id, page, pageSize);
+      case LoadExpenseType.hasBeenDeleted:
+        final useCase = await getIt.getAsync<ExpenseUseCase>();
+        return await useCase.listExpensesInGroup(
+          id,
+          page,
+          pageSize,
+          ExpenseStatusEnum.deleted,
+        );
+      case LoadExpenseType.all:
+        final useCase = await getIt.getAsync<ExpenseUseCase>();
+        return await useCase.listAllExpenses(
+          page,
+          pageSize,
+          ExpenseFilterArguments(),
+        );
+    }
+  }
+
   Future _onInitialEvent(InitialEvent event, Emitter emit) async {
     try {
-      final useCase = await getIt.getAsync<ExpenseUseCase>();
-      final expenses = event.type == LoadExpenseType.group
-          ? await useCase.listExpensesInGroup(
-              event.id,
-              event.page,
-              event.pageSize,
-              event.status!,
-            )
-          : await useCase.listExpensesInEvent(
-              event.id,
-              event.page,
-              event.pageSize,
-            );
-
+      final expenses = await getExpenses(
+        event.id,
+        event.page,
+        event.pageSize,
+        event.type,
+        event.status,
+      );
       emit(
         state.copyWith(
           page: expenses.page,
@@ -279,19 +342,13 @@ class ExpenseDataBloc extends Bloc<ExpenseEvent, ExpenseDataState> {
 
   Future _onLoadMoreExpenses(LoadMoreExpenses event, Emitter emit) async {
     try {
-      final useCase = await getIt.getAsync<ExpenseUseCase>();
-      final expenses = event.type == LoadExpenseType.group
-          ? await useCase.listExpensesInGroup(
-              event.id,
-              event.page,
-              event.pageSize,
-              event.status!,
-            )
-          : await useCase.listExpensesInEvent(
-              event.id,
-              event.page,
-              event.pageSize,
-            );
+      final expenses = await getExpenses(
+        event.id,
+        event.page,
+        event.pageSize,
+        event.type,
+        event.status,
+      );
 
       emit(
         state.copyWith(
@@ -313,19 +370,13 @@ class ExpenseDataBloc extends Bloc<ExpenseEvent, ExpenseDataState> {
     try {
       emit(state.copyWith(isLoading: true));
 
-      final useCase = await getIt.getAsync<ExpenseUseCase>();
-      final expenses = event.type == LoadExpenseType.group
-          ? await useCase.listExpensesInGroup(
-              event.id,
-              event.page,
-              event.pageSize,
-              event.status!,
-            )
-          : await useCase.listExpensesInEvent(
-              event.id,
-              event.page,
-              event.pageSize,
-            );
+      final expenses = await getExpenses(
+        event.id,
+        event.page,
+        event.pageSize,
+        event.type,
+        event.status,
+      );
 
       emit(
         state.copyWith(

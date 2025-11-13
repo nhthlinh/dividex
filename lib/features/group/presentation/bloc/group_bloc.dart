@@ -139,15 +139,28 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
         groupId: event.groupId,
         name: event.name,
         addMemberIds: event.memberIdsAdd,
-        deleteMemberIds: event.memberIdsRemove
+        deleteMemberIds: event.memberIdsRemove,
       );
+
+      if (event.avatar != null && event.deletedAvatarUid != null) {
+        updateImage(
+          groupId,
+          [event.avatar!],
+          AttachmentType.group,
+          [event.deletedAvatarUid!],
+        );
+      } else if (event.avatar == null && event.deletedAvatarUid != null) {
+        deleteImage([event.deletedAvatarUid!]);
+      } else if (event.avatar != null && event.deletedAvatarUid == null) {
+        uploadImage(
+          groupId,
+          [event.avatar!],
+          AttachmentType.group,
+        );
+      }
 
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);
-
-      // if (event.avatar != null) {
-      //   uploadImage(groupId, [event.avatar!], AttachmentType.group);
-      // }
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       if (e.toString().contains(MessageCode.userNotFound)) {
@@ -158,13 +171,13 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
     }
   }
 
-  Future _onUpdateGroupLeader(UpdateGroupLeaderEvent event, Emitter emit) async {
+  Future _onUpdateGroupLeader(
+    UpdateGroupLeaderEvent event,
+    Emitter emit,
+  ) async {
     try {
       final useCase = await getIt.getAsync<GroupUseCase>();
-      await useCase.updateGroupLeader(
-        event.groupId,
-        event.newLeaderId,
-      );
+      await useCase.updateGroupLeader(event.groupId, event.newLeaderId);
 
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);
@@ -221,9 +234,12 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
   Future _onGetGroupDetail(GetGroupDetailEvent event, Emitter emit) async {
     try {
       final useCase = await getIt.getAsync<GroupUseCase>();
-      final group = await useCase.getGroupDetail(event.groupId);
+      final results = await Future.wait([
+        useCase.getGroupDetail(event.groupId),
+        useCase.getBarChartData(event.groupId, event.year),
+      ]);
 
-      emit(GroupDetailState(groupDetail: group));
+      emit(GroupDetailState(groupDetail: results[0] as GroupModel?, barChartData: results[1] as List<CustomBarChartData>?));
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       if (e.toString().contains(MessageCode.groupNotFound)) {
@@ -236,16 +252,19 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
 
   Future _onGetGroupReport(GetGroupReportEvent event, Emitter emit) async {
     try {
-        final useCase = await getIt.getAsync<GroupUseCase>();
-        final results = await Future.wait([
-          useCase.getGroupReport(event.groupId),
-          useCase.getChartData(event.groupId),
-        ]);
-
-        emit(GroupReportState(
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      final results = await Future.wait([
+        useCase.getGroupReport(event.groupId),
+        useCase.getChartData(event.groupId),
+      ]);
+      final group = await useCase.getGroupDetail(event.groupId);
+      emit( 
+        GroupReportState(
           groupReport: results[0] as GroupModel?,
+          groupDetail: group,
           chartData: results[1] as List<ChartData>?,
-        ));
+        ),
+      );
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       if (e.toString().contains(MessageCode.groupNotFound)) {
@@ -275,7 +294,6 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
   //     }
   //   }
   // }
-
 }
 
 class LoadedGroupsEventsBloc

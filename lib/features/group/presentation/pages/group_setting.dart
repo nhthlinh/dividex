@@ -7,6 +7,11 @@ import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart'
     as group_bloc;
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
     as group_event;
+import 'package:Dividex/features/image/data/models/image_model.dart';
+import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
+import 'package:Dividex/features/image/presentation/bloc/image_state.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_update_delete_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
@@ -19,6 +24,7 @@ import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -28,7 +34,7 @@ class GroupSettingPage extends StatefulWidget {
   final String groupId;
   final String groupLeaderId;
   final String groupName;
-  final String groupAvatarUrl;
+  final ImageModel? groupAvatarUrl;
   const GroupSettingPage({
     super.key,
     required this.groupId,
@@ -53,6 +59,9 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
 
   // Xóa
   List<String> selectedUserIdsToDelete = [];
+
+  List<ImageModel> deletedImages = [];
+  List<Uint8List> updatedImages = [];
 
   UserModel? leader;
 
@@ -200,6 +209,8 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
           name: controller.text,
           memberIdsAdd: selectedUserIdsToAdd,
           memberIdsRemove: confirmedDeletes,
+          avatar: updatedImages.isNotEmpty ? updatedImages[0] : null,
+          deletedAvatarUid: deletedImages.isNotEmpty ? deletedImages[0].uid : null
         ),
       );
 
@@ -226,6 +237,50 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: InkWell(
+                onTap: () {
+                  context.pushNamed(
+                  AppRouteNames.listExpenseDeleted,
+                  pathParameters: {
+                    'groupId': widget.groupId,
+                  },
+                  extra: {
+                    'groupName': widget.groupName,
+                    'groupAvatarUrl': widget.groupAvatarUrl?.publicUrl ?? '',
+                  },
+                );
+                },
+                child: Row(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          intl.deleteExpense,
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(
+                                fontSize: 12,
+                                letterSpacing: 0,
+                                height: 16 / 12,
+                                color: Colors.grey,
+                              ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                        color: Colors.grey[400],
+                      ),
+                    ],
+                  ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+                  
+
             ContentCard(
               child: Column(
                 children: [
@@ -238,6 +293,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       ),
                     ),
                   ),
+                  
                   const SizedBox(height: 8),
                   const Divider(
                     height: 1,
@@ -357,31 +413,55 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       color: AppThemes.borderColor,
                     ),
                     const SizedBox(height: 16),
-                    Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            intl.addGroupImageLabel,
-                            style: Theme.of(context).textTheme.titleSmall
-                                ?.copyWith(
-                                  fontSize: 12,
-                                  letterSpacing: 0,
-                                  height: 16 / 12,
-                                  color: Colors.grey,
-                                ),
-                          ),
-                        ),
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundImage: widget.groupAvatarUrl == ''
-                              ? NetworkImage(
-                                  'https://ui-avatars.com/api/?name=${Uri.encodeComponent(widget.groupName)}&background=random&color=fff&size=128',
-                                )
-                              : NetworkImage(widget.groupAvatarUrl),
-                        ),
-                      ],
+
+                    // Column(
+                    //   children: [
+                    //     Align(
+                    //       alignment: Alignment.centerLeft,
+                    //       child: Text(
+                    //         intl.addGroupImageLabel,
+                    //         style: Theme.of(context).textTheme.titleSmall
+                    //             ?.copyWith(
+                    //               fontSize: 12,
+                    //               letterSpacing: 0,
+                    //               height: 16 / 12,
+                    //               color: Colors.grey,
+                    //             ),
+                    //       ),
+                    //     ),
+                    //     CircleAvatar(
+                    //       radius: 40,
+                    //       backgroundImage: widget.groupAvatarUrl == ''
+                    //           ? NetworkImage(
+                    //               'https://ui-avatars.com/api/?name=${Uri.encodeComponent(widget.groupName)}&background=random&color=fff&size=128',
+                    //             )
+                    //           : NetworkImage(widget.groupAvatarUrl),
+                    //     ),
+                    //   ],
+                    // ),
+                    BlocProvider(
+                      create: (context) => ImageBloc(),
+                      child: BlocBuilder<ImageBloc, ImageState>(
+                        builder: (context, state) {
+                          return ImageUpdateDeleteWidget(
+                            label: intl.addGroupImageLabel,
+                            nameForExampleImage: widget.groupName,
+                            isAvatar: true,
+                            type: PickerType.avatar,
+                            images: widget.groupAvatarUrl != null
+                                ? [widget.groupAvatarUrl!]
+                                : [],
+                            onFilesPicked: (List<Uint8List> files) {
+                              updatedImages = [files[0]];
+                            },
+                            onDelete: (image) {
+                              deletedImages = [image];
+                            },
+                          );
+                        },
+                      ),
                     ),
+                    
                     const SizedBox(height: 8),
                     CustomTextInputWidget(
                       size: TextInputSize.large,

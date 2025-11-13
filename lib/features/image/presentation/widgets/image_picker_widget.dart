@@ -74,23 +74,21 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   }
 
   Future<void> _editImage(int index) async {
-  final result = await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => SimpleImageEditorPage(
-        imageBytes: _previewFiles[index],
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            SimpleImageEditorPage(imageBytes: _previewFiles[index]),
       ),
-    ),
-  );
+    );
 
-  if (result != null && result is Uint8List) {
-    setState(() {
-      _previewFiles[index] = result;
-    });
-    widget.onFilesPicked(List<Uint8List>.from(_previewFiles));
+    if (result != null && result is Uint8List) {
+      setState(() {
+        _previewFiles[index] = result;
+      });
+      widget.onFilesPicked(List<Uint8List>.from(_previewFiles));
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -103,15 +101,24 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         children: [
           Text(
             intl.uploadImageHint,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppThemes.borderColor, fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: AppThemes.borderColor,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(height: 8),
-      
+
           // Upload button + status
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomButton(text: intl.chooseFile, onPressed: _pickFiles, type: ButtonType.secondary, size: ButtonSize.medium),
+              CustomButton(
+                text: intl.chooseFile,
+                onPressed: _pickFiles,
+                type: ButtonType.secondary,
+                size: ButtonSize.medium,
+              ),
               const SizedBox(width: 8),
               Text(
                 _previewFiles.isEmpty
@@ -121,7 +128,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             ],
           ),
           const SizedBox(height: 16),
-      
+
           // Preview
           if (_previewFiles.isEmpty)
             Container(
@@ -149,7 +156,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.close, color: AppThemes.borderColor),
+                        icon: const Icon(
+                          Icons.close,
+                          color: AppThemes.borderColor,
+                        ),
                         onPressed: () => _removeImage(0),
                       ),
                     ],
@@ -157,6 +167,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 ),
               ],
             )
+          
           else
             Wrap(
               spacing: 8,
@@ -179,7 +190,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                       child: Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.close, color: AppThemes.borderColor),
+                            icon: const Icon(
+                              Icons.close,
+                              color: AppThemes.borderColor,
+                            ),
                             onPressed: () => _removeImage(i),
                           ),
                         ],

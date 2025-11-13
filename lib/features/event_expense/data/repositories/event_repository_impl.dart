@@ -2,6 +2,7 @@ import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/event_expense/data/source/event_remote_datasource.dart';
 import 'package:Dividex/features/event_expense/domain/event_repository.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
+import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -83,5 +84,14 @@ class EventRepositoryImpl implements EventRepository {
   @override
   Future<void> addMembersToEvent(String eventId, List<String> userIds) async {
     return await remoteDataSource.addMembersToEvent(eventId, userIds);
+  }
+
+  @override
+  Future<List<ChartData>> getChartData(String eventId) async {
+    return await remoteDataSource.getChartData(eventId);
+  }
+  @override
+  Future<List<CustomBarChartData>> getBarChartData(String eventId, int year) async {
+    return await remoteDataSource.getBarChartData(eventId, year);
   }
 }

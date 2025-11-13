@@ -454,7 +454,7 @@
   "deleteConfirm1": "Bạn chỉ có thể xóa thành viên sau khi ",
   "deleteConfirm2": "tất cả nợ của thành viên đã được giải quyết.",
   "delete": "Xóa",
-  "from": "trong",
+  "from": "từ",
   "leaveIsDenied": "Tổng số dư không bằng 0, hãy giải quyết hết nợ trước khi rời nhóm",
   "overview": "Tổng quan",
 
@@ -481,7 +481,7 @@
   "confirm": "Xác nhận",
   "description": "Mô tả",
   "binLabel": "Nhập mã pin để xác nhận chuyển khoản",
-  "to": "đén",
+  "to": "đến",
   "youHaveSuccessfullyTransferred": "Bạn đã chuyển thành công",
   "transferSuccessful": "Chuyển tiền thành công",
   "youHaveSuccessfullyWithdraw": "Bạn đã rút thành công",
@@ -490,6 +490,72 @@
   "accountDeleted": "Xóa thông tin tài khoản thành công!",
   "accountUpdated": "Cập nhật thông tin tài khoản thành công!",
   "addNewAccount": "Thêm tài khoản mới",
-  "addAccountGuide": "Vui lòng nhập thông tin tài khoản ngân hàng của bạn tại đây nếu bạn muốn rút tiền về tài khoản cá nhân."
+  "addAccountGuide": "Vui lòng nhập thông tin tài khoản ngân hàng của bạn tại đây nếu bạn muốn rút tiền về tài khoản cá nhân.",
+  "rechargeIntoApp": "Nạp tiền vào Dividex",
+  "balance": "Số dư ví",
+  "showBalance": "Xem số dư",
+  "pleaseEnterAmount": "Nhập số tiền cần nạp",
+  "totalDebt": "Tổng nợ",
+  "sharedEvents": "Sự kiện cùng tham gia",
+  "mutualGroups": "Nhóm cùng tham gia",
+  "mutualFriends": "Bạn chung",
+  "seePhoto": "Xem ảnh",
+  "changePhoto": "Thay đổi ảnh",
+  "deletePhoto": "Xóa ảnh",
+  "eventAddMemberHint": "Bạn có thể thêm thành viên mới vào sự kiện qua",
+  "eventAddMembers": "Thêm thành viên (đã ở trong nhóm)",
+  "groupMember": "Thành viên",
+  "detail": "Chi tiết",
+  "settleUp": "Giải quyết",
+  "createDepositSuccess": "Thanh toán thành công",
+  "bank": "Ngân hàng",
+  "date": "Ngày thực hiện",
+  "code": "Mã",
+  "walletReport": "Báo cáo ví",
+  "netBalance": "Nợ",
+  "expenseDeleted": "Chi tiêu đã được xóa tạm thời, hãy khôi phục hoặc xóa hẳn trong cài đặt group",
+  "deleteDate": "Ngày xóa",
+  "restore": "Khôi phục",
+  "hardDelete": "Xóa hẳn",
+  "deleteExpense": "Xóa chi tiêu",
+  "profilePicture": "Ảnh đại diện",
+  "pinInputError1": "Vui lòng nhập mã PIN.",
+  "pinInputError2": "Mã PIN phải gồm 6 chữ số.",
+  "updatePin": "Cập nhật mã pin",
+  "currentPin": "Mã PIN hiện tại",
+  "newPin": "Mã PIN mới",
+  "confirmPin": "Xác nhận mã PIN",
+  "updatePinGuide": "Vui lòng nhập mã PIN hiện tại và đặt mã PIN mới gồm 6 chữ số. Mã pin dùng để xác thực giao dịch cho ứng dụng",
+  "fee": "Phí chuyển tiền",
+  "pinInvalid": "Mã pin không hợp lệ, kiểm tra lại trong cài đặt",
+  "realAmount": "Số tiền sau quy đổi",
+  "realAmountDescription": "Số tiền đã được quy đổi sang đơn vị tiền tệ đích.",
+
+  "originalAmount": "Số tiền gốc",
+  "originalAmountDescription": "Số tiền trước khi quy đổi.",
+  "confirmTransfer": "Xác nhận chuyển tiền",
+  "exchangeRateMessage": "Tỉ giá hiện tại: 1 {baseCurrency} = {rate} VND",
+  "convertedAmountMessage": "Số tiền quy đổi: {amount} VND",
+  "continueQuestion": "Bạn có muốn tiếp tục không?",
+
+  "toSettleUpDebtInGroup": " thông qua chuyển khoản trong app hoặc các phương pháp trả ngoài.",
+  "outSideTransfer": "Trả ngoài",
+  "pinNotSet": "Bạn chưa tạo mã pin để giao dịch",
+  "pinIncorrect": "Mã pin của bạn không chính xác",
+  "createPinGuide": "Vui lòng tạo mã PIN gồm 6 chữ số để bảo vệ tài khoản của bạn. Mã PIN này sẽ được dùng để đăng nhập hoặc xác nhận các thao tác quan trọng.",
+  "createPinTitle": "Tạo mã PIN",
+  "youBorrowed": "bạn mượn",
+  "youLent": "bạn cho mượn",
+  "year": "Năm",
+  "externalExpense": "Giao dịch nạp vào",
+  "internalExpense": "Giao dịch trong app"
+
+
+
+
+
+
+
+
 
 }

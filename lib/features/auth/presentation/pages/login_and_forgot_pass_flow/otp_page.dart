@@ -6,6 +6,7 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -15,6 +16,7 @@ import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 

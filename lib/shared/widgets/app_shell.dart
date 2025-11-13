@@ -105,7 +105,7 @@ class _AppShellState extends State<AppShell> {
                         _buildNavItem(context, 1, Icons.search, 'Search'),
                         const SizedBox(width: 60),
                         _buildNavItem(context, 2, Icons.mail_outline, 'Mail'),
-                        _buildNavItem(context, 3, Icons.settings, 'Settings'),
+                        _buildNavItem(context, 3, Icons.settings_outlined, 'Settings'),
                       ],
                     ),
                   ),

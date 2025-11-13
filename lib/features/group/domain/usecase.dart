@@ -10,25 +10,28 @@ class GroupUseCase {
 
   GroupUseCase(this.repository);
 
-  
   Future<String> createGroup({
     required String name,
     required List<String> memberIds,
   }) {
-    return repository.createGroup(
-      name: name,
-      memberIds: memberIds,
-    );
+    return repository.createGroup(name: name, memberIds: memberIds);
   }
 
-  Future<PagingModel<List<GroupModel>>> listGroups(int page, int pageSize, String searchQuery) {
+  Future<PagingModel<List<GroupModel>>> listGroups(
+    int page,
+    int pageSize,
+    String searchQuery,
+  ) {
     return repository.listGroups(page, pageSize, searchQuery);
   }
 
-  Future<PagingModel<List<GroupModel>>> listGroupsWithDetail(int page, int pageSize, String searchQuery) {
+  Future<PagingModel<List<GroupModel>>> listGroupsWithDetail(
+    int page,
+    int pageSize,
+    String searchQuery,
+  ) {
     return repository.listGroupsWithDetail(page, pageSize, searchQuery);
   }
-
 
   Future<GroupModel?> getGroupDetail(String groupId) {
     return repository.getGroupDetail(groupId);
@@ -42,7 +45,12 @@ class GroupUseCase {
     return repository.leaveGroup(groupId);
   }
 
-  Future<PagingModel<List<EventModel>>> listEvents(int page, int pageSize, String groupId, String searchQuery) {
+  Future<PagingModel<List<EventModel>>> listEvents(
+    int page,
+    int pageSize,
+    String groupId,
+    String searchQuery,
+  ) {
     return repository.listEvents(page, pageSize, groupId, searchQuery);
   }
 
@@ -71,21 +79,40 @@ class GroupUseCase {
   Future<List<ChartData>> getChartData(String groupId) async {
     return repository.getChartData(groupId);
   }
+
+  Future<List<CustomBarChartData>> getBarChartData(String groupId, int year) async {
+    return repository.getBarChartData(groupId, year);
+  }
 }
 
 class ChartData {
   final String fullName;
   final double value;
 
-  ChartData({
-    required this.fullName,
-    required this.value,
-  });
+  ChartData({required this.fullName, required this.value});
 
   factory ChartData.fromJson(Map<String, dynamic> json) {
     return ChartData(
       fullName: json['full_name'] as String,
-      value: double.tryParse((json['percent'] as String).replaceAll('%', '').trim())?.abs() ?? 0.0,
+      value:
+          double.tryParse(
+            (json['percent'] as String).replaceAll('%', '').trim(),
+          )?.abs() ??
+          0.0,
+    );
+  }
+}
+
+class CustomBarChartData {
+  final int month;
+  final double value;
+
+  CustomBarChartData({required this.month, required this.value});
+
+  factory CustomBarChartData.fromJson(Map<String, dynamic> json) {
+    return CustomBarChartData(
+      month: json['month'] as int,
+      value: (json['total_amount'] as num).toDouble(),
     );
   }
 }

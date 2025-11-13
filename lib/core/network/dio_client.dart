@@ -7,8 +7,8 @@ class DioClient {
 
   DioClient(this.dio);
 
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
-    return dio.get(path, queryParameters: queryParameters);
+  Future<Response> get(String path, {Map<String, dynamic>? queryParameters, dynamic data}) {
+    return dio.get(path, queryParameters: queryParameters, data: data);
   }
 
   Future<Response> post(String path, {dynamic data, Map<String, dynamic>? queryParameters}) {
@@ -39,9 +39,7 @@ Future<T> apiCallWrapper<T>(Future<T> Function() apiCall) async {
     } else {
       throw Exception('Network error: ${dioError.message}');
     }
-  } catch (e, stackTrace) {
-    print(e);
-    print(stackTrace);
+  } catch (e) {
     throw Exception('Unexpected error: $e');
   }
 }

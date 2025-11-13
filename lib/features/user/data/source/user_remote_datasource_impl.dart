@@ -2,7 +2,10 @@ import 'package:Dividex/core/network/dio_client.dart';
 
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/data/source/user_remote_datasource.dart';
+import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: UserRemoteDataSource)
@@ -104,4 +107,41 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
       }
     });
   }
+
+  @override
+  Future<UserModel> getMe() async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/auth/me');
+      return UserModel.fromJson(response.data['data']);
+    });
+  }
+
+  @override
+  Future<void> updateMe(String name, CurrencyEnum currency) async {
+    return apiCallWrapper(() async {
+      await dio.put('/auth/me', data: {
+        'full_name': name,
+      });
+    });
+  }
+
+  @override
+  Future<void> createPin(String pin) async {
+    return apiCallWrapper(() async {
+      await dio.post('/auth/pin', data: {
+        'pin': pin,
+      });
+    });
+  }
+
+  @override
+  Future<void> updatePin(String oldPin, String newPin) async {
+    return apiCallWrapper(() async {
+      await dio.put('/auth/pin', data: {
+        'old_pin': oldPin,
+        'new_pin': newPin,
+      });
+    });
+  }
+
 }

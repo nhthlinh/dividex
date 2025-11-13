@@ -1,4 +1,5 @@
 import 'package:Dividex/features/image/data/models/image_model.dart';
+import 'package:Dividex/shared/models/enum.dart';
 import 'package:hive/hive.dart';
 
 @HiveType(typeId: 3)
@@ -21,6 +22,9 @@ class UserLocalModel {
   @HiveField(5)
   final String? phoneNumber;
 
+  @HiveField(6)
+  final String? preferredCurrency;
+
   UserLocalModel({ 
     required this.id,
     required this.email,
@@ -28,7 +32,28 @@ class UserLocalModel {
     required this.avatarUrl,
     this.password,
     this.phoneNumber,
+    this.preferredCurrency,
   });
+
+  UserLocalModel copyWith({
+    String? id,
+    String? email,
+    String? fullName,
+    ImageModel? avatarUrl,
+    String? password,
+    String? phoneNumber,
+    String? preferredCurrency,
+  }) {
+    return UserLocalModel(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      fullName: fullName ?? this.fullName,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      password: password ?? this.password,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      preferredCurrency: preferredCurrency ?? this.preferredCurrency,
+    );
+  }
 }
 
 class UserLocalModelAdapter extends TypeAdapter<UserLocalModel> {
@@ -48,6 +73,7 @@ class UserLocalModelAdapter extends TypeAdapter<UserLocalModel> {
       avatarUrl: fields[3] as ImageModel?,
       password: fields[4] as String?,
       phoneNumber: fields[5] as String?,
+      preferredCurrency: fields[6] as String?,
     );
   }
 
@@ -66,6 +92,8 @@ class UserLocalModelAdapter extends TypeAdapter<UserLocalModel> {
       ..writeByte(4)
       ..write(obj.password)
       ..writeByte(5)
-      ..write(obj.phoneNumber);
+      ..write(obj.phoneNumber)
+      ..writeByte(6)
+      ..write(obj.preferredCurrency);
   }
 }

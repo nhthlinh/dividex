@@ -1,4 +1,5 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 enum FriendCardType { none, response, pending, acepted }
@@ -68,8 +70,9 @@ class _FriendCardState extends State<FriendCard> {
               ),
       ),
       onTap: () {
-        // Navigate to friend's profile
-        print('Navigate to ${widget.friend.fullName} profile');
+        context.pushNamed(AppRouteNames.friendProfile, pathParameters: {
+          'id': widget.friend.friendUid,
+        });
       },
       trailing: IconButton(
         icon: _buildTrailingIcon(intl),
@@ -107,7 +110,9 @@ class _FriendCardState extends State<FriendCard> {
   void _handleAction(BuildContext context, AppLocalizations intl) {
     switch (widget.type) {
       case FriendCardType.acepted:
-        // Navigate to friend's profile
+        context.pushNamed(AppRouteNames.friendProfile, pathParameters: {
+          'id': widget.friend.friendUid,
+        });
         break;
       case FriendCardType.none:
         if (widget.isSearchPage) {

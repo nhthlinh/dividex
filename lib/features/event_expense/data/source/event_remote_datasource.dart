@@ -1,5 +1,6 @@
 import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
+import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 
 abstract class EventRemoteDataSource {
@@ -34,4 +35,7 @@ abstract class EventRemoteDataSource {
   });
 
   Future<void> addMembersToEvent(String eventId, List<String> userIds);
+
+  Future<List<ChartData>> getChartData(String eventId);
+  Future<List<CustomBarChartData>> getBarChartData(String eventId, int year);
 }

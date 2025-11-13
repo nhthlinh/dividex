@@ -14,7 +14,9 @@ class UserDebt {
   factory UserDebt.fromJson(Map<String, dynamic> json) {
     return UserDebt(
       userId: json['user_uid'],
-      amount: (json['amount'] as num).toDouble(),
+      amount: json['amount'] is num
+        ? (json['amount'] as num).toDouble()
+        : double.tryParse(json['amount'].toString()) ?? 0.0,
     );
   }
 }
@@ -43,7 +45,10 @@ class UserDeptInfo {
             : null,
         id: json['uid'] as String?,
       ),
-      amount: (json['amount'] as num).toDouble(),
+      amount: json['amount'] is num
+        ? (json['amount'] as num).toDouble()
+        : double.tryParse(json['amount'].toString()) ?? 0.0,
+
     );
   }
 }

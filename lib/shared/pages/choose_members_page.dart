@@ -1,4 +1,5 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 
 class ChooseMembersPage extends StatefulWidget {
   final String? id;
@@ -20,6 +22,8 @@ class ChooseMembersPage extends StatefulWidget {
   final ValueChanged<List<UserModel>> onSelectedMembersChanged;
   final List<UserModel>? initialSelectedMembers;
   final bool isMultiSelect;
+  final bool isCanChooseMyself;
+
   const ChooseMembersPage({
     super.key,
     required this.type,
@@ -27,6 +31,7 @@ class ChooseMembersPage extends StatefulWidget {
     required this.initialSelectedMembers,
     required this.id,
     required this.isMultiSelect,
+    this.isCanChooseMyself = false,
   });
 
   @override
@@ -67,6 +72,8 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
   Widget build(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+
+    print('isCanChooseMyself: ${widget.isCanChooseMyself}');
 
     return AppShell(
       currentIndex: 0,
@@ -123,7 +130,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
                   intl,
                   hasMore,
                   state.totalItems,
-                  usersWithoutMyself,
+                  widget.isCanChooseMyself ? state.users : usersWithoutMyself,
                 );
               },
             ),
@@ -224,8 +231,10 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
                       ),
               ),
               onTap: () {
-                // Navigate to friend's profile
-                print('Navigate to ${user.fullName} profile');
+                context.pushNamed(
+                  AppRouteNames.friendProfile,
+                  pathParameters: {'id': user.id ?? ''},
+                );
               },
               trailing: CustomButton(
                 size: ButtonSize.small,

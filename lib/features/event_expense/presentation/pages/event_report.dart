@@ -2,16 +2,28 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart'
+    as event_event;
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_state.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart'
+    as expense_event;
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
+import 'package:Dividex/features/group/presentation/pages/group_detail.dart';
+import 'package:Dividex/features/group/presentation/widgets/chart_widget.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
+import 'package:Dividex/shared/widgets/bar_chart.dart';
+import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class EventReportPage extends StatefulWidget {
   final String eventId;
@@ -37,7 +49,16 @@ class _EventReportPageState extends State<EventReportPage> {
   void initState() {
     super.initState();
     context.read<ExpenseDataBloc>().add(
-      InitialEvent(id: widget.eventId, type: LoadExpenseType.event),
+      expense_event.InitialEvent(
+        id: widget.eventId,
+        type: LoadExpenseType.event,
+      ),
+    );
+    context.read<EventBloc>().add(
+      event_event.GetChartDataEvent(
+        eventId: widget.eventId,
+        year: DateTime.now().year,
+      ),
     );
   }
 
@@ -65,6 +86,117 @@ class _EventReportPageState extends State<EventReportPage> {
         ),
         child: Column(
           children: [
+            BlocBuilder<EventBloc, EventState>(
+              builder: (context, state) {
+                if (state is! EventChartDataState) {
+                  return const Center(
+                    child: ColoredBox(
+                      color: Colors.transparent,
+                      child: SpinKitFadingCircle(
+                        color: AppThemes.primary3Color,
+                      ),
+                    ),
+                  );
+                }
+                return Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        intl.overview,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontSize: 12,
+                          letterSpacing: 0,
+                          height: 16 / 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    ContentCard(
+                      child: Column(
+                        children: [
+                          buildGroupInfoRow(
+                            intl.eventNameLabel,
+                            state.eventData?.name ?? '',
+                          ),
+                          const Divider(
+                            height: 1,
+                            color: AppThemes.borderColor,
+                          ),
+                          buildGroupInfoRow(
+                            intl.eventStartDateLabel,
+                            DateFormat('dd/MM/yyyy').format(
+                              state.eventData?.eventStart ?? DateTime.now(),
+                            ),
+                          ),
+                          const Divider(
+                            height: 1,
+                            color: AppThemes.borderColor,
+                          ),
+                          buildGroupInfoRow(
+                            intl.eventEndDateLabel,
+                            DateFormat('dd/MM/yyyy').format(
+                              state.eventData?.eventEnd ?? DateTime.now(),
+                            ),
+                          ),
+                          const Divider(
+                            height: 1,
+                            color: AppThemes.borderColor,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 8,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  intl.eventDescriptionLabel,
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                ),
+                                Text(
+                                  state.eventData?.description ?? '',
+                                  style: Theme.of(context).textTheme.titleSmall
+                                      ?.copyWith(
+                                        color: AppThemes.primary3Color,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        intl.contributon,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontSize: 12,
+                          letterSpacing: 0,
+                          height: 16 / 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    ContributionPieChart(chartData: state.chartData),
+
+                    const SizedBox(height: 5),
+                    MonthlyBarChart(
+                      data: state.barChartData,
+                      year: DateTime.now().year,
+                    ),
+                  ],
+                );
+              },
+            ),
             BlocBuilder<ExpenseDataBloc, ExpenseDataState>(
               buildWhen: (p, c) =>
                   p.expenses != c.expenses || p.isLoading != c.isLoading,
@@ -92,10 +224,32 @@ class _EventReportPageState extends State<EventReportPage> {
                 );
               },
             ),
-
-            const SizedBox(height: 10),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildGroupInfoRow(String title, String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            value,
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(color: AppThemes.primary3Color),
+          ),
+        ],
       ),
     );
   }
@@ -144,8 +298,17 @@ class _EventReportPageState extends State<EventReportPage> {
     AppLocalizations intl,
     bool hasMore,
     int totalExpenses,
-    List<ExpenseModel>? expenses,
+    List<ExpenseModel> expenses,
   ) {
+    final groupedExpenses = <String, List<ExpenseModel>>{};
+    for (var e in expenses) {
+      final key = e.expenseDate?.toString().substring(0, 10) ?? 'Unknown';
+      groupedExpenses.putIfAbsent(key, () => []).add(e);
+    }
+
+    final sortedKeys = groupedExpenses.keys.toList()
+      ..sort((a, b) => b.compareTo(a));
+
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -172,33 +335,17 @@ class _EventReportPageState extends State<EventReportPage> {
           ),
         ),
         const SizedBox(height: 8),
-        ListView.builder(
+
+        ListView(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: expenses?.length != null
-              ? (expenses!.length + (hasMore ? 1 : 0))
-              : 0,
-          itemBuilder: (context, index) {
-            if (index == expenses!.length) {
-              context.read<ExpenseDataBloc>().add(
-                LoadMoreExpenses(
-                  id: widget.eventId,
-                  type: LoadExpenseType.event,
-                ),
-              );
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Center(
-                  child: SpinKitFadingCircle(color: AppThemes.primary3Color),
-                ),
-              );
-            }
-
-            final expense = expenses[index];
-
-            return ExpenseCard(expense: expense, widget: widget);
-          },
+          children: buildGroupedExpenseList(
+            context,
+            groupedExpenses,
+            sortedKeys,
+            intl,
+          ),
         ),
       ],
     );
@@ -213,8 +360,6 @@ class ExpenseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final intl = AppLocalizations.of(context)!;
-
     return InfoCard(
       title: expense.name ?? '',
       leading: CircleAvatar(
@@ -243,19 +388,13 @@ class ExpenseCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            expense.status == ExpenseStatus.done ? intl.done : intl.notYet,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: expense.status == ExpenseStatus.done
-                  ? AppThemes.successColor
-                  : AppThemes.minusMoney,
-            ),
-          ),
         ],
       ),
       onTap: () {
-        context.pushNamed(AppRouteNames.expenseDetail, pathParameters: {"id": expense.id ?? ''});
+        context.pushNamed(
+          AppRouteNames.expenseDetail,
+          pathParameters: {"id": expense.id ?? ''},
+        );
       },
     );
   }

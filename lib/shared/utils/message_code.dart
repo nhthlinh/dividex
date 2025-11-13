@@ -27,4 +27,7 @@ class MessageCode {
 
   static const String friendRelationAlreadyExists = 'FRIEND_HAS_RELATION';
   static const String friendRequestNotFound = 'FRIENDSHIP_NOT_FOUND';
+
+  static const String pinNotSet = 'PIN_NOT_SET';
+  static const String pinIncorrect = 'PIN_INCORRECT';
 }

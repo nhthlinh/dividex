@@ -1179,7 +1179,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get delete => 'Xóa';
 
   @override
-  String get from => 'trong';
+  String get from => 'từ';
 
   @override
   String get leaveIsDenied =>
@@ -1260,7 +1260,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get binLabel => 'Nhập mã pin để xác nhận chuyển khoản';
 
   @override
-  String get to => 'đén';
+  String get to => 'đến';
 
   @override
   String get youHaveSuccessfullyTransferred => 'Bạn đã chuyển thành công';
@@ -1289,4 +1289,185 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get addAccountGuide =>
       'Vui lòng nhập thông tin tài khoản ngân hàng của bạn tại đây nếu bạn muốn rút tiền về tài khoản cá nhân.';
+
+  @override
+  String get rechargeIntoApp => 'Nạp tiền vào Dividex';
+
+  @override
+  String get balance => 'Số dư ví';
+
+  @override
+  String get showBalance => 'Xem số dư';
+
+  @override
+  String get pleaseEnterAmount => 'Nhập số tiền cần nạp';
+
+  @override
+  String get totalDebt => 'Tổng nợ';
+
+  @override
+  String get sharedEvents => 'Sự kiện cùng tham gia';
+
+  @override
+  String get mutualGroups => 'Nhóm cùng tham gia';
+
+  @override
+  String get mutualFriends => 'Bạn chung';
+
+  @override
+  String get seePhoto => 'Xem ảnh';
+
+  @override
+  String get changePhoto => 'Thay đổi ảnh';
+
+  @override
+  String get deletePhoto => 'Xóa ảnh';
+
+  @override
+  String get eventAddMemberHint =>
+      'Bạn có thể thêm thành viên mới vào sự kiện qua';
+
+  @override
+  String get eventAddMembers => 'Thêm thành viên (đã ở trong nhóm)';
+
+  @override
+  String get groupMember => 'Thành viên';
+
+  @override
+  String get detail => 'Chi tiết';
+
+  @override
+  String get settleUp => 'Giải quyết';
+
+  @override
+  String get createDepositSuccess => 'Thanh toán thành công';
+
+  @override
+  String get bank => 'Ngân hàng';
+
+  @override
+  String get date => 'Ngày thực hiện';
+
+  @override
+  String get code => 'Mã';
+
+  @override
+  String get walletReport => 'Báo cáo ví';
+
+  @override
+  String get netBalance => 'Nợ';
+
+  @override
+  String get expenseDeleted =>
+      'Chi tiêu đã được xóa tạm thời, hãy khôi phục hoặc xóa hẳn trong cài đặt group';
+
+  @override
+  String get deleteDate => 'Ngày xóa';
+
+  @override
+  String get restore => 'Khôi phục';
+
+  @override
+  String get hardDelete => 'Xóa hẳn';
+
+  @override
+  String get deleteExpense => 'Xóa chi tiêu';
+
+  @override
+  String get profilePicture => 'Ảnh đại diện';
+
+  @override
+  String get pinInputError1 => 'Vui lòng nhập mã PIN.';
+
+  @override
+  String get pinInputError2 => 'Mã PIN phải gồm 6 chữ số.';
+
+  @override
+  String get updatePin => 'Cập nhật mã pin';
+
+  @override
+  String get currentPin => 'Mã PIN hiện tại';
+
+  @override
+  String get newPin => 'Mã PIN mới';
+
+  @override
+  String get confirmPin => 'Xác nhận mã PIN';
+
+  @override
+  String get updatePinGuide =>
+      'Vui lòng nhập mã PIN hiện tại và đặt mã PIN mới gồm 6 chữ số. Mã pin dùng để xác thực giao dịch cho ứng dụng';
+
+  @override
+  String get fee => 'Phí chuyển tiền';
+
+  @override
+  String get pinInvalid => 'Mã pin không hợp lệ, kiểm tra lại trong cài đặt';
+
+  @override
+  String get insufficientBalance => 'Balance is not enough';
+
+  @override
+  String get realAmount => 'Số tiền sau quy đổi';
+
+  @override
+  String get realAmountDescription =>
+      'Số tiền đã được quy đổi sang đơn vị tiền tệ đích.';
+
+  @override
+  String get originalAmount => 'Số tiền gốc';
+
+  @override
+  String get originalAmountDescription => 'Số tiền trước khi quy đổi.';
+
+  @override
+  String get confirmTransfer => 'Xác nhận chuyển tiền';
+
+  @override
+  String exchangeRateMessage(Object baseCurrency, Object rate) {
+    return 'Tỉ giá hiện tại: 1 $baseCurrency = $rate VND';
+  }
+
+  @override
+  String convertedAmountMessage(Object amount) {
+    return 'Số tiền quy đổi: $amount VND';
+  }
+
+  @override
+  String get continueQuestion => 'Bạn có muốn tiếp tục không?';
+
+  @override
+  String get toSettleUpDebtInGroup =>
+      ' thông qua chuyển khoản trong app hoặc các phương pháp trả ngoài.';
+
+  @override
+  String get outSideTransfer => 'Trả ngoài';
+
+  @override
+  String get pinNotSet => 'Bạn chưa tạo mã pin để giao dịch';
+
+  @override
+  String get pinIncorrect => 'Mã pin của bạn không chính xác';
+
+  @override
+  String get createPinGuide =>
+      'Vui lòng tạo mã PIN gồm 6 chữ số để bảo vệ tài khoản của bạn. Mã PIN này sẽ được dùng để đăng nhập hoặc xác nhận các thao tác quan trọng.';
+
+  @override
+  String get createPinTitle => 'Tạo mã PIN';
+
+  @override
+  String get youBorrowed => 'bạn mượn';
+
+  @override
+  String get youLent => 'bạn cho mượn';
+
+  @override
+  String get year => 'Năm';
+
+  @override
+  String get externalExpense => 'Giao dịch nạp vào';
+
+  @override
+  String get internalExpense => 'Giao dịch trong app';
 }

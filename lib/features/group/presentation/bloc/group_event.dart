@@ -56,6 +56,7 @@ class UpdateGroupEvent extends GroupsEvent {
   final List<String> memberIdsAdd;
   final List<String> memberIdsRemove;
   final Uint8List? avatar;
+  final String? deletedAvatarUid;
 
   const UpdateGroupEvent({
     required this.groupId,
@@ -63,10 +64,11 @@ class UpdateGroupEvent extends GroupsEvent {
     required this.memberIdsAdd,
     required this.memberIdsRemove,
     this.avatar,
+    this.deletedAvatarUid
   });
 
   @override
-  List<Object?> get props => [name, memberIdsAdd, memberIdsRemove];
+  List<Object?> get props => [name, memberIdsAdd, memberIdsRemove, avatar, deletedAvatarUid];
 }
 
 class UpdateGroupLeaderEvent extends GroupsEvent {
@@ -102,11 +104,12 @@ class LeaveGroupEvent extends GroupsEvent {
 
 class GetGroupDetailEvent extends GroupsEvent {
   final String groupId;
+  final int year;
 
-  const GetGroupDetailEvent(this.groupId);
+  const GetGroupDetailEvent(this.groupId, this.year);
 
   @override
-  List<Object?> get props => [groupId];
+  List<Object?> get props => [groupId, year];
 }
 
 class GetGroupReportEvent extends GroupsEvent {

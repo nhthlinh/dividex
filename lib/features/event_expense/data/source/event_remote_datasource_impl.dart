@@ -2,7 +2,9 @@ import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/event_expense/data/source/event_remote_datasource.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
+import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 
@@ -157,6 +159,32 @@ class EventRemoteDataSourceImpl implements EventRemoteDataSource {
           'user_uids': userIds,
         },
       );
+    });
+  }
+
+  @override
+  Future<List<ChartData>> getChartData(String eventId) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/events/$eventId/spending', queryParameters: {'currency': HiveService.getUser().preferredCurrency ?? 'VND'});
+      if (response.data['data'] == null) {
+        return [];
+      }
+      return (response.data['data'] as List)
+          .map((item) => ChartData.fromJson(item))
+          .toList();
+    });
+  }
+
+  @override
+  Future<List<CustomBarChartData>> getBarChartData(String eventId, int year) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/events/$eventId/chart', queryParameters: {'year': year});
+      if (response.data['data'] == null) {
+        return [];
+      }
+      return (response.data['data'] as List)
+          .map((item) => CustomBarChartData.fromJson(item))
+          .toList();
     });
   }
 }

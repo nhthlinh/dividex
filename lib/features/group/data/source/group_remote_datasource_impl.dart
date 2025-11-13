@@ -5,6 +5,8 @@ import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/data/source/group_remote_datasource.dart';
 import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: GroupRemoteDataSource)
@@ -46,7 +48,9 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
   @override
   Future<GroupModel?> getGroupDetail(String groupId) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/groups/$groupId');
+      final response = await dio.get('/groups/$groupId', queryParameters: {
+        'currency': HiveService.getUser().preferredCurrency ?? 'VND',
+      });
       if (response.data['data'] == null) {
         return null;
       }
@@ -144,6 +148,7 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
           'order_by': 'updated_at',
           'sort_type': 'desc',
           if (searchQuery.isNotEmpty) 'search': searchQuery,
+          'currency': HiveService.getUser().preferredCurrency ?? 'VND',
         },
       );
 
@@ -170,7 +175,7 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
   @override
   Future<List<ChartData>> getChartData(String groupId) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/groups/$groupId/members-report');
+      final response = await dio.get('/groups/$groupId/members-report', queryParameters: {'currency': HiveService.getUser().preferredCurrency ?? 'VND'});
       if (response.data['data'] == null) {
         return [];
       }
@@ -179,4 +184,19 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
           .toList();
     });
   }
+
+  
+  @override
+  Future<List<CustomBarChartData>> getBarChartData(String groupId, int year) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/groups/$groupId/chart', queryParameters: {'year': year});
+      if (response.data['data'] == null) {
+        return [];
+      }
+      return (response.data['data'] as List)
+          .map((item) => CustomBarChartData.fromJson(item))
+          .toList();
+    });
+  }
 }
+

@@ -43,3 +43,8 @@ class DeclineFriendRequestEvent extends FriendEvent {
   final String friendId;
   DeclineFriendRequestEvent(this.friendId);
 }
+
+class GetFriendOverviewEvent extends FriendEvent {
+  final String friendId;
+  GetFriendOverviewEvent(this.friendId);
+}

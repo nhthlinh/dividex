@@ -12,7 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.4
 
   # UI & Icons
   cupertino_icons: ^1.0.8
@@ -80,6 +80,9 @@ dependencies:
   flutter_spinkit: ^5.2.2
   animations: ^2.0.11
   fl_chart: ^1.1.1
+  webview_flutter: ^4.13.0
+  flutter_native_splash: ^2.4.7
+  vietqr_core: ^0.2.5+1
 
 dev_dependencies:
   flutter_test:

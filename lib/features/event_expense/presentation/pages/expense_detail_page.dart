@@ -1,17 +1,27 @@
+import 'dart:typed_data';
+
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
+import 'package:Dividex/features/image/data/models/image_model.dart';
+import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
+import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
+import 'package:Dividex/features/image/presentation/bloc/image_state.dart';
 import 'package:Dividex/features/image/presentation/pages/image_page.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_update_delete_widget.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseDetail extends StatefulWidget {
@@ -24,10 +34,28 @@ class ExpenseDetail extends StatefulWidget {
 }
 
 class _ExpenseDetailState extends State<ExpenseDetail> {
+  List<Uint8List> updatedImages = [];
+  List<ImageModel> deletedImages = [];
+  List<ImageModel> existingImages = [];
+
+  // void onTapImage(String id) {
+  //   if (updatedImages.isNotEmpty && deletedImages.isNotEmpty) {
+  //     updateImage(
+  //       id,
+  //       updatedImages,
+  //       AttachmentType.expense,
+  //       deletedImages.map((e) => e.uid).toList(),
+  //     );
+  //   } else if (updatedImages.isEmpty && deletedImages.isNotEmpty) {
+  //     deleteImage(deletedImages.map((e) => e.uid).toList());
+  //   } else if (updatedImages.isNotEmpty && deletedImages.isEmpty) {
+  //     uploadImage(id, updatedImages, AttachmentType.expense);
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
-
     context.read<ExpenseBloc>().add(
       GetExpenseDetail(expenseId: widget.expenseId),
     );
@@ -42,6 +70,20 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
       currentIndex: 0,
       child: Layout(
         title: intl.expense,
+        action: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: () {
+                context.pushNamed(
+                  AppRouteNames.expenseEdit,
+                  pathParameters: {'id': widget.expenseId},
+                );
+              },
+              icon: const Icon(Icons.edit_outlined, color: Colors.white),
+            ),
+          ],
+        ),
         child: BlocBuilder<ExpenseBloc, ExpenseState>(
           builder: (context, state) {
             if (state is! ExpenseLoadedState) {
@@ -61,10 +103,6 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
             final formattedReminder = DateFormat(
               "dd/MM/yyyy",
             ).format(expense.remindAt ?? DateTime.now());
-
-            print('expense userDebtInfos: ${expense.userDebtInfos?.map((e) => e.amount).toList()}');
-            print('expense userDebts: ${expense.userDebtInfos?.map((e) => e.user.fullName).toList()}');
-            print('expense userDebtInfos: ${expense.userDebtInfos?.map((e) => e.user.avatar).toList()}');
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -93,7 +131,9 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                         ],
                       ),
                       Text(
-                        "%",
+                        expense.currency != null
+                            ? '${expense.totalAmount} ${expense.currency?.code}'
+                            : '',
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: AppThemes.infoColor,
                         ),
@@ -112,11 +152,14 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                     intl.expenseCategoryLabel,
                     expense.category ?? '',
                   ),
-                  buildGroupInfoRow(intl.expensePayerLabel, expense.paidByUser?.fullName ?? ''),
+                  buildGroupInfoRow(
+                    intl.expensePayerLabel,
+                    expense.paidByUser?.fullName ?? '',
+                  ),
                   buildGroupInfoRow(intl.dueDay, formattedReminder),
 
                   const SizedBox(height: 16),
-              
+
                   //Image
                   Text(
                     intl.image,
@@ -171,11 +214,31 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                       ),
                     ),
                   ] else ...[
-                    SizedBox.shrink()
+                    SizedBox.shrink(),
                   ],
 
+                  // BlocProvider(
+                  //   create: (context) => ImageBloc(),
+                  //   child: BlocBuilder<ImageBloc, ImageState>(
+                  //     builder: (context, state) {
+                  //       return ImageUpdateDeleteWidget(
+                  //         label: intl.addGroupImageLabel,
+                  //         nameForExampleImage: expense.name ?? '',
+                  //         isAvatar: false,
+                  //         type: PickerType.gallery,
+                  //         images: expense.images ?? [],
+                  //         onFilesPicked: (List<Uint8List> files) {
+                  //           updatedImages = files;
+                  //         },
+                  //         onDelete: (image) {
+                  //           deletedImages.add(image);
+                  //         },
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
-              
+
                   Text(
                     intl.billDetail,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -183,11 +246,11 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 8),
-              
+
                   if (expense.userDebtInfos != null &&
                       expense.userDebtInfos!.isNotEmpty) ...[
                     ListView.builder(
+                      padding: EdgeInsets.zero,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: expense.userDebtInfos?.length ?? 0,
@@ -205,9 +268,9 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                       },
                     ),
                   ],
-              
+
                   const SizedBox(height: 8),
-              
+
                   Text(
                     intl.expenseNoteLabel,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -220,7 +283,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                     expense.note ?? '',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-              
+
                   // actions
                   const SizedBox(height: 16),
                 ],
@@ -289,9 +352,7 @@ class ExpenseCard extends StatelessWidget {
                 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(expense.user.fullName ?? '')}&background=random&color=fff&size=128',
               ),
       ),
-      subtitle: (expense.amount >= 0)
-          ? '${(expense.amount / totalAmount * 100).toStringAsFixed(2)} %'
-          : '0 %',
+      subtitle: '${(expense.amount.abs() / totalAmount * 100).toStringAsFixed(2)} %',
       trailing: Column(
         children: [
           Text(

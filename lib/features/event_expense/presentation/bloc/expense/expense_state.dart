@@ -1,7 +1,14 @@
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
+import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:equatable/equatable.dart';
 
 class ExpenseState {}
+
+class ExpenseBarChartData extends ExpenseState {
+  final List<CustomBarChartData> data;
+
+  ExpenseBarChartData({required this.data});
+}
 
 class ExpenseLoadedState extends ExpenseState {
   final ExpenseModel expense;

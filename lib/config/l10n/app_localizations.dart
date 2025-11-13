@@ -869,7 +869,7 @@ abstract class AppLocalizations {
   /// No description provided for @pay.
   ///
   /// In en, this message translates to:
-  /// **'Pay'**
+  /// **'Settle up'**
   String get pay;
 
   /// No description provided for @analytics.
@@ -2443,6 +2443,348 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter your bank account information here if you wish to withdraw money to your personal account.'**
   String get addAccountGuide;
+
+  /// No description provided for @rechargeIntoApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Recharge into Dividex'**
+  String get rechargeIntoApp;
+
+  /// No description provided for @balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get balance;
+
+  /// No description provided for @showBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Show balance'**
+  String get showBalance;
+
+  /// No description provided for @pleaseEnterAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter amount'**
+  String get pleaseEnterAmount;
+
+  /// No description provided for @totalDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Total dept'**
+  String get totalDebt;
+
+  /// No description provided for @sharedEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared events'**
+  String get sharedEvents;
+
+  /// No description provided for @mutualGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Mutual groups'**
+  String get mutualGroups;
+
+  /// No description provided for @mutualFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Mutual friends'**
+  String get mutualFriends;
+
+  /// No description provided for @seePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'See photo'**
+  String get seePhoto;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get changePhoto;
+
+  /// No description provided for @deletePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete photo'**
+  String get deletePhoto;
+
+  /// No description provided for @eventAddMemberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add new members to this event through'**
+  String get eventAddMemberHint;
+
+  /// No description provided for @eventAddMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Add members (already in group)'**
+  String get eventAddMembers;
+
+  /// No description provided for @groupMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get groupMember;
+
+  /// No description provided for @detail.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail'**
+  String get detail;
+
+  /// No description provided for @settleUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Settle up'**
+  String get settleUp;
+
+  /// No description provided for @createDepositSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit success'**
+  String get createDepositSuccess;
+
+  /// No description provided for @bank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank'**
+  String get bank;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction day'**
+  String get date;
+
+  /// No description provided for @code.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get code;
+
+  /// No description provided for @walletReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet report'**
+  String get walletReport;
+
+  /// No description provided for @netBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Net balance'**
+  String get netBalance;
+
+  /// No description provided for @expenseDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense has been soft delete, please restore or hard delete in group setting.'**
+  String get expenseDeleted;
+
+  /// No description provided for @deleteDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete day'**
+  String get deleteDate;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @hardDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard delete'**
+  String get hardDelete;
+
+  /// No description provided for @deleteExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete expense'**
+  String get deleteExpense;
+
+  /// No description provided for @profilePicture.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile picture'**
+  String get profilePicture;
+
+  /// No description provided for @pinInputError1.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter pin code'**
+  String get pinInputError1;
+
+  /// No description provided for @pinInputError2.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin code must has 6 number'**
+  String get pinInputError2;
+
+  /// No description provided for @updatePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Update pin code'**
+  String get updatePin;
+
+  /// No description provided for @currentPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Current PIN'**
+  String get currentPin;
+
+  /// No description provided for @newPin.
+  ///
+  /// In en, this message translates to:
+  /// **'New PIN'**
+  String get newPin;
+
+  /// No description provided for @confirmPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm PIN'**
+  String get confirmPin;
+
+  /// No description provided for @updatePinGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your current PIN and set a new 6-digit PIN. Pin code will be used to verify your transactions. '**
+  String get updatePinGuide;
+
+  /// No description provided for @fee.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee'**
+  String get fee;
+
+  /// No description provided for @pinInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin is invalid, please set your pin in setting'**
+  String get pinInvalid;
+
+  /// No description provided for @insufficientBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance is not enough'**
+  String get insufficientBalance;
+
+  /// No description provided for @realAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Converted amount'**
+  String get realAmount;
+
+  /// No description provided for @realAmountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount after currency conversion.'**
+  String get realAmountDescription;
+
+  /// No description provided for @originalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Original amount'**
+  String get originalAmount;
+
+  /// No description provided for @originalAmountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount before currency conversion.'**
+  String get originalAmountDescription;
+
+  /// No description provided for @confirmTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm transfer'**
+  String get confirmTransfer;
+
+  /// No description provided for @exchangeRateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Current exchange rate: 1 {baseCurrency} = {rate} VND'**
+  String exchangeRateMessage(Object baseCurrency, Object rate);
+
+  /// No description provided for @convertedAmountMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Converted amount: {amount} VND'**
+  String convertedAmountMessage(Object amount);
+
+  /// No description provided for @continueQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to continue?'**
+  String get continueQuestion;
+
+  /// No description provided for @toSettleUpDebtInGroup.
+  ///
+  /// In en, this message translates to:
+  /// **' through a transfer or any method outside the DivideX app.'**
+  String get toSettleUpDebtInGroup;
+
+  /// No description provided for @outSideTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside transfer'**
+  String get outSideTransfer;
+
+  /// No description provided for @pinNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up your pin to transfer'**
+  String get pinNotSet;
+
+  /// No description provided for @pinIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pin is incorect'**
+  String get pinIncorrect;
+
+  /// No description provided for @createPinGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Please create a 6-digit PIN to secure your account. You’ll use this PIN to log in or confirm important actions.'**
+  String get createPinGuide;
+
+  /// No description provided for @createPinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create PIN'**
+  String get createPinTitle;
+
+  /// No description provided for @youBorrowed.
+  ///
+  /// In en, this message translates to:
+  /// **'you borrowed'**
+  String get youBorrowed;
+
+  /// No description provided for @youLent.
+  ///
+  /// In en, this message translates to:
+  /// **'you lent'**
+  String get youLent;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get year;
+
+  /// No description provided for @externalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'External expense'**
+  String get externalExpense;
+
+  /// No description provided for @internalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal expense'**
+  String get internalExpense;
 }
 
 class _AppLocalizationsDelegate

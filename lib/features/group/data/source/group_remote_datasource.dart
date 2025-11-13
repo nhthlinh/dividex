@@ -26,5 +26,6 @@ abstract class GroupRemoteDataSource {
   Future<void> updateGroupLeader(String groupId, String newLeaderId);
   Future<GroupModel?> getGroupReport(String groupId);
   Future<List<ChartData>> getChartData(String groupId);
+  Future<List<CustomBarChartData>> getBarChartData(String groupId, int year);
 }
 

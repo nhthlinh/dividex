@@ -111,8 +111,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> updateFcmToken(String fcmToken) async {
     return apiCallWrapper(() async {
       final response = await dio.put(
-        '/user/fcm-token',
-        data: {'fcmToken': fcmToken},
+        '/auth/fcm-token',
+        data: {'fcm_token': fcmToken},
       );
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to update FCM token: ${response.statusCode}');

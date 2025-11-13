@@ -17,6 +17,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     on<DeleteEventEvent>(_onDeleteEvent);
     on<JoinEvent>(_onJoinEvent);
     on<AddMembersToEvent>(_onAddMembersToEvent);
+    on<GetChartDataEvent>(_onGetChartData);
   }
 
   Future _onCreateEvent(CreateEventEvent event, Emitter emit) async {
@@ -147,6 +148,20 @@ class EventBloc extends Bloc<EventEvent, EventState> {
       } else {
         showCustomToast(intl.error, type: ToastType.error);
       }
+    }
+  }
+
+  Future _onGetChartData(GetChartDataEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<EventUseCase>();
+      final eventData = await useCase.getEvent(event.eventId);
+      final chartData = await useCase.getChartData(event.eventId);
+      final barChartData = await useCase.getBarChartData(event.eventId, event.year);
+
+      emit(EventChartDataState(chartData: chartData, barChartData: barChartData, eventData: eventData));
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
     }
   }
 }

@@ -14,14 +14,12 @@ import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
     as user_event;
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart'
     as user_state;
-import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
-import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -130,7 +128,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                   const SizedBox(height: 8),
                   RichText(
                     text: TextSpan(
-                      text: intl.groupAddMemberHint,
+                      text: intl.eventAddMemberHint,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.grey,
                       ),
@@ -148,7 +146,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ' ${intl.groupAddMemberFriends}',
+                          text: ' ${intl.eventAddMembers}',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: AppThemes.primary3Color,
                           ),
@@ -166,7 +164,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                         size: ButtonSize.medium,
                       ),
                       CustomButton(
-                        text: intl.friend,
+                        text: intl.groupMember,
                         onPressed: () {
                           context.pushNamed(
                             AppRouteNames.chooseMember,

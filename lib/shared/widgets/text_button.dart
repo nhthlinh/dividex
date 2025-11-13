@@ -35,7 +35,7 @@ class CustomTextButton extends StatelessWidget {
           if (description.isNotEmpty) ...[
             RichText(
               text: TextSpan(
-                text: label,
+                text: description,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontSize: 12,
                   letterSpacing: 0,

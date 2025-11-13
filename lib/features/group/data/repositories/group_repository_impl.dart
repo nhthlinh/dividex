@@ -92,4 +92,9 @@ class GroupRepositoryImpl implements GroupRepository {
   Future<List<ChartData>> getChartData(String groupId) {
     return remoteDataSource.getChartData(groupId);
   }
+
+  @override
+  Future<List<CustomBarChartData>> getBarChartData(String groupId, int year) {
+    return remoteDataSource.getBarChartData(groupId, year);
+  }
 }

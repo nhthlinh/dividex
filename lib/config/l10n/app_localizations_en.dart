@@ -399,7 +399,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get remind => 'Remind';
 
   @override
-  String get pay => 'Pay';
+  String get pay => 'Settle up';
 
   @override
   String get analytics => 'Analytics';
@@ -1291,4 +1291,185 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get addAccountGuide =>
       'Please enter your bank account information here if you wish to withdraw money to your personal account.';
+
+  @override
+  String get rechargeIntoApp => 'Recharge into Dividex';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get showBalance => 'Show balance';
+
+  @override
+  String get pleaseEnterAmount => 'Please enter amount';
+
+  @override
+  String get totalDebt => 'Total dept';
+
+  @override
+  String get sharedEvents => 'Shared events';
+
+  @override
+  String get mutualGroups => 'Mutual groups';
+
+  @override
+  String get mutualFriends => 'Mutual friends';
+
+  @override
+  String get seePhoto => 'See photo';
+
+  @override
+  String get changePhoto => 'Change photo';
+
+  @override
+  String get deletePhoto => 'Delete photo';
+
+  @override
+  String get eventAddMemberHint =>
+      'You can add new members to this event through';
+
+  @override
+  String get eventAddMembers => 'Add members (already in group)';
+
+  @override
+  String get groupMember => 'Member';
+
+  @override
+  String get detail => 'Detail';
+
+  @override
+  String get settleUp => 'Settle up';
+
+  @override
+  String get createDepositSuccess => 'Deposit success';
+
+  @override
+  String get bank => 'Bank';
+
+  @override
+  String get date => 'Transaction day';
+
+  @override
+  String get code => 'Code';
+
+  @override
+  String get walletReport => 'Wallet report';
+
+  @override
+  String get netBalance => 'Net balance';
+
+  @override
+  String get expenseDeleted =>
+      'Expense has been soft delete, please restore or hard delete in group setting.';
+
+  @override
+  String get deleteDate => 'Delete day';
+
+  @override
+  String get restore => 'Restore';
+
+  @override
+  String get hardDelete => 'Hard delete';
+
+  @override
+  String get deleteExpense => 'Delete expense';
+
+  @override
+  String get profilePicture => 'Profile picture';
+
+  @override
+  String get pinInputError1 => 'Please enter pin code';
+
+  @override
+  String get pinInputError2 => 'Pin code must has 6 number';
+
+  @override
+  String get updatePin => 'Update pin code';
+
+  @override
+  String get currentPin => 'Current PIN';
+
+  @override
+  String get newPin => 'New PIN';
+
+  @override
+  String get confirmPin => 'Confirm PIN';
+
+  @override
+  String get updatePinGuide =>
+      'Please enter your current PIN and set a new 6-digit PIN. Pin code will be used to verify your transactions. ';
+
+  @override
+  String get fee => 'Fee';
+
+  @override
+  String get pinInvalid => 'Pin is invalid, please set your pin in setting';
+
+  @override
+  String get insufficientBalance => 'Balance is not enough';
+
+  @override
+  String get realAmount => 'Converted amount';
+
+  @override
+  String get realAmountDescription => 'The amount after currency conversion.';
+
+  @override
+  String get originalAmount => 'Original amount';
+
+  @override
+  String get originalAmountDescription =>
+      'The amount before currency conversion.';
+
+  @override
+  String get confirmTransfer => 'Confirm transfer';
+
+  @override
+  String exchangeRateMessage(Object baseCurrency, Object rate) {
+    return 'Current exchange rate: 1 $baseCurrency = $rate VND';
+  }
+
+  @override
+  String convertedAmountMessage(Object amount) {
+    return 'Converted amount: $amount VND';
+  }
+
+  @override
+  String get continueQuestion => 'Do you want to continue?';
+
+  @override
+  String get toSettleUpDebtInGroup =>
+      ' through a transfer or any method outside the DivideX app.';
+
+  @override
+  String get outSideTransfer => 'Outside transfer';
+
+  @override
+  String get pinNotSet => 'Set up your pin to transfer';
+
+  @override
+  String get pinIncorrect => 'Your pin is incorect';
+
+  @override
+  String get createPinGuide =>
+      'Please create a 6-digit PIN to secure your account. You’ll use this PIN to log in or confirm important actions.';
+
+  @override
+  String get createPinTitle => 'Create PIN';
+
+  @override
+  String get youBorrowed => 'you borrowed';
+
+  @override
+  String get youLent => 'you lent';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get externalExpense => 'External expense';
+
+  @override
+  String get internalExpense => 'Internal expense';
 }

@@ -7,11 +7,15 @@ import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/group/presentation/member_carousel.dart';
+import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
+import 'package:Dividex/shared/widgets/settle_up_pop_up.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +33,9 @@ class _GroupPageState extends State<GroupPage> {
   final List<GroupModel> _groupList = [];
 
   final _textEditingController = TextEditingController();
+  final ValueNotifier<CurrencyEnum> _selectedCurrency =
+      ValueNotifier(CurrencyEnum.vnd);
+  final List<CurrencyEnum> _units = CurrencyEnum.values;
 
   List<int> _selectedMemberIndices = [];
 
@@ -36,6 +43,12 @@ class _GroupPageState extends State<GroupPage> {
   void initState() {
     super.initState();
     context.read<LoadedGroupsBloc>().add(InitialEvent('', true));
+    _selectedCurrency.value = CurrencyEnum.values.firstWhere(
+      (c) =>
+          c.code ==
+          (HiveService.getUser().preferredCurrency ?? CurrencyEnum.vnd.code),
+      orElse: () => CurrencyEnum.vnd,
+    );
   }
 
   @override
@@ -55,20 +68,112 @@ class _GroupPageState extends State<GroupPage> {
         title: intl.group,
         child: Column(
           children: [
-            // Search
-            CustomTextInputWidget(
-              size: TextInputSize.large,
-              isReadOnly: false,
-              keyboardType: TextInputType.text,
-              label: intl.searchTab,
-              controller: _textEditingController,
-              suffixIcon: IconButton(
-                onPressed: () {
-                  context.read<LoadedGroupsBloc>().add(
-                    InitialEvent(_textEditingController.text, true),
-                  );
-                },
-                icon: Icon(Icons.search),
+            SizedBox(
+              width: 340,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 7, // 70%
+                    child: // Search
+                    CustomTextInputWidget(
+                      size: TextInputSize.large,
+                      isReadOnly: false,
+                      keyboardType: TextInputType.text,
+                      label: intl.searchTab,
+                      controller: _textEditingController,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          context.read<LoadedGroupsBloc>().add(
+                            InitialEvent(_textEditingController.text, true),
+                          );
+                        },
+                        icon: Icon(Icons.search),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 3, // 30%
+                    child: ValueListenableBuilder<CurrencyEnum>(
+                      valueListenable: _selectedCurrency,
+                      builder: (context, value, _) {
+                        return CustomDropdownWidget<CurrencyEnum>(
+                          label: intl.expenseCurrencyLabel,
+                          value: _selectedCurrency.value,
+                          options: _units,
+                          displayString: (b) => b.code,
+                          buildOption: (b, selected) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 6,
+                                horizontal: 4,
+                              ),
+                              child: Row(
+                                children: [
+                                  // if (b.avatarUrl != null)
+                                  //   Image.network(
+                                  //     b.avatarUrl!,
+                                  //     width: 50,
+                                  //     height: 50,
+                                  //     errorBuilder: (context, error, stackTrace) =>
+                                  //         const Icon(Icons.group),
+                                  //   )
+                                  // else
+                                  //   const Icon(Icons.group),
+                                  Text(
+                                    b.code,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: selected
+                                              ? AppThemes.primary3Color
+                                              : Colors.grey,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Text(
+                                      b.description,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: selected
+                                                ? AppThemes.primary3Color
+                                                : Colors.grey,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ),
+                                  if (selected)
+                                    const Icon(
+                                      Icons.check,
+                                      color: AppThemes.primary3Color,
+                                    ),
+                                ],
+                              ),
+                            );
+                          },
+                          onChanged: (val) {
+                            _selectedCurrency.value = val!;
+                            HiveService.saveUser(
+                              HiveService.getUser().copyWith(
+                                preferredCurrency: val.code,
+                              ),
+                            );
+                            print('Selected currency: ${val.code}');
+                            print(
+                                'Saved preferred currency: ${HiveService.getUser().preferredCurrency ?? 'null'}');
+                          },
+                          isRequired: true,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -138,7 +243,13 @@ class _GroupPageState extends State<GroupPage> {
                     }
 
                     final group = _groupList[index];
-                    final members = group.members ?? [];
+                    final members =
+                        group.members
+                            ?.where(
+                              (m) => m.user?.id != HiveService.getUser().id,
+                            )
+                            .toList() ??
+                        [];
 
                     final currentMember =
                         members[_selectedMemberIndices[index]];
@@ -267,7 +378,7 @@ class _GroupPageState extends State<GroupPage> {
                       ).textTheme.titleSmall?.copyWith(color: Colors.white),
                     ),
                     Text(
-                      intl.membersText(members.length),
+                      intl.membersText(members.length + 1),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppThemes.borderColor,
                       ),
@@ -281,12 +392,16 @@ class _GroupPageState extends State<GroupPage> {
           Container(
             alignment: Alignment.center,
             child: MemberCarousel(
-              members: members
-                  .where((m) => m.user?.id != HiveService.getUser().id)
-                  .toList(),
+              members: members,
               onChanged: (idx) {
                 setState(() {
-                  _selectedMemberIndices[index] = idx;
+                  if (members[index].id == HiveService.getUser().id) {
+                    _selectedMemberIndices[index] =
+                        ((idx + 1) % members.length);
+                  } else {
+                    _selectedMemberIndices[index] = idx;
+                  }
+                  print(idx);
                 });
               },
             ),
@@ -298,20 +413,22 @@ class _GroupPageState extends State<GroupPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                '${currentMember.user?.fullName} ${(currentMember.amount != null && currentMember.amount! >= 0) ? intl.ownYou : intl.youOwn}',
+                (currentMember.amount != null && currentMember.amount! >= 0)
+                    ? '${currentMember.user?.fullName} ${intl.ownYou}'
+                    : '${intl.youOwn} ${currentMember.user?.fullName}',
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
               ),
 
               Text(
-                '${currentMember.amount} đ',
+                '${formatNumber(currentMember.amount?.abs() ?? 0)} ${_selectedCurrency.value.code}',
                 style: TextStyle(
                   color:
                       (currentMember.amount != null &&
                           currentMember.amount! >= 0)
-                      ? AppThemes.minusMoney
-                      : AppThemes.successColor,
+                      ? AppThemes.successColor
+                      : AppThemes.minusMoney,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -327,11 +444,24 @@ class _GroupPageState extends State<GroupPage> {
               text: (currentMember.amount != null && currentMember.amount! > 0)
                   ? intl.remind
                   : intl.pay,
-              onPressed: () {},
+              onPressed: () {
+                if (currentMember.amount != null &&
+                    currentMember.amount! > 0) {
+                  // Xử lý nhắc nhở
+                } else {
+                  showSettleUpDialog(
+                    context: context,
+                    receiver: currentMember.user!,
+                    amount: currentMember.amount!.abs(),
+                    currency: _selectedCurrency.value,
+                    groupId: group.id!,
+                  );
+                }
+              },
               customColor:
                   (currentMember.amount != null && currentMember.amount! > 0)
-                  ? AppThemes.minusMoney
-                  : AppThemes.successColor,
+                  ? AppThemes.successColor
+                  : AppThemes.minusMoney,
             ),
           ],
         ],

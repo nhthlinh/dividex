@@ -25,4 +25,14 @@ class ImageRepositoryImpl implements ImageRepository {
   Future<void> uploadImage(String presignedUrl, Uint8List fileBytes) {
     return remoteDataSource.uploadImage(presignedUrl, fileBytes);
   }
+
+  @override
+  Future<List<ImagePresignUrlResponseModel>> updateImages(List<ImagePresignUrlInputModel> newFiles, List<String> deletedImageUids) {
+    return remoteDataSource.updateImages(newFiles, deletedImageUids);
+  }
+
+  @override
+  Future<void> deleteImages(List<String> deletedImageUids) {
+    return remoteDataSource.deleteImages(deletedImageUids);
+  }
 }

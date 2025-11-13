@@ -1,4 +1,7 @@
+import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
+import 'package:Dividex/shared/models/enum.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 class UserModel {
   final String? id;
@@ -8,6 +11,7 @@ class UserModel {
   final ImageModel? avatar;
   final bool? hasDebt;
   final double? amount;
+  final CurrencyEnum? currency;
 
   UserModel({
     this.id,
@@ -17,6 +21,7 @@ class UserModel {
     this.avatar,
     this.hasDebt,
     this.amount,
+    this.currency,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -31,6 +36,12 @@ class UserModel {
             : null),
     hasDebt: json['has_debt'] as bool?,
     amount: (json['amount'] as num?)?.toDouble(),
+    currency: json['currency'] == null
+        ? null
+        : $enumDecodeNullable(
+            $CurrencyEnumEnumMap,
+            json['currency'].toString().toLowerCase(),
+          ),
   );
 
     Map<String, dynamic> toJson() => <String, dynamic>{
@@ -41,6 +52,9 @@ class UserModel {
       'avatar_url': avatar,
       'has_debt': hasDebt,
       'amount': amount,
+      'currency': currency != null
+          ? $CurrencyEnumEnumMap[currency]!
+          : null,
     };
 
 

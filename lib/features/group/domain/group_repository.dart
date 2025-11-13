@@ -31,4 +31,5 @@ abstract class GroupRepository {
 
   Future<GroupModel?> getGroupReport(String groupId);
   Future<List<ChartData>> getChartData(String groupId);
+  Future<List<CustomBarChartData>> getBarChartData(String groupId, int year);
 }

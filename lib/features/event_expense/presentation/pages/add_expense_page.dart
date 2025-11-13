@@ -15,6 +15,7 @@ import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
     as user_event;
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -27,6 +28,7 @@ import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/two_option_selector_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
@@ -375,7 +377,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   extra: {
                     'id': _selectedEvent?.id,
                     'type': user_event.LoadType.eventParticipants,
-                    'initialSelected': _selectedPayer,
+                    'initialSelected': _selectedPayer != null ? [_selectedPayer!] : <UserModel>[],
                     'onChanged': (List<UserModel> user) {
                       setState(() {
                         _selectedPayer = user.first;
@@ -384,6 +386,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       });
                     },
                     'isMultiSelect': false,
+                    'isCanChooseMyself': true,
                   },
                 );
               },

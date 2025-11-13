@@ -79,6 +79,12 @@ class HardDeleteExpenseEvent extends ExpenseEvent {
   HardDeleteExpenseEvent({required this.expenseId});
 }
 
+class RestoreExpenseEvent extends ExpenseEvent {
+  final String expenseId;
+
+  RestoreExpenseEvent({required this.expenseId});
+}
+
 class RestoreExpense extends ExpenseEvent {
   final String expenseId;
 
@@ -91,7 +97,13 @@ class GetExpenseDetail extends ExpenseEvent {
   GetExpenseDetail({required this.expenseId});
 }
 
-enum LoadExpenseType { group, event }
+class GetBarChartData extends ExpenseEvent {
+  final int year;
+
+  GetBarChartData({required this.year});
+}
+
+enum LoadExpenseType { group, event, hasBeenDeleted, all }
 
 class InitialEvent extends ExpenseEvent {
   String id;

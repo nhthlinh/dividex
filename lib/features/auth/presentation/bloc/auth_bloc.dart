@@ -10,6 +10,7 @@ import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:Dividex/shared/services/notification/fcm.dart';
 
 part 'auth_state.dart';
 
@@ -58,7 +59,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       // Gửi FCM token sau khi đăng ký thành công
-      //await sendFcmTokenToBackend(true);
+      await sendFcmTokenToBackend(true);
 
       emit(const AuthAuthenticated());
     } catch (e) {
@@ -104,7 +105,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       // Gửi FCM token sau khi đăng nhập thành công
-      //await sendFcmTokenToBackend(true);
+      await sendFcmTokenToBackend(true);
 
       emit(const AuthAuthenticated());
     } catch (e) {
@@ -132,7 +133,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       // Xóa token, dữ liệu người dùng, v.v.
       emit(AuthUnauthenticated());
-      // await sendFcmTokenToBackend(false);
+      await sendFcmTokenToBackend(false);
       await HiveService.clearToken(); // Xóa token khỏi local storage
       await HiveService.clearUser(); // Xóa dữ liệu người dùng khỏi local storage
     } catch (e) {
@@ -155,7 +156,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (token?.accessToken != null && token?.refreshToken != null) {
         emit(const AuthAuthenticated());
         // // Gửi FCM token sau khi mở app
-        // await sendFcmTokenToBackend(true);
+        await sendFcmTokenToBackend(true);
       } else {
         emit(AuthUnauthenticated());
       }

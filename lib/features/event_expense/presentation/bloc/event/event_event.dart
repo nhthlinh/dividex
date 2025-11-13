@@ -107,3 +107,10 @@ class RefreshEventsGroups extends EventEvent {
     this.sortType = "asc",
   });
 }
+
+class GetChartDataEvent extends EventEvent {
+  final int year;
+  final String eventId;
+
+  GetChartDataEvent({required this.year, required this.eventId});
+}

@@ -1,4 +1,5 @@
 import 'package:Dividex/features/group/domain/usecase.dart';
+import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -33,34 +34,36 @@ class _ContributionPieChartState extends State<ContributionPieChart> {
         ? widget.chartData
         : [ChartData(fullName: '', value: 1)];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: PieChart(
-            PieChartData(
-              sectionsSpace: 0,
-              centerSpaceRadius: 0,
-              pieTouchData: PieTouchData(
-                touchCallback: (event, response) {
-                  setState(() {
-                    if (!event.isInterestedForInteractions ||
-                        response == null ||
-                        response.touchedSection == null) {
-                      touchedIndex = null;
-                      return;
-                    }
-                    touchedIndex =
-                        response.touchedSection!.touchedSectionIndex;
-                  });
-                },
+    return ContentCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AspectRatio(
+            aspectRatio: 1,
+            child: PieChart(
+              PieChartData(
+                sectionsSpace: 0,
+                centerSpaceRadius: 0,
+                pieTouchData: PieTouchData(
+                  touchCallback: (event, response) {
+                    setState(() {
+                      if (!event.isInterestedForInteractions ||
+                          response == null ||
+                          response.touchedSection == null) {
+                        touchedIndex = null;
+                        return;
+                      }
+                      touchedIndex =
+                          response.touchedSection!.touchedSectionIndex;
+                    });
+                  },
+                ),
+                sections: _showingSections(),
               ),
-              sections: _showingSections(),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

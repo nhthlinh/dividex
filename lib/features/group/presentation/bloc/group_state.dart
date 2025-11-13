@@ -12,8 +12,9 @@ class GroupState extends Equatable {
 
 class GroupDetailState extends GroupState {
   final GroupModel? groupDetail;
+  final List<CustomBarChartData>? barChartData;
 
-  const GroupDetailState({this.groupDetail});
+  const GroupDetailState({this.groupDetail, this.barChartData});
 
   @override
   List<Object?> get props => [groupDetail];
@@ -25,17 +26,19 @@ class GroupDetailState extends GroupState {
 
 class GroupReportState extends GroupState {
   final GroupModel? groupReport;
+  final GroupModel? groupDetail;
   final List<ChartData>? chartData;
 
-
-  const GroupReportState({this.groupReport, this.chartData});
+  const GroupReportState({this.groupReport, this.groupDetail, this.chartData});
 
   GroupReportState copyWith({
     GroupModel? groupReport,
+    GroupModel? groupDetail,
     List<ChartData>? chartData,
   }) {
     return GroupReportState(
       groupReport: groupReport ?? this.groupReport,
+      groupDetail: groupDetail ?? this.groupDetail,
       chartData: chartData ?? this.chartData,
     );
   }

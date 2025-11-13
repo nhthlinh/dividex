@@ -3,6 +3,8 @@ import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/data/source/expense_remote_datasource.dart';
 import 'package:Dividex/features/event_expense/domain/expense_repository.dart';
 import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
+import 'package:Dividex/features/group/domain/usecase.dart';
+import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
@@ -62,6 +64,15 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   }
 
   @override
+  Future<PagingModel<List<ExpenseModel>>> listAllExpenses(
+    int page,
+    int pageSize,
+    ExpenseFilterArguments? filter,
+  ) async {
+    return await remoteDataSource.listAllExpenses(page, pageSize, filter);
+  }
+
+  @override
   Future<void> updateExpense(ExpenseModel expense) async {
     await remoteDataSource.updateExpense(expense);
   }
@@ -86,4 +97,8 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     await remoteDataSource.restoreExpense(id);
   }
 
+  @override
+  Future<List<CustomBarChartData>> getBarChartData(int year) async {
+    return await remoteDataSource.getBarChartData(year);
+  }
 }

@@ -4,8 +4,6 @@ import 'package:Dividex/shared/models/enum.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 
-enum ExpenseStatus { done, notYet }
-
 class ExpenseModel {
   final String? id;
   final DateTime? updatedAt;
@@ -23,7 +21,10 @@ class ExpenseModel {
   final List<UserDebt>? userDebts;
   final List<UserDeptInfo>? userDebtInfos;
   final List<ImageModel>? images;
-  final ExpenseStatus? status;
+
+  final String? fromUser;
+  final String? toUser;
+  final String? status;
 
   ExpenseModel({
     this.id,
@@ -42,6 +43,8 @@ class ExpenseModel {
     this.userDebts,
     this.images,
     this.userDebtInfos,
+    this.fromUser,
+    this.toUser,
     this.status,
   });
 
@@ -60,9 +63,9 @@ class ExpenseModel {
     totalAmount: (json['total_amount'] as num? ?? json['amount'] as num?)?.toDouble(),
     note: json['note'] as String?,
     category: json['category'] as String?,
-    expenseDate: json['expense_date'] == null
-        ? null
-        : DateTime.parse(json['expense_date'] as String),
+    expenseDate: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
     remindAt: json['end_date'] == null
         ? null
         : DateTime.parse(json['end_date'] as String),
@@ -83,32 +86,24 @@ class ExpenseModel {
   );
 
   factory ExpenseModel.fromListExpenseInGroupJson(Map<String, dynamic> json) {
-    final eventName = json['event'] as String?;
-    final expenseList = json['expense'] as List<dynamic>? ?? [];
-
     return ExpenseModel(
-      event: eventName,
-      id: expenseList.isNotEmpty ? expenseList.first['uid'] as String? : null,
-      name: expenseList.isNotEmpty
-          ? expenseList.first['name'] as String?
-          : null,
-      currency: expenseList.isNotEmpty
-          ? $enumDecodeNullable(
+      event: json['event'] as String?,
+      id: json['uid'] as String?,
+      name: json['name'] as String?,
+      currency: $enumDecodeNullable(
               $CurrencyEnumEnumMap,
-              expenseList.first['currency'].toString().toLowerCase(),
-            )
-          : null,
-      totalAmount: expenseList.isNotEmpty
-          ? (expenseList.first['amount'] != null
-                ? (expenseList.first['amount'] as num).toDouble()
-                : null)
-          : null,
-      status: expenseList.isNotEmpty
-          ? $enumDecodeNullable(
-              _$ExpenseStatusEnumMap,
-              expenseList.first['status'],
-            )
-          : null,
+              json['currency'].toString().toLowerCase(),
+            ),
+      totalAmount: (json['amount'] != null
+                ? (json['amount'] as num).toDouble()
+                : null),
+      category: json['category'] as String?,
+      toUser: json['to_user'] as String?,
+      fromUser: json['from_user'] as String?,
+      status: json['status'] as String?,
+      expenseDate: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
     );
   }
 
@@ -127,13 +122,11 @@ class ExpenseModel {
     'remindAt': instance.remindAt?.toIso8601String(),
     'category': instance.category,
     'list_expense_member': instance.userDebts?.map((e) => e.toJson()).toList(),
+    'images': instance.images?.map((e) => e.toJson()).toList(),
+    'paidByUser': instance.paidByUser?.toJson(),
+
   };
 }
-
-const _$ExpenseStatusEnumMap = {
-  ExpenseStatus.done: 'DONE',
-  ExpenseStatus.notYet: 'NOTYET',
-};
 
 const _$SplitTypeEnumEnumMap = {
   SplitTypeEnum.equal: 'equal',

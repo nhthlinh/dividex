@@ -35,3 +35,9 @@ class LoadedUsersState extends Equatable {
     );
   }
 }
+
+class UserState {
+  UserModel? user;
+
+  UserState({this.user});
+}

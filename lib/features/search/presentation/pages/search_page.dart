@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
               subtitle: intl.searchTransactionSubtitle,
               trailing: Image.asset('lib/assets/images/transaction_search_image.png', width: 105, height: 80),
               onTap: () {
-                // Navigate to search transaction page
+                context.pushNamed(AppRouteNames.searchTransaction);
               },
             ),
             const SizedBox(height: 16),

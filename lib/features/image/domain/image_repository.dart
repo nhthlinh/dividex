@@ -6,4 +6,7 @@ abstract class ImageRepository {
   Future<List<ImagePresignUrlResponseModel>> getPresignedUrls(List<ImagePresignUrlInputModel> files);
   Future<void> uploadImage(String presignedUrl, Uint8List fileBytes);
   Future<void> completeUpload(String instanceUid, List<String> fileUids);
+
+  Future<List<ImagePresignUrlResponseModel>> updateImages(List<ImagePresignUrlInputModel> newFiles, List<String> deletedImageUids);
+  Future<void> deleteImages(List<String> deletedImageUids);
 }

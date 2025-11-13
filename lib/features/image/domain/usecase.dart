@@ -21,4 +21,12 @@ class ImageUseCase {
   Future<void> completeUpload(String instanceUid, List<String> fileUids) async {
     return await imageRepository.completeUpload(instanceUid, fileUids);
   } 
+
+  Future<List<ImagePresignUrlResponseModel>> updateImages(List<ImagePresignUrlInputModel> newFiles, List<String> deletedImageUids) async {
+    return await imageRepository.updateImages(newFiles, deletedImageUids);
+  }
+
+  Future<void> deleteImages(List<String> deletedImageUids) async {
+    return await imageRepository.deleteImages(deletedImageUids);
+  }
 }
