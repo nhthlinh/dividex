@@ -121,6 +121,14 @@ class GetGroupReportEvent extends GroupsEvent {
   List<Object?> get props => [groupId];
 }
 
+class GetSimpleDetailGroupEvent extends GroupsEvent {
+  final String groupId;
+
+  const GetSimpleDetailGroupEvent(this.groupId);
+
+  @override
+  List<Object?> get props => [groupId];
+}
 class LoadGroupEventsEvent extends Equatable {
   const LoadGroupEventsEvent();
 

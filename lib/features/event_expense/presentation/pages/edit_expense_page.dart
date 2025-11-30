@@ -551,7 +551,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
           CustomButton(
             text: intl.delete,
             onPressed: () {
-              showCustomToast(intl.expenseDeleted, type: ToastType.success);
+              showCustomToast(intl.expenseDeletedInfo, type: ToastType.success);
               context.read<ExpenseBloc>().add(
                 SoftDeleteExpenseEvent(expenseId: widget.expenseId),
               );

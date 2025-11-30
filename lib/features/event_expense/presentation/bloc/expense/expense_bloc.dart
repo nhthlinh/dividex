@@ -116,9 +116,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     try {
       final useCase = await getIt.getAsync<ExpenseUseCase>();
       await useCase.softDeleteExpense(event.expenseId);
-
-      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
-      showCustomToast(intl.success, type: ToastType.success);
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
 

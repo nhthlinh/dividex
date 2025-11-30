@@ -2231,7 +2231,7 @@ abstract class AppLocalizations {
   /// No description provided for @from.
   ///
   /// In en, this message translates to:
-  /// **'from'**
+  /// **'From'**
   String get from;
 
   /// No description provided for @leaveIsDenied.
@@ -2576,11 +2576,11 @@ abstract class AppLocalizations {
   /// **'Net balance'**
   String get netBalance;
 
-  /// No description provided for @expenseDeleted.
+  /// No description provided for @expenseDeletedInfo.
   ///
   /// In en, this message translates to:
   /// **'Expense has been soft delete, please restore or hard delete in group setting.'**
-  String get expenseDeleted;
+  String get expenseDeletedInfo;
 
   /// No description provided for @deleteDate.
   ///
@@ -2785,6 +2785,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Internal expense'**
   String get internalExpense;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// No description provided for @chooseTypeFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose type of transaction'**
+  String get chooseTypeFilter;
+
+  /// No description provided for @wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get wallet;
+
+  /// No description provided for @inOrEx.
+  ///
+  /// In en, this message translates to:
+  /// **'In or ex app'**
+  String get inOrEx;
+
+  /// No description provided for @conected.
+  ///
+  /// In en, this message translates to:
+  /// **'Conected'**
+  String get conected;
+
+  /// No description provided for @lastTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Last transaction'**
+  String get lastTransaction;
+
+  /// Notification when someone updates an event
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have updated an event {event}'**
+  String eventUpdated(Object user, Object event);
+
+  /// Notification when someone creates an event
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have created an event {event}'**
+  String eventCreated(Object user, Object event);
+
+  /// Notification when someone deletes an event
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have deleted an event {event}'**
+  String eventDeleted(Object user, Object event);
+
+  /// Notification when someone restores a deleted expense
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have restored an expense {expense}'**
+  String expenseRestored(Object user, Object expense);
+
+  /// Notification when someone deletes an expense
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have deleted an expense {expense}'**
+  String expenseDeleted(Object user, Object expense);
+
+  /// Notification when someone updates an expense
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have updated an expense {expense}'**
+  String expenseUpdated(Object user, Object expense);
+
+  /// Notification when someone creates an expense
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have created an expense {expense}'**
+  String expenseCreated(Object user, Object expense);
+
+  /// Notification when someone accepts your friend request
+  ///
+  /// In en, this message translates to:
+  /// **'{user} accepted your friend request'**
+  String friendAccepted(Object user);
+
+  /// Notification when someone sends a friend request with a message
+  ///
+  /// In en, this message translates to:
+  /// **'{user} has sent you a friend request. message: {message}'**
+  String friendRequestNoti(Object user, Object message);
+
+  /// Notification when you receive a friend request
+  ///
+  /// In en, this message translates to:
+  /// **'You have received a friend request from {user}'**
+  String friendRequestToMe(Object user);
+
+  /// Notification when group leader changes
+  ///
+  /// In en, this message translates to:
+  /// **'{user} is new leader of group {group}'**
+  String leaderChanged(Object user, Object group);
+
+  /// Notification when someone updates a group
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have updated a group {group}'**
+  String groupUpdated(Object user, Object group);
+
+  /// Notification when user deposits money
+  ///
+  /// In en, this message translates to:
+  /// **'You have deposited {amount} {currency}'**
+  String deposit(Object amount, Object currency);
+
+  /// No description provided for @enterMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter message...'**
+  String get enterMessage;
+
+  /// No description provided for @partnerTyping.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner is typing...'**
+  String get partnerTyping;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @messageDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Message is deleted'**
+  String get messageDeleted;
+
+  /// No description provided for @edited.
+  ///
+  /// In en, this message translates to:
+  /// **'Message is Edited'**
+  String get edited;
 }
 
 class _AppLocalizationsDelegate

@@ -14,6 +14,7 @@ import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:Dividex/shared/widgets/settle_up_pop_up.dart';
@@ -77,7 +78,9 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
               }
               return 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(overview?.friend.fullName ?? '')}&background=random&color=fff&size=128';
             })(),
-            action: Row(
+            action: ((state.overview?.status != 'ACCEPTED' &&
+                    state.overview?.message != null) || (state.overview?.status == 'NONE' ||
+                    state.overview?.status == 'NOTYET')) ? null : Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 CustomButton(
@@ -238,6 +241,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                               if (index == friends.length) {
                                 context.read<LoadedUsersBloc>().add(
                                   user_event.LoadMoreUsersEvent(
+                                    state.page + 1,
                                     widget.friendId,
                                     user_event.LoadType.mutualFriends,
                                   ),
@@ -669,19 +673,26 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
           type: ButtonType.secondary,
           customColor: AppThemes.errorColor,
         ),
-        CustomButton(
-          text: intl.send,
-          onPressed: () {
-            context.read<FriendBloc>().add(
-              SendFriendRequestEvent(
-                friend.id ?? '',
-                message: controller.text.isEmpty ? null : controller.text,
-              ),
-            );
-            Navigator.of(context).pop();
-          },
-          size: ButtonSize.medium,
-          customColor: AppThemes.primary3Color,
+        CustomFormWrapper(
+          fields: [FormFieldConfig(controller: controller, isRequired: true)],
+          builder: (isValid) => CustomButton(
+            text: intl.send,
+            onPressed: (controller.text.isEmpty)
+                ? null
+                : () {
+                    context.read<FriendBloc>().add(
+                      SendFriendRequestEvent(
+                        friend.id ?? '',
+                        message: controller.text.isEmpty
+                            ? null
+                            : controller.text,
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  },
+            size: ButtonSize.medium,
+            customColor: AppThemes.primary3Color,
+          ),
         ),
       ],
     );

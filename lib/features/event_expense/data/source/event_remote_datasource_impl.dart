@@ -6,7 +6,6 @@ import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:injectable/injectable.dart';
-import 'package:intl/intl.dart';
 
 @Injectable(as: EventRemoteDataSource)
 class EventRemoteDataSourceImpl implements EventRemoteDataSource {

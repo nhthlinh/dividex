@@ -32,6 +32,11 @@ class RechargeRepositoryImpl implements RechargeRepository {
   }
 
   @override
+  Future<Map<String, dynamic>> getWalletInfo() {
+    return remoteDataSource.getWalletInfo();
+  }
+
+  @override
   Future<PagingModel<List<ExternalTransactionModel>>> getExternalHistory(int page, int pageSize, ExternalTransactionFilterArguments? filter) {
     return remoteDataSource.getExternalHistory(page, pageSize, filter);
   }

@@ -16,19 +16,20 @@ abstract class LoadUserEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
-
+ 
 class InitialEvent extends LoadUserEvent {
   final String? id;
-  final LoadType action;
+  final LoadType action; 
   final String? searchQuery;
   const InitialEvent(this.id, this.action, {this.searchQuery});
 }
 
 class LoadMoreUsersEvent extends LoadUserEvent {
+  final int page;
   final String? id;
   final LoadType action;
   final String? searchQuery;
-  const LoadMoreUsersEvent(this.id, this.action, {this.searchQuery});
+  const LoadMoreUsersEvent(this.page, this.id, this.action, {this.searchQuery});
 }
 
 class RefreshUsersEvent extends LoadUserEvent {

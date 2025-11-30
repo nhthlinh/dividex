@@ -83,18 +83,23 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
     ExpenseFilterArguments? filter,
   ) async {
     return apiCallWrapper(() async {
+      print(filter?.start);
+      print(filter?.end);
       final queryParams = {
         'page': page,
         'page_size': pageSize,
-        if (filter?.status != null) 'status': filter!.status!.name else 'status': 'ACTIVE',
-        if (filter?.start != null) 'start': filter!.start!.toIso8601String(),
-        if (filter?.end != null) 'end': filter!.end!.toIso8601String(),
+        if (filter?.status != null)
+          'status': filter!.status!.name
+        else
+          'status': 'ACTIVE',
+        if (filter?.start != null)
+          'start': DateFormat("yyyy-MM-dd HH:mm").format(filter!.start!),
+        if (filter?.end != null)
+          'end': DateFormat("yyyy-MM-dd HH:mm").format(filter!.end!),
         if (filter?.minAmount != null) 'min_amount': filter!.minAmount,
         if (filter?.maxAmount != null) 'max_amount': filter!.maxAmount,
-        if (filter?.eventId?.isNotEmpty ?? false)
-          'event_id': filter!.eventId,
-        if (filter?.groupId?.isNotEmpty ?? false)
-          'group_id': filter!.groupId,
+        if (filter?.eventId?.isNotEmpty ?? false) 'event': filter!.eventId,
+        if (filter?.groupId?.isNotEmpty ?? false) 'group': filter!.groupId,
         if (filter?.category?.isNotEmpty ?? false) 'category': filter!.category,
         if (filter?.name?.isNotEmpty ?? false) 'name': filter!.name,
       };

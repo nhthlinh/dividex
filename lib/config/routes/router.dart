@@ -44,19 +44,25 @@ import 'package:Dividex/features/home/presentation/pages/withdraw_page.dart';
 import 'package:Dividex/features/home/presentation/pages/withdraw_success_page.dart';
 import 'package:Dividex/features/home/presentation/recharge_report.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
+import 'package:Dividex/features/message/presentation/bloc/chat_bloc.dart';
+import 'package:Dividex/features/message/presentation/pages/chat_all_page.dart';
+import 'package:Dividex/features/message/presentation/pages/chat_page.dart';
+import 'package:Dividex/features/notifications/presentation/bloc/notification_bloc.dart';
+import 'package:Dividex/features/notifications/presentation/pages/noti_page.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/features/recharge/presentation/pages/recharge_page.dart';
+import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/features/search/presentation/bloc/search_transaction_bloc.dart';
 import 'package:Dividex/features/search/presentation/bloc/search_users_bloc.dart'
     as search_bloc;
 import 'package:Dividex/features/friend/presentation/pages/friend_page.dart';
+import 'package:Dividex/features/search/presentation/pages/filter_page.dart';
 import 'package:Dividex/features/search/presentation/pages/search_page.dart';
 import 'package:Dividex/features/search/presentation/pages/search_transaction_page.dart';
 import 'package:Dividex/features/search/presentation/pages/search_user_page.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/pages/choose_members_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/change_pass_page.dart';
@@ -65,10 +71,13 @@ import 'package:Dividex/features/home/presentation/pages/setting_page.dart';
 import 'package:Dividex/features/home/presentation/pages/term_of_service_page.dart';
 import 'package:Dividex/features/splash/presentation/pages/splash_page.dart';
 import 'package:Dividex/features/splash/presentation/pages/splash_page_2.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 // Định nghĩa các tên route để sử dụng Type-safe routing
 class AppRouteNames {
@@ -85,8 +94,8 @@ class AppRouteNames {
 
   static const String home = 'home';
   static const String friend = 'friend';
+  static const String notification = 'notification';
 
-  static const String mail = 'mail';
   static const String settings = 'settings';
 
   static const String profile = 'profile';
@@ -99,7 +108,7 @@ class AppRouteNames {
   static const String search = 'search';
   static const String searchUser = 'search-user';
   static const String searchTransaction = 'search-transaction';
-  // static const String chat = 'chat';
+  static const String filter = 'filter';
 
   static const String addExpense = 'add-expense';
   static const String addGroup = 'add-group';
@@ -135,6 +144,9 @@ class AppRouteNames {
   static const String friendProfile = 'friend-profile';
   static const String walletReport = 'wallet-report';
   static const String transactionReport = 'transaction-report';
+
+  static const String chat = 'chat';
+  static const String chatInGroup = 'chat-in-group';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -219,9 +231,49 @@ GoRouter buildRouter(BuildContext context) {
         path: '/home',
         name: AppRouteNames.home,
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return buildPageWithDefaultTransition(child: HomePage());
+          return buildPageWithDefaultTransition(
+            child: BlocProvider<RechargeBloc>(
+              create: (context) => RechargeBloc(),
+              child: HomePage(),
+            ),
+          );
         },
         routes: [
+          GoRoute(
+            path: 'notification',
+            name: AppRouteNames.notification,
+            pageBuilder: (context, state) {
+              return buildPageWithDefaultTransition(
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider<LoadedNotiBloc>(
+                      create: (context) => LoadedNotiBloc(),
+                    ),
+                    BlocProvider<FriendBloc>(create: (context) => FriendBloc()),
+                    BlocProvider<LoadFriendDeptBloc>(
+                      create: (context) => LoadFriendDeptBloc(),
+                    ),
+                    BlocProvider<LoadedUsersBloc>(
+                      create: (context) => LoadedUsersBloc(),
+                    ),
+                    BlocProvider<RechargeBloc>(
+                      create: (context) => RechargeBloc(),
+                    ),
+                    BlocProvider<LoadedHistoryBloc>(
+                      create: (context) => LoadedHistoryBloc(),
+                    ),
+                    BlocProvider<ExpenseDataBloc>(
+                      create: (context) => ExpenseDataBloc(),
+                    ),
+                    BlocProvider<GroupBloc>(create: (context) => GroupBloc()),
+                    BlocProvider<EventBloc>(create: (context) => EventBloc()),
+                    BlocProvider<ExpenseBloc>(create: (context) => ExpenseBloc()),
+                  ],
+                  child: NotiPage(),
+                ),
+              );
+            },
+          ),
           GoRoute(
             path: '/expense/:id',
             name: AppRouteNames.expenseDetail,
@@ -305,9 +357,7 @@ GoRouter buildRouter(BuildContext context) {
                           create: (context) => LoadedUsersBloc(),
                         ),
                       ],
-                      child: GroupReportPage(
-                        groupId: groupId,
-                      ),
+                      child: GroupReportPage(groupId: groupId),
                     ),
                   );
                 },
@@ -399,7 +449,6 @@ GoRouter buildRouter(BuildContext context) {
                       final groupId = state.pathParameters['groupId'];
                       final extra = state.extra as Map<String, dynamic>?;
                       final groupName = extra?['groupName'] as String?;
-                      final groupAvatar = extra?['groupAvatar'] as String?;
                       return buildPageWithDefaultTransition(
                         child: MultiBlocProvider(
                           providers: [
@@ -413,7 +462,6 @@ GoRouter buildRouter(BuildContext context) {
                           child: HardDeleteExpensePage(
                             groupId: groupId ?? '',
                             groupName: groupName ?? '',
-                            groupAvatarUrl: groupAvatar ?? '',
                           ),
                         ),
                       );
@@ -428,8 +476,6 @@ GoRouter buildRouter(BuildContext context) {
                       final groupId = state.pathParameters['groupId'];
                       final extra = state.extra as Map<String, dynamic>?;
                       final eventName = extra?['eventName'] as String?;
-                      final groupName = extra?['groupName'] as String?;
-                      final groupAvatar = extra?['groupAvatar'] as String?;
                       return buildPageWithDefaultTransition(
                         child: MultiBlocProvider(
                           providers: [
@@ -444,8 +490,6 @@ GoRouter buildRouter(BuildContext context) {
                             eventId: eventId,
                             groupId: groupId ?? '',
                             eventName: eventName ?? '',
-                            groupName: groupName ?? '',
-                            groupAvatarUrl: groupAvatar ?? '',
                           ),
                         ),
                       );
@@ -629,7 +673,7 @@ GoRouter buildRouter(BuildContext context) {
             },
           ),
 
-           GoRoute(
+          GoRoute(
             path: 'transaction-report',
             name: AppRouteNames.transactionReport,
             pageBuilder: (BuildContext context, GoRouterState state) {
@@ -668,7 +712,6 @@ GoRouter buildRouter(BuildContext context) {
               );
             },
           ),
-        
         ],
       ),
       GoRoute(
@@ -692,41 +735,116 @@ GoRouter buildRouter(BuildContext context) {
             path: 'search-transaction',
             name: AppRouteNames.searchTransaction,
             pageBuilder: (context, state) => buildPageWithDefaultTransition(
-              child: BlocProvider(
-                create: (context) => SearchTransactionBloc(),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SearchTransactionBloc>(
+                    create: (context) => SearchTransactionBloc(),
+                  ),
+                  BlocProvider<RechargeBloc>(
+                    create: (context) => RechargeBloc(),
+                  ),
+                ],
                 child: SearchTransactionPage(),
               ),
             ),
           ),
+          GoRoute(
+            path: 'filter',
+            name: AppRouteNames.filter,
+            pageBuilder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              final filterType = extra?['filterType'] ?? FilterType.all;
+              final initialExpenseFilter =
+                  extra?['initialExpenseFilter'] as ExpenseFilterArguments?;
+              final initialExternalFilter =
+                  extra?['initialExternalFilter']
+                      as ExternalTransactionFilterArguments?;
+              final initialInternalFilter =
+                  extra?['initialInternalFilter']
+                      as InternalTransactionFilterArguments?;
+
+              final void Function(ExpenseFilterArguments)? onApplyExpense =
+                  extra?['onApplyExpense'];
+              final void Function(ExternalTransactionFilterArguments)?
+              onApplyExternal = extra?['onApplyExternal'];
+              final void Function(InternalTransactionFilterArguments)?
+              onApplyInternal = extra?['onApplyInternal'];
+
+              return buildPageWithDefaultTransition(
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider<LoadedGroupsBloc>(
+                      create: (context) => LoadedGroupsBloc(),
+                    ),
+                    BlocProvider<LoadedGroupsEventsBloc>(
+                      create: (context) => LoadedGroupsEventsBloc(),
+                    ),
+                  ],
+                  child: FilterPage(
+                    filterType: filterType,
+                    initialExpenseFilter: initialExpenseFilter,
+                    initialExternalFilter: initialExternalFilter,
+                    initialInternalFilter: initialInternalFilter,
+                    onApplyExpense: onApplyExpense,
+                    onApplyExternal: onApplyExternal,
+                    onApplyInternal: onApplyInternal,
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
-      // GoRoute(
-      //   path: '/mail',
-      //   name: AppRouteNames.mail,
-      //   pageBuilder: (BuildContext context, GoRouterState state) {
-      //     return buildPageWithDefaultTransition(
-      //       child: AppShell(
-      //         currentIndex: 2,
-      //         child: Layout(
-      //           title: "Trang mail",
-      //           child: Column(
-      //             children: const [
-      //               Text("Nội dung trang mail"),
-      //               SizedBox(height: 16),
-      //               Text("Thêm nội dung khác ở đây"),
-      //               SizedBox(height: 16),
-      //               Text("V.v..."),
-      //               SizedBox(height: 16),
-      //               Text("Nội dung bổ sung"),
-      //               SizedBox(height: 16),
-      //               Text("Và nhiều hơn nữa"),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // ),
+
+      GoRoute(
+        path: '/chat',
+        name: AppRouteNames.chat,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return buildPageWithDefaultTransition(
+            child: BlocProvider<LoadedGroupsBloc>(
+              create: (context) => LoadedGroupsBloc(),
+              child: ChatAllPage(),
+            ),
+          );
+        },
+        routes: [
+          GoRoute(
+            path: 'chat/:groupId',
+            name: AppRouteNames.chatInGroup,
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              final baseUrl = dotenv.env['BASE_URL'] ?? 'http://localhost:3000';
+              final wsUrl = dotenv.env['WS_URL'] ?? 'ws://localhost:3000';
+              final token = HiveService.getToken()?.accessToken ?? '';
+              final extra = state.extra as Map<String, dynamic>;
+              final service = ChatService(
+                apiBase: baseUrl,
+                wsUrl: wsUrl,
+                token: token,
+                roomId: extra['groupId'] as String,
+              );
+              return buildPageWithDefaultTransition(
+                child: MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (_) => ChatProvider(service: service),
+                    ),
+                  ],
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: LoadedMessageBloc()),
+                      BlocProvider(create: (context) => ChatBloc()),
+                    ],
+                    child: ChatPage(
+                      roomName: extra['groupName'] as String,
+                      roomId: extra['groupId'] as String,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       GoRoute(
         path: '/settings',
         name: AppRouteNames.settings,

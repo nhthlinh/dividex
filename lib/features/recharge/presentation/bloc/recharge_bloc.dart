@@ -41,6 +41,8 @@ class CreateWithdrawEvent extends RechargeEvent {
 
 class GetWalletEvent extends RechargeEvent {}
 
+class GetWalletInfoEvent extends RechargeEvent {}
+
 class GetDepositDetailEvent extends RechargeEvent {
   final String id;
 
@@ -122,6 +124,24 @@ class GetWalletSuccessState extends RechargeState {
   GetWalletSuccessState(this.walletInfo);
 }
 
+class GetWalletInfoSuccessState extends RechargeState {
+  final String balance;
+  final String currency;
+  final String totalTransactions;
+  final String phoneNumber;
+  final String fullName;
+  final String latestTime;
+
+  GetWalletInfoSuccessState(
+    this.balance,
+    this.currency,
+    this.totalTransactions,
+    this.phoneNumber,
+    this.fullName,
+    this.latestTime,
+  );
+}
+
 class GetDepositDetailSuccessState extends RechargeState {
   final DepositTransactionModel depositDetail;
 
@@ -189,6 +209,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
     on<GetDepositDetailEvent>(_onGetDepositDetail);
     on<GetWithdrawDetailEvent>(_onGetWithdrawDetail);
     on<TransferEvent>(_onTransferEvent);
+    on<GetWalletInfoEvent>(_onGetWalletInfo);
   }
 
   Future<void> _onDeposit(
@@ -332,6 +353,32 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
       }
     }
   }
+
+  Future<void> _onGetWalletInfo(
+    GetWalletInfoEvent event,
+    Emitter<RechargeState> emit,
+  ) async {
+    try {
+      final usecase = await getIt.getAsync<RechargeUseCase>();
+      final walletInfo = await usecase.getWalletInfo();
+
+      emit(
+        GetWalletInfoSuccessState(
+          walletInfo['balance'] as String,
+          walletInfo['currency'] as String,
+          walletInfo['totalTransactions'] as String,
+          walletInfo['phoneNumber'] as String,
+          walletInfo['fullName'] as String,
+          walletInfo['latestTime'] as String,
+        ),
+      );
+    } catch (e, stackTrace) {
+      print(stackTrace);
+      print(e);
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
 }
 
 class LoadedHistoryBloc extends Bloc<GetHistoryEvent, LoadedHistoryState> {
@@ -346,8 +393,16 @@ class LoadedHistoryBloc extends Bloc<GetHistoryEvent, LoadedHistoryState> {
 
       // Lấy dữ liệu theo loại giao dịch
       final transactions = event.type == WalletHistoryType.external
-          ? await useCase.getExternalHistory(event.page, event.pageSize, ExternalTransactionFilterArguments())
-          : await useCase.getInternalHistory(event.page, event.pageSize, InternalTransactionFilterArguments());
+          ? await useCase.getExternalHistory(
+              event.page,
+              event.pageSize,
+              ExternalTransactionFilterArguments(),
+            )
+          : await useCase.getInternalHistory(
+              event.page,
+              event.pageSize,
+              InternalTransactionFilterArguments(),
+            );
 
       emit(
         state.copyWith(
@@ -357,14 +412,14 @@ class LoadedHistoryBloc extends Bloc<GetHistoryEvent, LoadedHistoryState> {
           isLoading: false,
           externalTransaction: event.type == WalletHistoryType.external
               ? (transactions.data
-                .map((e) => e as ExternalTransactionModel)
-                .toList())
+                    .map((e) => e as ExternalTransactionModel)
+                    .toList())
               : <ExternalTransactionModel>[],
           internalTransaction: event.type == WalletHistoryType.internal
-            ? (transactions.data
-                .map((e) => e as InternalTransactionModel)
-                .toList())
-            : <InternalTransactionModel>[],
+              ? (transactions.data
+                    .map((e) => e as InternalTransactionModel)
+                    .toList())
+              : <InternalTransactionModel>[],
         ),
       );
     } catch (e) {
@@ -377,8 +432,16 @@ class LoadedHistoryBloc extends Bloc<GetHistoryEvent, LoadedHistoryState> {
     try {
       final useCase = await getIt.getAsync<RechargeUseCase>();
       final transactions = event.type == WalletHistoryType.external
-          ? await useCase.getExternalHistory(event.page, event.pageSize, ExternalTransactionFilterArguments())
-          : await useCase.getInternalHistory(event.page, event.pageSize, InternalTransactionFilterArguments());
+          ? await useCase.getExternalHistory(
+              event.page,
+              event.pageSize,
+              ExternalTransactionFilterArguments(),
+            )
+          : await useCase.getInternalHistory(
+              event.page,
+              event.pageSize,
+              InternalTransactionFilterArguments(),
+            );
 
       emit(
         state.copyWith(
@@ -386,12 +449,16 @@ class LoadedHistoryBloc extends Bloc<GetHistoryEvent, LoadedHistoryState> {
           totalPage: transactions.totalPage,
           totalItems: transactions.totalItems,
           externalTransaction: event.type == WalletHistoryType.external
-              ? ([...state.externalTransaction, ...transactions.data].map((e) => e as ExternalTransactionModel)
-                .toList())
+              ? ([
+                  ...state.externalTransaction,
+                  ...transactions.data,
+                ].map((e) => e as ExternalTransactionModel).toList())
               : <ExternalTransactionModel>[],
           internalTransaction: event.type == WalletHistoryType.internal
-              ? ([...state.internalTransaction, ...transactions.data].map((e) => e as InternalTransactionModel)
-                .toList())
+              ? ([
+                  ...state.internalTransaction,
+                  ...transactions.data,
+                ].map((e) => e as InternalTransactionModel).toList())
               : <InternalTransactionModel>[],
         ),
       );
@@ -409,20 +476,26 @@ class LoadedHistoryBloc extends Bloc<GetHistoryEvent, LoadedHistoryState> {
 
       final useCase = await getIt.getAsync<RechargeUseCase>();
       final users = event.type == WalletHistoryType.external
-          ? await useCase.getExternalHistory(event.page, event.pageSize, ExternalTransactionFilterArguments())
-          : await useCase.getInternalHistory(event.page, event.pageSize, InternalTransactionFilterArguments());
+          ? await useCase.getExternalHistory(
+              event.page,
+              event.pageSize,
+              ExternalTransactionFilterArguments(),
+            )
+          : await useCase.getInternalHistory(
+              event.page,
+              event.pageSize,
+              InternalTransactionFilterArguments(),
+            );
 
       emit(
         state.copyWith(
           page: users.page,
           totalPage: users.totalPage,
           externalTransaction: event.type == WalletHistoryType.external
-              ? (users.data.map((e) => e as ExternalTransactionModel)
-                .toList())
+              ? (users.data.map((e) => e as ExternalTransactionModel).toList())
               : <ExternalTransactionModel>[],
           internalTransaction: event.type == WalletHistoryType.internal
-              ? (users.data.map((e) => e as InternalTransactionModel)
-                .toList())
+              ? (users.data.map((e) => e as InternalTransactionModel).toList())
               : <InternalTransactionModel>[],
           totalItems: users.totalItems,
           isLoading: false,

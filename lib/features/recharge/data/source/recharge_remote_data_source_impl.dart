@@ -1,10 +1,14 @@
+import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/recharge/data/models/recharge_model.dart';
 import 'package:Dividex/features/recharge/data/source/recharge_remote_data_source.dart';
 import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
+import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 
 @Injectable(as: RechargeRemoteDataSource)
 class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
@@ -69,6 +73,29 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
   }
 
   @override
+  Future<Map<String, dynamic>> getWalletInfo() {
+    return apiCallWrapper(() async {
+      final res = await dio.get('/auth/wallet');
+
+      final balanceRaw = res.data['data']['balance'];
+      final currency = res.data['data']['currency'] ?? '';
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+
+      final balance = double.tryParse(balanceRaw.toString());
+      return {
+        'balance': balance != null
+            ? formatNumber(double.parse(balance.toStringAsFixed(2)))
+            : 0.00,
+        'currency': currency,
+        'totalTransactions': res.data['data']['total_transactions'].toString(),
+        'phoneNumber': res.data['data']['phone_number'].toString(),
+        'fullName': res.data['data']['full_name'].toString(),
+        'latestTime': getTimeAgo(DateTime.parse(res.data['data']['latest_time']), intl),
+      };
+    });
+  }
+
+  @override
   Future<DepositTransactionModel> getDepositDetail(String id) {
     return apiCallWrapper(() async {
       final res = await dio.get('/wallet/$id/deposit');
@@ -94,8 +121,8 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
       final queryParams = {
         'page': page,
         'page_size': pageSize,
-        if (filter?.start != null) 'start': filter!.start!.toIso8601String(),
-        if (filter?.end != null) 'end': filter!.end!.toIso8601String(),
+        if (filter?.start != null) 'start': DateFormat("yyyy-MM-dd HH:mm").format(filter!.start!),
+        if (filter?.end != null) 'end': DateFormat("yyyy-MM-dd HH:mm").format(filter!.end!),
         if (filter?.minAmount != null) 'min_amount': filter!.minAmount,
         if (filter?.maxAmount != null) 'max_amount': filter!.maxAmount,
         if (filter?.code?.isNotEmpty ?? false) 'code': filter!.code,
@@ -133,13 +160,12 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
         'page': page,
         'page_size': pageSize,
 
-        if (filter?.start != null) 'start': filter!.start!.toIso8601String(),
-        if (filter?.end != null) 'end': filter!.end!.toIso8601String(),
+        if (filter?.start != null) 'start': DateFormat("yyyy-MM-dd HH:mm").format(filter!.start!),
+        if (filter?.end != null) 'end': DateFormat("yyyy-MM-dd HH:mm").format(filter!.end!),
         if (filter?.minAmount != null) 'min_amount': filter!.minAmount,
         if (filter?.maxAmount != null) 'max_amount': filter!.maxAmount,
         if (filter?.groupId?.isNotEmpty ?? false) 'group_id': filter!.groupId,
-        if (filter?.name?.isNotEmpty ?? false) 'keyword': filter!.name,
-        if (filter?.code?.isNotEmpty ?? false) 'code': filter!.code,
+        if (filter?.keyword?.isNotEmpty ?? false) 'keyword': filter!.keyword,
       };
       final res = await dio.get(
         '/wallet/transaction',

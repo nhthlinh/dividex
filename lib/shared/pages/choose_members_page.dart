@@ -73,8 +73,6 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
     final intl = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    print('isCanChooseMyself: ${widget.isCanChooseMyself}');
-
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
@@ -131,6 +129,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
                   hasMore,
                   state.totalItems,
                   widget.isCanChooseMyself ? state.users : usersWithoutMyself,
+                  state.page,
                 );
               },
             ),
@@ -162,6 +161,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
     bool hasMore,
     int totalUsers,
     List<UserModel>? users,
+    int page
   ) {
     return Column(
       children: [
@@ -180,7 +180,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
               children: totalUsers > 0
                   ? [
                       TextSpan(
-                        text: totalUsers > 99 ? ' 99+' : ' $totalUsers',
+                        text: totalUsers > 99 ? ' 99+' : ' ${widget.isCanChooseMyself ? totalUsers : totalUsers - 1}',
                         style: TextStyle(color: AppThemes.primary3Color),
                       ),
                     ]
@@ -200,6 +200,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
             if (index == users!.length) {
               context.read<LoadedUsersBloc>().add(
                 LoadMoreUsersEvent(
+                  page + 1,
                   widget.id,
                   widget.type,
                   searchQuery: _searchController.text.isEmpty

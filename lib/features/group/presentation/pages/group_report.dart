@@ -241,6 +241,7 @@ class _GroupReportPageState extends State<GroupReportPage> {
                   hasMore,
                   state.totalItems,
                   usersWithoutMyself,
+                  state.page,
                 );
               },
             ),
@@ -402,6 +403,7 @@ class _GroupReportPageState extends State<GroupReportPage> {
     bool hasMore,
     int totalUsers,
     List<UserModel>? users,
+    int page,
   ) {
     return Column(
       children: [
@@ -440,6 +442,7 @@ class _GroupReportPageState extends State<GroupReportPage> {
             if (index == users!.length) {
               context.read<LoadedUsersBloc>().add(
                 load_user_event.LoadMoreUsersEvent(
+                  page + 1,
                   widget.groupId,
                   load_user_event.LoadType.groupMembers,
                   searchQuery: '',
@@ -550,8 +553,6 @@ class _GroupReportPageState extends State<GroupReportPage> {
                   },
                   extra: {
                     'eventName': event.name ?? '',
-                    'groupName': groupName,
-                    'groupAvatarUrl': groupAvatarUrl,
                   },
                 );
               },

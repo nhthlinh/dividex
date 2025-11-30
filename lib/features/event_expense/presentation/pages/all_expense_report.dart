@@ -9,6 +9,7 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/bar_chart.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +83,7 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
                   hasMore,
                   state.totalItems,
                   state.expenses,
+                  state.page
                 );
               },
             ),
@@ -138,6 +140,7 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
     bool hasMore,
     int totalExpenses,
     List<ExpenseModel> expenses,
+    int page
   ) {
     final groupedExpenses = <String, List<ExpenseModel>>{};
     for (var e in expenses) {
@@ -186,6 +189,21 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
             intl,
           ),
         ),
+
+        if (hasMore) ... [
+          BlocProvider<ExpenseDataBloc>(
+            create: (context) => context.read<ExpenseDataBloc>(),
+            child: CustomButton(
+              text: intl.more,
+              onPressed: () {
+                context.read<ExpenseDataBloc>().add(
+                  LoadMoreExpenses(id: '', type: LoadExpenseType.all, page: page + 1),
+                );
+              },
+              size: ButtonSize.small,
+            ),
+          ),
+        ]
       ],
     );
   }
@@ -231,7 +249,7 @@ List<Widget> buildGroupedExpenseList(
             backgroundColor: Colors.grey,
             backgroundImage: NetworkImage(
               getCategoryByKey(expense.category ?? '')?.getImage() ??
-                  'lib/assets/icons/money-transfer.png',
+                'lib/assets/icons/money-transfer.png',
             ),
           ),
           subtitle: expense.event,

@@ -6,7 +6,6 @@ import 'package:Dividex/features/group/data/source/group_remote_datasource.dart'
 import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
-import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: GroupRemoteDataSource)

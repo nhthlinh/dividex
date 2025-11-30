@@ -38,21 +38,6 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
   List<ImageModel> deletedImages = [];
   List<ImageModel> existingImages = [];
 
-  // void onTapImage(String id) {
-  //   if (updatedImages.isNotEmpty && deletedImages.isNotEmpty) {
-  //     updateImage(
-  //       id,
-  //       updatedImages,
-  //       AttachmentType.expense,
-  //       deletedImages.map((e) => e.uid).toList(),
-  //     );
-  //   } else if (updatedImages.isEmpty && deletedImages.isNotEmpty) {
-  //     deleteImage(deletedImages.map((e) => e.uid).toList());
-  //   } else if (updatedImages.isNotEmpty && deletedImages.isEmpty) {
-  //     uploadImage(id, updatedImages, AttachmentType.expense);
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -286,6 +271,17 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
 
                   // actions
                   const SizedBox(height: 16),
+
+                  if (expense.status == 'DELETED') ...[
+                    Align(
+                      alignment: Alignment.center,
+                      child: CustomButton(text: intl.restore, onPressed: () {
+                        context.read<ExpenseBloc>().add(
+                          RestoreExpenseEvent(expenseId: expense.id!),
+                        );
+                      }),
+                    )
+                  ]
                 ],
               ),
             );

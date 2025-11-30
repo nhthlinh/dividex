@@ -7,6 +7,7 @@ import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
@@ -251,19 +252,24 @@ class _FriendCardState extends State<FriendCard> {
             type: ButtonType.secondary,
             customColor: AppThemes.errorColor,
           ),
-          CustomButton(
-            text: intl.send,
-            onPressed: () {
-              context.read<FriendBloc>().add(
-                SendFriendRequestEvent(
-                  widget.friend.friendUid,
-                  message: controller.text.isEmpty ? null : controller.text,
-                ),
-              );
-              Navigator.of(context).pop();
-            },
-            size: ButtonSize.medium,
-            customColor: AppThemes.primary3Color,
+          CustomFormWrapper(
+            fields: [
+              FormFieldConfig(controller: controller, isRequired: true),
+            ],
+            builder: (isValid) => CustomButton(
+              text: intl.send,
+              onPressed: (controller.text.isEmpty) ? null : () {
+                context.read<FriendBloc>().add(
+                  SendFriendRequestEvent(
+                    widget.friend.friendUid,
+                    message: controller.text.isEmpty ? null : controller.text,
+                  ),
+                );
+                Navigator.of(context).pop();
+              },
+              size: ButtonSize.medium,
+              customColor: AppThemes.primary3Color,
+            ),
           ),
         ],
       );

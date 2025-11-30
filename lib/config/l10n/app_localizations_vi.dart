@@ -1358,7 +1358,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get netBalance => 'Nợ';
 
   @override
-  String get expenseDeleted =>
+  String get expenseDeletedInfo =>
       'Chi tiêu đã được xóa tạm thời, hãy khôi phục hoặc xóa hẳn trong cài đặt group';
 
   @override
@@ -1470,4 +1470,105 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get internalExpense => 'Giao dịch trong app';
+
+  @override
+  String get notifications => 'Thông báo';
+
+  @override
+  String get filter => 'Bộ lọc';
+
+  @override
+  String get chooseTypeFilter => 'Chọn loại giao dịch';
+
+  @override
+  String get wallet => 'Ví';
+
+  @override
+  String get inOrEx => 'Trong hay ngoài app';
+
+  @override
+  String get conected => 'Đã kết nối';
+
+  @override
+  String get lastTransaction => 'Giao dịch cuối';
+
+  @override
+  String eventUpdated(Object user, Object event) {
+    return '$user đã cập nhật sự kiện $event';
+  }
+
+  @override
+  String eventCreated(Object user, Object event) {
+    return '$user đã tạo sự kiện $event';
+  }
+
+  @override
+  String eventDeleted(Object user, Object event) {
+    return '$user đã xóa sự kiện $event';
+  }
+
+  @override
+  String expenseRestored(Object user, Object expense) {
+    return '$user đã khôi phục khoản chi $expense';
+  }
+
+  @override
+  String expenseDeleted(Object user, Object expense) {
+    return '$user đã xóa khoản chi $expense';
+  }
+
+  @override
+  String expenseUpdated(Object user, Object expense) {
+    return '$user đã cập nhật khoản chi $expense';
+  }
+
+  @override
+  String expenseCreated(Object user, Object expense) {
+    return '$user đã tạo khoản chi $expense';
+  }
+
+  @override
+  String friendAccepted(Object user) {
+    return '$user đã chấp nhận lời mời kết bạn của bạn';
+  }
+
+  @override
+  String friendRequestNoti(Object user, Object message) {
+    return '$user đã gửi lời mời kết bạn. Tin nhắn: $message';
+  }
+
+  @override
+  String friendRequestToMe(Object user) {
+    return 'Bạn nhận được lời mời kết bạn từ $user';
+  }
+
+  @override
+  String leaderChanged(Object user, Object group) {
+    return '$user là trưởng nhóm mới của nhóm $group';
+  }
+
+  @override
+  String groupUpdated(Object user, Object group) {
+    return '$user đã cập nhật nhóm $group';
+  }
+
+  @override
+  String deposit(Object amount, Object currency) {
+    return 'Bạn đã nạp $amount $currency';
+  }
+
+  @override
+  String get enterMessage => 'Nhập tin nhắn...';
+
+  @override
+  String get partnerTyping => 'Đối phương đang nhập...';
+
+  @override
+  String get edit => 'Chỉnh sửa';
+
+  @override
+  String get messageDeleted => 'Tin nhắn đã bị xóa';
+
+  @override
+  String get edited => 'Tin nhắn đã chỉnh sửa';
 }

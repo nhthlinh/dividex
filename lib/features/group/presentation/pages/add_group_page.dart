@@ -177,7 +177,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
             const SizedBox(height: 30),
             CustomButton(
               text: intl.add,
-              onPressed: isValid ? submitGroup : null,
+              onPressed: (isValid && selectedMembers.isNotEmpty) ? submitGroup : null,
             ),
             const SizedBox(height: 30),
           ],

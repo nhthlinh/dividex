@@ -2,6 +2,7 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:Dividex/features/notifications/presentation/bloc/notification_state.dart';
+import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/features/home/presentation/widgets/button_grid.dart';
 import 'package:Dividex/features/home/presentation/widgets/fancy_card.dart';
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    context.read<RechargeBloc>().add(GetWalletInfoEvent());
   }
 
   @override
@@ -135,8 +137,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BlocBuilder<NotificationBloc, NotificationState> notiButton() {
-    return BlocBuilder<NotificationBloc, NotificationState>(
+  BlocBuilder<LoadedNotiBloc, LoadedNotiState> notiButton() {
+    return BlocBuilder<LoadedNotiBloc, LoadedNotiState>(
       builder: (context, state) {
         if (state is NotificationLoaded) {
           return Stack(
@@ -145,10 +147,11 @@ class _HomePageState extends State<HomePage> {
                 iconSize: 30,
                 icon: const Icon(Icons.notifications, color: Colors.white),
                 onPressed: () {
-                  // context.pushNamed(AppRouteNames.notification);
+                  context.pushNamed(AppRouteNames.notification);
                 },
               ),
-              if (state.unreadCount > 0)
+    
+              if (state.totalItems > 0)
                 Positioned(
                   right: 8,
                   top: 8,
@@ -156,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                     radius: 8,
                     backgroundColor: Colors.red,
                     child: Text(
-                      state.unreadCount.toString(),
+                      state.totalItems.toString(),
                       style: const TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ),
@@ -167,7 +170,7 @@ class _HomePageState extends State<HomePage> {
         return IconButton(
           icon: const Icon(Icons.notifications, color: Colors.white),
           onPressed: () {
-            // context.pushNamed(AppRouteNames.notification);
+            context.pushNamed(AppRouteNames.notification);
           },
         );
       },

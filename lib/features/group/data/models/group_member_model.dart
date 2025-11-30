@@ -1,5 +1,6 @@
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/shared/utils/get_time_ago.dart';
 
 class GroupMemberModel {
   final String? id;
@@ -27,7 +28,7 @@ class GroupMemberModel {
             : GroupModel.fromJson(json['group'] as Map<String, dynamic>),
         joinedAt: json['joinedAt'] == null
             ? null
-            : DateTime.parse(json['joinedAt'] as String),
+            : parseUTCToVN(json['joinedAt'] as String),
         amount: json['balance'] == null
             ? null
             : double.tryParse(json['balance'].toString()),

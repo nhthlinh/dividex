@@ -155,7 +155,7 @@ class _AppShellState extends State<AppShell> {
             context.pushNamed(AppRouteNames.search);
             break;
           case 2:
-            context.pushNamed(AppRouteNames.mail);
+            context.pushNamed(AppRouteNames.chat);
             break;
           case 3:
             context.pushNamed(AppRouteNames.settings);

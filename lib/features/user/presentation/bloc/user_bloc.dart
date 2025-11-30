@@ -24,29 +24,30 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
     LoadType type,
     String? id,
     String? searchQuery,
+    int page,
   ) async {
     final useCase = await getIt.getAsync<UserUseCase>();
     final friendUseCase = await getIt.getAsync<FriendUseCase>();
     switch (type) {
       case LoadType.friends:
-        return await useCase.getUserForCreateGroup(id ?? '', 1, 5, searchQuery);
+        return await useCase.getUserForCreateGroup(id ?? '', page, 5, searchQuery);
       case LoadType.groupMembers:
-        return await useCase.getUserForCreateEvent(id ?? '', 1, 5, searchQuery);
+        return await useCase.getUserForCreateEvent(id ?? '', page, 5, searchQuery);
       case LoadType.eventParticipants:
         return await useCase.getUserForCreateExpense(
           id ?? '',
-          1,
+          page,
           5,
           searchQuery,
         );
       case LoadType.mutualFriends:
-        return await friendUseCase.listMutualFriends(id ?? '', 1, 5);
+        return await friendUseCase.listMutualFriends(id ?? '', page, 5);
     }
   }
 
   Future _onInitial(InitialEvent event, Emitter emit) async {
     try {
-      final users = await getData(event.action, event.id, event.searchQuery);
+      final users = await getData(event.action, event.id, event.searchQuery, 1);
 
       emit(
         state.copyWith(
@@ -65,7 +66,7 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
 
   Future _onLoadMoreUsers(LoadMoreUsersEvent event, Emitter emit) async {
     try {
-      final users = await getData(event.action, event.id, event.searchQuery);
+      final users = await getData(event.action, event.id, event.searchQuery, event.page);
 
       emit(
         state.copyWith(
@@ -87,7 +88,7 @@ class LoadedUsersBloc extends Bloc<LoadUserEvent, LoadedUsersState> {
     try {
       emit(state.copyWith(isLoading: true));
 
-      final users = await getData(event.action, event.id, event.searchQuery);
+      final users = await getData(event.action, event.id, event.searchQuery, 1);
 
       emit(
         state.copyWith(

@@ -15,6 +15,7 @@ class SearchUsersBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {
   }
 
   Future _onInitial(InitialEvent event, Emitter emit) async {
+    emit(state.copyWith(isLoading: true));
     try {
       final useCase = await getIt.getAsync<FriendUseCase>();
 
@@ -36,6 +37,7 @@ class SearchUsersBloc extends Bloc<LoadFriendEvent, LoadedFriendsState> {
   }
 
   Future _onLoadMoreFriends(LoadMoreFriendsEvent event, Emitter emit) async {
+    if (state.page >= state.totalPage) return;
     try {
       final useCase = await getIt.getAsync<FriendUseCase>();
       final friends = await useCase.searchUsers(event.searchQuery, state.page + 1, 5);

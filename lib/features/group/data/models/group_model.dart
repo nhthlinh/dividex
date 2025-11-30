@@ -3,6 +3,7 @@ import 'package:Dividex/features/group/data/models/group_member_model.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 class GroupModel {
@@ -57,7 +58,7 @@ class GroupModel {
                 : null),
       createdAt: json['createdAt'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
+          : parseUTCToVN(json['createdAt'] as String),
       members: (json['group_members'] as List<dynamic>?)
           ?.map((e) => GroupMemberModel.fromJson(e as Map<String, dynamic>))
           .toList(),

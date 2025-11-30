@@ -33,8 +33,9 @@ class _GroupPageState extends State<GroupPage> {
   final List<GroupModel> _groupList = [];
 
   final _textEditingController = TextEditingController();
-  final ValueNotifier<CurrencyEnum> _selectedCurrency =
-      ValueNotifier(CurrencyEnum.vnd);
+  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(
+    CurrencyEnum.vnd,
+  );
   final List<CurrencyEnum> _units = CurrencyEnum.values;
 
   List<int> _selectedMemberIndices = [];
@@ -166,7 +167,8 @@ class _GroupPageState extends State<GroupPage> {
                             );
                             print('Selected currency: ${val.code}');
                             print(
-                                'Saved preferred currency: ${HiveService.getUser().preferredCurrency ?? 'null'}');
+                              'Saved preferred currency: ${HiveService.getUser().preferredCurrency ?? 'null'}',
+                            );
                           },
                           isRequired: true,
                         );
@@ -251,6 +253,18 @@ class _GroupPageState extends State<GroupPage> {
                             .toList() ??
                         [];
 
+                    if (members.isEmpty) {
+                      // group chỉ có 1 người là mình → không có ai để hiển thị
+                      return groupWidget(
+                        context,
+                        group,
+                        intl,
+                        const [], // gửi list rỗng vào widget
+                        index,
+                        null // currentMember null
+                      );
+                    }
+
                     final currentMember =
                         members[_selectedMemberIndices[index]];
 
@@ -326,7 +340,7 @@ class _GroupPageState extends State<GroupPage> {
     AppLocalizations intl,
     List<GroupMemberModel> members,
     int index,
-    GroupMemberModel currentMember,
+    GroupMemberModel? currentMember,
   ) {
     return ContentCard(
       onTap: () {
@@ -389,80 +403,84 @@ class _GroupPageState extends State<GroupPage> {
             ),
           ),
 
-          Container(
-            alignment: Alignment.center,
-            child: MemberCarousel(
-              members: members,
-              onChanged: (idx) {
-                setState(() {
-                  if (members[index].id == HiveService.getUser().id) {
-                    _selectedMemberIndices[index] =
-                        ((idx + 1) % members.length);
-                  } else {
-                    _selectedMemberIndices[index] = idx;
-                  }
-                  print(idx);
-                });
-              },
-            ),
-          ),
-
-          /// Debt info
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                (currentMember.amount != null && currentMember.amount! >= 0)
-                    ? '${currentMember.user?.fullName} ${intl.ownYou}'
-                    : '${intl.youOwn} ${currentMember.user?.fullName}',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          if (currentMember != null) ...[
+            /// Member carousel
+            Container(
+              alignment: Alignment.center,
+              child: MemberCarousel(
+                members: members,
+                onChanged: (idx) {
+                  setState(() {
+                    if (members[index].id == HiveService.getUser().id) {
+                      _selectedMemberIndices[index] =
+                          ((idx + 1) % members.length);
+                    } else {
+                      _selectedMemberIndices[index] = idx;
+                    }
+                    print(idx);
+                  });
+                },
               ),
+            ),
 
-              Text(
-                '${formatNumber(currentMember.amount?.abs() ?? 0)} ${_selectedCurrency.value.code}',
-                style: TextStyle(
-                  color:
-                      (currentMember.amount != null &&
-                          currentMember.amount! >= 0)
-                      ? AppThemes.successColor
-                      : AppThemes.minusMoney,
-                  fontWeight: FontWeight.bold,
+            /// Debt info
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  (currentMember.amount != null && currentMember.amount! >= 0)
+                      ? '${currentMember.user?.fullName} ${intl.ownYou}'
+                      : '${intl.youOwn} ${currentMember.user?.fullName}',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                 ),
+
+                Text(
+                  '${formatNumber(currentMember.amount?.abs() ?? 0)} ${_selectedCurrency.value.code}',
+                  style: TextStyle(
+                    color:
+                        (currentMember.amount != null &&
+                            currentMember.amount! >= 0)
+                        ? AppThemes.successColor
+                        : AppThemes.minusMoney,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+
+            // Button action
+            if (currentMember.amount != 0) ...[
+              const SizedBox(height: 5),
+
+              CustomButton(
+                size: ButtonSize.medium,
+                text:
+                    (currentMember.amount != null && currentMember.amount! > 0)
+                    ? intl.remind
+                    : intl.pay,
+                onPressed: () {
+                  if (currentMember.amount != null &&
+                      currentMember.amount! > 0) {
+                    // Xử lý nhắc nhở
+                  } else {
+                    showSettleUpDialog(
+                      context: context,
+                      receiver: currentMember.user!,
+                      amount: currentMember.amount!.abs(),
+                      currency: _selectedCurrency.value,
+                      groupId: group.id!,
+                    );
+                  }
+                },
+                customColor:
+                    (currentMember.amount != null && currentMember.amount! > 0)
+                    ? AppThemes.successColor
+                    : AppThemes.minusMoney,
               ),
             ],
-          ),
-
-          // Button action
-          if (currentMember.amount != 0) ...[
-            const SizedBox(height: 5),
-
-            CustomButton(
-              size: ButtonSize.medium,
-              text: (currentMember.amount != null && currentMember.amount! > 0)
-                  ? intl.remind
-                  : intl.pay,
-              onPressed: () {
-                if (currentMember.amount != null &&
-                    currentMember.amount! > 0) {
-                  // Xử lý nhắc nhở
-                } else {
-                  showSettleUpDialog(
-                    context: context,
-                    receiver: currentMember.user!,
-                    amount: currentMember.amount!.abs(),
-                    currency: _selectedCurrency.value,
-                    groupId: group.id!,
-                  );
-                }
-              },
-              customColor:
-                  (currentMember.amount != null && currentMember.amount! > 0)
-                  ? AppThemes.successColor
-                  : AppThemes.minusMoney,
-            ),
           ],
         ],
       ),

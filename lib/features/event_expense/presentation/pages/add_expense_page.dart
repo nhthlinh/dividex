@@ -45,7 +45,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController expenseAmountController = TextEditingController();
-  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(CurrencyEnum.vnd);
+  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(
+    CurrencyEnum.vnd,
+  );
   final ValueNotifier<CategoryModel?> _selectedCategory = ValueNotifier(null);
   final TextEditingController selectedEventTextEditingController =
       TextEditingController();
@@ -115,7 +117,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
           showCustomToast(intl.expenseSplitNotMatch, type: ToastType.error);
           return;
         }
-        
       }
 
       context.read<ExpenseBloc>().add(
@@ -131,7 +132,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
           formattedReminder,
           splitType,
           userDebts,
-          images.whereType<Uint8List>().toList()
+          images.whereType<Uint8List>().toList(),
         ),
       );
 
@@ -334,6 +335,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
               );
             },
           ),
+
           const SizedBox(height: 16),
 
           CustomTextInputWidget(
@@ -377,7 +379,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   extra: {
                     'id': _selectedEvent?.id,
                     'type': user_event.LoadType.eventParticipants,
-                    'initialSelected': _selectedPayer != null ? [_selectedPayer!] : <UserModel>[],
+                    'initialSelected': _selectedPayer != null
+                        ? [_selectedPayer!]
+                        : <UserModel>[],
                     'onChanged': (List<UserModel> user) {
                       setState(() {
                         _selectedPayer = user.first;
@@ -491,7 +495,17 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
           CustomButton(
             text: intl.add,
-            onPressed: (isValid && userDebts.isNotEmpty) ? submitExpense : null,
+            onPressed:
+                (isValid &&
+                    userDebts.isNotEmpty &&
+                    userDebts.fold<double>(
+                          0,
+                          (previousValue, element) =>
+                              previousValue + (element.amount),
+                        ) ==
+                        (double.tryParse(expenseAmountController.text) ?? 0))
+                ? submitExpense
+                : null,
           ),
           const SizedBox(height: 20),
         ],

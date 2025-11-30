@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/event_expense/data/models/category_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
@@ -9,23 +10,23 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/features/group/presentation/pages/group_detail.dart';
 import 'package:Dividex/features/home/presentation/pages/setting_page.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 
 class HardDeleteExpensePage extends StatefulWidget {
   final String groupId;
   final String groupName;
-  final String groupAvatarUrl;
 
   const HardDeleteExpensePage({
     super.key,
     required this.groupId,
     required this.groupName,
-    required this.groupAvatarUrl,
   });
 
   @override
@@ -76,6 +77,7 @@ class _HardDeleteExpensePageState extends State<HardDeleteExpensePage> {
                   hasMore,
                   state.totalItems,
                   state.expenses,
+                  state.page
                 );
               },
             ),
@@ -132,6 +134,7 @@ class _HardDeleteExpensePageState extends State<HardDeleteExpensePage> {
     bool hasMore,
     int totalExpenses,
     List<ExpenseModel> expenses,
+    int page
   ) {
     final groupedExpenses = <String, List<ExpenseModel>>{};
     for (var e in expenses) {
@@ -173,23 +176,74 @@ class _HardDeleteExpensePageState extends State<HardDeleteExpensePage> {
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          children: buildGroupedExpenseList(
+          children: buildGroupedExpenseDeleteList(
             context,
             groupedExpenses,
             sortedKeys,
             intl,
           ),
         ),
+
+        if (hasMore) ... [
+          BlocProvider<ExpenseDataBloc>(
+            create: (context) => context.read<ExpenseDataBloc>(),
+            child: CustomButton(
+              text: intl.more,
+              onPressed: () {
+                context.read<ExpenseDataBloc>().add(
+                  LoadMoreExpenses(id: widget.groupId, type: LoadExpenseType.hasBeenDeleted, page: page + 1),
+                );
+              },
+              size: ButtonSize.small,
+            ),
+          ),
+        ]
       ],
     );
   }
 }
 
+List<Widget> buildGroupedExpenseDeleteList(
+  BuildContext context,
+  Map<String, List<ExpenseModel>> groupedExpenses,
+  List<String> sortedKeys,
+  AppLocalizations intl,
+) {
+  List<Widget> widgets = [];
+
+  for (var date in sortedKeys) {
+    final displayDate = DateFormat('dd MMM yyyy').format(DateTime.parse(date));
+
+    widgets.add(
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            displayDate,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontSize: 12,
+              letterSpacing: 0,
+              height: 16 / 12,
+              color: AppThemes.primary3Color,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    for (var expense in groupedExpenses[date]!) {
+      widgets.add(ExpenseCard(expense: expense));
+    }
+  }
+
+  return widgets;
+}
+
 class ExpenseCard extends StatelessWidget {
-  const ExpenseCard({super.key, required this.expense, required this.widget});
+  const ExpenseCard({super.key, required this.expense});
 
   final ExpenseModel expense;
-  final HardDeleteExpensePage widget;
 
   @override
   Widget build(BuildContext context) {
@@ -200,15 +254,13 @@ class ExpenseCard extends StatelessWidget {
       leading: CircleAvatar(
         radius: 20,
         backgroundColor: Colors.grey,
-        backgroundImage:
-            (widget.groupAvatarUrl != '' && widget.groupAvatarUrl.isNotEmpty)
-            ? NetworkImage(widget.groupAvatarUrl)
-            : NetworkImage(
-                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(widget.groupName)}&background=random&color=fff&size=128',
-              ),
+        backgroundImage: NetworkImage(
+          getCategoryByKey(expense.category ?? '')?.getImage() ??
+              'lib/assets/icons/money-transfer.png',
+        ),
       ),
       subtitle: expense.updatedAt != null
-          ? '${intl.deleteDate}: ${expense.updatedAt!.toLocal().toString().split(' ')[0]}'
+          ? '${intl.deleteDate}: ${expense.updatedAt!.toLocal().toString().split(' ')[0]} - ${expense.event}'
           : null,
       trailing: Column(
         children: [

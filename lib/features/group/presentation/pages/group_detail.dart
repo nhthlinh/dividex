@@ -14,6 +14,7 @@ import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/bar_chart.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:flutter/material.dart';
@@ -154,6 +155,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                       hasMore,
                       state.totalItems,
                       state.expenses,
+                      state.page
                     );
                   },
                 ),
@@ -212,6 +214,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
     bool hasMore,
     int totalExpenses,
     List<ExpenseModel> expenses,
+    int page
   ) {
     final groupedExpenses = <String, List<ExpenseModel>>{};
     for (var e in expenses) {
@@ -255,6 +258,21 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
           physics: const NeverScrollableScrollPhysics(),
           children: buildGroupedExpenseList(context, groupedExpenses, sortedKeys, intl),
         ),
+
+        if (hasMore) ... [
+          BlocProvider<ExpenseDataBloc>(
+            create: (context) => context.read<ExpenseDataBloc>(),
+            child: CustomButton(
+              text: intl.more,
+              onPressed: () {
+                context.read<ExpenseDataBloc>().add(
+                  expense_event.LoadMoreExpenses(id: widget.groupId, page: page + 1),
+                );
+              },
+              size: ButtonSize.small,
+            ),
+          ),
+        ]
       ],
     );
   }

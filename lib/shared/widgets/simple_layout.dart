@@ -19,7 +19,6 @@ class SimpleLayout extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          
           // Title + back button ở y = 50
           Positioned(
             top: 50,

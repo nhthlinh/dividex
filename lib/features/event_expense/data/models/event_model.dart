@@ -1,3 +1,5 @@
+import 'package:Dividex/shared/utils/get_time_ago.dart';
+
 class EventModel {
   final String? id;
   final String? name;
@@ -31,13 +33,13 @@ class EventModel {
     description: json['description'] as String? ?? json['event_description'] as String?,
     eventStart: json['event_start'] == null
         ? null
-        : DateTime.parse(json['event_start'] as String),
+        : parseUTCToVN(json['event_start'] as String),
     eventEnd: json['event_end'] == null
         ? null
-        : DateTime.parse(json['event_end'] as String),
+        : parseUTCToVN(json['event_end'] as String),
     createdAt: json['created_at'] == null
         ? null
-        : DateTime.parse(json['created_at'] as String),
+        : parseUTCToVN(json['created_at'] as String),
     groupName: json['group_name'] as String?,
     memberIds: (json['member_ids'] as List<dynamic>?)
         ?.map((e) => e as String)

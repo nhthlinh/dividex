@@ -1,7 +1,5 @@
-import 'package:Dividex/features/image/domain/image_repository.dart';
 import 'package:Dividex/features/recharge/data/models/recharge_model.dart';
 import 'package:Dividex/features/recharge/domain/recharge_repository.dart';
-import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
@@ -38,6 +36,10 @@ class RechargeUseCase {
 
   Future<String> getWallet() async {
     return rechargeRepository.getWallet();
+  }
+
+  Future<Map<String, dynamic>> getWalletInfo() async {
+    return rechargeRepository.getWalletInfo();
   }
 
   Future<PagingModel<List<ExternalTransactionModel>>> getExternalHistory(

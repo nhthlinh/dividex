@@ -513,7 +513,7 @@
   "code": "Mã",
   "walletReport": "Báo cáo ví",
   "netBalance": "Nợ",
-  "expenseDeleted": "Chi tiêu đã được xóa tạm thời, hãy khôi phục hoặc xóa hẳn trong cài đặt group",
+  "expenseDeletedInfo": "Chi tiêu đã được xóa tạm thời, hãy khôi phục hoặc xóa hẳn trong cài đặt group",
   "deleteDate": "Ngày xóa",
   "restore": "Khôi phục",
   "hardDelete": "Xóa hẳn",
@@ -548,14 +548,135 @@
   "youLent": "bạn cho mượn",
   "year": "Năm",
   "externalExpense": "Giao dịch nạp vào",
-  "internalExpense": "Giao dịch trong app"
+  "internalExpense": "Giao dịch trong app",
+  "notifications": "Thông báo",
+  "filter": "Bộ lọc",
+  "chooseTypeFilter": "Chọn loại giao dịch",
+  "wallet": "Ví",
+  "inOrEx": "Trong hay ngoài app",
+  "conected": "Đã kết nối",
+  "lastTransaction": "Giao dịch cuối",
 
+  "eventUpdated": "{user} đã cập nhật sự kiện {event}",
+  "@eventUpdated": {
+    "description": "Thông báo khi ai đó cập nhật sự kiện",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
 
+  "eventCreated": "{user} đã tạo sự kiện {event}",
+  "@eventCreated": {
+    "description": "Thông báo khi ai đó tạo sự kiện",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
 
+  "eventDeleted": "{user} đã xóa sự kiện {event}",
+  "@eventDeleted": {
+    "description": "Thông báo khi ai đó xóa sự kiện",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
 
+  "expenseRestored": "{user} đã khôi phục khoản chi {expense}",
+  "@expenseRestored": {
+    "description": "Thông báo khi ai đó khôi phục một khoản chi đã xóa",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
 
+  "expenseDeleted": "{user} đã xóa khoản chi {expense}",
+  "@expenseDeleted": {
+    "description": "Thông báo khi ai đó xóa một khoản chi",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
 
+  "expenseUpdated": "{user} đã cập nhật khoản chi {expense}",
+  "@expenseUpdated": {
+    "description": "Thông báo khi ai đó cập nhật một khoản chi",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
 
+  "expenseCreated": "{user} đã tạo khoản chi {expense}",
+  "@expenseCreated": {
+    "description": "Thông báo khi ai đó tạo một khoản chi",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "friendAccepted": "{user} đã chấp nhận lời mời kết bạn của bạn",
+  "@friendAccepted": {
+    "description": "Thông báo khi ai đó chấp nhận lời mời kết bạn",
+    "placeholders": {
+      "user": {}
+    }
+  },
+
+  "friendRequestNoti": "{user} đã gửi lời mời kết bạn. Tin nhắn: {message}",
+  "@friendRequestNoti": {
+    "description": "Thông báo khi ai đó gửi lời mời kết bạn kèm tin nhắn",
+    "placeholders": {
+      "user": {},
+      "message": {}
+    }
+  },
+
+  "friendRequestToMe": "Bạn nhận được lời mời kết bạn từ {user}",
+  "@friendRequestToMe": {
+    "description": "Thông báo khi bạn nhận được lời mời kết bạn",
+    "placeholders": {
+      "user": {}
+    }
+  },
+
+  "leaderChanged": "{user} là trưởng nhóm mới của nhóm {group}",
+  "@leaderChanged": {
+    "description": "Thông báo khi trưởng nhóm được thay đổi",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
+  "groupUpdated": "{user} đã cập nhật nhóm {group}",
+  "@groupUpdated": {
+    "description": "Thông báo khi ai đó cập nhật thông tin nhóm",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
+  "deposit": "Bạn đã nạp {amount} {currency}",
+  "@deposit": {
+    "description": "Thông báo khi người dùng nạp tiền",
+    "placeholders": {
+      "amount": {},
+      "currency": {}
+    }
+  },
+  "enterMessage": "Nhập tin nhắn...",
+  "partnerTyping": "Đối phương đang nhập...",
+  "edit": "Chỉnh sửa",
+  "messageDeleted": "Tin nhắn đã bị xóa",
+  "edited": "Tin nhắn đã chỉnh sửa"
+  
 
 
 }

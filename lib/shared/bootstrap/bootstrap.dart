@@ -44,7 +44,7 @@ Future<void> bootstrap() async {
         providers: [
           BlocProvider(create: (_) => BottomNavVisibilityCubit()),
           BlocProvider(create: (_) => AuthBloc()),
-          BlocProvider(create: (_) => NotificationBloc()),
+          BlocProvider(create: (_) => LoadedNotiBloc()),
           BlocProvider(create: (_) => LocaleCubit()..loadLocale()),
           BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
         ],

@@ -454,7 +454,7 @@
   "deleteConfirm1": "You can only remove a member after ",
   "deleteConfirm2": "all debts in the group have been settled.",
   "delete": "Delete",
-  "from": "from",
+  "from": "From",
   "leaveIsDenied": "Total amount is not zero, please settle up before leaving", 
   "overview": "Overview",
   "totalEvents": "Event attended",
@@ -512,7 +512,7 @@
   "code": "Code",
   "walletReport": "Wallet report",
   "netBalance": "Net balance",
-  "expenseDeleted": "Expense has been soft delete, please restore or hard delete in group setting.",
+  "expenseDeletedInfo": "Expense has been soft delete, please restore or hard delete in group setting.",
   "deleteDate": "Delete day",
   "restore": "Restore",
   "hardDelete": "Hard delete",
@@ -548,7 +548,135 @@
   "youLent": "you lent",
   "year": "Year",
   "externalExpense": "External expense",
-  "internalExpense": "Internal expense"
+  "internalExpense": "Internal expense",
+  "notifications": "Notifications",
+  "filter": "Filter",
+  "chooseTypeFilter": "Choose type of transaction",
+  "wallet": "Wallet",
+  "inOrEx": "In or ex app",
+  "conected": "Conected",
+  "lastTransaction": "Last transaction",
+
+  "eventUpdated": "{user} have updated an event {event}",
+  "@eventUpdated": {
+    "description": "Notification when someone updates an event",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "eventCreated": "{user} have created an event {event}",
+  "@eventCreated": {
+    "description": "Notification when someone creates an event",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "eventDeleted": "{user} have deleted an event {event}",
+  "@eventDeleted": {
+    "description": "Notification when someone deletes an event",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "expenseRestored": "{user} have restored an expense {expense}",
+  "@expenseRestored": {
+    "description": "Notification when someone restores a deleted expense",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseDeleted": "{user} have deleted an expense {expense}",
+  "@expenseDeleted": {
+    "description": "Notification when someone deletes an expense",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseUpdated": "{user} have updated an expense {expense}",
+  "@expenseUpdated": {
+    "description": "Notification when someone updates an expense",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseCreated": "{user} have created an expense {expense}",
+  "@expenseCreated": {
+    "description": "Notification when someone creates an expense",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "friendAccepted": "{user} accepted your friend request",
+  "@friendAccepted": {
+    "description": "Notification when someone accepts your friend request",
+    "placeholders": {
+      "user": {}
+    }
+  },
+
+  "friendRequestNoti": "{user} has sent you a friend request. message: {message}",
+  "@friendRequestNoti": {
+    "description": "Notification when someone sends a friend request with a message",
+    "placeholders": {
+      "user": {},
+      "message": {}
+    }
+  },
+
+  "friendRequestToMe": "You have received a friend request from {user}",
+  "@friendRequestToMe": {
+    "description": "Notification when you receive a friend request",
+    "placeholders": {
+      "user": {}
+    }
+  },
+
+  "leaderChanged": "{user} is new leader of group {group}",
+  "@leaderChanged": {
+    "description": "Notification when group leader changes",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
+  "groupUpdated": "{user} have updated a group {group}",
+  "@groupUpdated": {
+    "description": "Notification when someone updates a group",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
+  "deposit": "You have deposited {amount} {currency}",
+  "@deposit": {
+    "description": "Notification when user deposits money",
+    "placeholders": {
+      "amount": {},
+      "currency": {}
+    }
+  },
+  "enterMessage": "Enter message...",
+  "partnerTyping": "Partner is typing...",
+  "edit": "Edit",
+  "messageDeleted": "Message is deleted",
+  "edited": "Message is Edited"
+  
 
 
 }

@@ -2,6 +2,7 @@ import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 enum ExternalTransactionType {
@@ -39,7 +40,7 @@ class InternalTransactionModel {
       description: json['description'],
       group: json['group'],
       code: json['code'],
-      date: DateTime.parse(json['created_at']),
+      date: parseUTCToVN(json['created_at']),
     );
   }
 }
@@ -72,7 +73,7 @@ class ExternalTransactionModel {
       type: json['type'] == 'deposit'
           ? ExternalTransactionType.deposit
           : ExternalTransactionType.withdraw,
-      date: DateTime.parse(json['date']),
+      date: parseUTCToVN(json['date']),
       code: json['code'],
     );
   }
@@ -108,10 +109,10 @@ class DepositTransactionModel {
             $CurrencyEnumEnumMap,
             json['currency'].toString().toLowerCase(),
           ) ?? CurrencyEnum.values.first,
-      date: DateTime.parse(json['created_at']),
+      date: parseUTCToVN(json['created_at']),
       code: json['code'],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      createdAt: json['created_at'] != null ? parseUTCToVN(json['created_at']) : null,
+      updatedAt: json['updated_at'] != null ? parseUTCToVN(json['updated_at']) : null,
     );
   }
 }
@@ -138,7 +139,7 @@ class WithdrawTransactionModel {
       id: json['uid'],
       user: UserModel.fromJson(json['user']),
       amount: double.tryParse(json['amount'].toString()) ?? 0.0,
-      date: DateTime.parse(json['created_at']),
+      date: parseUTCToVN(json['created_at']),
       code: json['code'],
       bankAccount: BankAccount.fromJson(json['bank_account']),
     );

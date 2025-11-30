@@ -248,7 +248,6 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                   },
                   extra: {
                     'groupName': widget.groupName,
-                    'groupAvatarUrl': widget.groupAvatarUrl?.publicUrl ?? '',
                   },
                 );
                 },

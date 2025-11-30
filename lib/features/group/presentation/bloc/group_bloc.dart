@@ -106,6 +106,7 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
     on<GetGroupDetailEvent>(_onGetGroupDetail);
     on<UpdateGroupLeaderEvent>(_onUpdateGroupLeader);
     on<GetGroupReportEvent>(_onGetGroupReport);
+    on<GetSimpleDetailGroupEvent>(_onGetSimpleDetailGroup);
   }
 
   Future _onCreateGroup(CreateGroupEvent event, Emitter emit) async {
@@ -152,11 +153,7 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
       } else if (event.avatar == null && event.deletedAvatarUid != null) {
         deleteImage([event.deletedAvatarUid!]);
       } else if (event.avatar != null && event.deletedAvatarUid == null) {
-        uploadImage(
-          groupId,
-          [event.avatar!],
-          AttachmentType.group,
-        );
+        uploadImage(groupId, [event.avatar!], AttachmentType.group);
       }
 
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
@@ -239,7 +236,12 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
         useCase.getBarChartData(event.groupId, event.year),
       ]);
 
-      emit(GroupDetailState(groupDetail: results[0] as GroupModel?, barChartData: results[1] as List<CustomBarChartData>?));
+      emit(
+        GroupDetailState(
+          groupDetail: results[0] as GroupModel?,
+          barChartData: results[1] as List<CustomBarChartData>?,
+        ),
+      );
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       if (e.toString().contains(MessageCode.groupNotFound)) {
@@ -258,11 +260,33 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
         useCase.getChartData(event.groupId),
       ]);
       final group = await useCase.getGroupDetail(event.groupId);
-      emit( 
+      emit(
         GroupReportState(
           groupReport: results[0] as GroupModel?,
           groupDetail: group,
           chartData: results[1] as List<ChartData>?,
+        ),
+      );
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      if (e.toString().contains(MessageCode.groupNotFound)) {
+        showCustomToast(intl.groupNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onGetSimpleDetailGroup(
+    GetSimpleDetailGroupEvent event,
+    Emitter emit,
+  ) async {
+    try {
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      final results = await useCase.getGroupReport(event.groupId);
+      emit(
+        GroupReportState(
+          groupReport: results,
         ),
       );
     } catch (e) {

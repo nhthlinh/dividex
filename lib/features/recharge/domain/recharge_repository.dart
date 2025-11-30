@@ -7,6 +7,7 @@ abstract class RechargeRepository {
   Future<void> createDeposit(double amount, String currency, String bankCode);
   Future<void> createWithdraw(double amount, String accountNumber, String bankCode);
   Future<String> getWallet();
+  Future<Map<String, dynamic>> getWalletInfo();
   Future<DepositTransactionModel> getDepositDetail(String id);
   Future<WithdrawTransactionModel> getWithdrawDetail(String id);
   Future<PagingModel<List<ExternalTransactionModel>>> getExternalHistory(int page, int pageSize, ExternalTransactionFilterArguments? filter);

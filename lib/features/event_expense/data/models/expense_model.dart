@@ -1,6 +1,7 @@
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 
@@ -52,7 +53,7 @@ class ExpenseModel {
     id: json['uid'] as String?,
     updatedAt: json['updated_at'] == null
         ? null
-        : DateTime.parse(json['updated_at'] as String),
+        : parseUTCToVN(json['updated_at'] as String),
     name: json['name'] as String?,
     currency: json['currency'] == null
         ? null
@@ -64,11 +65,13 @@ class ExpenseModel {
     note: json['note'] as String?,
     category: json['category'] as String?,
     expenseDate: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
+          ? json['expense_date'] == null
+              ? null
+              : parseUTCToVN(json['expense_date'] as String)
+          : parseUTCToVN(json['created_at'] as String),
     remindAt: json['end_date'] == null
         ? null
-        : DateTime.parse(json['end_date'] as String),
+        : parseUTCToVN(json['end_date'] as String),
     paidByUser: json['paid_by'] == null
         ? null
         : UserModel.fromJson(json['paid_by'] as Map<String, dynamic>),
@@ -83,6 +86,7 @@ class ExpenseModel {
     userDebtInfos: (json['list_user'] as List<dynamic>?)
         ?.map((e) => UserDeptInfo.fromJson(e as Map<String, dynamic>))
         .toList(),
+    status: json['status'] as String?,
   );
 
   factory ExpenseModel.fromListExpenseInGroupJson(Map<String, dynamic> json) {
@@ -103,7 +107,7 @@ class ExpenseModel {
       status: json['status'] as String?,
       expenseDate: json['created_at'] == null
           ? null
-          : DateTime.parse(json['created_at'] as String),
+          : parseUTCToVN(json['created_at'] as String),
     );
   }
 

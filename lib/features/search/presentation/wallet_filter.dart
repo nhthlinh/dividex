@@ -1,7 +1,7 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/presentation/widgets/date_input_field_widget.dart';
 import 'package:Dividex/features/search/data/model/filter_model.dart';
+import 'package:Dividex/features/search/presentation/pages/filter_page.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TransactionFilterWidget extends StatefulWidget {
-  final bool? isExternal;
+  final FilterType type;
   final InternalTransactionFilterArguments? internalFilter;
   final ExternalTransactionFilterArguments? externalFilter;
   final void Function(InternalTransactionFilterArguments)? onApplyInternal;
@@ -17,7 +17,7 @@ class TransactionFilterWidget extends StatefulWidget {
 
   const TransactionFilterWidget({
     super.key,
-    this.isExternal,
+    required this.type,
     this.internalFilter,
     this.externalFilter,
     this.onApplyInternal,
@@ -30,7 +30,7 @@ class TransactionFilterWidget extends StatefulWidget {
 }
 
 class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
-  bool isExternal = true;
+  FilterType type = FilterType.externalTransaction;
 
   // Common filters
   DateTime? startDate;
@@ -39,8 +39,10 @@ class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
   double? maxAmount;
 
   // Internal-specific
-  String? name;
+  String? keyword;
   String? groupId;
+
+  // External
   String? code;
 
   final amountControllerFrom = TextEditingController();
@@ -60,28 +62,35 @@ class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
   @override
   void initState() {
     super.initState();
-    if (widget.isExternal != null) {
-      isExternal = widget.isExternal!;
-      amountControllerFrom.text = widget.isExternal!
-          ? widget.externalFilter?.minAmount?.toString() ?? ''
-          : widget.internalFilter?.minAmount?.toString() ?? '';
-      amountControllerTo.text = widget.isExternal!
-          ? widget.externalFilter?.maxAmount?.toString() ?? ''
-          : widget.internalFilter?.maxAmount?.toString() ?? '';
-      startController.text = widget.isExternal!
-          ? widget.externalFilter?.start != null
-                ? DateFormat('dd/MM/yyyy').format(widget.externalFilter!.start!)
-                : ''
-          : widget.internalFilter?.start != null
-          ? DateFormat('dd/MM/yyyy').format(widget.internalFilter!.start!)
-          : '';
-      if (widget.internalFilter != null) {
-        name = widget.internalFilter?.name;
-        groupId = widget.internalFilter?.groupId;
-      }
-      if (widget.externalFilter != null) {
-        code = widget.externalFilter?.code;
-      }
+    type = widget.type;
+    amountControllerFrom.text = widget.type == FilterType.externalTransaction
+        ? widget.externalFilter?.minAmount?.toString() ?? ''
+        : widget.internalFilter?.minAmount?.toString() ?? '';
+    amountControllerTo.text = widget.type == FilterType.externalTransaction
+        ? widget.externalFilter?.maxAmount?.toString() ?? ''
+        : widget.internalFilter?.maxAmount?.toString() ?? '';
+    startController.text = widget.type == FilterType.externalTransaction
+        ? widget.externalFilter?.start != null
+              ? DateFormat('dd/MM/yyyy').format(widget.externalFilter!.start!)
+              : ''
+        : widget.internalFilter?.start != null
+        ? DateFormat('dd/MM/yyyy').format(widget.internalFilter!.start!)
+        : '';
+    endController.text = widget.type == FilterType.externalTransaction
+        ? widget.externalFilter?.end != null
+              ? DateFormat('dd/MM/yyyy').format(widget.externalFilter!.end!)
+              : ''
+        : widget.internalFilter?.end != null
+        ? DateFormat('dd/MM/yyyy').format(widget.internalFilter!.end!)
+        : '';
+    if (widget.internalFilter != null &&
+        widget.type == FilterType.internalTransaction) {
+      keyword = widget.internalFilter?.keyword;
+      groupId = widget.internalFilter?.groupId;
+    }
+    if (widget.externalFilter != null &&
+        widget.type == FilterType.externalTransaction) {
+      code = widget.externalFilter?.code;
     }
   }
 
@@ -90,33 +99,8 @@ class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
     final intl = AppLocalizations.of(context)!;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            CustomButton(
-              size: ButtonSize.medium,
-              type: isExternal ? ButtonType.secondary : ButtonType.primary,
-              text: intl.internalExpense,
-              onPressed: () {
-                setState(() {
-                  isExternal = false;
-                });
-              },
-            ),
-            CustomButton(
-              size: ButtonSize.medium,
-              type: isExternal ? ButtonType.primary : ButtonType.secondary,
-              text: intl.externalExpense,
-              onPressed: () {
-                setState(() {
-                  isExternal = true;
-                });
-              },
-            ),
-          ],
-        ),
         // Date Range Inputs
         SizedBox(
           width: 340,
@@ -130,7 +114,6 @@ class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
                   hintText: '13/05/2025',
                   controller: startController,
                   size: TextInputSize.large,
-                  isRequired: true,
                   validator: null,
                 ),
               ),
@@ -142,7 +125,6 @@ class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
                   hintText: '13/05/2025',
                   controller: endController,
                   size: TextInputSize.large,
-                  isRequired: true,
                   validator: null,
                 ),
               ),
@@ -161,7 +143,6 @@ class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
                 child: CustomTextInputWidget(
                   size: TextInputSize.large,
                   isReadOnly: false,
-                  isRequired: true,
                   label: intl.from,
                   hintText: intl.expenseAmountHint,
                   controller: amountControllerFrom,
@@ -176,7 +157,6 @@ class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
                 child: CustomTextInputWidget(
                   size: TextInputSize.large,
                   isReadOnly: false,
-                  isRequired: true,
                   label: intl.to,
                   hintText: intl.expenseAmountHint,
                   controller: amountControllerTo,
@@ -192,23 +172,23 @@ class _TransactionFilterWidgetState extends State<TransactionFilterWidget> {
         CustomButton(
           size: ButtonSize.large,
           onPressed: () {
-            if (isExternal) {
+            if (type == FilterType.externalTransaction) {
               final filter = ExternalTransactionFilterArguments(
-                start: startDate,
-                end: endDate,
-                minAmount: minAmount,
-                maxAmount: maxAmount,
+                start: startController.text.isNotEmpty ? DateFormat("dd/MM/yyyy").parse(startController.text) : null,
+                end: endController.text.isNotEmpty ? DateFormat("dd/MM/yyyy").parse(endController.text) : null,
+                minAmount: double.tryParse(amountControllerFrom.text),
+                maxAmount: double.tryParse(amountControllerTo.text),
               );
               if (widget.onApplyExternal != null) {
                 widget.onApplyExternal!(filter);
               }
-            } else {
+            } else if (type == FilterType.internalTransaction) {
               final filter = InternalTransactionFilterArguments(
-                start: startDate,
-                end: endDate,
-                minAmount: minAmount,
-                maxAmount: maxAmount,
-                name: name,
+                start: startController.text.isNotEmpty ? DateFormat("dd/MM/yyyy").parse(startController.text) : null,
+                end: endController.text.isNotEmpty ? DateFormat("dd/MM/yyyy").parse(endController.text) : null,
+                minAmount: double.tryParse(amountControllerFrom.text),
+                maxAmount: double.tryParse(amountControllerTo.text),
+                keyword: keyword,
                 groupId: groupId,
               );
               if (widget.onApplyInternal != null) {

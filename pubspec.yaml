@@ -12,6 +12,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  http: ^1.4.0
+  web_socket_channel: ^2.4.0
+
   flutter_launcher_icons: ^0.14.4
 
   # UI & Icons

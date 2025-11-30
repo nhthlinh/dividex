@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class BalanceRow extends StatefulWidget {
   final String balanceLabel;
   final String balance;
+  final bool isHomepage;
 
   const BalanceRow({
     super.key,
     required this.balanceLabel,
     required this.balance,
+    this.isHomepage = false,
   });
 
   @override
@@ -27,10 +29,10 @@ class _BalanceRowState extends State<BalanceRow> {
           children: [
             Text(
               widget.balanceLabel,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.w500, color: Colors.grey),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+                color: widget.isHomepage ? Colors.white : Colors.grey,
+              ),
             ),
           ],
         ),
@@ -46,20 +48,19 @@ class _BalanceRowState extends State<BalanceRow> {
                   ? Icon(
                       Icons.visibility_off,
                       size: 20,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: widget.isHomepage ? Colors.white : Theme.of(context).colorScheme.primary,
                     )
                   : Icon(
                       Icons.visibility,
                       size: 20,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: widget.isHomepage ? Colors.white : Theme.of(context).colorScheme.primary,
                     ),
               const SizedBox(width: 8),
               Text(
                 isHidden ? '••••••' : widget.balance,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: widget.isHomepage ? Colors.white : Theme.of(context).colorScheme.primary,
+                ),
               ),
             ],
           ),

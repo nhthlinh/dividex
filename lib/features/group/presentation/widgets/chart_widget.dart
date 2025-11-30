@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -15,17 +17,35 @@ class _ContributionPieChartState extends State<ContributionPieChart> {
   int? touchedIndex;
   late List<ChartData> datas;
 
-  Color getColorByPercent(double percent) {
-    // Giới hạn trong khoảng 0–100
-    percent = percent.clamp(0, 100);
-    // Càng cao thì alpha càng lớn (đậm hơn)
-    final alpha = (100 + percent * 1.55).toInt().clamp(100, 255);
-    return Color.fromARGB(alpha, 220, 0, 0); // đỏ cơ bản
-  }
+  // Color getColorByPercent(double percent) {
+  //   // Giới hạn trong khoảng 0–100
+  //   percent = percent.clamp(0, 100);
+  //   // Càng cao thì alpha càng lớn (đậm hơn)
+  //   final alpha = (100 + percent * 1.55).toInt().clamp(100, 255);
+  //   return Color.fromARGB(alpha, 220, 0, 0); // đỏ cơ bản
+  // }
+
+  Color getColorFromNameAndValue(String fullName, double value) {
+  // Tạo seed từ tên + value
+  final seed = fullName.hashCode ^ value.hashCode;
+
+  // Random dựa trên seed (nhưng luôn cố định)
+  final rand = Random(seed);
+
+  // Hue khóa ở 0° (đỏ)
+  const hue = 0.0;
+
+  // Tạo saturation và lightness trong khoảng đẹp
+  final saturation = 0.5 + rand.nextDouble() * 0.5; // 0.5 – 1.0
+  final lightness = 0.4 + rand.nextDouble() * 0.4;  // 0.4 – 0.8
+
+  final hsl = HSLColor.fromAHSL(1.0, hue, saturation, lightness);
+
+  return hsl.toColor();
+}
 
   @override
   Widget build(BuildContext context) {
-
     if (widget.chartData.isEmpty) {
       return SizedBox.shrink();
     }
@@ -73,10 +93,12 @@ class _ContributionPieChartState extends State<ContributionPieChart> {
       final isTouched = i == touchedIndex;
 
       return PieChartSectionData(
-        color: getColorByPercent(data.value),
+        color: getColorFromNameAndValue(data.fullName, data.value),
         value: data.value,
         radius: 110,
-        title: isTouched ? '${data.fullName}\n${data.value.toStringAsFixed(0)}%' : '',
+        title: isTouched
+            ? '${data.fullName}\n${data.value.toStringAsFixed(0)}%'
+            : '',
         titleStyle: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -88,7 +110,7 @@ class _ContributionPieChartState extends State<ContributionPieChart> {
             ? _BadgeWidget(
                 name: data.fullName,
                 percent: data.value,
-                color: getColorByPercent(data.value),
+                color: getColorFromNameAndValue(data.fullName, data.value),
               )
             : null,
         badgePositionPercentageOffset: 1.4,

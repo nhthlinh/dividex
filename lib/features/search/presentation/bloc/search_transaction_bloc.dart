@@ -62,7 +62,7 @@ class RefreshTransactionsEvent extends SearchTransactionEvent {
 
 class SearchTransactionsState extends Equatable {
   const SearchTransactionsState({
-    this.isLoading = true,
+    this.isLoading = false,
     this.page = 1,
     this.totalPage = 0,
     this.totalItems = 0,
@@ -137,6 +137,8 @@ class SearchTransactionBloc
           emit(
             state.copyWith(
               expense: expenses.data,
+              externalTransactions: [],
+              internalTransactions: [],
               page: expenses.page,
               totalPage: expenses.totalPage,
               totalItems: expenses.totalItems,
@@ -157,6 +159,8 @@ class SearchTransactionBloc
               externalTransactions: List<ExternalTransactionModel>.from(
                 external.data,
               ),
+              expense: [],
+              internalTransactions: [],
               page: external.page,
               totalPage: external.totalPage,
               totalItems: external.totalItems,
@@ -177,6 +181,8 @@ class SearchTransactionBloc
               internalTransactions: List<InternalTransactionModel>.from(
                 internal.data,
               ),
+              expense: [],
+              externalTransactions: [],
               page: internal.page,
               totalPage: internal.totalPage,
               totalItems: internal.totalItems,
@@ -211,8 +217,7 @@ class SearchTransactionBloc
           );
           break;
       }
-    } catch (e, s) {
-      print('Search error: $e\n$s');
+    } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
       emit(state.copyWith(isLoading: false));
@@ -296,8 +301,7 @@ class SearchTransactionBloc
           emit(state.copyWith(isLoading: false));
           break;
       }
-    } catch (e, s) {
-      print('LoadMore error: $e\n$s');
+    } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
       emit(state.copyWith(isLoading: false));
@@ -324,6 +328,8 @@ class SearchTransactionBloc
           emit(
             state.copyWith(
               expense: refreshed.data,
+              externalTransactions: [],
+              internalTransactions: [],
               page: refreshed.page,
               totalPage: refreshed.totalPage,
               totalItems: refreshed.totalItems,
@@ -344,6 +350,8 @@ class SearchTransactionBloc
               externalTransactions: List<ExternalTransactionModel>.from(
                 refreshed.data,
               ),
+              expense: [],
+              internalTransactions: [],
               page: refreshed.page,
               totalPage: refreshed.totalPage,
               totalItems: refreshed.totalItems,
@@ -364,6 +372,8 @@ class SearchTransactionBloc
               internalTransactions: List<InternalTransactionModel>.from(
                 refreshed.data,
               ),
+              expense: [],
+              externalTransactions: [],
               page: refreshed.page,
               totalPage: refreshed.totalPage,
               totalItems: refreshed.totalItems,
@@ -399,8 +409,7 @@ class SearchTransactionBloc
           );
           break;
       }
-    } catch (e, s) {
-      print('Refresh error: $e\n$s');
+    } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
       emit(state.copyWith(isLoading: false));

@@ -1180,7 +1180,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
-  String get from => 'from';
+  String get from => 'From';
 
   @override
   String get leaveIsDenied =>
@@ -1360,7 +1360,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get netBalance => 'Net balance';
 
   @override
-  String get expenseDeleted =>
+  String get expenseDeletedInfo =>
       'Expense has been soft delete, please restore or hard delete in group setting.';
 
   @override
@@ -1472,4 +1472,105 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get internalExpense => 'Internal expense';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get chooseTypeFilter => 'Choose type of transaction';
+
+  @override
+  String get wallet => 'Wallet';
+
+  @override
+  String get inOrEx => 'In or ex app';
+
+  @override
+  String get conected => 'Conected';
+
+  @override
+  String get lastTransaction => 'Last transaction';
+
+  @override
+  String eventUpdated(Object user, Object event) {
+    return '$user have updated an event $event';
+  }
+
+  @override
+  String eventCreated(Object user, Object event) {
+    return '$user have created an event $event';
+  }
+
+  @override
+  String eventDeleted(Object user, Object event) {
+    return '$user have deleted an event $event';
+  }
+
+  @override
+  String expenseRestored(Object user, Object expense) {
+    return '$user have restored an expense $expense';
+  }
+
+  @override
+  String expenseDeleted(Object user, Object expense) {
+    return '$user have deleted an expense $expense';
+  }
+
+  @override
+  String expenseUpdated(Object user, Object expense) {
+    return '$user have updated an expense $expense';
+  }
+
+  @override
+  String expenseCreated(Object user, Object expense) {
+    return '$user have created an expense $expense';
+  }
+
+  @override
+  String friendAccepted(Object user) {
+    return '$user accepted your friend request';
+  }
+
+  @override
+  String friendRequestNoti(Object user, Object message) {
+    return '$user has sent you a friend request. message: $message';
+  }
+
+  @override
+  String friendRequestToMe(Object user) {
+    return 'You have received a friend request from $user';
+  }
+
+  @override
+  String leaderChanged(Object user, Object group) {
+    return '$user is new leader of group $group';
+  }
+
+  @override
+  String groupUpdated(Object user, Object group) {
+    return '$user have updated a group $group';
+  }
+
+  @override
+  String deposit(Object amount, Object currency) {
+    return 'You have deposited $amount $currency';
+  }
+
+  @override
+  String get enterMessage => 'Enter message...';
+
+  @override
+  String get partnerTyping => 'Partner is typing...';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get messageDeleted => 'Message is deleted';
+
+  @override
+  String get edited => 'Message is Edited';
 }

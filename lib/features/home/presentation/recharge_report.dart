@@ -41,14 +41,22 @@ class _RechargeReportState extends State<RechargeReport> {
       child: Layout(
         title: isExternal ? intl.externalExpense : intl.internalExpense,
         action: IconButton(
-          icon: Icon(isExternal ? Icons.arrow_circle_down : Icons.arrow_circle_up),
+          icon: Icon(
+            isExternal ? Icons.arrow_circle_down : Icons.arrow_circle_up,
+          ),
           color: Colors.white,
           onPressed: () {
             setState(() {
               isExternal = !isExternal;
             });
             context.read<LoadedHistoryBloc>().add(
-              GetHistoryInitEvent(1, 10, isExternal ? WalletHistoryType.external : WalletHistoryType.internal),
+              GetHistoryInitEvent(
+                1,
+                10,
+                isExternal
+                    ? WalletHistoryType.external
+                    : WalletHistoryType.internal,
+              ),
             );
           },
         ),
@@ -115,9 +123,11 @@ class _RechargeReportState extends State<RechargeReport> {
               },
               child: SizedBox.shrink(),
             ),
+
             BlocBuilder<LoadedHistoryBloc, LoadedHistoryState>(
               buildWhen: (p, c) =>
-                  p.externalTransaction != c.externalTransaction || p.internalTransaction != c.internalTransaction ||
+                  p.externalTransaction != c.externalTransaction ||
+                  p.internalTransaction != c.internalTransaction ||
                   p.isLoading != c.isLoading,
               builder: (context, state) {
                 if (state.isLoading) {
@@ -134,7 +144,7 @@ class _RechargeReportState extends State<RechargeReport> {
                 } else if (state.internalTransaction.isEmpty && !isExternal) {
                   return noTransactionWidget(intl, theme);
                 }
-                
+
                 return isExternal
                     ? listExternalTransactionResults(intl, state)
                     : listInternalTransactionResults(intl, state);
@@ -410,20 +420,28 @@ class CustomRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Title cố định, không wrap
           Text(
             title,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w500,
-              color: Colors.grey,
-            ),
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                ),
           ),
-          Text(
-            info,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-              color: AppThemes.primary3Color,
+
+          const SizedBox(width: 12),
+
+          // Info ăn toàn bộ phần còn lại, wrap khi dài
+          Expanded(
+            child: Text(
+              info,
+              softWrap: true,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppThemes.primary3Color,
+                  ),
             ),
           ),
         ],
@@ -481,7 +499,7 @@ class InternalExpenseCard extends StatelessWidget {
       subtitle: DateFormat('HH:mm').format(expense.date!),
       trailing: Column(
         children: [
-          Text( 
+          Text(
             (expense.toUser == HiveService.getUser().fullName)
                 ? '+ ${formatNumber(expense.amount ?? 0)} VND'
                 : '- ${formatNumber(expense.amount?.abs() ?? 0)} VND',
@@ -492,7 +510,7 @@ class InternalExpenseCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text( 
+          Text(
             (expense.toUser == HiveService.getUser().fullName)
                 ? '${intl.from} ${expense.fromUser}'
                 : '${intl.to} ${expense.toUser}',
@@ -503,6 +521,54 @@ class InternalExpenseCard extends StatelessWidget {
           ),
         ],
       ),
+      onTap: () {
+        showCustomDialog(
+          context: context,
+          content: Column(
+            children: [
+              CustomRow(title: intl.from, info: expense.fromUser ?? ''),
+              CustomRow(title: intl.to, info: expense.toUser ?? ''),
+              CustomRow(
+                title: intl.amount,
+                info: '${formatNumber(expense.amount ?? 0)} VND',
+              ),
+              CustomRow(title: intl.code, info: expense.code ?? ''),
+              CustomRow(title: intl.group, info: expense.group ?? ''),
+              CustomRow(
+                title: intl.date,
+                info: DateFormat(
+                  'dd/MM/yyyy HH:mm',
+                ).format(expense.date ?? DateTime.now()),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        intl.description,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Text(
+                        expense.description ?? '',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: AppThemes.primary3Color,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

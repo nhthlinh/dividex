@@ -252,7 +252,7 @@ class _AddEventPageState extends State<AddEventPage> {
           ],
 
           const SizedBox(height: 30),
-          CustomButton(text: intl.add, onPressed: isValid ? submitEvent : null),
+          CustomButton(text: intl.add, onPressed: (isValid && selectedMembers.isNotEmpty) ? submitEvent : null),
           const SizedBox(height: 30),
         ],
       ),
@@ -308,6 +308,7 @@ class _AddEventPageState extends State<AddEventPage> {
         );
       },
     );
+  
   }
 
   LayoutBuilder noGroupWidget(AppLocalizations intl, ThemeData theme) {

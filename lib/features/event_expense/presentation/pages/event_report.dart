@@ -1,9 +1,9 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/event_expense/data/models/category_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart'
     as event_event;
 import 'package:Dividex/features/event_expense/presentation/bloc/event/event_state.dart';
@@ -17,6 +17,7 @@ import 'package:Dividex/features/group/presentation/widgets/chart_widget.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/bar_chart.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:flutter/material.dart';
@@ -29,15 +30,11 @@ class EventReportPage extends StatefulWidget {
   final String eventId;
   final String groupId;
   final String eventName;
-  final String groupName;
-  final String groupAvatarUrl;
   const EventReportPage({
     super.key,
     required this.eventId,
     required this.eventName,
     required this.groupId,
-    required this.groupName,
-    required this.groupAvatarUrl,
   });
 
   @override
@@ -221,6 +218,7 @@ class _EventReportPageState extends State<EventReportPage> {
                   hasMore,
                   state.totalItems,
                   state.expenses,
+                  state.page
                 );
               },
             ),
@@ -299,6 +297,7 @@ class _EventReportPageState extends State<EventReportPage> {
     bool hasMore,
     int totalExpenses,
     List<ExpenseModel> expenses,
+    int page
   ) {
     final groupedExpenses = <String, List<ExpenseModel>>{};
     for (var e in expenses) {
@@ -347,6 +346,21 @@ class _EventReportPageState extends State<EventReportPage> {
             intl,
           ),
         ),
+
+        if (hasMore) ... [
+          BlocProvider<ExpenseDataBloc>(
+            create: (context) => context.read<ExpenseDataBloc>(),
+            child: CustomButton(
+              text: intl.more,
+              onPressed: () {
+                context.read<ExpenseDataBloc>().add(
+                  LoadMoreExpenses(id: '', type: LoadExpenseType.all, page: page + 1),
+                );
+              },
+              size: ButtonSize.small,
+            ),
+          ),
+        ]
       ],
     );
   }
@@ -365,12 +379,10 @@ class ExpenseCard extends StatelessWidget {
       leading: CircleAvatar(
         radius: 20,
         backgroundColor: Colors.grey,
-        backgroundImage:
-            (widget.groupAvatarUrl != '' && widget.groupAvatarUrl.isNotEmpty)
-            ? NetworkImage(widget.groupAvatarUrl)
-            : NetworkImage(
-                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(widget.groupName)}&background=random&color=fff&size=128',
-              ),
+        backgroundImage: NetworkImage(
+          getCategoryByKey(expense.category ?? '')?.getImage() ??
+              'lib/assets/icons/money-transfer.png',
+        ),
       ),
       subtitle: widget.eventName,
       trailing: Column(

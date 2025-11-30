@@ -1,5 +1,6 @@
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/shared/utils/get_time_ago.dart';
 
 enum FriendStatus { none, response, pending, accepted }
 
@@ -44,8 +45,8 @@ class FriendModel {
       startedAt: json['start'] == null
           ? json['date_joined'] == null
               ? null
-              : DateTime.parse(json['date_joined'] as String)
-          : DateTime.parse(json['start'] as String),
+              : parseUTCToVN(json['date_joined'] as String)
+          : parseUTCToVN(json['start'] as String),
     );
   }
 

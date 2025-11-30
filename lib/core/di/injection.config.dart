@@ -73,6 +73,23 @@ import 'package:Dividex/features/image/data/source/image_remote_data_source_impl
     as _i41;
 import 'package:Dividex/features/image/domain/image_repository.dart' as _i306;
 import 'package:Dividex/features/image/domain/usecase.dart' as _i111;
+import 'package:Dividex/features/message/data/repositories/chat_repository_impl.dart'
+    as _i727;
+import 'package:Dividex/features/message/data/source/chat_remote_datasource.dart'
+    as _i725;
+import 'package:Dividex/features/message/data/source/chat_remote_datasource_impl.dart'
+    as _i400;
+import 'package:Dividex/features/message/domain/repository.dart' as _i979;
+import 'package:Dividex/features/message/domain/usecase.dart' as _i270;
+import 'package:Dividex/features/notifications/data/repositories/noti_repository_impl.dart'
+    as _i326;
+import 'package:Dividex/features/notifications/data/source/noti_remote_data_source.dart'
+    as _i146;
+import 'package:Dividex/features/notifications/data/source/noti_remote_data_source_impl.dart'
+    as _i506;
+import 'package:Dividex/features/notifications/domain/noti_repository.dart'
+    as _i307;
+import 'package:Dividex/features/notifications/domain/usecase.dart' as _i617;
 import 'package:Dividex/features/recharge/data/repositories/recharge_repository_impl.dart'
     as _i210;
 import 'package:Dividex/features/recharge/data/source/recharge_remote_data_source.dart'
@@ -162,6 +179,10 @@ extension GetItInjectableX on _i174.GetIt {
         await getAsync<_i692.FriendRemoteDataSource>(),
       ),
     );
+    gh.factoryAsync<_i725.ChatRemoteDataSource>(
+      () async =>
+          _i400.ChatRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
+    );
     gh.factoryAsync<_i989.EventRemoteDataSource>(
       () async =>
           _i1037.EventRemoteDataSourceImpl(await getAsync<_i305.DioClient>()),
@@ -169,6 +190,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i134.RechargeRemoteDataSource>(
       () async =>
           _i209.RechargeRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
+    );
+    gh.factoryAsync<_i979.ChatRepository>(
+      () async => _i727.ChatRepositoryImpl(
+        await getAsync<_i725.ChatRemoteDataSource>(),
+      ),
     );
     gh.factoryAsync<_i947.ExpenseRemoteDataSource>(
       () async =>
@@ -181,6 +207,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i477.UserRemoteDataSource>(
       () async =>
           _i357.UserRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
+    );
+    gh.factoryAsync<_i146.NotiRemoteDataSource>(
+      () async =>
+          _i506.NotiRemoteDatasourceImpl(await getAsync<_i305.DioClient>()),
     );
     gh.factoryAsync<_i126.FriendUseCase>(
       () async =>
@@ -201,6 +231,11 @@ extension GetItInjectableX on _i174.GetIt {
         await getAsync<_i477.UserRemoteDataSource>(),
       ),
     );
+    gh.factoryAsync<_i307.NotiRepository>(
+      () async => _i326.NotiRepositoryImpl(
+        await getAsync<_i146.NotiRemoteDataSource>(),
+      ),
+    );
     gh.factoryAsync<_i55.ExpenseRepository>(
       () async => _i679.ExpenseRepositoryImpl(
         await getAsync<_i947.ExpenseRemoteDataSource>(),
@@ -209,6 +244,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factoryAsync<_i701.ExpenseUseCase>(
       () async =>
           _i701.ExpenseUseCase(await getAsync<_i55.ExpenseRepository>()),
+    );
+    gh.factoryAsync<_i617.NotiUseCase>(
+      () async => _i617.NotiUseCase(await getAsync<_i307.NotiRepository>()),
+    );
+    gh.factoryAsync<_i270.ChatUseCase>(
+      () async => _i270.ChatUseCase(await getAsync<_i979.ChatRepository>()),
     );
     gh.factoryAsync<_i56.UserUseCase>(
       () async => _i56.UserUseCase(await getAsync<_i635.UserRepository>()),

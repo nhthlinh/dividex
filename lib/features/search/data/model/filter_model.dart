@@ -81,8 +81,7 @@ class ExternalTransactionFilterArguments {
 }
 
 class InternalTransactionFilterArguments {
-  final String? name;
-  final String? code;
+  final String? keyword;
   final String? groupId;
   final DateTime? start;
   final DateTime? end;
@@ -90,8 +89,7 @@ class InternalTransactionFilterArguments {
   final double? maxAmount;
 
   InternalTransactionFilterArguments({
-    this.name,
-    this.code,
+    this.keyword,
     this.groupId,
     this.start,
     this.end,
@@ -100,8 +98,7 @@ class InternalTransactionFilterArguments {
   });
 
   InternalTransactionFilterArguments copyWith({
-    String? name,
-    String? code,
+    String? keyword,
     String? groupId,
     DateTime? start,
     DateTime? end,
@@ -109,8 +106,7 @@ class InternalTransactionFilterArguments {
     double? maxAmount,
   }) {
     return InternalTransactionFilterArguments(
-      name: name ?? this.name,
-      code: code ?? this.code,
+      keyword: keyword ?? this.keyword,
       groupId: groupId ?? this.groupId,
       start: start ?? this.start,
       end: end ?? this.end,
