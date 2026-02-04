@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Dividex/config/routes/router.dart';
+import 'package:Dividex/core/services/device_info_service.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
@@ -32,6 +33,22 @@ abstract class DioModule {
 
     final dio = Dio(options);
 
+    try {
+      final deviceInfo = await DeviceInfoService.getDeviceInfo(includeLocation: true);
+      options.headers.addAll({
+        'X-Platform': deviceInfo['platform'],
+        'X-Device-Model': deviceInfo['device_model'],
+        'X-OS-Version': deviceInfo['os_version'],
+        'X-Device-ID': deviceInfo['device_id'],
+        'X-App-Version': deviceInfo['app_version'],
+        'X-Location': deviceInfo['location'] != null
+            ? '${deviceInfo['location']['lat']},${deviceInfo['location']['lng']}'
+            : '',
+      });
+    } catch (e) {
+      debugPrint('Failed to get device info: $e');
+    }
+
     /// Log request/response
     dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
 
@@ -47,7 +64,10 @@ abstract class DioModule {
           );
 
           // BỎ QUA nếu là request refresh
-          if (options.path.contains('/auth/refresh') || options.path.contains('https://split-expense-s3.s3.amazonaws.com')) {
+          if (options.path.contains('/auth/refresh') ||
+              options.path.contains(
+                'https://split-expense-s3.s3.amazonaws.com',
+              )) {
             return handler.next(options);
           }
           options.headers['Authorization'] =
@@ -66,7 +86,6 @@ abstract class DioModule {
             if ((errorCode == 403 ||
                     messageCode == "INVALID_OR_EXPIRED_TOKEN") &&
                 response.requestOptions.path.contains('/auth/refresh')) {
-                  
               final context = navigatorKey.currentContext!;
               await HiveService.clearToken(); // Xóa token khỏi local storage
               await HiveService.clearUser(); // Xóa dữ liệu người dùng khỏi local storage
@@ -82,9 +101,9 @@ abstract class DioModule {
             final isTokenExpired =
                 (errorCode == 403 && messageCode == "INVALID_OR_EXPIRED_TOKEN");
 
-            print(
-              "isTokenExpired: $isTokenExpired, isRefreshing: $isRefreshing",
-            );
+            // print(
+            //   "isTokenExpired: $isTokenExpired, isRefreshing: $isRefreshing",
+            // );
 
             if (isTokenExpired && !isRefreshing) {
               isRefreshing = true;
@@ -126,7 +145,6 @@ abstract class DioModule {
                 }
               } catch (e) {
                 // network error cũng logout
-                print("Refresh token exception: $e");
                 final context = navigatorKey.currentContext!;
                 await HiveService.clearToken(); // Xóa token khỏi local storage
                 await HiveService.clearUser(); // Xóa dữ liệu người dùng khỏi local storage

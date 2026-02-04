@@ -1,5 +1,4 @@
 import 'dart:io' as io;
-import 'dart:typed_data';
 
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
@@ -7,9 +6,7 @@ import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/image/presentation/pages/image_page.dart';
 import 'package:Dividex/features/image/presentation/widgets/image_edit_widget.dart';
 import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
-import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
-import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +113,7 @@ class _ImageUpdateDeleteWidgetState extends State<ImageUpdateDeleteWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuild ImageUpdateDeleteWidget: ${widget.isAvatar}');
+    // print('Rebuild ImageUpdateDeleteWidget: ${widget.isAvatar}');
     return SizedBox(
       width: 340,
       child: Column(

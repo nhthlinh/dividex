@@ -100,6 +100,7 @@ class _AnimatedBorderToastState extends State<_AnimatedBorderToast>
             alignment: Alignment.center,
             children: [
               Container(
+                width: MediaQuery.of(context).size.width * 0.9,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,

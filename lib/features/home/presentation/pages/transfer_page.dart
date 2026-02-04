@@ -26,7 +26,6 @@ import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
@@ -362,10 +361,6 @@ class _TransferPageState extends State<TransferPage> {
                                     avatar: friends[index].avatarUrl,
                                   );
                                 }
-
-                                print(
-                                  'Selected User: ${selectedToUser.value?.fullName}',
-                                );
                               });
                             },
                           );

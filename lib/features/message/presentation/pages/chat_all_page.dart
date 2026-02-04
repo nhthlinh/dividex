@@ -46,7 +46,7 @@ class _ChatAllPageState extends State<ChatAllPage> {
     final theme = Theme.of(context);
 
     return AppShell(
-      currentIndex: 0,
+      currentIndex: 2,
       child: SimpleLayout(
         title: intl.group,
         child: Column(

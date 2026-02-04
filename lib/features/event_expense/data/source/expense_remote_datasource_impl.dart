@@ -83,8 +83,6 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
     ExpenseFilterArguments? filter,
   ) async {
     return apiCallWrapper(() async {
-      print(filter?.start);
-      print(filter?.end);
       final queryParams = {
         'page': page,
         'page_size': pageSize,

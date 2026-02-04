@@ -165,12 +165,13 @@ class _FriendPageState extends State<FriendPage> {
     >(
       builder: (context, state) {
         if (state.isLoading) {
-          return Center(
-            child: ColoredBox(
-              color: Colors.transparent,
-              child: SpinKitFadingCircle(color: AppThemes.primary3Color),
-            ),
-          );
+          return const SizedBox.shrink();
+          // return Center(
+          //   child: ColoredBox(
+          //     color: Colors.transparent,
+          //     child: SpinKitFadingCircle(color: AppThemes.primary3Color),
+          //   ),
+          // );
         }
 
         final List<FriendModel> requests = type == FriendRequestType.received

@@ -190,9 +190,9 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
     if (controller.text.isNotEmpty) {
       sanitizeLists();
 
-      print(selectedUserIdsToAdd.map((e) => e).toList());
-      print(selectedUserIdsToDelete.map((e) => e).toList());
-      print(members.map((e) => e).toList());
+      // print(selectedUserIdsToAdd.map((e) => e).toList());
+      // print(selectedUserIdsToDelete.map((e) => e).toList());
+      // print(members.map((e) => e).toList());
 
       // Xác nhận xóa từng user
       List<String> confirmedDeletes = [];

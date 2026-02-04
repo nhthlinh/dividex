@@ -13,7 +13,6 @@ class PagingModel<T> {
 
   factory PagingModel.fromJson(Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJsonT) {
     final data = json['data'] ?? {};
-    print('PagingModel data:  ${fromJsonT(data)}');
 
     return PagingModel(
       data: fromJsonT(data),

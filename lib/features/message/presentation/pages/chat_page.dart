@@ -9,8 +9,6 @@ import 'package:Dividex/features/home/presentation/pages/setting_page.dart';
 import 'package:Dividex/features/message/domain/usecase.dart';
 import 'package:Dividex/features/message/presentation/bloc/chat_bloc.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
-import 'package:Dividex/shared/widgets/app_shell.dart';
-import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
@@ -190,7 +188,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   void _handleEvent(Map<String, dynamic> ev) {
-    print("message in socket: $ev");
+    // print("message in socket: $ev");
     final type = ev['type'];
     if (type == 'connection') {
       debugPrint("WS connected = ${ev['connected']}");

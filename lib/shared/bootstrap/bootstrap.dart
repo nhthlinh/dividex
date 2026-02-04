@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Dividex/app.dart';
 import 'package:Dividex/config/location/locale_cubit.dart';
+import 'package:Dividex/config/routes/refresh_notifier.dart';
 import 'package:Dividex/config/themes/theme_cubit.dart';
 import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
@@ -14,9 +15,9 @@ import 'package:Dividex/features/notifications/presentation/bloc/notification_bl
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 Future<void> bootstrap() async {
   runZonedGuarded(() async {
@@ -47,6 +48,7 @@ Future<void> bootstrap() async {
           BlocProvider(create: (_) => LoadedNotiBloc()),
           BlocProvider(create: (_) => LocaleCubit()..loadLocale()),
           BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
+          //ChangeNotifierProvider(create: (_) => AppRefreshNotifier())
         ],
         child: const MyApp(),
       ),

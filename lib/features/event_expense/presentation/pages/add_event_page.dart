@@ -64,12 +64,12 @@ class _AddEventPageState extends State<AddEventPage> {
   Future<void> submitEvent() async {
     if (_formKey.currentState!.validate()) {
       // Submit the event data
-      print('Event Name: ${eventNameController.text}');
-      print('Event Description: ${eventDescriptionController.text}');
-      print('Event Start Date: ${eventStartDateController.text}');
-      print('Event End Date: ${eventEndDateController.text}');
-      print('Selected Group: ${selectedGroup.value?.name ?? ''}');
-      print('Selected Members: $selectedMembers');
+      // print('Event Name: ${eventNameController.text}');
+      // print('Event Description: ${eventDescriptionController.text}');
+      // print('Event Start Date: ${eventStartDateController.text}');
+      // print('Event End Date: ${eventEndDateController.text}');
+      // print('Selected Group: ${selectedGroup.value?.name ?? ''}');
+      // print('Selected Members: $selectedMembers');
 
       context.read<EventBloc>().add(
         CreateEventEvent(

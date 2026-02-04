@@ -45,7 +45,6 @@ class _FilterPageState extends State<FilterPage> {
   @override
   void initState() {
     super.initState();
-    print(widget.filterType.name);
     typeBig =
         widget.filterType == FilterType.externalTransaction ||
             widget.filterType == FilterType.internalTransaction

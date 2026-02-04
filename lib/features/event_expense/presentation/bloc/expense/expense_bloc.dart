@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
@@ -7,9 +5,6 @@ import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/domain/event_usecase.dart';
 import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart'
-    as event_event;
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';

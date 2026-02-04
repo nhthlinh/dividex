@@ -14,7 +14,6 @@ import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
@@ -116,7 +115,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                               value: selectedToAccount.value,
                               options: accounts,
                               displayString: (account) =>
-                                  '${account.accountNumber ?? ''} ${account.bankName ?? ''}',
+                                  '${account.accountNumber} ${account.bankName}',
                               buildOption: (account, selected) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -126,7 +125,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                   child: Row(
                                     children: [
                                       Text(
-                                        account.bankName ?? '',
+                                        account.bankName,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium

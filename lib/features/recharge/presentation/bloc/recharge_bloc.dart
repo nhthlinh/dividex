@@ -4,9 +4,7 @@ import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/recharge/data/models/recharge_model.dart';
 import 'package:Dividex/features/recharge/domain/usecase.dart';
 import 'package:Dividex/features/search/data/model/filter_model.dart';
-import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
-import 'package:Dividex/shared/widgets/create_pin.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -372,9 +370,9 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
           walletInfo['latestTime'] as String,
         ),
       );
-    } catch (e, stackTrace) {
-      print(stackTrace);
-      print(e);
+    } catch (e) {
+      // print(stackTrace);
+      // print(e);
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
     }

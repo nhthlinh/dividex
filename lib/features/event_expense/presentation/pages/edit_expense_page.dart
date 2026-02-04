@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
@@ -21,7 +19,6 @@ import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
     as user_event;
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/models/enum.dart';
-import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -145,16 +142,16 @@ class _EditExpensePageState extends State<EditExpensePage> {
         }
       }
 
-      print('🔍 Submitting expense with details:');
-      print('- name: ${expenseNameController.text}');
-      print('- amount: ${expenseAmountController.text}');
-      print('- payer: ${_selectedPayer?.fullName}');
-      print('- category: ${_selectedCategory.value?.key}');
-      print('- currency: ${_selectedCurrency.value.code}');
-      print('- date: $formattedDate');
-      print('- reminder: $formattedReminder');
-      print('- split type: $splitType');
-      print('- user debts: $userDebts');
+      // print('🔍 Submitting expense with details:');
+      // print('- name: ${expenseNameController.text}');
+      // print('- amount: ${expenseAmountController.text}');
+      // print('- payer: ${_selectedPayer?.fullName}');
+      // print('- category: ${_selectedCategory.value?.key}');
+      // print('- currency: ${_selectedCurrency.value.code}');
+      // print('- date: $formattedDate');
+      // print('- reminder: $formattedReminder');
+      // print('- split type: $splitType');
+      // print('- user debts: $userDebts');
 
       context.read<ExpenseBloc>().add(
         UpdateExpenseEvent(
@@ -238,14 +235,14 @@ class _EditExpensePageState extends State<EditExpensePage> {
 
     _isInitialized = true;
 
-    print('🔍 UserDebts: ${userDebts.length}');
-    print('🔍 Missing fields:');
-    print('- name: ${expenseNameController.text}');
-    print('- amount: ${expenseAmountController.text}');
-    print('- payer: ${_selectedPayer?.fullName}');
-    print('- category: ${_selectedCategory.value?.key}');
-    print('- currency: ${_selectedCurrency.value.code}');
-    print('- date: ${dateController.text}');
+    // print('🔍 UserDebts: ${userDebts.length}');
+    // print('🔍 Missing fields:');
+    // print('- name: ${expenseNameController.text}');
+    // print('- amount: ${expenseAmountController.text}');
+    // print('- payer: ${_selectedPayer?.fullName}');
+    // print('- category: ${_selectedCategory.value?.key}');
+    // print('- currency: ${_selectedCurrency.value.code}');
+    // print('- date: ${dateController.text}');
 
     return CustomFormWrapper(
       formKey: formKey,

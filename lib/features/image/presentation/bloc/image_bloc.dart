@@ -138,9 +138,9 @@ Future<void> uploadImage(
       presignedList.map((e) => e.uid).toList(), // uid BE cấp
     );
 
-    print("✅ Upload thành công");
+    // print("✅ Upload thành công");
   } catch (e) {
-    print("❌ Upload image failed: $e");
+    // print("❌ Upload image failed: $e");
   }
 }
 
@@ -196,9 +196,9 @@ Future<void> updateImage(
       presignedList.map((e) => e.uid).toList(), // uid BE cấp
     );
 
-    print("✅ Upload thành công");
+    // print("✅ Upload thành công");
   } catch (e) {
-    print("❌ Upload image failed: $e");
+    // print("❌ Upload image failed: $e");
   }
 }
 
@@ -210,6 +210,6 @@ Future<void> deleteImage(
 
     await imageUsecase.deleteImages(deletedImageUids);
   } catch (e) {
-    print("❌ Delete image failed: $e");
+    // print("❌ Delete image failed: $e");
   }
 }

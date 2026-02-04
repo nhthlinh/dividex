@@ -26,7 +26,6 @@ class ImageRemoteDatasourceImpl implements ImageRemoteDataSource {
   Future<List<ImagePresignUrlResponseModel>> getPresignedUrls(
     List<ImagePresignUrlInputModel> files,
   ) {
-    print(files.map((e) => e.toJson()).toList());
     return apiCallWrapper(() async {
       final response = await dio.post(
         '/attachments/presigned-url',

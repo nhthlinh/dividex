@@ -14,7 +14,6 @@ class ThousandsFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    print('Old Value: ${oldValue.text}, New Value: ${newValue.text}');  
     // Nếu rỗng thì giữ nguyên
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');

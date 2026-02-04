@@ -1,5 +1,4 @@
 import 'package:Dividex/features/image/data/models/image_model.dart';
-import 'package:Dividex/shared/models/enum.dart';
 import 'package:hive/hive.dart';
 
 @HiveType(typeId: 3)

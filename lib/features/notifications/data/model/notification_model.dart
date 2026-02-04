@@ -16,7 +16,6 @@ import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

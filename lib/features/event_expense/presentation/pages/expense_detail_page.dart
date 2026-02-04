@@ -8,12 +8,7 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
-import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
-import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
-import 'package:Dividex/features/image/presentation/bloc/image_state.dart';
 import 'package:Dividex/features/image/presentation/pages/image_page.dart';
-import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
-import 'package:Dividex/features/image/presentation/widgets/image_update_delete_widget.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';

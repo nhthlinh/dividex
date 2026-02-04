@@ -66,8 +66,8 @@ class ExpenseModel {
     category: json['category'] as String?,
     expenseDate: json['created_at'] == null
           ? json['expense_date'] == null
-              ? null
-              : parseUTCToVN(json['expense_date'] as String)
+              ? null 
+              : DateTime.parse(json['expense_date'] as String)
           : parseUTCToVN(json['created_at'] as String),
     remindAt: json['end_date'] == null
         ? null

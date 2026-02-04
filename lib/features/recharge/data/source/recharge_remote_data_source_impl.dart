@@ -90,7 +90,10 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
         'totalTransactions': res.data['data']['total_transactions'].toString(),
         'phoneNumber': res.data['data']['phone_number'].toString(),
         'fullName': res.data['data']['full_name'].toString(),
-        'latestTime': getTimeAgo(DateTime.parse(res.data['data']['latest_time']), intl),
+        // 'latestTime': getTimeAgo(DateTime.parse(res.data['data']['latest_time']), intl),
+        'latestTime': res.data['data']['latest_time'] != null
+          ? getTimeAgo(DateTime.parse(res.data['data']['latest_time']), intl)
+          : '', // hoặc '' nếu bạn muốn hiển thị chuỗi trống
       };
     });
   }

@@ -7,7 +7,6 @@ Future<void> sendFcmTokenToBackend(bool isLogin) async {
   if (isLogin) {
     try {
       final fcmToken = await FirebaseMessaging.instance.getToken();
-      print('FCM Token: $fcmToken');
       if (fcmToken != null) {
         // Gọi API update FCM token lên server
         final authRemote = await getIt.getAsync<AuthRemoteDataSource>();

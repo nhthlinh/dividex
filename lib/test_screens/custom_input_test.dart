@@ -149,18 +149,18 @@ class _InputTestScreenState extends State<InputTestScreen> {
               ElevatedButton(
                 onPressed: () {
                   // Validate form
-                  if (_formKey.currentState!.validate()) {
-                    print("All inputs are valid!");
-                    print("Text: ${textController.text}");
-                    print("Number: ${numberController.text}");
-                    print("Password: ${passwordController.text}");
-                    print("Email: ${emailController.text}");
-                    print("Phone: ${phoneController.text}");
-                    print("Date: ${dateController.text}");
-                    print("Multi-line: ${multiLineController.text}");
-                  } else {
-                    print("Some inputs are invalid!");
-                  }
+                  // if (_formKey.currentState!.validate()) {
+                  //   print("All inputs are valid!");
+                  //   print("Text: ${textController.text}");
+                  //   print("Number: ${numberController.text}");
+                  //   print("Password: ${passwordController.text}");
+                  //   print("Email: ${emailController.text}");
+                  //   print("Phone: ${phoneController.text}");
+                  //   print("Date: ${dateController.text}");
+                  //   print("Multi-line: ${multiLineController.text}");
+                  // } else {
+                  //   print("Some inputs are invalid!");
+                  // }
                 },
                 child: const Text("Submit / Validate"),
               ),

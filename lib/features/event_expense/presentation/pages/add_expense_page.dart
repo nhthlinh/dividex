@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
@@ -15,7 +13,6 @@ import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
     as user_event;
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/models/enum.dart';
-import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -123,7 +120,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
         CreateExpenseEvent(
           expenseNameController.text,
           double.tryParse(expenseAmountController.text) ?? 0,
-          _selectedCurrency.value!.code,
+          _selectedCurrency.value.code,
           _selectedCategory.value!.key,
           _selectedEvent!.id!,
           _selectedPayer!.id,

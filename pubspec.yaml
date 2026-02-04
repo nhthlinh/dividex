@@ -12,6 +12,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  device_info_plus: ^10.1.0
+  package_info_plus: ^8.3.0
+  geolocator: ^10.1.0
+
   http: ^1.4.0
   web_socket_channel: ^2.4.0
 

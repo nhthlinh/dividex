@@ -4,8 +4,6 @@ import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/data/source/user_remote_datasource.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
-import 'package:Dividex/shared/services/local/hive_service.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: UserRemoteDataSource)

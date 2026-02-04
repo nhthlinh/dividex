@@ -165,10 +165,10 @@ class _GroupPageState extends State<GroupPage> {
                                 preferredCurrency: val.code,
                               ),
                             );
-                            print('Selected currency: ${val.code}');
-                            print(
-                              'Saved preferred currency: ${HiveService.getUser().preferredCurrency ?? 'null'}',
-                            );
+                            // print('Selected currency: ${val.code}');
+                            // print(
+                            //   'Saved preferred currency: ${HiveService.getUser().preferredCurrency ?? 'null'}',
+                            // );
                           },
                           isRequired: true,
                         );
@@ -417,7 +417,6 @@ class _GroupPageState extends State<GroupPage> {
                     } else {
                       _selectedMemberIndices[index] = idx;
                     }
-                    print(idx);
                   });
                 },
               ),

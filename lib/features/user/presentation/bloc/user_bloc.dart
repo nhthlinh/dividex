@@ -129,7 +129,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Future _onUpdateMe(UpdateMeEvent event, Emitter<UserState> emit) async {
     try {
       final useCase = await getIt.getAsync<UserUseCase>();
-      final user = await useCase.updateMe(event.name, event.currency);
+      await useCase.updateMe(event.name, event.currency);
 
       final userId = HiveService.getUser().id;
 
