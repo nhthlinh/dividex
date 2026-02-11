@@ -1,30 +1,46 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+import 'dart:async';
 
+import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/login_page.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'package:dividex_dacn/main.dart';
+class MockAuthBloc extends Mock implements AuthBloc {}
+
+class FakeAuthState extends Fake implements AuthState {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  
+  setUpAll(() {
+    registerFallbackValue(FakeAuthState());
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('LoginScreen shows login button', (tester) async {
+    final mockAuthBloc = MockAuthBloc();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    when(() => mockAuthBloc.state).thenReturn(AuthInitial());
+    when(() => mockAuthBloc.stream)
+        .thenAnswer((_) => const Stream.empty());
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: BlocProvider<AuthBloc>.value(
+          value: mockAuthBloc,
+          child: const LoginPage(),
+        ),
+      ),
+    );
+
+    expect(
+    find.widgetWithText(CustomButton, 'Login'),
+      findsOneWidget,
+    );
+
   });
 }

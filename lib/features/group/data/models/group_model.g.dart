@@ -7,18 +7,16 @@ part of 'group_model.dart';
 // **************************************************************************
 
 GroupModel _$GroupModelFromJson(Map<String, dynamic> json) => GroupModel(
-  id: json['uid'] as String?,
+  id: json['id'] as String?,
   name: json['name'] as String?,
-  avatarUrl: json['avatar_url'] as String?,
+  avatarUrl: json['avatarUrl'] as String?,
   createdAt: json['createdAt'] == null
       ? null
       : DateTime.parse(json['createdAt'] as String),
   members: (json['members'] as List<dynamic>?)
       ?.map((e) => GroupMemberModel.fromJson(e as Map<String, dynamic>))
       .toList(),
-  leader: json['leader'] == null
-      ? null
-      : json['leader'] as String,
+  leader: json['leader'] as String?,
   status: $enumDecodeNullable(_$StatusEnumEnumMap, json['status']),
   events: (json['events'] as List<dynamic>?)
       ?.map((e) => EventModel.fromJson(e as Map<String, dynamic>))
@@ -27,11 +25,11 @@ GroupModel _$GroupModelFromJson(Map<String, dynamic> json) => GroupModel(
 
 Map<String, dynamic> _$GroupModelToJson(GroupModel instance) =>
     <String, dynamic>{
-      'uid': instance.id,
+      'id': instance.id,
       'name': instance.name,
       'leader': instance.leader,
       'status': _$StatusEnumEnumMap[instance.status],
-      'avatar_url': instance.avatarUrl,
+      'avatarUrl': instance.avatarUrl,
       'createdAt': instance.createdAt?.toIso8601String(),
       'members': instance.members,
       'events': instance.events,

@@ -6,6 +6,37 @@ import 'package:Dividex/shared/services/local/models/user_local_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
+  static bool _isTestMode = false;
+  static TokenLocalModel? _mockToken;
+  static String _mockLocale = 'vi';
+
+  static void enableTestMode({String locale = 'vi'}) {
+    _isTestMode = true;
+    _mockLocale = locale;
+  }
+
+  static SettingsLocalModel getSettings() {
+    if (_isTestMode) {
+      return SettingsLocalModel(localeCode: _mockLocale);
+    }
+    final settings =
+        getSettingsBox().get(HiveKey.settings) ?? SettingsLocalModel();
+    return settings;
+  }
+
+  static TokenLocalModel? getToken() {
+    if (_isTestMode) return _mockToken;
+    return getTokenBox().get(HiveKey.token);
+  }
+
+  static Future<void> saveToken(TokenLocalModel token) async {
+    if (_isTestMode) {
+      _mockToken = token;
+      return;
+    }
+    await getTokenBox().put(HiveKey.token, token);
+  }
+
   // Initialize Hive and open all boxes
   static Future<void> initialize({bool reset = false}) async {
     await Hive.initFlutter();
@@ -33,11 +64,11 @@ class HiveService {
     await getSettingsBox().put(HiveKey.settings, settings);
   }
 
-  static SettingsLocalModel getSettings() {
-    final settings =
-        getSettingsBox().get(HiveKey.settings) ?? SettingsLocalModel();
-    return settings;
-  }
+  // static SettingsLocalModel getSettings() {
+  //   final settings =
+  //       getSettingsBox().get(HiveKey.settings) ?? SettingsLocalModel();
+  //   return settings;
+  // }
 
   static Future<void> updateTheme(String theme) async {
     final current = getSettings();
@@ -60,13 +91,13 @@ class HiveService {
   //========================== TOKEN ==========================//
   static Box<TokenLocalModel> getTokenBox() => Hive.box<TokenLocalModel>(HiveBox.token);
 
-  static Future<void> saveToken(TokenLocalModel token) async {
-    await getTokenBox().put(HiveKey.token, token);
-  }
+  // static Future<void> saveToken(TokenLocalModel token) async {
+  //   await getTokenBox().put(HiveKey.token, token);
+  // }
 
-  static TokenLocalModel? getToken() {
-    return getTokenBox().get(HiveKey.token);
-  }
+  // static TokenLocalModel? getToken() {
+  //   return getTokenBox().get(HiveKey.token);
+  // }
 
   static Future<void> clearToken() async {
     await getTokenBox().delete(HiveKey.token);
@@ -85,5 +116,15 @@ class HiveService {
 
   static Future<void> clearUser() async {
     await getUserBox().delete(HiveKey.user);
+  }
+
+  static void mockToken({
+    required String accessToken,
+    required String refreshToken,
+  }) {
+    _mockToken = TokenLocalModel(
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    );
   }
 }
