@@ -190,9 +190,9 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
     if (controller.text.isNotEmpty) {
       sanitizeLists();
 
-      // print(selectedUserIdsToAdd.map((e) => e).toList());
-      // print(selectedUserIdsToDelete.map((e) => e).toList());
-      // print(members.map((e) => e).toList());
+      // debugPrint(selectedUserIdsToAdd.map((e) => e).toList());
+      // debugPrint(selectedUserIdsToDelete.map((e) => e).toList());
+      // debugPrint(members.map((e) => e).toList());
 
       // Xác nhận xóa từng user
       List<String> confirmedDeletes = [];
@@ -210,7 +210,9 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
           memberIdsAdd: selectedUserIdsToAdd,
           memberIdsRemove: confirmedDeletes,
           avatar: updatedImages.isNotEmpty ? updatedImages[0] : null,
-          deletedAvatarUid: deletedImages.isNotEmpty ? deletedImages[0].uid : null
+          deletedAvatarUid: deletedImages.isNotEmpty
+              ? deletedImages[0].uid
+              : null,
         ),
       );
 
@@ -233,6 +235,18 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
     return AppShell(
       currentIndex: 0,
       child: Layout(
+        onRefresh: () async {
+          context.read<LoadedUsersBloc>().add(
+            InitialEvent(
+              widget.groupId,
+              LoadType.groupMembers,
+              searchQuery: '',
+            ),
+          );
+
+          controller.text = widget.groupName;
+          return Future.value();
+        },
         title: widget.groupName,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -242,43 +256,37 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
               child: InkWell(
                 onTap: () {
                   context.pushNamed(
-                  AppRouteNames.listExpenseDeleted,
-                  pathParameters: {
-                    'groupId': widget.groupId,
-                  },
-                  extra: {
-                    'groupName': widget.groupName,
-                  },
-                );
+                    AppRouteNames.listExpenseDeleted,
+                    pathParameters: {'groupId': widget.groupId},
+                    extra: {'groupName': widget.groupName},
+                  );
                 },
                 child: Row(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          intl.deleteExpense,
-                          style: Theme.of(context).textTheme.titleSmall
-                              ?.copyWith(
-                                fontSize: 12,
-                                letterSpacing: 0,
-                                height: 16 / 12,
-                                color: Colors.grey,
-                              ),
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        intl.deleteExpense,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontSize: 12,
+                          letterSpacing: 0,
+                          height: 16 / 12,
+                          color: Colors.grey,
                         ),
                       ),
-                      const Spacer(),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                        color: Colors.grey[400],
-                      ),
-                    ],
-                  ),
+                    ),
+                    const Spacer(),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                      color: Colors.grey[400],
+                    ),
+                  ],
+                ),
               ),
             ),
 
             const SizedBox(height: 16),
-                  
 
             ContentCard(
               child: Column(
@@ -292,7 +300,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 8),
                   const Divider(
                     height: 1,
@@ -460,7 +468,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                         },
                       ),
                     ),
-                    
+
                     const SizedBox(height: 8),
                     CustomTextInputWidget(
                       size: TextInputSize.large,

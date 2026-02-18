@@ -29,6 +29,8 @@ class _AddAccountPageState extends State<AddAccountPage> {
     CurrencyEnum.vnd,
   );
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -65,8 +67,13 @@ class _AddAccountPageState extends State<AddAccountPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          return Future.value();
+        }, // No specific refresh logic needed for this page
         title: intl.account,
         child: CustomFormWrapper(
+          clearTrigger: clearFormTrigger,
           formKey: _formKey,
           fields: [
             FormFieldConfig(controller: accountNumber, isRequired: true),

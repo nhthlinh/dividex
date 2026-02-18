@@ -48,6 +48,8 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController binController = TextEditingController();
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +95,15 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          toController.text = widget.toUser.fullName!;
+          originalAmountController.text = formatNumber(widget.originalAmount);
+          realAmountController.text = formatNumber(widget.realAmount);
+          descriptionController.text = widget.description ?? '';
+          feeController.text = '0.00';
+          clearFormTrigger.value = !clearFormTrigger.value;
+          return Future.value();
+        },
         title: intl.confirm,
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.7,
@@ -105,7 +116,7 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                     context.pushNamed(
                       AppRouteNames.transferSuccess,
                       extra: {
-                        'toUser': widget.toUser, 
+                        'toUser': widget.toUser,
                         'amount': widget.originalAmount,
                         'currency': widget.currency,
                       },
@@ -132,14 +143,15 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                   children: [
                     Expanded(
                       flex: 7, // 70%
-                      child:  CustomTextInputWidget(
+                      child: CustomTextInputWidget(
                         label: intl.originalAmount,
                         size: TextInputSize.large,
                         controller: originalAmountController,
                         keyboardType: TextInputType.number,
                         isReadOnly: true,
                         inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly, // chỉ cho nhập số
+                          FilteringTextInputFormatter
+                              .digitsOnly, // chỉ cho nhập số
                           ThousandsFormatter(), // formatter của bạn
                         ],
                       ),
@@ -153,7 +165,8 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                         isReadOnly: true,
                         label: intl.expenseCurrencyLabel,
                         controller: TextEditingController(
-                            text: widget.currency.code.toUpperCase()),
+                          text: widget.currency.code.toUpperCase(),
+                        ),
                         keyboardType: TextInputType.text,
                       ),
                     ),
@@ -169,14 +182,15 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                         children: [
                           Expanded(
                             flex: 7, // 70%
-                            child:  CustomTextInputWidget(
+                            child: CustomTextInputWidget(
                               label: intl.realAmount,
                               size: TextInputSize.large,
                               controller: realAmountController,
                               keyboardType: TextInputType.number,
                               isReadOnly: true,
                               inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly, // chỉ cho nhập số
+                                FilteringTextInputFormatter
+                                    .digitsOnly, // chỉ cho nhập số
                                 ThousandsFormatter(), // formatter của bạn
                               ],
                             ),
@@ -189,8 +203,7 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                               size: TextInputSize.large,
                               isReadOnly: true,
                               label: intl.expenseCurrencyLabel,
-                              controller: TextEditingController(
-                                  text: 'VND'),
+                              controller: TextEditingController(text: 'VND'),
                               keyboardType: TextInputType.text,
                             ),
                           ),
@@ -220,6 +233,7 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
               ),
               const SizedBox(height: 8),
               CustomFormWrapper(
+                clearTrigger: clearFormTrigger,
                 formKey: _formKey,
                 fields: [
                   FormFieldConfig(controller: binController, isRequired: true),

@@ -43,6 +43,8 @@ class _OTPInputPageState extends State<OTPInputPage> {
 
   String? _userEmail;
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -107,6 +109,11 @@ class _OTPInputPageState extends State<OTPInputPage> {
     final intl = AppLocalizations.of(context)!; // Get the localization instance
 
     return SimpleLayout(
+      onRefresh: () {
+        _loadUserEmailAndStartTimer();
+        clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+        return Future.value();
+      },
       title: intl.forgotPassword,
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -130,6 +137,7 @@ class _OTPInputPageState extends State<OTPInputPage> {
 
   CustomFormWrapper otpForm(AppLocalizations intl, ThemeData theme) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [FormFieldConfig(controller: otpController, isRequired: true)],
       builder: (isValid) {
@@ -212,6 +220,9 @@ class _OTPInputPageState extends State<OTPInputPage> {
                 onPressed: isValid
                     ? () {
                         submitOTP(intl);
+                        // Clear the form after submission
+                        clearFormTrigger.value =
+                            !clearFormTrigger.value; // Trigger form reset
                       }
                     : null,
               ),

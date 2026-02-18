@@ -72,4 +72,8 @@ class UserUseCase {
   Future<void> updatePin(String oldPin, String newPin) {
     return repository.updatePin(oldPin, newPin);
   }
+
+  Future<void> reviewApp(int stars) {
+    return repository.reviewApp(stars);
+  }
 }

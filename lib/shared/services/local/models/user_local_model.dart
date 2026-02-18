@@ -24,6 +24,9 @@ class UserLocalModel {
   @HiveField(6)
   final String? preferredCurrency;
 
+  @HiveField(7)
+  final int? countUserLogin;
+
   UserLocalModel({ 
     required this.id,
     required this.email,
@@ -32,6 +35,7 @@ class UserLocalModel {
     this.password,
     this.phoneNumber,
     this.preferredCurrency,
+    this.countUserLogin,
   });
 
   UserLocalModel copyWith({
@@ -42,6 +46,7 @@ class UserLocalModel {
     String? password,
     String? phoneNumber,
     String? preferredCurrency,
+    int? countUserLogin,
   }) {
     return UserLocalModel(
       id: id ?? this.id,
@@ -51,6 +56,7 @@ class UserLocalModel {
       password: password ?? this.password,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       preferredCurrency: preferredCurrency ?? this.preferredCurrency,
+      countUserLogin: countUserLogin ?? this.countUserLogin,
     );
   }
 }
@@ -73,13 +79,14 @@ class UserLocalModelAdapter extends TypeAdapter<UserLocalModel> {
       password: fields[4] as String?,
       phoneNumber: fields[5] as String?,
       preferredCurrency: fields[6] as String?,
+      countUserLogin: fields[7] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserLocalModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -93,6 +100,8 @@ class UserLocalModelAdapter extends TypeAdapter<UserLocalModel> {
       ..writeByte(5)
       ..write(obj.phoneNumber)
       ..writeByte(6)
-      ..write(obj.preferredCurrency);
+      ..write(obj.preferredCurrency)
+      ..writeByte(7)
+      ..write(obj.countUserLogin);
   }
 }

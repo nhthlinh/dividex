@@ -9,6 +9,7 @@ class Layout extends StatelessWidget {
   final bool canBeBack;
   final Widget? action;
   final bool isHomePage;
+  final Future<void> Function() onRefresh;
 
   const Layout({
     super.key,
@@ -19,6 +20,7 @@ class Layout extends StatelessWidget {
     this.canBeBack = true,
     this.action,
     this.isHomePage = false,
+    required this.onRefresh,
   });
 
   @override
@@ -73,7 +75,7 @@ class Layout extends StatelessWidget {
                                   'https://ui-avatars.com/api/?name=${Uri.encodeComponent(currentUser.fullName ?? 'User')}&background=random&color=fff&size=128',
                                 ),
                         ),
-                      
+
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -113,7 +115,14 @@ class Layout extends StatelessWidget {
                     top: Radius.circular(32),
                   ),
                 ),
-                child: Stack(children: [SingleChildScrollView(child: Center(child: child))]),
+                // child: Stack(children: [SingleChildScrollView(child: Center(child: child))]),
+                child: RefreshIndicator(
+                  onRefresh: onRefresh,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Center(child: child),
+                  ),
+                ),
               ),
             ),
           ),

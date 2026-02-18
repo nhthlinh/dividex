@@ -27,14 +27,16 @@ abstract class DioModule {
     final options = BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 20),
       headers: {'Accept-Language': locale},
     );
 
     final dio = Dio(options);
 
     try {
-      final deviceInfo = await DeviceInfoService.getDeviceInfo(includeLocation: true);
+      final deviceInfo = await DeviceInfoService.getDeviceInfo(
+        includeLocation: true,
+      );
       options.headers.addAll({
         'X-Platform': deviceInfo['platform'],
         'X-Device-Model': deviceInfo['device_model'],
@@ -101,7 +103,7 @@ abstract class DioModule {
             final isTokenExpired =
                 (errorCode == 403 && messageCode == "INVALID_OR_EXPIRED_TOKEN");
 
-            // print(
+            // debugPrint(
             //   "isTokenExpired: $isTokenExpired, isRefreshing: $isRefreshing",
             // );
 

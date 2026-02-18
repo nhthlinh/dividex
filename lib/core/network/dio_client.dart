@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
@@ -11,8 +12,8 @@ class DioClient {
     return dio.get(path, queryParameters: queryParameters, data: data);
   }
 
-  Future<Response> post(String path, {dynamic data, Map<String, dynamic>? queryParameters}) {
-    return dio.post(path, data: data, queryParameters: queryParameters);
+  Future<Response> post(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) {
+    return dio.post(path, data: data, queryParameters: queryParameters, options: options);
   }
 
   Future<Response> put(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) {
@@ -40,7 +41,8 @@ Future<T> apiCallWrapper<T>(Future<T> Function() apiCall) async {
       throw Exception('Network error: ${dioError.message}');
     }
   } catch (e) {
-    throw Exception('Unexpected error: $e');
+    debugPrint('UNEXPECTED ERROR: $e');
+    rethrow; 
   }
 }
 

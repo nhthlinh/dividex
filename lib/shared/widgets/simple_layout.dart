@@ -5,13 +5,14 @@ class SimpleLayout extends StatelessWidget {
   final String title;
   final Widget child;
   final bool showBack;
-
+  final Future<void> Function() onRefresh;
 
   const SimpleLayout({
     super.key,
     required this.title,
     required this.child,
     this.showBack = true,
+    required this.onRefresh,
   });
 
   @override
@@ -34,9 +35,9 @@ class SimpleLayout extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -50,9 +51,7 @@ class SimpleLayout extends StatelessWidget {
             child: SizedBox(
               height: 200,
               width: double.infinity,
-              child: CustomPaint(
-                painter: WavePainter(),
-              ),
+              child: CustomPaint(painter: WavePainter()),
             ),
           ),
 
@@ -68,11 +67,17 @@ class SimpleLayout extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(32),
+                  ),
                 ),
-                child: SingleChildScrollView(
-                  child: child,
-                )
+                child: RefreshIndicator(
+                  onRefresh: onRefresh,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: child,
+                  ),
+                ),
               ),
             ),
           ),

@@ -14,7 +14,12 @@ class TransferSuccessPage extends StatefulWidget {
   final UserModel toUser;
   final double amount;
   final CurrencyEnum currency;
-  const TransferSuccessPage({super.key, required this.toUser, required this.amount, required this.currency});
+  const TransferSuccessPage({
+    super.key,
+    required this.toUser,
+    required this.amount,
+    required this.currency,
+  });
 
   @override
   State<TransferSuccessPage> createState() => _TransferSuccessPageState();
@@ -33,50 +38,65 @@ class _TransferSuccessPageState extends State<TransferSuccessPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          // No specific refresh logic needed for this page, but you can add any necessary actions here if required.
+          return Future.value();
+        },
         title: intl.success,
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.7,
-          child: Column(children: [
-            Image(
-              image: AssetImage("lib/assets/images/transfer_successful.png"),
-              width: 300,
-              height: 300,
-            ),
-            SizedBox(height: 24),
-            Text(
-              intl.transferSuccessful,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppThemes.primary3Color),
-            ),
-            SizedBox(height: 8),
-            Text(
-              intl.youHaveSuccessfullyTransferred,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${formatNumber(widget.amount)} ${widget.currency.code.toUpperCase()} ',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppThemes.infoColor),
+          child: Column(
+            children: [
+              Image(
+                image: AssetImage("lib/assets/images/transfer_successful.png"),
+                width: 300,
+                height: 300,
+              ),
+              SizedBox(height: 24),
+              Text(
+                intl.transferSuccessful,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: AppThemes.primary3Color,
                 ),
-                Text(
-                  '${intl.to} ',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  '${widget.toUser.fullName}',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppThemes.primary3Color),
-                ),
-              ],
-            ),
-            const Spacer(),
-            CustomButton(text: intl.confirm, onPressed: () {
-              context.goNamed(AppRouteNames.home);
-            })
-          ],),
-        )
+              ),
+              SizedBox(height: 8),
+              Text(
+                intl.youHaveSuccessfullyTransferred,
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${formatNumber(widget.amount)} ${widget.currency.code.toUpperCase()} ',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppThemes.infoColor,
+                    ),
+                  ),
+                  Text(
+                    '${intl.to} ',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    '${widget.toUser.fullName}',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppThemes.primary3Color,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              CustomButton(
+                text: intl.confirm,
+                onPressed: () {
+                  context.goNamed(AppRouteNames.home);
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

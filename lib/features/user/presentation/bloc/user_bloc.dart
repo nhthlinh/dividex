@@ -112,6 +112,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UpdateMeEvent>(_onUpdateMe);
     on<CreatePinEvent>(_onCreatePin);
     on<UpdatePinEvent>(_onUpdatePin);
+    on<ReviewEvent>(_onReview);
   }
 
   Future _onGetMe(GetMeEvent event, Emitter<UserState> emit) async {
@@ -171,6 +172,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       final useCase = await getIt.getAsync<UserUseCase>();
       await useCase.updatePin(event.oldPin, event.newPin);
+
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future _onReview(ReviewEvent event, Emitter<UserState> emit) async {
+    try {
+      final useCase = await getIt.getAsync<UserUseCase>();
+      await useCase.reviewApp(event.stars);
 
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);

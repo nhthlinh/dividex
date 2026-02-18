@@ -28,11 +28,14 @@ class _ChangePassPageState extends State<ChangePassPage> {
   bool _obscureNewPassword = true; // State for new password visibility
   bool _obscureConfirmPassword = true; // State for confirm password visibility
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void dispose() {
     oldPasswordController.dispose();
     newPasswordController.dispose();
     newPasswordConfirmController.dispose();
+    clearFormTrigger.dispose();
     super.dispose();
   }
 
@@ -58,10 +61,15 @@ class _ChangePassPageState extends State<ChangePassPage> {
     return AppShell(
       currentIndex: 3,
       child: SimpleLayout(
+        onRefresh: () async {
+          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          return Future.value();
+        },
         title: intl.settingChangePass,
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             return CustomFormWrapper(
+              clearTrigger: clearFormTrigger,
               formKey: _formKey,
               fields: [
                 FormFieldConfig(
@@ -161,19 +169,25 @@ class _ChangePassPageState extends State<ChangePassPage> {
                         },
                       ),
                       validator: (value) {
-                        return CustomValidator().validateConfirmPassword(value, intl, newPasswordController);
+                        return CustomValidator().validateConfirmPassword(
+                          value,
+                          intl,
+                          newPasswordController,
+                        );
                       },
                       size: TextInputSize.large,
                       isReadOnly: false,
                     ),
-      
+
                     const SizedBox(height: 16),
-      
+
                     CustomButton(
                       text: intl.settingChangePass,
                       onPressed: isValid
                           ? () {
                               _submitPass();
+                              clearFormTrigger.value =
+                                  !clearFormTrigger.value; // Trigger form reset
                             }
                           : null,
                     ),

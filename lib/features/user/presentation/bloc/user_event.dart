@@ -69,3 +69,8 @@ class UpdatePinEvent extends UserEvent {
 
   UpdatePinEvent({required this.oldPin, required this.newPin});
 }
+
+class ReviewEvent extends UserEvent {
+  final int stars;
+  ReviewEvent({this.stars = 5});
+}

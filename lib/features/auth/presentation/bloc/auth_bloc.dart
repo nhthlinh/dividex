@@ -101,6 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           avatarUrl: authResponse.user.avatar,
           password: event.password,
           phoneNumber: authResponse.user.phoneNumber ?? '',
+          countUserLogin: authResponse.countUserLogin,
         ),
       );
 

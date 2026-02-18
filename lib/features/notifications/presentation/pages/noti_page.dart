@@ -34,6 +34,10 @@ class _NotiPageState extends State<NotiPage> {
     return AppShell(
       currentIndex: 1,
       child: SimpleLayout(
+        onRefresh: () {
+          context.read<LoadedNotiBloc>().add(RefreshNotiEvent());
+          return Future.value();
+        },
         title: intl.notifications,
         child: Column(
           children: [
@@ -57,7 +61,12 @@ class _NotiPageState extends State<NotiPage> {
 
                 final hasMore = searchState.page < searchState.totalPage;
 
-                return notiCardList(hasMore, context, searchState.notis, searchState.page);
+                return notiCardList(
+                  hasMore,
+                  context,
+                  searchState.notis,
+                  searchState.page,
+                );
               },
             ),
           ],
@@ -117,7 +126,11 @@ class _NotiPageState extends State<NotiPage> {
 
             return ContentCard(
               onTap: () => {
-                notis[index].type.goToRelatedPage(notis[index].relatedUid, context, notis[index].fromUser)
+                notis[index].type.goToRelatedPage(
+                  notis[index].relatedUid,
+                  context,
+                  notis[index].fromUser,
+                ),
               },
               child: Row(
                 children: [
@@ -138,8 +151,9 @@ class _NotiPageState extends State<NotiPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          NotificationParser(AppLocalizations.of(context)!)
-                              .parse(notis[index].content),
+                          NotificationParser(
+                            AppLocalizations.of(context)!,
+                          ).parse(notis[index].content),
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                         const SizedBox(height: 8),

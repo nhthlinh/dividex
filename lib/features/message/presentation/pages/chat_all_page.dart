@@ -1,5 +1,3 @@
-
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
@@ -48,6 +46,10 @@ class _ChatAllPageState extends State<ChatAllPage> {
     return AppShell(
       currentIndex: 2,
       child: SimpleLayout(
+        onRefresh: () {
+          context.read<LoadedGroupsBloc>().add(RefreshGroupsEvent('', false));
+          return Future.value();
+        },
         title: intl.group,
         child: Column(
           children: [
@@ -186,13 +188,8 @@ class _ChatAllPageState extends State<ChatAllPage> {
       onTap: () {
         context.pushNamed(
           AppRouteNames.chatInGroup,
-          pathParameters: {
-            "groupId": group.id ?? '',
-          },
-          extra: {
-            "groupId": group.id ?? '',
-            "groupName": group.name ?? ''
-          },
+          pathParameters: {"groupId": group.id ?? ''},
+          extra: {"groupId": group.id ?? '', "groupName": group.name ?? ''},
         );
       },
       child: Row(
@@ -216,9 +213,7 @@ class _ChatAllPageState extends State<ChatAllPage> {
             children: [
               Text(
                 group.name ?? '',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall,
+                style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
           ),

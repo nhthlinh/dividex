@@ -36,6 +36,8 @@ class _AddGroupPageState extends State<AddGroupPage> {
   Uint8List? imageBytes;
   List<UserModel> selectedMembers = [];
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -70,12 +72,20 @@ class _AddGroupPageState extends State<AddGroupPage> {
 
     return AppShell(
       currentIndex: 0,
-      child: SimpleLayout(title: intl.addGroup, child: groupForm(intl)),
+      child: SimpleLayout(
+        onRefresh: () {
+          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          return Future.value();
+        },
+        title: intl.addGroup,
+        child: groupForm(intl),
+      ),
     );
   }
 
   CustomFormWrapper groupForm(AppLocalizations intl) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [
         FormFieldConfig(controller: groupNameController, isRequired: true),
@@ -168,16 +178,21 @@ class _AddGroupPageState extends State<AddGroupPage> {
               },
             ),
             const SizedBox(height: 8),
-            UserGrid(users: selectedMembers, onTap: (user) {
-              setState(() {
-                selectedMembers.remove(user);
-              });
-            }),
+            UserGrid(
+              users: selectedMembers,
+              onTap: (user) {
+                setState(() {
+                  selectedMembers.remove(user);
+                });
+              },
+            ),
 
             const SizedBox(height: 30),
             CustomButton(
               text: intl.add,
-              onPressed: (isValid && selectedMembers.isNotEmpty) ? submitGroup : null,
+              onPressed: (isValid && selectedMembers.isNotEmpty)
+                  ? submitGroup
+                  : null,
             ),
             const SizedBox(height: 30),
           ],

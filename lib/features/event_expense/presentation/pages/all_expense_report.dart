@@ -41,8 +41,23 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
     final theme = Theme.of(context);
 
     return AppShell(
+      // onRefresh: () async {
+      //   context.read<ExpenseDataBloc>().add(
+      //     InitialEvent(id: '', type: LoadExpenseType.all),
+      //   );
+      //   context.read<ExpenseBloc>().add(GetBarChartData(year: DateTime.now().year));
+      // },
       currentIndex: 0,
       child: Layout(
+        onRefresh: () {
+          context.read<ExpenseDataBloc>().add(
+            InitialEvent(id: '', type: LoadExpenseType.all),
+          );
+          context.read<ExpenseBloc>().add(
+            GetBarChartData(year: DateTime.now().year),
+          );
+          return Future.value();
+        },
         title: intl.transactionReport,
         child: Column(
           children: [
@@ -83,7 +98,7 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
                   hasMore,
                   state.totalItems,
                   state.expenses,
-                  state.page
+                  state.page,
                 );
               },
             ),
@@ -140,7 +155,7 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
     bool hasMore,
     int totalExpenses,
     List<ExpenseModel> expenses,
-    int page
+    int page,
   ) {
     final groupedExpenses = <String, List<ExpenseModel>>{};
     for (var e in expenses) {
@@ -190,20 +205,24 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
           ),
         ),
 
-        if (hasMore) ... [
+        if (hasMore) ...[
           BlocProvider<ExpenseDataBloc>(
             create: (context) => context.read<ExpenseDataBloc>(),
             child: CustomButton(
               text: intl.more,
               onPressed: () {
                 context.read<ExpenseDataBloc>().add(
-                  LoadMoreExpenses(id: '', type: LoadExpenseType.all, page: page + 1),
+                  LoadMoreExpenses(
+                    id: '',
+                    type: LoadExpenseType.all,
+                    page: page + 1,
+                  ),
                 );
               },
               size: ButtonSize.small,
             ),
           ),
-        ]
+        ],
       ],
     );
   }
@@ -249,7 +268,7 @@ List<Widget> buildGroupedExpenseList(
             backgroundColor: Colors.grey,
             backgroundImage: NetworkImage(
               getCategoryByKey(expense.category ?? '')?.getImage() ??
-                'lib/assets/icons/money-transfer.png',
+                  'lib/assets/icons/money-transfer.png',
             ),
           ),
           subtitle: expense.event,

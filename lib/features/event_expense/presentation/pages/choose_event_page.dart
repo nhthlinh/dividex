@@ -60,6 +60,11 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          selectedEvent = widget.initialSelectedEvent;
+          context.read<EventDataBloc>().add(InitialEvent());
+          return Future.value();
+        },
         title: intl.expenseEventLabel,
         child: Column(
           children: [
@@ -200,7 +205,8 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
                     radius: 20,
                     backgroundColor: Colors.grey,
                     backgroundImage:
-                        (group.avatarUrl != null && group.avatarUrl!.publicUrl.isNotEmpty)
+                        (group.avatarUrl != null &&
+                            group.avatarUrl!.publicUrl.isNotEmpty)
                         ? NetworkImage(group.avatarUrl!.publicUrl)
                         : NetworkImage(
                             'https://ui-avatars.com/api/?name=${Uri.encodeComponent(group.name ?? 'Group')}&background=random&color=fff&size=128',
@@ -285,7 +291,6 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
                                   ],
                                 ),
                               );
-                            
                             }).toList()
                           : [
                               Padding(

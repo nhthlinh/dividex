@@ -66,6 +66,17 @@ class _GroupPageState extends State<GroupPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          context.read<LoadedGroupsBloc>().add(InitialEvent('', true));
+          _selectedCurrency.value = CurrencyEnum.values.firstWhere(
+            (c) =>
+                c.code ==
+                (HiveService.getUser().preferredCurrency ??
+                    CurrencyEnum.vnd.code),
+            orElse: () => CurrencyEnum.vnd,
+          );
+          return Future.value();
+        },
         title: intl.group,
         child: Column(
           children: [
@@ -165,8 +176,8 @@ class _GroupPageState extends State<GroupPage> {
                                 preferredCurrency: val.code,
                               ),
                             );
-                            // print('Selected currency: ${val.code}');
-                            // print(
+                            // debugPrint('Selected currency: ${val.code}');
+                            // debugPrint(
                             //   'Saved preferred currency: ${HiveService.getUser().preferredCurrency ?? 'null'}',
                             // );
                           },
@@ -261,7 +272,7 @@ class _GroupPageState extends State<GroupPage> {
                         intl,
                         const [], // gửi list rỗng vào widget
                         index,
-                        null // currentMember null
+                        null, // currentMember null
                       );
                     }
 

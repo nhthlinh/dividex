@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:Dividex/core/network/dio_client.dart';
+import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
 import 'package:Dividex/features/image/data/source/image_remote_data_source.dart';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: ImageRemoteDataSource)
@@ -55,7 +57,10 @@ class ImageRemoteDatasourceImpl implements ImageRemoteDataSource {
   }
 
   @override
-  Future<List<ImagePresignUrlResponseModel>> updateImages(List<ImagePresignUrlInputModel> newFiles, List<String> deletedImageUids) {
+  Future<List<ImagePresignUrlResponseModel>> updateImages(
+    List<ImagePresignUrlInputModel> newFiles,
+    List<String> deletedImageUids,
+  ) {
     return apiCallWrapper(() async {
       final response = await dio.put(
         '/attachments/image',
@@ -73,12 +78,30 @@ class ImageRemoteDatasourceImpl implements ImageRemoteDataSource {
   @override
   Future<void> deleteImages(List<String> deletedImageUids) {
     return apiCallWrapper(() async {
-      await dio.delete(
-        '/attachments',
-        data: {
-          'list_uids': deletedImageUids,
-        },
+      await dio.delete('/attachments', data: {'list_uids': deletedImageUids});
+    });
+  }
+
+  @override
+  Future<ImageExpenseModel> uploadExpenseImage(Uint8List fileBytes) {
+    return apiCallWrapper(() async {
+      final formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(
+          fileBytes,
+          filename: 'receipt.jpg',
+          contentType: MediaType('image', 'jpeg'),
+        ),
+      });
+
+      final response = await dio.post(
+        '/attachments/ocr/upload',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
       );
+
+      final data = response.data['data'];
+
+      return ImageExpenseModel.fromJson(data);
     });
   }
 }

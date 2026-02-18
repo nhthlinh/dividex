@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
 import 'package:Dividex/features/image/domain/image_repository.dart';
 import 'package:injectable/injectable.dart';
@@ -28,5 +29,9 @@ class ImageUseCase {
 
   Future<void> deleteImages(List<String> deletedImageUids) async {
     return await imageRepository.deleteImages(deletedImageUids);
+  }
+
+  Future<ImageExpenseModel> uploadExpenseImage(Uint8List fileBytes) async {
+    return await imageRepository.uploadExpenseImage(fileBytes);
   }
 }

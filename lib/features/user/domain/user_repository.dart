@@ -28,4 +28,5 @@ abstract class UserRepository {
   Future<void> updateMe(String name, CurrencyEnum currency);
   Future<void> createPin(String pin);
   Future<void> updatePin(String oldPin, String newPin);
+  Future<void> reviewApp(int stars);
 }

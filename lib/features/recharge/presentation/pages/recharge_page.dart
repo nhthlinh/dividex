@@ -62,6 +62,10 @@ class _RechargePageState extends State<RechargePage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          context.read<RechargeBloc>().add(GetWalletEvent());
+          return Future.value();
+        },
         title: intl.rechargeIntoApp,
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.7,
@@ -86,7 +90,7 @@ class _RechargePageState extends State<RechargePage> {
                         );
                       },
                     ),
-                    
+
                     const SizedBox(height: 8),
                     Divider(height: 1, color: AppThemes.borderColor),
                     const SizedBox(height: 8),
@@ -109,7 +113,8 @@ class _RechargePageState extends State<RechargePage> {
                             margin: const EdgeInsets.all(4),
                             child: CustomButton(
                               size: ButtonSize.medium,
-                              text: '${formatNumber(amount)} ${HiveService.getUser().preferredCurrency ?? 'VND'}',
+                              text:
+                                  '${formatNumber(amount)} ${HiveService.getUser().preferredCurrency ?? 'VND'}',
                               onPressed: () {
                                 setState(() {
                                   if (amountController.text !=
@@ -173,9 +178,9 @@ class _RechargePageState extends State<RechargePage> {
               'NCB',
             ),
           );
-          context
-              .read<RechargeBloc>()
-              .add(GetWalletEvent()); // Cập nhật lại số dư ví
+          context.read<RechargeBloc>().add(
+            GetWalletEvent(),
+          ); // Cập nhật lại số dư ví
           Navigator.pop(context);
         },
       )

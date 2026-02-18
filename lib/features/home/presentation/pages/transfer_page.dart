@@ -59,6 +59,8 @@ class _TransferPageState extends State<TransferPage> {
     CurrencyEnum.vnd,
   );
   String? groupId;
+  
+  final clearFormTrigger = ValueNotifier(false);
 
   @override
   void initState() {
@@ -200,8 +202,31 @@ class _TransferPageState extends State<TransferPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          context.read<LoadedFriendsBloc>().add(
+            event.InitialEvent(HiveService.getUser().id),
+          );
+          context.read<RechargeBloc>().add(GetWalletEvent());
+
+          // Nếu có truyền sẵn người nhận, số tiền, loại tiền tệ từ ngoài
+          if (widget.toUser != null) {
+            selectedToUser.value = widget.toUser;
+          }
+          if (widget.amount != null) {
+            originalAmount.text = formatNumber(widget.amount!);
+          }
+          if (widget.currency != null) {
+            _selectedCurrency.value = widget.currency!;
+          }
+          if (widget.groupId != null) {
+            groupId = widget.groupId!;
+          }
+          return Future.value();
+        },
         title: intl.transfer,
         child: CustomFormWrapper(
+          clearTrigger: clearFormTrigger,
           formKey: _formKey,
           fields: [
             FormFieldConfig(controller: originalAmount, isRequired: true),

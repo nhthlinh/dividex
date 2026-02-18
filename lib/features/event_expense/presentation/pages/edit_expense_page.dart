@@ -87,6 +87,8 @@ class _EditExpensePageState extends State<EditExpensePage> {
 
   final List<CurrencyEnum> _units = getAllCurrencies().map((e) => e).toList();
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -142,16 +144,16 @@ class _EditExpensePageState extends State<EditExpensePage> {
         }
       }
 
-      // print('🔍 Submitting expense with details:');
-      // print('- name: ${expenseNameController.text}');
-      // print('- amount: ${expenseAmountController.text}');
-      // print('- payer: ${_selectedPayer?.fullName}');
-      // print('- category: ${_selectedCategory.value?.key}');
-      // print('- currency: ${_selectedCurrency.value.code}');
-      // print('- date: $formattedDate');
-      // print('- reminder: $formattedReminder');
-      // print('- split type: $splitType');
-      // print('- user debts: $userDebts');
+      // debugPrint('🔍 Submitting expense with details:');
+      // debugPrint('- name: ${expenseNameController.text}');
+      // debugPrint('- amount: ${expenseAmountController.text}');
+      // debugPrint('- payer: ${_selectedPayer?.fullName}');
+      // debugPrint('- category: ${_selectedCategory.value?.key}');
+      // debugPrint('- currency: ${_selectedCurrency.value.code}');
+      // debugPrint('- date: $formattedDate');
+      // debugPrint('- reminder: $formattedReminder');
+      // debugPrint('- split type: $splitType');
+      // debugPrint('- user debts: $userDebts');
 
       context.read<ExpenseBloc>().add(
         UpdateExpenseEvent(
@@ -194,6 +196,14 @@ class _EditExpensePageState extends State<EditExpensePage> {
           }
 
           return SimpleLayout(
+            onRefresh: () async {
+              context.read<ExpenseBloc>().add(
+                GetExpenseDetail(expenseId: widget.expenseId),
+              );
+              clearFormTrigger.value =
+                  !clearFormTrigger.value; // Trigger form reset
+              return Future.value();
+            },
             title: intl.addExpense,
             child: expenseForm(intl, state.expense),
           );
@@ -235,16 +245,17 @@ class _EditExpensePageState extends State<EditExpensePage> {
 
     _isInitialized = true;
 
-    // print('🔍 UserDebts: ${userDebts.length}');
-    // print('🔍 Missing fields:');
-    // print('- name: ${expenseNameController.text}');
-    // print('- amount: ${expenseAmountController.text}');
-    // print('- payer: ${_selectedPayer?.fullName}');
-    // print('- category: ${_selectedCategory.value?.key}');
-    // print('- currency: ${_selectedCurrency.value.code}');
-    // print('- date: ${dateController.text}');
+    // debugPrint('🔍 UserDebts: ${userDebts.length}');
+    // debugPrint('🔍 Missing fields:');
+    // debugPrint('- name: ${expenseNameController.text}');
+    // debugPrint('- amount: ${expenseAmountController.text}');
+    // debugPrint('- payer: ${_selectedPayer?.fullName}');
+    // debugPrint('- category: ${_selectedCategory.value?.key}');
+    // debugPrint('- currency: ${_selectedCurrency.value.code}');
+    // debugPrint('- date: ${dateController.text}');
 
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: formKey,
       fields: [
         FormFieldConfig(controller: expenseNameController, isRequired: true),
@@ -544,7 +555,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
             text: intl.save,
             onPressed: (isValid && userDebts.isNotEmpty) ? submitExpense : null,
           ),
-          const SizedBox(height: 20), 
+          const SizedBox(height: 20),
           CustomButton(
             text: intl.delete,
             onPressed: () {

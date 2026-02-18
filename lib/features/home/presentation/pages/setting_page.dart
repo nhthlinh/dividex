@@ -32,6 +32,8 @@ class _SettingPageState extends State<SettingPage> {
   final confirmNewPin = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   Widget build(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
@@ -39,6 +41,10 @@ class _SettingPageState extends State<SettingPage> {
     return AppShell(
       currentIndex: 3,
       child: Layout(
+        onRefresh: () {
+          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          return Future.value();
+        },
         title: intl.settings,
         showAvatar: true,
         avatarUrl: HiveService.getUser().avatarUrl?.publicUrl != ''
@@ -171,6 +177,7 @@ class _SettingPageState extends State<SettingPage> {
                   showCustomDialog(
                     context: context,
                     content: CustomFormWrapper(
+                      clearTrigger: clearFormTrigger,
                       formKey: _formKey,
                       fields: [
                         FormFieldConfig(controller: oldPin, isRequired: true),

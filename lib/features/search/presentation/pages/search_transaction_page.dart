@@ -79,6 +79,17 @@ class _SearchTransactionPageState extends State<SearchTransactionPage> {
     return AppShell(
       currentIndex: 1,
       child: SimpleLayout(
+        onRefresh: () {
+          context.read<SearchTransactionBloc>().add(
+            InitialEvent(
+              SearchTransactionTypeEnum.all,
+              initialExpenseFilter,
+              initialExternalFilter,
+              initialInternalFilter,
+            ),
+          );
+          return Future.value();
+        },
         title: intl.transaction,
         child: Column(
           children: [

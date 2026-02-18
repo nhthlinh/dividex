@@ -44,6 +44,7 @@ import 'package:Dividex/features/home/presentation/pages/withdraw_page.dart';
 import 'package:Dividex/features/home/presentation/pages/withdraw_success_page.dart';
 import 'package:Dividex/features/home/presentation/recharge_report.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
+import 'package:Dividex/features/image/presentation/pages/expense_ocr_page.dart';
 import 'package:Dividex/features/message/presentation/bloc/chat_bloc.dart';
 import 'package:Dividex/features/message/presentation/pages/chat_all_page.dart';
 import 'package:Dividex/features/message/presentation/pages/chat_page.dart';
@@ -147,6 +148,8 @@ class AppRouteNames {
 
   static const String chat = 'chat';
   static const String chatInGroup = 'chat-in-group';
+
+  static const String scanExpense = 'scan-expense';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -232,8 +235,11 @@ GoRouter buildRouter(BuildContext context) {
         name: AppRouteNames.home,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return buildPageWithDefaultTransition(
-            child: BlocProvider<RechargeBloc>(
-              create: (context) => RechargeBloc(),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<RechargeBloc>(create: (context) => RechargeBloc()),
+                BlocProvider<UserBloc>(create: (context) => UserBloc()),
+              ],
               child: HomePage(),
             ),
           );
@@ -267,7 +273,9 @@ GoRouter buildRouter(BuildContext context) {
                     ),
                     BlocProvider<GroupBloc>(create: (context) => GroupBloc()),
                     BlocProvider<EventBloc>(create: (context) => EventBloc()),
-                    BlocProvider<ExpenseBloc>(create: (context) => ExpenseBloc()),
+                    BlocProvider<ExpenseBloc>(
+                      create: (context) => ExpenseBloc(),
+                    ),
                   ],
                   child: NotiPage(),
                 ),
@@ -994,6 +1002,12 @@ GoRouter buildRouter(BuildContext context) {
             child: FriendProfilePage(friendId: friendId),
           );
         },
+      ),
+      GoRoute(
+        path: '/scan-expense', 
+        name: AppRouteNames.scanExpense, 
+        pageBuilder: (context, state) =>
+            buildPageWithDefaultTransition(child: ExpenseOcrPage()),
       ),
     ],
     redirect: (context, state) {

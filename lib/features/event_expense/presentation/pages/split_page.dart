@@ -60,6 +60,13 @@ class _SplitPageState extends State<SplitPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          // Reset về giá trị ban đầu
+          setState(() {
+            _currentDebts = widget.initialSelected;
+          });
+          return Future.value();
+        },
         title: intl.expenseSplitCustomLabel,
         child: Column(
           children: [

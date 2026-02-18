@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:Dividex/app.dart';
 import 'package:Dividex/config/location/locale_cubit.dart';
-import 'package:Dividex/config/routes/refresh_notifier.dart';
 import 'package:Dividex/config/themes/theme_cubit.dart';
 import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
@@ -17,7 +16,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
 
 Future<void> bootstrap() async {
   runZonedGuarded(() async {

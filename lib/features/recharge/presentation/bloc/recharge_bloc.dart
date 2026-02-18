@@ -371,8 +371,8 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
         ),
       );
     } catch (e) {
-      // print(stackTrace);
-      // print(e);
+      // debugPrint(stackTrace);
+      // debugPrint(e);
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
     }

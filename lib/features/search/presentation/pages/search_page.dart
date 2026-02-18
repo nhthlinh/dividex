@@ -21,6 +21,9 @@ class _SearchPageState extends State<SearchPage> {
     return AppShell(
       currentIndex: 1,
       child: SimpleLayout(
+        onRefresh: () {
+          return Future.value();
+        },
         title: intl.search,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -28,7 +31,11 @@ class _SearchPageState extends State<SearchPage> {
             InfoCard(
               title: intl.transaction,
               subtitle: intl.searchTransactionSubtitle,
-              trailing: Image.asset('lib/assets/images/transaction_search_image.png', width: 105, height: 80),
+              trailing: Image.asset(
+                'lib/assets/images/transaction_search_image.png',
+                width: 105,
+                height: 80,
+              ),
               onTap: () {
                 context.pushNamed(AppRouteNames.searchTransaction);
               },
@@ -37,7 +44,11 @@ class _SearchPageState extends State<SearchPage> {
             InfoCard(
               title: intl.user,
               subtitle: intl.searchUserSubtitle,
-              trailing: Image.asset('lib/assets/images/user_search_image.png', width: 105, height: 80),
+              trailing: Image.asset(
+                'lib/assets/images/user_search_image.png',
+                width: 105,
+                height: 80,
+              ),
               onTap: () {
                 context.pushNamed(AppRouteNames.searchUser);
               },

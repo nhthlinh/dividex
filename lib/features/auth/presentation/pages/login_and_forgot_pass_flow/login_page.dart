@@ -26,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   bool _obscurePassword = true; // State to toggle password visibility
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +46,10 @@ class _LoginPageState extends State<LoginPage> {
     final intl = AppLocalizations.of(context)!; // Get the localization instance
 
     return Layout(
+      onRefresh: () async {
+        clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+        return Future.value();
+      },
       title: intl.login,
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -99,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
     ThemeData theme,
   ) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       fields: [
         FormFieldConfig(controller: emailController, isRequired: true),
         FormFieldConfig(controller: passwordController, isRequired: true),
@@ -177,6 +184,9 @@ class _LoginPageState extends State<LoginPage> {
                         context.read<AuthBloc>().add(
                           AuthLoginRequested(email: email, password: password),
                         );
+                        // Clear the form after submission
+                        clearFormTrigger.value =
+                            !clearFormTrigger.value; // Trigger form reset
                       }
                     },
             ),

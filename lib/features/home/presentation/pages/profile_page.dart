@@ -39,6 +39,8 @@ class _ProfilePageState extends State<ProfilePage> {
   List<Uint8List> updatedImages = [];
   List<ImageModel> deletedImages = [];
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void dispose() {
     name.dispose();
@@ -64,8 +66,13 @@ class _ProfilePageState extends State<ProfilePage> {
             selectedCurrency.value = user.currency ?? CurrencyEnum.vnd;
 
             return SimpleLayout(
+              onRefresh: () {
+                clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+                return Future.value();
+              },
               title: intl.profileSetting,
               child: CustomFormWrapper(
+                clearTrigger: clearFormTrigger,
                 fields: [
                   FormFieldConfig(controller: name, isRequired: true),
                   FormFieldConfig(
@@ -127,7 +134,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 16),
                     CustomTextInputWidget(
                       size: TextInputSize.large,
-                      controller: TextEditingController(text: selectedCurrency.value.code.toUpperCase()),
+                      controller: TextEditingController(
+                        text: selectedCurrency.value.code.toUpperCase(),
+                      ),
                       keyboardType: TextInputType.text,
                       isReadOnly: true,
                       isRequired: false,

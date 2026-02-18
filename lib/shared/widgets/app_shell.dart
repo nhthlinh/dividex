@@ -31,24 +31,6 @@ class _AppShellState extends State<AppShell> {
     super.dispose();
   }
 
-  bool _isRefreshing = false;
-
-  void _triggerRefresh() async {
-    if (_isRefreshing) return; // tránh gọi trùng
-    
-    _isRefreshing = true;
-
-    await _onRefresh();
-
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    _isRefreshing = false;
-  }
-
-  Future<void> _onRefresh() async {  
-    GoRouter.of(context).refresh();
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -69,11 +51,6 @@ class _AppShellState extends State<AppShell> {
                 !_isBottomNavVisible) {
               setState(() => _isBottomNavVisible = true);
             }
-            if (notification is OverscrollNotification &&
-                notification.overscroll < - 10) {
-              _triggerRefresh();
-            }
-
             return false;
           },
           child: widget.child,

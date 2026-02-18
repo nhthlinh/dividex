@@ -62,6 +62,18 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         return AppShell(
           currentIndex: 0,
           child: Layout(
+            onRefresh: () {
+              context.read<GroupBloc>().add(
+                group_event.GetGroupDetailEvent(
+                  widget.groupId,
+                  DateTime.now().year,
+                ),
+              );
+              context.read<ExpenseDataBloc>().add(
+                expense_event.InitialEvent(id: widget.groupId),
+              );
+              return Future.value();
+            },
             title: state.groupDetail?.name ?? '',
             showAvatar: true,
             action: IconButton(
@@ -155,7 +167,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                       hasMore,
                       state.totalItems,
                       state.expenses,
-                      state.page
+                      state.page,
                     );
                   },
                 ),
@@ -214,7 +226,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
     bool hasMore,
     int totalExpenses,
     List<ExpenseModel> expenses,
-    int page
+    int page,
   ) {
     final groupedExpenses = <String, List<ExpenseModel>>{};
     for (var e in expenses) {
@@ -256,23 +268,31 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          children: buildGroupedExpenseList(context, groupedExpenses, sortedKeys, intl),
+          children: buildGroupedExpenseList(
+            context,
+            groupedExpenses,
+            sortedKeys,
+            intl,
+          ),
         ),
 
-        if (hasMore) ... [
+        if (hasMore) ...[
           BlocProvider<ExpenseDataBloc>(
             create: (context) => context.read<ExpenseDataBloc>(),
             child: CustomButton(
               text: intl.more,
               onPressed: () {
                 context.read<ExpenseDataBloc>().add(
-                  expense_event.LoadMoreExpenses(id: widget.groupId, page: page + 1),
+                  expense_event.LoadMoreExpenses(
+                    id: widget.groupId,
+                    page: page + 1,
+                  ),
                 );
               },
               size: ButtonSize.small,
             ),
           ),
-        ]
+        ],
       ],
     );
   }
@@ -360,7 +380,6 @@ List<Widget> buildGroupedExpenseList(
             );
           },
         ),
-      
       );
     }
   }

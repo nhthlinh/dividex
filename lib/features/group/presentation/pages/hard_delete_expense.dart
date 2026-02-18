@@ -47,6 +47,15 @@ class _HardDeleteExpensePageState extends State<HardDeleteExpensePage> {
     return AppShell(
       currentIndex: 0,
       child: Layout(
+        onRefresh: () {
+          context.read<ExpenseDataBloc>().add(
+            InitialEvent(
+              id: widget.groupId,
+              type: LoadExpenseType.hasBeenDeleted,
+            ),
+          );
+          return Future.value();
+        },
         title: widget.groupName,
         child: Column(
           children: [
@@ -74,7 +83,7 @@ class _HardDeleteExpensePageState extends State<HardDeleteExpensePage> {
                   hasMore,
                   state.totalItems,
                   state.expenses,
-                  state.page
+                  state.page,
                 );
               },
             ),
@@ -131,7 +140,7 @@ class _HardDeleteExpensePageState extends State<HardDeleteExpensePage> {
     bool hasMore,
     int totalExpenses,
     List<ExpenseModel> expenses,
-    int page
+    int page,
   ) {
     final groupedExpenses = <String, List<ExpenseModel>>{};
     for (var e in expenses) {
@@ -181,20 +190,24 @@ class _HardDeleteExpensePageState extends State<HardDeleteExpensePage> {
           ),
         ),
 
-        if (hasMore) ... [
+        if (hasMore) ...[
           BlocProvider<ExpenseDataBloc>(
             create: (context) => context.read<ExpenseDataBloc>(),
             child: CustomButton(
               text: intl.more,
               onPressed: () {
                 context.read<ExpenseDataBloc>().add(
-                  LoadMoreExpenses(id: widget.groupId, type: LoadExpenseType.hasBeenDeleted, page: page + 1),
+                  LoadMoreExpenses(
+                    id: widget.groupId,
+                    type: LoadExpenseType.hasBeenDeleted,
+                    page: page + 1,
+                  ),
                 );
               },
               size: ButtonSize.small,
             ),
           ),
-        ]
+        ],
       ],
     );
   }

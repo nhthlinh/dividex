@@ -13,7 +13,10 @@ class CustomButtonTest extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("👉 Primary (no customColor)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              "👉 Primary (no customColor)",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             CustomButton(
               text: "Primary Large",
@@ -37,7 +40,10 @@ class CustomButtonTest extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-            const Text("👉 Secondary (no customColor)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              "👉 Secondary (no customColor)",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             CustomButton(
               text: "Secondary Large",
@@ -54,7 +60,10 @@ class CustomButtonTest extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-            const Text("👉 Primary (with customColor)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              "👉 Primary (with customColor)",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             CustomButton(
               text: "Primary Large Custom",
@@ -73,7 +82,10 @@ class CustomButtonTest extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-            const Text("👉 Secondary (with customColor)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              "👉 Secondary (with customColor)",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             CustomButton(
               text: "Secondary Large Custom",

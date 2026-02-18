@@ -167,7 +167,10 @@ class ChatProvider extends ChangeNotifier {
   void updateMessage(String id, String newContent, String? status) {
     final index = messages.indexWhere((m) => m.id == id);
     if (index != -1) {
-      messages[index] = messages[index].copyWith(content: newContent, status: status);
+      messages[index] = messages[index].copyWith(
+        content: newContent,
+        status: status,
+      );
       notifyListeners();
     }
   }
@@ -188,7 +191,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   void _handleEvent(Map<String, dynamic> ev) {
-    // print("message in socket: $ev");
+    // debugPrint("message in socket: $ev");
     final type = ev['type'];
     if (type == 'connection') {
       debugPrint("WS connected = ${ev['connected']}");
@@ -336,6 +339,23 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return SimpleLayout(
+      onRefresh: () {
+        WidgetsBinding.instance.addObserver(this);
+
+        final loadedBloc = context.read<LoadedMessageBloc>();
+        loadedBloc.add(InitialEvent(widget.roomId));
+
+        // Lắng nghe state từ bloc và gán vào ChatProvider
+        loadedBloc.stream.listen((state) {
+          final prov = context.read<ChatProvider>();
+          prov.setMessages(state.messages);
+          prov.setHasMore(state.page < state.totalPage);
+          prov.setLoadingMore(false);
+        });
+
+        _scrollController.addListener(_onScroll);
+        return Future.value();
+      },
       title: widget.roomName + (isConnected ? " 🟢" : " 🔴"),
       showBack: true,
       child: Column(
@@ -558,7 +578,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             prov.updateMessage(
                               m.id!,
                               newContent,
-                              "EDITED"
+                              "EDITED",
                             ); // bạn cần thêm method này trong ChatProvider
                             Navigator.pop(context); // Close the edit dialog
                           },
@@ -595,7 +615,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               prov.updateMessage(
                 m.id!,
                 "",
-                "DELETED"
+                "DELETED",
               ); // bạn cần thêm method này trong ChatProvider
             },
           ),

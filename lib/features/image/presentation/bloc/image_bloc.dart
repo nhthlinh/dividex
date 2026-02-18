@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/core/di/injection.dart';
+import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
 import 'package:Dividex/features/image/domain/usecase.dart';
 import 'package:Dividex/features/image/presentation/bloc/image_event.dart';
@@ -119,7 +120,7 @@ Future<void> uploadImage(
     final presignedList = await imageUsecase.getPresignedUrls(fileParams);
     if (presignedList.isEmpty) {
       throw Exception("Presigned URL not received");
-    } 
+    }
 
     for (int i = 0; i < presignedList.length; i++) {
       final presigned = presignedList[i];
@@ -138,9 +139,9 @@ Future<void> uploadImage(
       presignedList.map((e) => e.uid).toList(), // uid BE cấp
     );
 
-    // print("✅ Upload thành công");
+    // debugPrint("✅ Upload thành công");
   } catch (e) {
-    // print("❌ Upload image failed: $e");
+    // debugPrint("❌ Upload image failed: $e");
   }
 }
 
@@ -174,10 +175,13 @@ Future<void> updateImage(
     final imageUsecase = await getIt.getAsync<ImageUseCase>();
 
     // 3️⃣ Gọi API lấy presigned url
-    final presignedList = await imageUsecase.updateImages(fileParams, deletedImageUids);
+    final presignedList = await imageUsecase.updateImages(
+      fileParams,
+      deletedImageUids,
+    );
     if (presignedList.isEmpty) {
       throw Exception("Presigned URL not received");
-    } 
+    }
 
     for (int i = 0; i < presignedList.length; i++) {
       final presigned = presignedList[i];
@@ -196,20 +200,29 @@ Future<void> updateImage(
       presignedList.map((e) => e.uid).toList(), // uid BE cấp
     );
 
-    // print("✅ Upload thành công");
+    // debugPrint("✅ Upload thành công");
   } catch (e) {
-    // print("❌ Upload image failed: $e");
+    // debugPrint("❌ Upload image failed: $e");
   }
 }
 
-Future<void> deleteImage(
-  List<String> deletedImageUids,
-) async {
+Future<void> deleteImage(List<String> deletedImageUids) async {
   try {
     final imageUsecase = await getIt.getAsync<ImageUseCase>();
 
     await imageUsecase.deleteImages(deletedImageUids);
   } catch (e) {
-    // print("❌ Delete image failed: $e");
+    // debugPrint("❌ Delete image failed: $e");
+  }
+}
+
+Future<ImageExpenseModel?> uploadExpenseImage(Uint8List imageBytes) async {
+  try {
+    final imageUsecase = await getIt.getAsync<ImageUseCase>();
+    return await imageUsecase.uploadExpenseImage(imageBytes);
+    // debugPrint("✅ Upload thành công");
+  } catch (e) {
+    return null;
+    // debugPrint("❌ Upload image failed: $e");
   }
 }

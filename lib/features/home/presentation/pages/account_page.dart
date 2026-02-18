@@ -33,6 +33,10 @@ class _AccountPageState extends State<AccountPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          context.read<AccountBloc>().add(GetAccountsEvent());
+          return Future.value();
+        },
         title: intl.account,
         child: Column(
           children: [
@@ -82,34 +86,29 @@ class _AccountPageState extends State<AccountPage> {
                     itemBuilder: (context, index) {
                       final account = accounts[index];
                       return ContentCard(
-                         onTap: () {
-                        context.pushNamed(
-                          AppRouteNames.accountDetail,
-                          pathParameters: {'id': account.id ?? ''},
-                          extra: account,
-                        );
-                      },
+                        onTap: () {
+                          context.pushNamed(
+                            AppRouteNames.accountDetail,
+                            pathParameters: {'id': account.id ?? ''},
+                            extra: account,
+                          );
+                        },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   intl.accountNumber,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
+                                  style: Theme.of(context).textTheme.titleSmall
                                       ?.copyWith(
                                         color: AppThemes.primary3Color,
                                       ),
                                 ),
                                 Text(
                                   account.accountNumber,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
+                                  style: Theme.of(context).textTheme.titleSmall
                                       ?.copyWith(
                                         color: AppThemes.primary3Color,
                                       ),
@@ -118,8 +117,7 @@ class _AccountPageState extends State<AccountPage> {
                             ),
                             const SizedBox(height: 8),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   intl.branch,

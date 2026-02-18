@@ -110,7 +110,16 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
   Future<UserModel> getMe() async {
     return apiCallWrapper(() async {
       final response = await dio.get('/auth/me');
-      return UserModel.fromJson(response.data['data']);
+      return UserModel.fromJson(response.data['data']); 
+    });
+  }
+
+  @override
+  Future<void> reviewApp(int stars) async {
+    return apiCallWrapper(() async {
+      await dio.post('/users/review', data: {
+        'rate': stars,
+      });
     });
   }
 

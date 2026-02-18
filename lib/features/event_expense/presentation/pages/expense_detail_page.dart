@@ -49,6 +49,12 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
     return AppShell(
       currentIndex: 0,
       child: Layout(
+        onRefresh: () async {
+          context.read<ExpenseBloc>().add(
+            GetExpenseDetail(expenseId: widget.expenseId),
+          );
+          return Future.value();
+        },
         title: intl.expense,
         action: Row(
           mainAxisSize: MainAxisSize.min,
@@ -270,13 +276,16 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                   if (expense.status == 'DELETED') ...[
                     Align(
                       alignment: Alignment.center,
-                      child: CustomButton(text: intl.restore, onPressed: () {
-                        context.read<ExpenseBloc>().add(
-                          RestoreExpenseEvent(expenseId: expense.id!),
-                        );
-                      }),
-                    )
-                  ]
+                      child: CustomButton(
+                        text: intl.restore,
+                        onPressed: () {
+                          context.read<ExpenseBloc>().add(
+                            RestoreExpenseEvent(expenseId: expense.id!),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ],
               ),
             );
@@ -343,7 +352,8 @@ class ExpenseCard extends StatelessWidget {
                 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(expense.user.fullName ?? '')}&background=random&color=fff&size=128',
               ),
       ),
-      subtitle: '${(expense.amount.abs() / totalAmount * 100).toStringAsFixed(2)} %',
+      subtitle:
+          '${(expense.amount.abs() / totalAmount * 100).toStringAsFixed(2)} %',
       trailing: Column(
         children: [
           Text(

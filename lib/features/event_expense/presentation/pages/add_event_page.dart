@@ -40,12 +40,14 @@ class _AddEventPageState extends State<AddEventPage> {
   final TextEditingController eventNameController = TextEditingController();
   final TextEditingController eventDescriptionController =
       TextEditingController();
-  final TextEditingController eventStartDateController = 
+  final TextEditingController eventStartDateController =
       TextEditingController();
   final TextEditingController eventEndDateController = TextEditingController();
 
   final ValueNotifier<GroupModel?> selectedGroup = ValueNotifier(null);
   List<UserModel> selectedMembers = [];
+
+  final clearFormTrigger = ValueNotifier(false);
 
   @override
   void initState() {
@@ -64,19 +66,23 @@ class _AddEventPageState extends State<AddEventPage> {
   Future<void> submitEvent() async {
     if (_formKey.currentState!.validate()) {
       // Submit the event data
-      // print('Event Name: ${eventNameController.text}');
-      // print('Event Description: ${eventDescriptionController.text}');
-      // print('Event Start Date: ${eventStartDateController.text}');
-      // print('Event End Date: ${eventEndDateController.text}');
-      // print('Selected Group: ${selectedGroup.value?.name ?? ''}');
-      // print('Selected Members: $selectedMembers');
+      // debugPrint('Event Name: ${eventNameController.text}');
+      // debugPrint('Event Description: ${eventDescriptionController.text}');
+      // debugPrint('Event Start Date: ${eventStartDateController.text}');
+      // debugPrint('Event End Date: ${eventEndDateController.text}');
+      // debugPrint('Selected Group: ${selectedGroup.value?.name ?? ''}');
+      // debugPrint('Selected Members: $selectedMembers');
 
       context.read<EventBloc>().add(
         CreateEventEvent(
           name: eventNameController.text,
           groupId: selectedGroup.value?.id ?? '',
-          eventStart:  DateFormat("yyyy-MM-dd").format(DateFormat("dd/MM/yyyy").parse(eventStartDateController.text)),
-          eventEnd:  DateFormat("yyyy-MM-dd").format(DateFormat("dd/MM/yyyy").parse(eventEndDateController.text)),
+          eventStart: DateFormat("yyyy-MM-dd").format(
+            DateFormat("dd/MM/yyyy").parse(eventStartDateController.text),
+          ),
+          eventEnd: DateFormat(
+            "yyyy-MM-dd",
+          ).format(DateFormat("dd/MM/yyyy").parse(eventEndDateController.text)),
           description: eventDescriptionController.text,
           memberIds: selectedMembers
               .map((e) => e.id)
@@ -99,11 +105,15 @@ class _AddEventPageState extends State<AddEventPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () async {
+          clearFormTrigger.value =
+              !clearFormTrigger.value; // Trigger form reset
+          return Future.value();
+        },
         title: intl.addEvent,
         child: BlocProvider(
           create: (context) =>
-              LoadedGroupsBloc()
-                ..add(group_event.InitialEvent('', false)),
+              LoadedGroupsBloc()..add(group_event.InitialEvent('', false)),
           child: eventForm(intl, theme),
         ),
       ),
@@ -112,6 +122,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
   CustomFormWrapper eventForm(AppLocalizations intl, ThemeData theme) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [
         FormFieldConfig(controller: eventNameController, isRequired: true),
@@ -176,7 +187,7 @@ class _AddEventPageState extends State<AddEventPage> {
                     );
                   },
                 ),
-            
+
                 const SizedBox(width: 8),
                 DateInputField(
                   label: intl.eventEndDateLabel,
@@ -195,7 +206,7 @@ class _AddEventPageState extends State<AddEventPage> {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
 
           BlocBuilder<LoadedGroupsBloc, LoadedGroupsState>(
@@ -244,15 +255,28 @@ class _AddEventPageState extends State<AddEventPage> {
               },
             ),
             const SizedBox(height: 8),
-            UserGrid(users: selectedMembers, onTap: (user) {
-              setState(() {
-                selectedMembers.remove(user);
-              });
-            }),
+            UserGrid(
+              users: selectedMembers,
+              onTap: (user) {
+                setState(() {
+                  selectedMembers.remove(user);
+                });
+              },
+            ),
           ],
 
           const SizedBox(height: 30),
-          CustomButton(text: intl.add, onPressed: (isValid && selectedMembers.isNotEmpty) ? submitEvent : null),
+          CustomButton(
+            text: intl.add,
+            onPressed: (isValid && selectedMembers.isNotEmpty)
+                ? () {
+                    submitEvent();
+                    // Clear the form after submission
+                    clearFormTrigger.value =
+                        !clearFormTrigger.value; // Trigger form reset
+                  }
+                : null,
+          ),
           const SizedBox(height: 30),
         ],
       ),
@@ -308,7 +332,6 @@ class _AddEventPageState extends State<AddEventPage> {
         );
       },
     );
-  
   }
 
   LayoutBuilder noGroupWidget(AppLocalizations intl, ThemeData theme) {

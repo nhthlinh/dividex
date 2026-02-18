@@ -45,4 +45,9 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> updatePin(String oldPin, String newPin) {
     return remoteDataSource.updatePin(oldPin, newPin);
   }
+
+  @override
+  Future<void> reviewApp(int stars) {
+    return remoteDataSource.reviewApp(stars);
+  }
 }

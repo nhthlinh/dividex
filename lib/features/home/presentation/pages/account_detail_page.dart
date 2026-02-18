@@ -30,6 +30,10 @@ class _AccountPageState extends State<AccountDetailPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          // No specific refresh logic needed for this page, but you can add any necessary actions here if required.
+          return Future.value();
+        },
         title: intl.account,
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -53,11 +57,11 @@ class _AccountPageState extends State<AccountDetailPage> {
                   ),
                 ],
               ),
-        
+
               const SizedBox(height: 8),
-              const Divider(color: AppThemes.borderColor,),
+              const Divider(color: AppThemes.borderColor),
               const SizedBox(height: 8),
-          
+
               Row(
                 children: [
                   Text(
@@ -72,15 +76,15 @@ class _AccountPageState extends State<AccountDetailPage> {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppThemes.primary3Color,
-                    ), 
+                    ),
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 8),
-              const Divider(color: AppThemes.borderColor,),
+              const Divider(color: AppThemes.borderColor),
               const SizedBox(height: 8),
-          
+
               Row(
                 children: [
                   Text(
@@ -99,14 +103,19 @@ class _AccountPageState extends State<AccountDetailPage> {
                   ),
                 ],
               ),
-          
+
               const SizedBox(height: 8),
-              const Divider(color: AppThemes.borderColor,),
+              const Divider(color: AppThemes.borderColor),
               const SizedBox(height: 16),
-          
-              CustomButton(text: intl.delete, onPressed: () {
-                context.read<AccountBloc>().add(DeleteAccountEvent(widget.id));
-              }),
+
+              CustomButton(
+                text: intl.delete,
+                onPressed: () {
+                  context.read<AccountBloc>().add(
+                    DeleteAccountEvent(widget.id),
+                  );
+                },
+              ),
             ],
           ),
         ),

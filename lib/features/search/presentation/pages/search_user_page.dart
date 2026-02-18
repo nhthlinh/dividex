@@ -40,6 +40,12 @@ class _SearchUserPageState extends State<SearchUserPage> {
     return AppShell(
       currentIndex: 1,
       child: SimpleLayout(
+        onRefresh: () {
+          context.read<search_bloc.SearchUsersBloc>().add(
+            InitialEvent(HiveService.getUser().id),
+          );
+          return Future.value();
+        },
         title: intl.friend,
         child: Column(
           children: [

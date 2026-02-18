@@ -13,11 +13,13 @@ import 'package:image_picker/image_picker.dart';
 enum PickerType { avatar, gallery }
 
 class ImagePickerWidget extends StatefulWidget {
+  final Uint8List? initialImage;
   final PickerType type;
   final void Function(List<Uint8List> files) onFilesPicked;
 
   const ImagePickerWidget({
     super.key,
+    this.initialImage,
     required this.type,
     required this.onFilesPicked,
   });
@@ -28,6 +30,14 @@ class ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   List<Uint8List> _previewFiles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialImage != null) {
+      _previewFiles = [widget.initialImage!];
+    }
+  }
 
   Future<void> _pickFiles() async {
     if (kIsWeb) {

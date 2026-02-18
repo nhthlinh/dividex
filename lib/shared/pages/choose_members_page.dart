@@ -76,6 +76,13 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          _selectedUsers.addAll(widget.initialSelectedMembers ?? []);
+          context.read<LoadedUsersBloc>().add(
+            InitialEvent(widget.id, widget.type),
+          );
+          return Future.value();
+        },
         title: intl.addMembers,
         child: Column(
           children: [
@@ -161,7 +168,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
     bool hasMore,
     int totalUsers,
     List<UserModel>? users,
-    int page
+    int page,
   ) {
     return Column(
       children: [
@@ -180,7 +187,9 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
               children: totalUsers > 0
                   ? [
                       TextSpan(
-                        text: totalUsers > 99 ? ' 99+' : ' ${widget.isCanChooseMyself ? totalUsers : totalUsers - 1}',
+                        text: totalUsers > 99
+                            ? ' 99+'
+                            : ' ${widget.isCanChooseMyself ? totalUsers : totalUsers - 1}',
                         style: TextStyle(color: AppThemes.primary3Color),
                       ),
                     ]

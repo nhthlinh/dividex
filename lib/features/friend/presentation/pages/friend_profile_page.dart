@@ -67,6 +67,21 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
         return AppShell(
           currentIndex: 0,
           child: Layout(
+            onRefresh: () {
+              context.read<FriendBloc>().add(
+                GetFriendOverviewEvent(widget.friendId),
+              );
+              context.read<LoadedUsersBloc>().add(
+                user_event.InitialEvent(
+                  widget.friendId,
+                  user_event.LoadType.mutualFriends,
+                ),
+              );
+              context.read<LoadFriendDeptBloc>().add(
+                InitialEvent(widget.friendId),
+              );
+              return Future.value();
+            },
             title: intl.friend,
             showAvatar: true,
             avatarUrl: (() {
@@ -78,26 +93,30 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
               }
               return 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(overview?.friend.fullName ?? '')}&background=random&color=fff&size=128';
             })(),
-            action: ((state.overview?.status != 'ACCEPTED' &&
-                    state.overview?.message != null) || (state.overview?.status == 'NONE' ||
-                    state.overview?.status == 'NOTYET')) ? null : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomButton(
-                  text: intl.delete,
-                  onPressed: () {
-                    context.read<FriendBloc>().add(
-                      DeclineFriendRequestEvent(
-                        state.overview!.friendshipUid ?? '',
+            action:
+                ((state.overview?.status != 'ACCEPTED' &&
+                        state.overview?.message != null) ||
+                    (state.overview?.status == 'NONE' ||
+                        state.overview?.status == 'NOTYET'))
+                ? null
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomButton(
+                        text: intl.delete,
+                        onPressed: () {
+                          context.read<FriendBloc>().add(
+                            DeclineFriendRequestEvent(
+                              state.overview!.friendshipUid ?? '',
+                            ),
+                          );
+                        },
+                        size: ButtonSize.medium,
+                        type: ButtonType.secondary,
+                        customColor: AppThemes.primary3Color,
                       ),
-                    );
-                  },
-                  size: ButtonSize.medium,
-                  type: ButtonType.secondary,
-                  customColor: AppThemes.primary3Color,
-                ),
-              ],
-            ),
+                    ],
+                  ),
             child: Column(
               children: [
                 Align(
@@ -674,6 +693,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
           customColor: AppThemes.errorColor,
         ),
         CustomFormWrapper(
+          clearTrigger: ValueNotifier(false),
           fields: [FormFieldConfig(controller: controller, isRequired: true)],
           builder: (isValid) => CustomButton(
             text: intl.send,

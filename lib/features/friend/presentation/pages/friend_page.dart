@@ -53,6 +53,23 @@ class _FriendPageState extends State<FriendPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () async {
+          context.read<LoadedFriendsBloc>().add(
+            InitialEvent(HiveService.getUser().id),
+          );
+          context.read<request_bloc.FriendRequestBloc>().add(
+            request_bloc.InitialEvent(
+              type: FriendRequestType.received,
+              HiveService.getUser().id,
+            ),
+          );
+          context.read<request_bloc.FriendRequestBloc>().add(
+            request_bloc.InitialEvent(
+              type: FriendRequestType.sent,
+              HiveService.getUser().id,
+            ),
+          );
+        },
         title: intl.friend,
         child: Column(
           children: [
@@ -116,7 +133,6 @@ class _FriendPageState extends State<FriendPage> {
                 );
               },
             ),
-           
           ],
         ),
       ),
@@ -240,7 +256,7 @@ class _FriendPageState extends State<FriendPage> {
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-            itemCount: friends?.length != null
+          itemCount: friends?.length != null
               ? (friends!.length + (hasMore ? 1 : 0))
               : 0,
           itemBuilder: (context, index) {
@@ -267,7 +283,6 @@ class _FriendPageState extends State<FriendPage> {
             );
           },
         ),
-      
       ],
     );
   }

@@ -12,6 +12,7 @@ import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
 import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
+import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,8 @@ class _WithdrawPageState extends State<WithdrawPage> {
   final ValueNotifier<BankAccount?> selectedToAccount = ValueNotifier(null);
   final amountController = TextEditingController();
   List<int> amountExample = [10000, 20000, 50000, 100000, 200000, 500000];
+
+  final clearFormTrigger = ValueNotifier(false);
 
   @override
   void initState() {
@@ -61,8 +64,14 @@ class _WithdrawPageState extends State<WithdrawPage> {
     return AppShell(
       currentIndex: 0,
       child: SimpleLayout(
+        onRefresh: () {
+          context.read<AccountBloc>().add(GetAccountsEvent());
+          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          return Future.value();
+        },
         title: intl.withdraw,
         child: CustomFormWrapper(
+          clearTrigger: clearFormTrigger,
           formKey: _formKey,
           fields: [
             FormFieldConfig(controller: amountController, isRequired: true),
@@ -76,7 +85,9 @@ class _WithdrawPageState extends State<WithdrawPage> {
                   BlocListener<RechargeBloc, RechargeState>(
                     listenWhen: (p, c) => p != c,
                     listener: (context, state) {
-                      double a = double.parse(amountController.text.trim().replaceAll('.', ''));
+                      double a = double.parse(
+                        amountController.text.trim().replaceAll('.', ''),
+                      );
                       BankAccount toAccount = selectedToAccount.value!;
                       if (state is RechargeSuccessState) {
                         context.pushNamed(
@@ -93,18 +104,21 @@ class _WithdrawPageState extends State<WithdrawPage> {
                     builder: (context, state) {
                       if (state.accounts.isEmpty) {
                         return Center(
-                          child: ColoredBox(
-                            color: Colors.transparent,
-                            child: SpinKitFadingCircle(
-                              color: AppThemes.primary3Color,
-                            ),
+                          child: SpinKitFadingCircle(
+                            color: AppThemes.primary3Color,
                           ),
                         );
                       } else {
                         final accounts = state.accounts;
 
                         if (accounts.isEmpty) {
-                          return SizedBox.shrink();
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (!context.mounted) return;
+                            showCustomToast(
+                              'You have not linked any bank account yet. Please add an account to proceed with withdrawal.',
+                              type: ToastType.error,
+                            );
+                          });
                         }
 
                         return ValueListenableBuilder<BankAccount?>(
@@ -191,7 +205,8 @@ class _WithdrawPageState extends State<WithdrawPage> {
                           margin: const EdgeInsets.all(4),
                           child: CustomButton(
                             size: ButtonSize.medium,
-                            text: '${formatNumber(amount)} ${HiveService.getUser().preferredCurrency ?? 'VND'}',
+                            text:
+                                '${formatNumber(amount)} ${HiveService.getUser().preferredCurrency ?? 'VND'}',
                             onPressed: () {
                               setState(() {
                                 if (amountController.text !=

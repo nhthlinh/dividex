@@ -17,12 +17,14 @@ class CustomFormWrapper extends StatefulWidget {
   final Widget Function(bool isValid)
   builder; // callback: truyền trạng thái hợp lệ
   final GlobalKey<FormState>? formKey;
+  final ValueNotifier<bool> clearTrigger;
 
   const CustomFormWrapper({
     super.key,
     required this.fields,
     required this.builder,
     this.formKey,
+    required this.clearTrigger,
   });
 
   @override
@@ -43,6 +45,7 @@ class _CustomFormWrapperState extends State<CustomFormWrapper> {
       }
     }
     _validate();
+    widget.clearTrigger.addListener(_clearForm);
   }
 
   @override
@@ -54,7 +57,21 @@ class _CustomFormWrapperState extends State<CustomFormWrapper> {
         field.selectedValue!.removeListener(_validate);
       }
     }
+    widget.clearTrigger.removeListener(_clearForm);
     super.dispose();
+  }
+
+  void _clearForm() {
+    for (var field in widget.fields) {
+      field.controller?.clear();
+
+      if (field.selectedValue != null) {
+        field.selectedValue!.value = null;
+      }
+    }
+
+    widget.formKey?.currentState?.reset();
+    _validate();
   }
 
   void _validate() {

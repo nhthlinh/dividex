@@ -62,6 +62,18 @@ class _FilterPageState extends State<FilterPage> {
     return AppShell(
       currentIndex: 1,
       child: SimpleLayout(
+        onRefresh: () {
+          typeBig =
+              widget.filterType == FilterType.externalTransaction ||
+                  widget.filterType == FilterType.internalTransaction
+              ? FilterType.transaction
+              : widget.filterType == FilterType.expense
+              ? FilterType.expense
+              : FilterType.all;
+          type = widget.filterType;
+          
+          return Future.value();
+        },
         title: intl.filter,
         child: Column(
           children: [
@@ -121,7 +133,6 @@ class _FilterPageState extends State<FilterPage> {
               ),
             ],
 
-
             if (type == FilterType.expense) ...[
               ExpenseFilterWidget(
                 key: const ValueKey('expense'),
@@ -158,7 +169,6 @@ class _FilterPageState extends State<FilterPage> {
               customColor: AppThemes.errorColor,
               text: intl.cancel,
               onPressed: () {
-                
                 Navigator.pop(context);
               },
             ),

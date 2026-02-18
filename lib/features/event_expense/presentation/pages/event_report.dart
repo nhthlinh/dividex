@@ -65,8 +65,37 @@ class _EventReportPageState extends State<EventReportPage> {
     final theme = Theme.of(context);
 
     return AppShell(
+      // onRefresh: () async {
+      //   context.read<ExpenseDataBloc>().add(
+      //     expense_event.InitialEvent(
+      //       id: widget.eventId,
+      //       type: LoadExpenseType.event,
+      //     ),
+      //   );
+      //   context.read<EventBloc>().add(
+      //     event_event.GetChartDataEvent(
+      //       eventId: widget.eventId,
+      //       year: DateTime.now().year,
+      //     ),
+      //   );
+      // },
       currentIndex: 0,
       child: Layout(
+        onRefresh: () {
+          context.read<ExpenseDataBloc>().add(
+            expense_event.InitialEvent(
+              id: widget.eventId,
+              type: LoadExpenseType.event,
+            ),
+          );
+          context.read<EventBloc>().add(
+            event_event.GetChartDataEvent(
+              eventId: widget.eventId,
+              year: DateTime.now().year,
+            ),
+          );
+          return Future.value();
+        },
         title: widget.eventName,
         action: IconButton(
           icon: const Icon(Icons.settings_outlined, color: Colors.white),
@@ -218,7 +247,7 @@ class _EventReportPageState extends State<EventReportPage> {
                   hasMore,
                   state.totalItems,
                   state.expenses,
-                  state.page
+                  state.page,
                 );
               },
             ),
@@ -297,7 +326,7 @@ class _EventReportPageState extends State<EventReportPage> {
     bool hasMore,
     int totalExpenses,
     List<ExpenseModel> expenses,
-    int page
+    int page,
   ) {
     final groupedExpenses = <String, List<ExpenseModel>>{};
     for (var e in expenses) {
@@ -347,20 +376,24 @@ class _EventReportPageState extends State<EventReportPage> {
           ),
         ),
 
-        if (hasMore) ... [
+        if (hasMore) ...[
           BlocProvider<ExpenseDataBloc>(
             create: (context) => context.read<ExpenseDataBloc>(),
             child: CustomButton(
               text: intl.more,
               onPressed: () {
                 context.read<ExpenseDataBloc>().add(
-                  LoadMoreExpenses(id: '', type: LoadExpenseType.all, page: page + 1),
+                  LoadMoreExpenses(
+                    id: '',
+                    type: LoadExpenseType.all,
+                    page: page + 1,
+                  ),
                 );
               },
               size: ButtonSize.small,
             ),
           ),
-        ]
+        ],
       ],
     );
   }

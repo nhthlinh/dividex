@@ -29,6 +29,10 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
     final bodySmall = textTheme.bodySmall;
 
     return SimpleLayout(
+      onRefresh: () {
+        // No specific refresh logic needed for this page, but you can add any necessary actions here if required.
+        return Future.value();
+      },
       title: intl.termsOfServiceTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

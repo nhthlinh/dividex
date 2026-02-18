@@ -7,6 +7,7 @@ import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
 import 'package:Dividex/features/event_expense/presentation/widgets/date_input_field_widget.dart';
+import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
@@ -21,6 +22,7 @@ import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
+import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/two_option_selector_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
@@ -63,9 +65,90 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
   final List<CurrencyEnum> _units = getAllCurrencies().map((e) => e).toList();
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showOptionDialog();
+    });
+  }
+
+  void _showOptionDialog() {
+    showCustomDialog(
+      context: context,
+      content: Column(
+        children: [
+          Text(
+            'Create a expense by: ',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          StatefulBuilder(
+            builder: (context, setState) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomButton(
+                    text: 'Manually',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    size: ButtonSize.medium,
+                    type: ButtonType.secondary,
+                    customColor: AppThemes.errorColor,
+                  ),
+                  CustomButton(
+                    text: 'Scanning',
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      final result = await context.pushNamed(
+                        AppRouteNames.scanExpense,
+                      );
+                      if (result != null && mounted) {
+                        _handleScanResult(result);
+                      }
+                    },
+                    size: ButtonSize.medium,
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleScanResult(dynamic result) {
+    final ImageExpenseModel imageInfo = result['imageInfo'];
+    final Uint8List bytes = result['bytes'];
+
+    // 1️⃣ Lưu ảnh
+    setState(() {
+      images = [bytes];
+    });
+
+    // 2️⃣ Đổ dữ liệu OCR vào form
+    expenseNameController.text = imageInfo.name;
+    expenseAmountController.text = imageInfo.totalAmount.toString();
+
+    _selectedCurrency.value = getAllCurrencies().firstWhere(
+      (c) => c.code == (imageInfo.currency.toUpperCase()),
+      orElse: () => getAllCurrencies().firstWhere((c) => c.code == 'VND'),
+    );
+
+    _selectedCategory.value = CategoryModel.categories.firstWhere(
+      (c) => c.key == (imageInfo.category),
+    );
+    noteController.text = imageInfo.note ?? '';
+    dateController.text = DateFormat(
+      "h:mm a - dd/MM/yyyy",
+    ).format(imageInfo.expenseDate ?? DateTime.now());
+    reminderController.text = DateFormat(
+      "dd/MM/yyyy",
+    ).format((imageInfo.expenseDate ?? DateTime.now()).add(Duration(days: 3)));
   }
 
   @override
@@ -77,6 +160,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
     noteController.dispose();
     dateController.dispose();
     reminderController.dispose();
+    clearFormTrigger.dispose();
     super.dispose();
   }
 
@@ -145,12 +229,22 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
     return AppShell(
       currentIndex: 0,
-      child: SimpleLayout(title: intl.addExpense, child: expenseForm(intl)),
+      child: SimpleLayout(
+        onRefresh: () async => {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+            _showOptionDialog();
+          }),
+        },
+        title: intl.addExpense,
+        child: expenseForm(intl),
+      ),
     );
   }
 
   CustomFormWrapper expenseForm(AppLocalizations intl) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: formKey,
       fields: [
         FormFieldConfig(controller: expenseNameController, isRequired: true),
@@ -463,6 +557,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
               ),
               const SizedBox(height: 8),
               ImagePickerWidget(
+                initialImage: images.isNotEmpty ? images.first : null,
                 type: PickerType.gallery,
                 onFilesPicked: (imageBytesList) {
                   setState(() {

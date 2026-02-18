@@ -68,6 +68,27 @@ class _GroupReportPageState extends State<GroupReportPage> {
     return AppShell(
       currentIndex: 0,
       child: Layout(
+        onRefresh: () {
+          context.read<GroupBloc>().add(
+            group_event.GetGroupReportEvent(widget.groupId),
+          );
+          context.read<LoadedUsersBloc>().add(
+            load_user_event.InitialEvent(
+              widget.groupId,
+              load_user_event.LoadType.groupMembers,
+              searchQuery: '',
+            ),
+          );
+          context.read<LoadedGroupsEventsBloc>().add(
+            group_event.LoadGroupEventsEventInitial(
+              page: 1,
+              pageSize: 10,
+              groupId: widget.groupId,
+              searchQuery: '',
+            ),
+          );
+          return Future.value();
+        },
         title: intl.report,
         child: Column(
           children: [
@@ -551,9 +572,7 @@ class _GroupReportPageState extends State<GroupReportPage> {
                     'eventId': event.id ?? '',
                     'groupId': widget.groupId,
                   },
-                  extra: {
-                    'eventName': event.name ?? '',
-                  },
+                  extra: {'eventName': event.name ?? ''},
                 );
               },
               child: Column(
@@ -608,4 +627,3 @@ double getRatio(double? d) {
   }
   return d;
 }
-

@@ -113,7 +113,7 @@ class _ImageUpdateDeleteWidgetState extends State<ImageUpdateDeleteWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // print('Rebuild ImageUpdateDeleteWidget: ${widget.isAvatar}');
+    // debugPrint('Rebuild ImageUpdateDeleteWidget: ${widget.isAvatar}');
     return SizedBox(
       width: 340,
       child: Column(
@@ -181,7 +181,8 @@ class _ImageUpdateDeleteWidgetState extends State<ImageUpdateDeleteWidget> {
                       ),
                     ],
                   ),
-                ] else if (deleteImageNum == widget.images!.length && deleteImageNum > 0) ...[
+                ] else if (deleteImageNum == widget.images!.length &&
+                    deleteImageNum > 0) ...[
                   const SizedBox(width: 8),
                   Image.asset('lib/assets/images/arrow_image.png', width: 50),
                   const SizedBox(width: 8),
@@ -222,10 +223,10 @@ class _ImageUpdateDeleteWidgetState extends State<ImageUpdateDeleteWidget> {
                       ),
                     );
                   }
-      
+
                   if (index < widget.images!.length) {
                     final image = widget.images![index];
-      
+
                     return InkWell(
                       onTap: () {
                         handleOnTap(index);
@@ -249,7 +250,7 @@ class _ImageUpdateDeleteWidgetState extends State<ImageUpdateDeleteWidget> {
                       ),
                     );
                   }
-      
+
                   final image = _previewFiles[index - widget.images!.length];
                   return Stack(
                     children: [

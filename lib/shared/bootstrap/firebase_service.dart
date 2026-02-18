@@ -11,13 +11,17 @@ class FirebaseService {
         );
       } else {
         if (kDebugMode) {
-          print('[FirebaseService] Firebase already initialized');
+          debugPrint('[FirebaseService] Firebase already initialized');
         }
       }
     } catch (e) {
-      if (e.toString().contains('A Firebase App named "[DEFAULT]" already exists')) {
+      if (e.toString().contains(
+        'A Firebase App named "[DEFAULT]" already exists',
+      )) {
         if (kDebugMode) {
-          print('[FirebaseService] Duplicate Firebase initialization caught and ignored.');
+          debugPrint(
+            '[FirebaseService] Duplicate Firebase initialization caught and ignored.',
+          );
         }
       } else {
         rethrow; // Chỉ throw lại lỗi nếu không phải lỗi duplicate
@@ -25,5 +29,3 @@ class FirebaseService {
     }
   }
 }
-
-

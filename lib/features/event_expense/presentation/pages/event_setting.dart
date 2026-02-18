@@ -103,6 +103,19 @@ class _EventSettingPageState extends State<EventSettingPage> {
     return AppShell(
       currentIndex: 0,
       child: Layout(
+        onRefresh: () {
+          context.read<user_bloc.LoadedUsersBloc>().add(
+            user_event.InitialEvent(
+              widget.eventId,
+              user_event.LoadType.eventParticipants,
+              searchQuery: '',
+            ),
+          );
+          context.read<EventBloc>().add(GetEventEvent(eventId: widget.eventId));
+
+          controller.text = widget.eventName;
+          return Future.value();
+        },
         title: widget.eventName,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -202,34 +215,33 @@ class _EventSettingPageState extends State<EventSettingPage> {
                   const SizedBox(height: 8),
                   if (selectedMembers.isNotEmpty)
                     Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      CustomButton(
-                        text: intl.cancel,
-                        onPressed: () {
-                          setState(() {
-                            selectedMembers = [];
-                            selectedUserIdsToAdd = [];
-                          });
-                        },
-                        size: ButtonSize.medium,
-                      ),
-                      CustomButton(
-                        text: intl.save,
-                        onPressed: () {
-                          context.read<EventBloc>().add(
-                            AddMembersToEvent(
-                              eventId: widget.eventId,
-                              memberIds: selectedUserIdsToAdd,
-                            ),
-                          );
-                        },
-                        size: ButtonSize.medium,
-                        type: ButtonType.secondary,
-                      ),
-                    ],
-                  ),
-                
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CustomButton(
+                          text: intl.cancel,
+                          onPressed: () {
+                            setState(() {
+                              selectedMembers = [];
+                              selectedUserIdsToAdd = [];
+                            });
+                          },
+                          size: ButtonSize.medium,
+                        ),
+                        CustomButton(
+                          text: intl.save,
+                          onPressed: () {
+                            context.read<EventBloc>().add(
+                              AddMembersToEvent(
+                                eventId: widget.eventId,
+                                memberIds: selectedUserIdsToAdd,
+                              ),
+                            );
+                          },
+                          size: ButtonSize.medium,
+                          type: ButtonType.secondary,
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),

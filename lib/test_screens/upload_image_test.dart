@@ -16,7 +16,7 @@ class UploadDemoPage extends StatelessWidget {
             ImagePickerWidget(
               type: PickerType.avatar,
               onFilesPicked: (files) {
-                // print("Avatar picked: ${files.length}");
+                // debugPrint("Avatar picked: ${files.length}");
               },
             ),
             const SizedBox(height: 32),
@@ -24,7 +24,7 @@ class UploadDemoPage extends StatelessWidget {
             ImagePickerWidget(
               type: PickerType.gallery,
               onFilesPicked: (files) {
-                // print("Gallery picked: ${files.length}");
+                // debugPrint("Gallery picked: ${files.length}");
               },
             ),
           ],

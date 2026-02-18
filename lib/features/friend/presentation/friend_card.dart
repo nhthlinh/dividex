@@ -253,6 +253,7 @@ class _FriendCardState extends State<FriendCard> {
             customColor: AppThemes.errorColor,
           ),
           CustomFormWrapper(
+            clearTrigger: ValueNotifier(false),
             fields: [
               FormFieldConfig(controller: controller, isRequired: true),
             ],

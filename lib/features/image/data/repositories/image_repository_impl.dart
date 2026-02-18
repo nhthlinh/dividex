@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
 import 'package:Dividex/features/image/data/source/image_remote_data_source.dart';
 import 'package:Dividex/features/image/domain/image_repository.dart';
@@ -34,5 +35,10 @@ class ImageRepositoryImpl implements ImageRepository {
   @override
   Future<void> deleteImages(List<String> deletedImageUids) {
     return remoteDataSource.deleteImages(deletedImageUids);
+  }
+
+  @override
+  Future<ImageExpenseModel> uploadExpenseImage(Uint8List fileBytes) {
+    return remoteDataSource.uploadExpenseImage(fileBytes);
   }
 }

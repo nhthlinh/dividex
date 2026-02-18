@@ -31,6 +31,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _obscurePassword = true; // State for password visibility
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +77,10 @@ class _RegisterPageState extends State<RegisterPage> {
     final intl = AppLocalizations.of(context)!; // Get the localization instance
 
     return Layout(
+      onRefresh: () async {
+        clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+        return Future.value();
+      },
       title: intl.register,
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -132,6 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
     BuildContext context,
   ) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [
         FormFieldConfig(controller: nameController, isRequired: true),
@@ -216,7 +223,11 @@ class _RegisterPageState extends State<RegisterPage> {
               text: intl.register,
               onPressed: (!isValid || state is AuthLoading)
                   ? null
-                  : () => _submitRegister(),
+                  : () {
+                      _submitRegister();
+                      // Clear the form after submission
+                      clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+                    },
             ),
 
             const SizedBox(height: 24),

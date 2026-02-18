@@ -28,6 +28,8 @@ class _ResetPassPageState extends State<ResetPassPage> {
   bool _obscurePassword = true; // State for password visibility
   bool _obscureConfirmPassword = true; // State for confirm password visibility
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void dispose() {
     passwordController.dispose();
@@ -57,6 +59,10 @@ class _ResetPassPageState extends State<ResetPassPage> {
     final intl = AppLocalizations.of(context)!; // Get the localization instance
 
     return SimpleLayout(
+      onRefresh: () {
+        clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+        return Future.value();
+      },
       title: intl.settingChangePass,
       child: BlocBuilder<AuthBloc, AuthState>(
         // Use BlocConsumer
@@ -73,6 +79,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
     ThemeData theme,
   ) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [
         FormFieldConfig(controller: passwordController, isRequired: true),
@@ -148,6 +155,9 @@ class _ResetPassPageState extends State<ResetPassPage> {
                 onPressed: isValid
                     ? () {
                         _submitPass();
+                        // Clear the form after submission
+                        clearFormTrigger.value =
+                            !clearFormTrigger.value; // Trigger form reset
                       }
                     : null,
               ),

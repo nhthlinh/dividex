@@ -39,6 +39,12 @@ class _RechargeReportState extends State<RechargeReport> {
     return AppShell(
       currentIndex: 0,
       child: Layout(
+        onRefresh: () {
+          context.read<LoadedHistoryBloc>().add(
+            GetHistoryInitEvent(1, 10, WalletHistoryType.external),
+          );
+          return Future.value();
+        },
         title: isExternal ? intl.externalExpense : intl.internalExpense,
         action: IconButton(
           icon: Icon(
@@ -426,9 +432,9 @@ class CustomRow extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey,
-                ),
+              fontWeight: FontWeight.w500,
+              color: Colors.grey,
+            ),
           ),
 
           const SizedBox(width: 12),
@@ -439,9 +445,9 @@ class CustomRow extends StatelessWidget {
               info,
               softWrap: true,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: AppThemes.primary3Color,
-                  ),
+                fontWeight: FontWeight.w500,
+                color: AppThemes.primary3Color,
+              ),
             ),
           ),
         ],
