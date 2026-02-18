@@ -153,7 +153,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get expenseAmountHint => '120.000';
 
   @override
-  String get expenseUnitLabel => 'Đơn vị';
+  String get expenseCurrencyLabel => 'Đơn vị';
 
   @override
   String get expenseCategoryLabel => 'Phân loại';
@@ -1010,4 +1010,565 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get transactionReport => 'Báo cáo';
+
+  @override
+  String friendRequest(Object userName) {
+    return 'Yêu cầu của $userName ';
+  }
+
+  @override
+  String get you => 'Bạn';
+
+  @override
+  String get your => 'của bạn';
+
+  @override
+  String get transaction => 'Giao dịch';
+
+  @override
+  String get searchTransactionSubtitle =>
+      'Tìm kiếm các khoản chi tiêu chung, hóa đơn hoặc khoản thanh toán trong nhóm';
+
+  @override
+  String get user => 'Người dùng';
+
+  @override
+  String get searchUserSubtitle =>
+      'Tìm kiếm người dùng để thêm làm bạn bè hoặc tham gia vào chi tiêu';
+
+  @override
+  String get search => 'Tìm kiếm';
+
+  @override
+  String get searchTransaction => 'Tìm giao dịch';
+
+  @override
+  String get searchUser => 'Tìm người dùng';
+
+  @override
+  String get addGroupSubtitle => 'Tạo một group để quản lý chi tiêu với bạn bè';
+
+  @override
+  String get addMembers => 'Chọn thành viên';
+
+  @override
+  String get refreshFail => 'Phiên đăng nhập đã hết, vui lòng đăng nhập lại';
+
+  @override
+  String get uploadImageHint =>
+      'Hãy tải ảnh lên, chú ý dung lượng nhỏ hơn 100Kb';
+
+  @override
+  String get chooseFile => 'Chọn file';
+
+  @override
+  String get fileChosen => 'file đã chọn';
+
+  @override
+  String get noFileChosen => '0 file đã chọn';
+
+  @override
+  String get members => 'Thành viên';
+
+  @override
+  String get addEventSubtitle =>
+      'Tạo một sự kiện để quản lý và chia sẻ chi tiêu dễ dàng';
+
+  @override
+  String get addExpenseSubtitle =>
+      'Thêm một chi tiêu mới để chia tiền với bạn bè dễ dàng hơn và giúp cho mọi thứ được công bằng trong nhóm.';
+
+  @override
+  String get expenseSplitType => 'Chọn kiểu chia:';
+
+  @override
+  String get groupNotFound => 'Không tìm thấy nhóm.';
+
+  @override
+  String get createIsDenied => 'Bạn không có quyền tạo mục này.';
+
+  @override
+  String get updateIsDenied => 'Bạn không có quyền cập nhật mục này.';
+
+  @override
+  String get deleteIsDenied => 'Bạn không có quyền xóa mục này.';
+
+  @override
+  String get eventNotFound => 'Không tìm thấy sự kiện.';
+
+  @override
+  String get expenseNotFound => 'Không tìm thấy chi tiêu';
+
+  @override
+  String get friendRelationAlreadyExists => 'Quan hệ bạn bè này đã tồn tại.';
+
+  @override
+  String get friendRequestNotFound => 'The friend request was not found.';
+
+  @override
+  String get totalAmount => 'Tổng số tiền';
+
+  @override
+  String get amount => 'Số tiền';
+
+  @override
+  String get splitRemainingEqually => 'Chia đều phần còn lại';
+
+  @override
+  String get allocated => 'Đã chia';
+
+  @override
+  String get noEventsInGroup => 'Chưa có sự kiện nào trong nhóm';
+
+  @override
+  String membersText(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thành viên',
+      one: '1 thành viên',
+      zero: 'Không có thành viên',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get event => 'Sự kiện';
+
+  @override
+  String get expense => 'Chi tiêu';
+
+  @override
+  String get groupAddMemberHint =>
+      'Bạn có thể thêm thành viên mới vào nhóm thông qua';
+
+  @override
+  String get groupAddMemberQr => 'Quét mã QR';
+
+  @override
+  String get groupAddMemberFriends => 'Thêm bạn bè (đã có trong ứng dụng)';
+
+  @override
+  String get groupChangeLeader => 'Đổi Trưởng nhóm';
+
+  @override
+  String get groupSettings => 'Cài đặt nhóm';
+
+  @override
+  String get eventSettings => 'Cài đặt sự kiện';
+
+  @override
+  String get leave => 'Rời';
+
+  @override
+  String get report => 'Báo cáo';
+
+  @override
+  String get done => 'XONG';
+
+  @override
+  String get notYet => 'CHƯA XONG';
+
+  @override
+  String get deleteConfirm1 => 'Bạn chỉ có thể xóa thành viên sau khi ';
+
+  @override
+  String get deleteConfirm2 => 'tất cả nợ của thành viên đã được giải quyết.';
+
+  @override
+  String get delete => 'Xóa';
+
+  @override
+  String get from => 'từ';
+
+  @override
+  String get leaveIsDenied =>
+      'Tổng số dư không bằng 0, hãy giải quyết hết nợ trước khi rời nhóm';
+
+  @override
+  String get overview => 'Tổng quan';
+
+  @override
+  String get totalEvents => 'Sự kiện tham gia';
+
+  @override
+  String get totalExpenses => 'Chi tiêu chia sẻ';
+
+  @override
+  String get totalSpending => 'Nhóm đã chi';
+
+  @override
+  String get userSpending => 'Bạn đã chi';
+
+  @override
+  String get contributionRate => 'Tỷ lệ đóng góp';
+
+  @override
+  String get event_not_joined_title => 'Bạn chưa tham gia sự kiện này';
+
+  @override
+  String get event_not_joined_message =>
+      'Nhấn \'Tham gia\' để tham gia sự kiện.';
+
+  @override
+  String get join_button => 'Tham gia';
+
+  @override
+  String get cancel_button => 'Hủy';
+
+  @override
+  String get leader => 'Nhóm trưởng';
+
+  @override
+  String get contributon => 'Đóng góp';
+
+  @override
+  String get dueDay => 'Ngày tới hạn';
+
+  @override
+  String get billDetail => 'Thông tin bill';
+
+  @override
+  String get image => 'Ảnh';
+
+  @override
+  String get expenseSplitNotMatch =>
+      'Số tiền chia không khớp, vui lòng kiểm tra lại';
+
+  @override
+  String get accountNumber => 'Số tài khoản';
+
+  @override
+  String get branch => 'Chi nhánh';
+
+  @override
+  String get accountNumberLabel => 'Nhập số tài khoản mới của bạn';
+
+  @override
+  String get chooseBeneficiary => 'Chọn người thụ hưởng';
+
+  @override
+  String get findBeneficiary => 'Tìm người thụ hưởng';
+
+  @override
+  String get confirm => 'Xác nhận';
+
+  @override
+  String get description => 'Mô tả';
+
+  @override
+  String get binLabel => 'Nhập mã pin để xác nhận chuyển khoản';
+
+  @override
+  String get to => 'đến';
+
+  @override
+  String get youHaveSuccessfullyTransferred => 'Bạn đã chuyển thành công';
+
+  @override
+  String get transferSuccessful => 'Chuyển tiền thành công';
+
+  @override
+  String get youHaveSuccessfullyWithdraw => 'Bạn đã rút thành công';
+
+  @override
+  String get withdrawSuccessful => 'Rút tiền thành công';
+
+  @override
+  String get accountCreated => 'Lưu thông tin tài khoản thành công!';
+
+  @override
+  String get accountDeleted => 'Xóa thông tin tài khoản thành công!';
+
+  @override
+  String get accountUpdated => 'Cập nhật thông tin tài khoản thành công!';
+
+  @override
+  String get addNewAccount => 'Thêm tài khoản mới';
+
+  @override
+  String get addAccountGuide =>
+      'Vui lòng nhập thông tin tài khoản ngân hàng của bạn tại đây nếu bạn muốn rút tiền về tài khoản cá nhân.';
+
+  @override
+  String get rechargeIntoApp => 'Nạp tiền vào Dividex';
+
+  @override
+  String get balance => 'Số dư ví';
+
+  @override
+  String get showBalance => 'Xem số dư';
+
+  @override
+  String get pleaseEnterAmount => 'Nhập số tiền cần nạp';
+
+  @override
+  String get totalDebt => 'Tổng nợ';
+
+  @override
+  String get sharedEvents => 'Sự kiện cùng tham gia';
+
+  @override
+  String get mutualGroups => 'Nhóm cùng tham gia';
+
+  @override
+  String get mutualFriends => 'Bạn chung';
+
+  @override
+  String get seePhoto => 'Xem ảnh';
+
+  @override
+  String get changePhoto => 'Thay đổi ảnh';
+
+  @override
+  String get deletePhoto => 'Xóa ảnh';
+
+  @override
+  String get eventAddMemberHint =>
+      'Bạn có thể thêm thành viên mới vào sự kiện qua';
+
+  @override
+  String get eventAddMembers => 'Thêm thành viên (đã ở trong nhóm)';
+
+  @override
+  String get groupMember => 'Thành viên';
+
+  @override
+  String get detail => 'Chi tiết';
+
+  @override
+  String get settleUp => 'Giải quyết';
+
+  @override
+  String get createDepositSuccess => 'Thanh toán thành công';
+
+  @override
+  String get bank => 'Ngân hàng';
+
+  @override
+  String get date => 'Ngày thực hiện';
+
+  @override
+  String get code => 'Mã';
+
+  @override
+  String get walletReport => 'Báo cáo ví';
+
+  @override
+  String get netBalance => 'Nợ';
+
+  @override
+  String get expenseDeletedInfo =>
+      'Chi tiêu đã được xóa tạm thời, hãy khôi phục hoặc xóa hẳn trong cài đặt group';
+
+  @override
+  String get deleteDate => 'Ngày xóa';
+
+  @override
+  String get restore => 'Khôi phục';
+
+  @override
+  String get hardDelete => 'Xóa hẳn';
+
+  @override
+  String get deleteExpense => 'Xóa chi tiêu';
+
+  @override
+  String get profilePicture => 'Ảnh đại diện';
+
+  @override
+  String get pinInputError1 => 'Vui lòng nhập mã PIN.';
+
+  @override
+  String get pinInputError2 => 'Mã PIN phải gồm 6 chữ số.';
+
+  @override
+  String get updatePin => 'Cập nhật mã pin';
+
+  @override
+  String get currentPin => 'Mã PIN hiện tại';
+
+  @override
+  String get newPin => 'Mã PIN mới';
+
+  @override
+  String get confirmPin => 'Xác nhận mã PIN';
+
+  @override
+  String get updatePinGuide =>
+      'Vui lòng nhập mã PIN hiện tại và đặt mã PIN mới gồm 6 chữ số. Mã pin dùng để xác thực giao dịch cho ứng dụng';
+
+  @override
+  String get fee => 'Phí chuyển tiền';
+
+  @override
+  String get pinInvalid => 'Mã pin không hợp lệ, kiểm tra lại trong cài đặt';
+
+  @override
+  String get insufficientBalance => 'Balance is not enough';
+
+  @override
+  String get realAmount => 'Số tiền sau quy đổi';
+
+  @override
+  String get realAmountDescription =>
+      'Số tiền đã được quy đổi sang đơn vị tiền tệ đích.';
+
+  @override
+  String get originalAmount => 'Số tiền gốc';
+
+  @override
+  String get originalAmountDescription => 'Số tiền trước khi quy đổi.';
+
+  @override
+  String get confirmTransfer => 'Xác nhận chuyển tiền';
+
+  @override
+  String exchangeRateMessage(Object baseCurrency, Object rate) {
+    return 'Tỉ giá hiện tại: 1 $baseCurrency = $rate VND';
+  }
+
+  @override
+  String convertedAmountMessage(Object amount) {
+    return 'Số tiền quy đổi: $amount VND';
+  }
+
+  @override
+  String get continueQuestion => 'Bạn có muốn tiếp tục không?';
+
+  @override
+  String get toSettleUpDebtInGroup =>
+      ' thông qua chuyển khoản trong app hoặc các phương pháp trả ngoài.';
+
+  @override
+  String get outSideTransfer => 'Trả ngoài';
+
+  @override
+  String get pinNotSet => 'Bạn chưa tạo mã pin để giao dịch';
+
+  @override
+  String get pinIncorrect => 'Mã pin của bạn không chính xác';
+
+  @override
+  String get createPinGuide =>
+      'Vui lòng tạo mã PIN gồm 6 chữ số để bảo vệ tài khoản của bạn. Mã PIN này sẽ được dùng để đăng nhập hoặc xác nhận các thao tác quan trọng.';
+
+  @override
+  String get createPinTitle => 'Tạo mã PIN';
+
+  @override
+  String get youBorrowed => 'bạn mượn';
+
+  @override
+  String get youLent => 'bạn cho mượn';
+
+  @override
+  String get year => 'Năm';
+
+  @override
+  String get externalExpense => 'Giao dịch nạp vào';
+
+  @override
+  String get internalExpense => 'Giao dịch trong app';
+
+  @override
+  String get notifications => 'Thông báo';
+
+  @override
+  String get filter => 'Bộ lọc';
+
+  @override
+  String get chooseTypeFilter => 'Chọn loại giao dịch';
+
+  @override
+  String get wallet => 'Ví';
+
+  @override
+  String get inOrEx => 'Trong hay ngoài app';
+
+  @override
+  String get conected => 'Đã kết nối';
+
+  @override
+  String get lastTransaction => 'Giao dịch cuối';
+
+  @override
+  String eventUpdated(Object user, Object event) {
+    return '$user đã cập nhật sự kiện $event';
+  }
+
+  @override
+  String eventCreated(Object user, Object event) {
+    return '$user đã tạo sự kiện $event';
+  }
+
+  @override
+  String eventDeleted(Object user, Object event) {
+    return '$user đã xóa sự kiện $event';
+  }
+
+  @override
+  String expenseRestored(Object user, Object expense) {
+    return '$user đã khôi phục khoản chi $expense';
+  }
+
+  @override
+  String expenseDeleted(Object user, Object expense) {
+    return '$user đã xóa khoản chi $expense';
+  }
+
+  @override
+  String expenseUpdated(Object user, Object expense) {
+    return '$user đã cập nhật khoản chi $expense';
+  }
+
+  @override
+  String expenseCreated(Object user, Object expense) {
+    return '$user đã tạo khoản chi $expense';
+  }
+
+  @override
+  String friendAccepted(Object user) {
+    return '$user đã chấp nhận lời mời kết bạn của bạn';
+  }
+
+  @override
+  String friendRequestNoti(Object user, Object message) {
+    return '$user đã gửi lời mời kết bạn. Tin nhắn: $message';
+  }
+
+  @override
+  String friendRequestToMe(Object user) {
+    return 'Bạn nhận được lời mời kết bạn từ $user';
+  }
+
+  @override
+  String leaderChanged(Object user, Object group) {
+    return '$user là trưởng nhóm mới của nhóm $group';
+  }
+
+  @override
+  String groupUpdated(Object user, Object group) {
+    return '$user đã cập nhật nhóm $group';
+  }
+
+  @override
+  String deposit(Object amount, Object currency) {
+    return 'Bạn đã nạp $amount $currency';
+  }
+
+  @override
+  String get enterMessage => 'Nhập tin nhắn...';
+
+  @override
+  String get partnerTyping => 'Đối phương đang nhập...';
+
+  @override
+  String get edit => 'Chỉnh sửa';
+
+  @override
+  String get messageDeleted => 'Tin nhắn đã bị xóa';
+
+  @override
+  String get edited => 'Tin nhắn đã chỉnh sửa';
 }

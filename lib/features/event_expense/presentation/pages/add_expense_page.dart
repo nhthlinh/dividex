@@ -1,473 +1,698 @@
-// import 'dart:async';
+import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
+import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/event_expense/data/models/category_model.dart';
+import 'package:Dividex/features/event_expense/data/models/event_model.dart';
+import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
+import 'package:Dividex/features/event_expense/presentation/widgets/date_input_field_widget.dart';
+import 'package:Dividex/features/image/data/models/image_expense_model.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
+import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
+    as user_event;
+import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/utils/validation_input.dart';
+import 'package:Dividex/shared/widgets/app_shell.dart';
+import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
+import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
+import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
+import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
+import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
+import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
+import 'package:Dividex/shared/widgets/simple_layout.dart';
+import 'package:Dividex/shared/widgets/two_option_selector_widget.dart';
+import 'package:Dividex/shared/widgets/user_grid_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
-// import 'package:Dividex/config/l10n/app_localizations.dart';
-// import 'package:Dividex/config/routes/router.dart';
-// import 'package:Dividex/features/event_expense/data/models/category_model.dart';
-// import 'package:Dividex/features/event_expense/data/models/event_model.dart';
-// import 'package:Dividex/features/group/data/models/group_model.dart';
-// import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart'
-//     as group_event;
-// import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
-//     as group_event;
-// import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
-// import 'package:Dividex/features/home/presentation/widgets/dropdown_autocomplete_widget.dart';
-// import 'package:Dividex/features/home/presentation/widgets/group_dropdown_widget.dart';
-// import 'package:Dividex/features/user/data/models/user_model.dart';
-// import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-// import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
-// import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
-// import 'package:Dividex/shared/models/enum.dart';
-// import 'package:Dividex/shared/services/local/hive_service.dart';
-// import 'package:Dividex/shared/utils/validation_input.dart';
-// import 'package:Dividex/shared/widgets/custom_button.dart';
-// import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
-// import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-// import 'package:Dividex/shared/widgets/image_picker_widget.dart';
-// import 'package:Dividex/shared/widgets/text_button.dart';
-// import 'package:Dividex/shared/widgets/wave_painter.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:intl/intl.dart';
+class AddExpensePage extends StatefulWidget {
+  const AddExpensePage({super.key});
 
-// class AddExpensePage extends StatefulWidget {
-//   final int expenseId;
+  @override
+  State<AddExpensePage> createState() => _AddExpensePageState();
+}
 
-//   const AddExpensePage({super.key, required this.expenseId});
+class _AddExpensePageState extends State<AddExpensePage> {
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController expenseNameController = TextEditingController();
+  final TextEditingController expenseAmountController = TextEditingController();
+  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(
+    CurrencyEnum.vnd,
+  );
+  final ValueNotifier<CategoryModel?> _selectedCategory = ValueNotifier(null);
+  final TextEditingController selectedEventTextEditingController =
+      TextEditingController();
+  EventModel? _selectedEvent;
+  final TextEditingController selectedPayerTextEditingController =
+      TextEditingController();
+  UserModel? _selectedPayer;
+  final TextEditingController noteController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController reminderController = TextEditingController();
+  List<Uint8List?> images = [];
+  SplitTypeEnum splitType = SplitTypeEnum.equal;
+  List<UserDebt> userDebts = [];
+  List<UserModel> users = [];
+  List<UserModel> usersInEvent = [];
 
-//   @override
-//   State<AddExpensePage> createState() => _AddExpensePageState();
-// }
+  final List<CurrencyEnum> _units = getAllCurrencies().map((e) => e).toList();
 
-// class _AddExpensePageState extends State<AddExpensePage> {
-//   final formKey = GlobalKey<FormState>();
-//   final TextEditingController expenseNameController = TextEditingController();
-//   final TextEditingController expenseAmountController = TextEditingController();
-//   final TextEditingController noteController = TextEditingController();
-//   final TextEditingController dateController = TextEditingController();
+  final clearFormTrigger = ValueNotifier(false);
 
-//   final ValueNotifier<String?> _selectedUnit = ValueNotifier(null);
-//   final ValueNotifier<CategoryModel?> _selectedCategory = ValueNotifier(null);
-//   final ValueNotifier<EventModel?> _selectedEvent = ValueNotifier(null);
-//   final ValueNotifier<UserModel?> _selectedPayer = ValueNotifier(null);
-//   final ValueNotifier<String?> _selectedReminder = ValueNotifier(
-//     '1 day before',
-//   );
-//   List<String?> imagePaths = [];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showOptionDialog();
+    });
+  }
 
-//   final List<String> _units = getAllCurrencies().map((e) => e.name).toList();
-//   List<GroupModel> _groups = [];
-//   List<UserModel> _payers = [];
-//   final List<String> _reminders = [
-//     '1 day before',
-//     '1 hour before',
-//     'No reminder',
-//   ];
+  void _showOptionDialog() {
+    showCustomDialog(
+      context: context,
+      content: Column(
+        children: [
+          Text(
+            'Create a expense by: ',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          StatefulBuilder(
+            builder: (context, setState) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomButton(
+                    text: 'Manually',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    size: ButtonSize.medium,
+                    type: ButtonType.secondary,
+                    customColor: AppThemes.errorColor,
+                  ),
+                  CustomButton(
+                    text: 'Scanning',
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      final result = await context.pushNamed(
+                        AppRouteNames.scanExpense,
+                      );
+                      if (result != null && mounted) {
+                        _handleScanResult(result);
+                      }
+                    },
+                    size: ButtonSize.medium,
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     // TODO: Load existing expense data if editing
-//     // Load Unit
-//     // Load Category
-//     // Load Event
-//     // Load Payer
-//     // Load Reminder
-//   }
+  void _handleScanResult(dynamic result) {
+    final ImageExpenseModel imageInfo = result['imageInfo'];
+    final Uint8List bytes = result['bytes'];
 
-//   @override
-//   void dispose() {
-//     expenseNameController.dispose();
-//     expenseAmountController.dispose();
-//     noteController.dispose();
-//     dateController.dispose();
-//     super.dispose();
-//   }
+    // 1️⃣ Lưu ảnh
+    setState(() {
+      images = [bytes];
+    });
 
-//   Future<void> _selectDate(BuildContext context) async {
-//     final DateTime? picked = await showDatePicker(
-//       context: context,
-//       initialDate: DateTime.now(),
-//       firstDate: DateTime(1900),
-//       lastDate: DateTime(2100),
-//     );
-//     if (picked != null) {
-//       setState(() {
-//         dateController.text = DateFormat('dd/MM/yyyy').format(picked);
-//       });
-//     }
-//   }
+    // 2️⃣ Đổ dữ liệu OCR vào form
+    expenseNameController.text = imageInfo.name;
+    expenseAmountController.text = imageInfo.totalAmount.toString();
 
-//   void submitExpense() {
-//     if (formKey.currentState?.validate() ?? false) {
-//       print('Expense submitted');
-//       print('Name: ${expenseNameController.text}');
-//       print('Amount: ${expenseAmountController.text}');
-//       print('Note: ${noteController.text}');
-//       print('Date: ${dateController.text}');
+    _selectedCurrency.value = getAllCurrencies().firstWhere(
+      (c) => c.code == (imageInfo.currency.toUpperCase()),
+      orElse: () => getAllCurrencies().firstWhere((c) => c.code == 'VND'),
+    );
 
-//       print(_selectedCategory.value);
-//       print(_selectedUnit.value);
-//       print(_selectedEvent.value);
-//       print(_selectedPayer.value);
-//       print(_selectedReminder.value);
-//     }
-//   }
+    _selectedCategory.value = CategoryModel.categories.firstWhere(
+      (c) => c.key == (imageInfo.category),
+    );
+    noteController.text = imageInfo.note ?? '';
+    dateController.text = DateFormat(
+      "h:mm a - dd/MM/yyyy",
+    ).format(imageInfo.expenseDate ?? DateTime.now());
+    reminderController.text = DateFormat(
+      "dd/MM/yyyy",
+    ).format((imageInfo.expenseDate ?? DateTime.now()).add(Duration(days: 3)));
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final intl = AppLocalizations.of(
-//       context,
-//     )!; // Lấy đối tượng AppLocalizations
+  @override
+  void dispose() {
+    expenseNameController.dispose();
+    expenseAmountController.dispose();
+    selectedEventTextEditingController.dispose();
+    selectedPayerTextEditingController.dispose();
+    noteController.dispose();
+    dateController.dispose();
+    reminderController.dispose();
+    clearFormTrigger.dispose();
+    super.dispose();
+  }
 
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           intl.addExpense,
-//           style: Theme.of(context).textTheme.titleMedium,
-//         ),
-//       ),
-//       body: Stack(
-//         children: [
-//           Align(
-//             alignment: Alignment.bottomCenter,
-//             child: SizedBox(
-//               height: 200,
-//               width: double.infinity,
-//               child: CustomPaint(painter: WavePainter()),
-//             ),
-//           ),
+  void submitExpense() {
+    if (formKey.currentState?.validate() ?? false) {
+      final intl = AppLocalizations.of(context)!;
+      final formattedDate = DateFormat(
+        "yyyy-MM-dd HH:mm",
+      ).format(DateFormat("h:mm a - dd/MM/yyyy").parse(dateController.text));
 
-//           SafeArea(
-//             child: SingleChildScrollView(
-//               child: Padding(
-//                 padding: const EdgeInsets.all(24.0),
-//                 child: SizedBox(
-//                   width: double.infinity,
-//                   child: MultiBlocProvider(
-//                     providers: [
-//                       BlocProvider<group_event.LoadedGroupsBloc>(
-//                         create: (context) =>
-//                             group_event.LoadedGroupsBloc()..add(
-//                               group_event.InitialEvent(
-//                                 HiveService.getUser().id ?? '',
-//                               ),
-//                             ),
-//                       ),
-//                       BlocProvider<LoadedUsersBloc>(
-//                         create: (context) => LoadedUsersBloc(),
-//                       ),
-//                     ],
-//                     child: expenseForm(intl),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
+      String formattedReminder = reminderController.text.isNotEmpty
+          ? DateFormat(
+              "yyyy-MM-dd",
+            ).format(DateFormat("dd/MM/yyyy").parse(reminderController.text))
+          : '';
 
-//   Form expenseForm(AppLocalizations intl) {
-//     return Form(
-//       key: formKey,
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.stretch,
-//         children: [
-//           CustomTextInput(
-//             label: intl.expenseNameLabel,
-//             hintText: intl.expenseNameHint,
-//             controller: expenseNameController,
-//             keyboardType: TextInputType.text,
-//             prefixIcon: const Icon(Icons.person, color: Colors.grey),
-//             validator: (value) {
-//               return CustomValidator().validateName(value, intl);
-//             },
-//           ),
-//           const SizedBox(height: 16),
-//           Row(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               Expanded(
-//                 flex: 7, // 70%
-//                 child: CustomTextInput(
-//                   label: intl.expenseAmountLabel,
-//                   hintText: intl.expenseAmountHint,
-//                   controller: expenseAmountController,
-//                   keyboardType: TextInputType.number,
-//                   prefixIcon: const Icon(
-//                     Icons.attach_money,
-//                     color: Colors.grey,
-//                   ),
-//                   validator: (value) =>
-//                       CustomValidator().validateAmount(value, intl),
-//                 ),
-//               ),
-//               const SizedBox(width: 8),
-//               Expanded(
-//                 flex: 3, // 30%
-//                 child: ValueListenableBuilder<String?>(
-//                   valueListenable: _selectedUnit,
-//                   builder: (context, value, _) {
-//                     return CustomDropdownWidget(
-//                       isSmall: true,
-//                       label: intl.expenseUnitLabel,
-//                       items: _units.map((unit) {
-//                         return DropdownMenuItem<String>(
-//                           value: unit,
-//                           child: Text(unit),
-//                         );
-//                       }).toList(),
-//                       value: value,
-//                       onChanged: (newValue) => _selectedUnit.value = newValue,
-//                     );
-//                   },
-//                 ),
-//               ),
-//             ],
-//           ),
-//           const SizedBox(height: 16),
-//           AutocompleteWidget<CategoryModel>(
-//             onSelected: (CategoryModel? p1) {
-//               _selectedCategory.value = p1;
-//             },
-//             options: CategoryModel.categories,
-//             label: intl.expenseCategoryLabel,
-//           ),
-//           const SizedBox(height: 16),
-//           BlocBuilder<group_event.LoadedGroupsBloc, LoadedGroupsState>(
-//             buildWhen: (p, c) =>
-//                 p.groups != c.groups || p.isLoading != c.isLoading,
-//             builder: (context, state) {
-//               if (state.isLoading) {
-//                 return GroupDropdownWidget(
-//                   initialValue: _selectedEvent.value,
-//                   groups: _groups,
-//                   onChanged: (event) {},
-//                 );
-//               }
+      if (userDebts.isEmpty) {
+        return;
+      }
 
-//               if (state.groups.isEmpty) {
-//                 return LayoutBuilder(
-//                   builder: (context, constraints) {
-//                     return RefreshIndicator(
-//                       onRefresh: () async {
-//                         context.read<group_event.LoadedGroupsBloc>().add(
-//                           group_event.RefreshGroupsEvent(
-//                             HiveService.getUser().id ?? '',
-//                           ),
-//                         );
-//                       },
-//                       child: SingleChildScrollView(
-//                         physics: AlwaysScrollableScrollPhysics(),
-//                         child: SizedBox(
-//                           width: constraints.maxWidth,
-//                           height: constraints.maxHeight,
-//                           child: Center(child: Text('Empty')),
-//                         ),
-//                       ),
-//                     );
-//                   },
-//                 );
-//               }
+      if (splitType == SplitTypeEnum.equal && userDebts.isNotEmpty) {
+        userDebts = calculateUserDebts(
+          usersInEvent,
+          double.tryParse(expenseAmountController.text) ?? 0,
+        );
+      }
 
-//               _groups = state.groups;
+      if (splitType == SplitTypeEnum.custom && userDebts.isNotEmpty) {
+        final totalDebt = userDebts.fold<double>(
+          0,
+          (previousValue, element) => previousValue + (element.amount),
+        );
+        final totalAmount = double.tryParse(expenseAmountController.text) ?? 0;
+        if (totalDebt != totalAmount) {
+          showCustomToast(intl.expenseSplitNotMatch, type: ToastType.error);
+          return;
+        }
+      }
 
-//               return GroupDropdownWidget(
-//                 initialValue: _selectedEvent.value,
-//                 groups: _groups,
-//                 onChanged: (event) {
-//                   setState(() {
-//                     _selectedEvent.value = event;
-//                     context.read<LoadedUsersBloc>().add(
-//                       InitialEvent(
-//                         event?.id,
-//                         LoadUsersAction.getEventParticipants,
-//                       ),
-//                     );
-//                   });
-//                 },
-//               );
-//             },
-//           ),
+      context.read<ExpenseBloc>().add(
+        CreateExpenseEvent(
+          expenseNameController.text,
+          double.tryParse(expenseAmountController.text) ?? 0,
+          _selectedCurrency.value.code,
+          _selectedCategory.value!.key,
+          _selectedEvent!.id!,
+          _selectedPayer!.id,
+          noteController.text,
+          formattedDate,
+          formattedReminder,
+          splitType,
+          userDebts,
+          images.whereType<Uint8List>().toList(),
+        ),
+      );
 
-//           const SizedBox(height: 16),
-//           BlocBuilder<LoadedUsersBloc, LoadedUsersState>(
-//             buildWhen: (p, c) =>
-//                 p.users != c.users || p.isLoading != c.isLoading,
-//             builder: (context, state) {
-//               if (state.isLoading) {
-//                 return Text(
-//                   intl.expensePayerLabel,
-//                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-//                     color: Theme.of(context).primaryColor,
-//                   ),
-//                 );
-//               }
+      Navigator.of(context).pop();
+    }
+  }
 
-//               if (state.users.isEmpty) {
-//                 return LayoutBuilder(
-//                   builder: (context, constraints) {
-//                     return RefreshIndicator(
-//                       onRefresh: () async {
-//                         context.read<LoadedUsersBloc>().add(
-//                           RefreshUsersEvent(
-//                             _selectedEvent.value?.id,
-//                             LoadUsersAction.getEventParticipants,
-//                           ),
-//                         );
-//                       },
-//                       child: SingleChildScrollView(
-//                         physics: AlwaysScrollableScrollPhysics(),
-//                         child: SizedBox(
-//                           width: constraints.maxWidth,
-//                           height: constraints.maxHeight,
-//                           child: Center(child: Text('Chose event first')),
-//                         ),
-//                       ),
-//                     );
-//                   },
-//                 );
-//               }
-//               if (!state.isLoading && state.users.isNotEmpty) {
-//                 // Cập nhật danh sách payer
-//                 _payers = state.users;
-//               }
-//               return ValueListenableBuilder<UserModel?>(
-//                 valueListenable: _selectedPayer,
-//                 builder: (context, value, _) {
-//                   return CustomDropdownWidget<UserModel>(
-//                     label: intl.expensePayerLabel,
-//                     items: _payers.map((payer) {
-//                       return DropdownMenuItem<UserModel>(
-//                         value: payer,
-//                         child: Container(
-//                           padding: const EdgeInsets.all(8),
-//                           decoration: BoxDecoration(
-//                             border: Border(
-//                               bottom: BorderSide(color: Colors.grey.shade300),
-//                             ),
-//                             borderRadius: BorderRadius.only(
-//                               bottomLeft: Radius.circular(20),
-//                             ),
-//                           ),
-//                           child: Row(
-//                             children: [
-//                               CircleAvatar(
-//                                 radius: 16,
-//                                 backgroundImage: NetworkImage(
-//                                   payer.avatar ?? '',
-//                                 ),
-//                                 child: const Icon(Icons.person),
-//                               ),
-//                               const SizedBox(width: 8),
-//                               Text(
-//                                 payer.fullName ?? '',
-//                                 overflow: TextOverflow.ellipsis,
-//                                 softWrap: false,
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       );
-//                     }).toList(),
-//                     value: value,
-//                     onChanged: (newValue) => _selectedPayer.value = newValue,
-//                   );
-//                 },
-//               );
-//             },
-//           ),
-//           const SizedBox(height: 16),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               CustomButton(
-//                 buttonText: intl.expenseSplitEquallyLabel,
-//                 onPressed: () {},
-//                 isBig: false,
-//               ),
-//               const SizedBox(width: 8),
-//               CustomButton(
-//                 buttonText: intl.expenseSplitCustomLabel,
-//                 onPressed: () {},
-//                 isBig: false,
-//               ),
-//             ],
-//           ),
-//           const SizedBox(height: 16),
-//           Text(
-//             intl.addConfigLabel,
-//             style: Theme.of(navigatorKey.currentContext!).textTheme.titleSmall
-//                 ?.copyWith(
-//                   color: Theme.of(navigatorKey.currentContext!).primaryColor,
-//                 ),
-//           ),
-//           const SizedBox(height: 10),
-//           CustomTextInput(
-//             label: intl.expenseNoteLabel,
-//             hintText: intl.expenseNoteLabel,
-//             controller: noteController,
-//             prefixIcon: const Icon(Icons.note, color: Colors.grey),
-//           ),
-//           const SizedBox(height: 16),
-//           CustomTextInput(
-//             label: intl.expenseDateLabel, // Label cho trường ngày sinh
-//             hintText: '13/05/2025',
-//             controller: dateController,
-//             isReadOnly: true, // Không cho phép gõ trực tiếp
-//             onTap: () => _selectDate(
-//               navigatorKey.currentContext!,
-//             ), // Mở DatePicker khi tap
-//             suffixIcon: const Icon(Icons.calendar_today), // Icon lịch
-//             inputFormatters: [DateInputFormatter()],
-//           ),
-//           const SizedBox(height: 16),
-//           ValueListenableBuilder<String?>(
-//             valueListenable: _selectedReminder,
-//             builder: (context, value, _) {
-//               return CustomDropdownWidget(
-//                 label: intl.expenseReminderLabel,
-//                 items: _reminders.map((remind) {
-//                   return DropdownMenuItem<String>(
-//                     value: remind,
-//                     child: Text(remind),
-//                   );
-//                 }).toList(),
-//                 value: value,
-//                 onChanged: (newValue) => _selectedReminder.value = newValue,
-//               );
-//             },
-//           ),
-//           const SizedBox(height: 16),
-//           Text(
-//             intl.addExpenseImageLabel,
-//             style: Theme.of(context).textTheme.titleSmall,
-//           ),
-//           const SizedBox(height: 10),
-//           Center(
-//             child: ImagePickerField(
-//               isAvatar: false,
-//               multiple: true,
-//               onChanged: (paths) {
-//                 setState(() {
-//                   imagePaths = paths;
-//                 });
-//               },
-//             ),
-//           ),
+  @override
+  Widget build(BuildContext context) {
+    final intl = AppLocalizations.of(
+      context,
+    )!; // Lấy đối tượng AppLocalizations
 
-//           const SizedBox(height: 20),
+    return AppShell(
+      currentIndex: 0,
+      child: SimpleLayout(
+        onRefresh: () async => {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+            _showOptionDialog();
+          }),
+        },
+        title: intl.addExpense,
+        child: expenseForm(intl),
+      ),
+    );
+  }
 
-//           CustomButton(
-//             buttonText: intl.add,
-//             onPressed: () {
-//               submitExpense();
-//             },
-//           ),
-//           const SizedBox(height: 20),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  CustomFormWrapper expenseForm(AppLocalizations intl) {
+    return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
+      formKey: formKey,
+      fields: [
+        FormFieldConfig(controller: expenseNameController, isRequired: true),
+        FormFieldConfig(controller: expenseAmountController, isRequired: true),
+        FormFieldConfig(selectedValue: _selectedCurrency, isRequired: true),
+        FormFieldConfig(selectedValue: _selectedCategory, isRequired: true),
+        FormFieldConfig(
+          controller: selectedEventTextEditingController,
+          isRequired: true,
+        ),
+        FormFieldConfig(
+          controller: selectedPayerTextEditingController,
+          isRequired: true,
+        ),
+        FormFieldConfig(controller: dateController, isRequired: true),
+      ],
+      builder: (isValid) => Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            intl.addExpenseSubtitle,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontSize: 12,
+              letterSpacing: 0,
+              height: 16 / 12,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          CustomTextInputWidget(
+            size: TextInputSize.large,
+            isReadOnly: false,
+            isRequired: true,
+            label: intl.expenseNameLabel,
+            hintText: intl.expenseNameHint,
+            controller: expenseNameController,
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              return CustomValidator().validateName(value, intl);
+            },
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: 340,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 7, // 70%
+                  child: CustomTextInputWidget(
+                    size: TextInputSize.large,
+                    isReadOnly: false,
+                    isRequired: true,
+                    label: intl.expenseAmountLabel,
+                    hintText: intl.expenseAmountHint,
+                    controller: expenseAmountController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) =>
+                        CustomValidator().validateAmount(value, intl),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 3, // 30%
+                  child: ValueListenableBuilder<CurrencyEnum>(
+                    valueListenable: _selectedCurrency,
+                    builder: (context, value, _) {
+                      return CustomDropdownWidget<CurrencyEnum>(
+                        label: intl.expenseCurrencyLabel,
+                        value: _selectedCurrency.value,
+                        options: _units,
+                        displayString: (b) => b.code,
+                        buildOption: (b, selected) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 6,
+                              horizontal: 4,
+                            ),
+                            child: Row(
+                              children: [
+                                // if (b.avatarUrl != null)
+                                //   Image.network(
+                                //     b.avatarUrl!,
+                                //     width: 50,
+                                //     height: 50,
+                                //     errorBuilder: (context, error, stackTrace) =>
+                                //         const Icon(Icons.group),
+                                //   )
+                                // else
+                                //   const Icon(Icons.group),
+                                Text(
+                                  b.code,
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: selected
+                                            ? AppThemes.primary3Color
+                                            : Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Text(
+                                    b.description,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: selected
+                                              ? AppThemes.primary3Color
+                                              : Colors.grey,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                ),
+                                if (selected)
+                                  const Icon(
+                                    Icons.check,
+                                    color: AppThemes.primary3Color,
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                        onChanged: (val) {
+                          _selectedCurrency.value = val!;
+                        },
+                        isRequired: true,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          ValueListenableBuilder<CategoryModel?>(
+            valueListenable: _selectedCategory,
+            builder: (context, value, _) {
+              return CustomDropdownWidget<CategoryModel>(
+                label: intl.expenseCategoryLabel,
+                value: _selectedCategory.value,
+                options: CategoryModel.categories,
+                displayString: (b) => b.localizedName(context),
+                buildOption: (b, selected) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 6,
+                      horizontal: 4,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            b.localizedName(context),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: selected
+                                      ? AppThemes.primary3Color
+                                      : Colors.grey,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                        if (selected)
+                          const Icon(
+                            Icons.check,
+                            color: AppThemes.primary3Color,
+                          ),
+                      ],
+                    ),
+                  );
+                },
+                onChanged: (val) {
+                  _selectedCategory.value = val;
+                },
+                isRequired: true,
+              );
+            },
+          ),
+
+          const SizedBox(height: 16),
+
+          CustomTextInputWidget(
+            size: TextInputSize.large,
+            controller: selectedEventTextEditingController,
+            keyboardType: TextInputType.text,
+            isReadOnly: true,
+            isRequired: true,
+            label: intl.expenseEventLabel,
+            suffixIcon: const Icon(Icons.keyboard_arrow_down),
+            onTap: () {
+              context.pushNamed(
+                AppRouteNames.chooseEvent,
+                extra: {
+                  'initialSelected': _selectedEvent,
+                  'onChanged': (EventModel event) {
+                    setState(() {
+                      _selectedEvent = event;
+                      selectedEventTextEditingController.text =
+                          event.name ?? '----';
+                    });
+                  },
+                },
+              );
+            },
+          ),
+
+          const SizedBox(height: 8),
+          if (_selectedEvent != null) ...[
+            CustomTextInputWidget(
+              size: TextInputSize.large,
+              controller: selectedPayerTextEditingController,
+              keyboardType: TextInputType.text,
+              isReadOnly: true,
+              isRequired: true,
+              label: intl.expensePayerLabel,
+              suffixIcon: const Icon(Icons.keyboard_arrow_down),
+              onTap: () {
+                context.pushNamed(
+                  AppRouteNames.chooseMember,
+                  extra: {
+                    'id': _selectedEvent?.id,
+                    'type': user_event.LoadType.eventParticipants,
+                    'initialSelected': _selectedPayer != null
+                        ? [_selectedPayer!]
+                        : <UserModel>[],
+                    'onChanged': (List<UserModel> user) {
+                      setState(() {
+                        _selectedPayer = user.first;
+                        selectedPayerTextEditingController.text =
+                            user.first.fullName ?? '----';
+                      });
+                    },
+                    'isMultiSelect': false,
+                    'isCanChooseMyself': true,
+                  },
+                );
+              },
+            ),
+            UserGrid(
+              users: _selectedPayer != null ? [_selectedPayer!] : [],
+              onTap: (user) {
+                setState(() {
+                  _selectedPayer = null;
+                  selectedPayerTextEditingController.text = '';
+                });
+              },
+            ),
+          ],
+
+          const SizedBox(height: 8),
+          CustomTextInputWidget(
+            size: TextInputSize.large,
+            isReadOnly: false,
+            label: intl.expenseNoteLabel,
+            controller: noteController,
+            keyboardType: TextInputType.text,
+            maxLines: 4,
+          ),
+          const SizedBox(height: 16),
+
+          SizedBox(
+            width: 340,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 6, // 60%
+                  child: DateInputField(
+                    label: intl.expenseDateLabel,
+                    hintText: '4:30 p.m - 13/05/2025',
+                    controller: dateController,
+                    size: TextInputSize.large,
+                    isRequired: true,
+                    validator: null,
+                    isPickedHour: true,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 4, // 40%
+                  child: DateInputField(
+                    label: intl.expenseReminderLabel,
+                    hintText: '13/05/2025',
+                    controller: reminderController,
+                    size: TextInputSize.medium,
+                    isRequired: true,
+                    validator: null,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                intl.addExpenseImageLabel,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontSize: 12,
+                  letterSpacing: 0,
+                  height: 16 / 12,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 8),
+              ImagePickerWidget(
+                initialImage: images.isNotEmpty ? images.first : null,
+                type: PickerType.gallery,
+                onFilesPicked: (imageBytesList) {
+                  setState(() {
+                    images = imageBytesList;
+                  });
+                },
+              ),
+            ],
+          ),
+
+          if (_selectedEvent != null &&
+              expenseAmountController.text.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            BlocProvider(
+              create: (context) => LoadedUsersBloc()
+                ..add(
+                  user_event.InitialEvent(
+                    _selectedEvent?.id,
+                    user_event.LoadType.eventParticipants,
+                  ),
+                ),
+              child: twoOptionSelector(intl),
+            ),
+          ],
+
+          const SizedBox(height: 20),
+
+          CustomButton(
+            text: intl.add,
+            onPressed:
+                (isValid &&
+                    userDebts.isNotEmpty &&
+                    userDebts.fold<double>(
+                          0,
+                          (previousValue, element) =>
+                              previousValue + (element.amount),
+                        ) ==
+                        (double.tryParse(expenseAmountController.text) ?? 0))
+                ? submitExpense
+                : null,
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  BlocBuilder twoOptionSelector(AppLocalizations intl) {
+    return BlocBuilder<LoadedUsersBloc, LoadedUsersState>(
+      buildWhen: (p, c) => p.users != c.users || p.isLoading != c.isLoading,
+      builder: (context, state) {
+        if (state.isLoading) {
+          return const Center(
+            child: ColoredBox(
+              color: Colors.transparent,
+              child: SpinKitFadingCircle(color: AppThemes.primary3Color),
+            ),
+          );
+        }
+
+        final members = state.users; // giả sử trong state có field này
+        usersInEvent = members;
+
+        if (splitType == SplitTypeEnum.equal) {
+          userDebts = calculateUserDebts(
+            members,
+            double.tryParse(expenseAmountController.text) ?? 0,
+          );
+        }
+
+        return TwoOptionSelector(
+          label: intl.expenseSplitType,
+          leftLabel: intl.expenseSplitEquallyLabel,
+          leftIcon: 'lib/assets/icons/balance.png',
+          rightLabel: intl.expenseSplitCustomLabel,
+          rightIcon: 'lib/assets/icons/unbalance.png',
+          onSelectionChanged: (value) async {
+            double totalEntered = double.parse(expenseAmountController.text);
+            if (totalEntered.isNaN || totalEntered <= 0) {
+              return;
+            }
+
+            if (value == 2) {
+              splitType = SplitTypeEnum.custom;
+              // Trang chia bill
+              final result = await context.pushNamed(
+                AppRouteNames.customSplit,
+                extra: {
+                  'id': _selectedEvent?.id,
+                  'type': user_event.LoadType.eventParticipants,
+                  'initialSelected': userDebts,
+                  'initialUsers': members,
+                  'initialType': splitType,
+                  'onChanged': (List<UserDebt> value) {
+                    setState(() {
+                      userDebts = value;
+                    });
+                  },
+                  'amount': double.parse(expenseAmountController.text),
+                },
+              );
+
+              if (result is List<UserDebt>) {
+                setState(() {
+                  userDebts = result;
+                });
+              }
+            } else {
+              splitType = SplitTypeEnum.equal;
+              // Chia đều
+              setState(() {
+                splitType = SplitTypeEnum.equal;
+                userDebts = calculateUserDebts(
+                  members,
+                  double.tryParse(expenseAmountController.text) ?? 0,
+                );
+              });
+            }
+          },
+          selectedIndex: splitType == SplitTypeEnum.equal ? 1 : 2,
+        );
+      },
+    );
+  }
+
+  List<UserDebt> calculateUserDebts(
+    List<UserModel> members,
+    double totalAmount,
+  ) {
+    return members.map((m) {
+      if (totalAmount <= 0 || members.isEmpty) {
+        return UserDebt(userId: m.id ?? '', amount: 0);
+      }
+      final balance = totalAmount / members.length;
+      return UserDebt(userId: m.id ?? '', amount: balance);
+    }).toList();
+  }
+}

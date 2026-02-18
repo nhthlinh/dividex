@@ -72,3 +72,9 @@
 * **Presentation:** dashboard quản trị (user list, report).
 * **Domain:** `BanUser`, `ViewSystemLogs`, `ResetPassword`.
 * **Data:** API quản trị.
+
+```
+flutter pub run build_runner build --delete-conflicting-outputs
+flutter run -d chrome
+flutter gen-l10n
+```

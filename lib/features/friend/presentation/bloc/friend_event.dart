@@ -21,7 +21,8 @@ class LoadMoreFriendsEvent extends LoadFriendEvent {
 
 class RefreshFriendsEvent extends LoadFriendEvent {
   final String? id;
-  const RefreshFriendsEvent(this.id);
+  final String? searchQuery;
+  const RefreshFriendsEvent(this.id, {this.searchQuery});
 }
 
 class FriendEvent {}
@@ -41,4 +42,9 @@ class AcceptFriendRequestEvent extends FriendEvent {
 class DeclineFriendRequestEvent extends FriendEvent {
   final String friendId;
   DeclineFriendRequestEvent(this.friendId);
+}
+
+class GetFriendOverviewEvent extends FriendEvent {
+  final String friendId;
+  GetFriendOverviewEvent(this.friendId);
 }

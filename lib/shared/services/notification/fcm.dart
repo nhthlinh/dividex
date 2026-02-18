@@ -13,19 +13,16 @@ Future<void> sendFcmTokenToBackend(bool isLogin) async {
         await authRemote.updateFcmToken(fcmToken);
       }
     } catch (e) {
-      // Logging nếu cần
       debugPrint('Error sending FCM token: $e');
     }
-  }
-  else {
+  } else {
     try {
       // Gọi API để xóa FCM token trên server
       final authRemote = await getIt.getAsync<AuthRemoteDataSource>();
-        await authRemote.updateFcmToken('');
+      await authRemote.updateFcmToken('');
     } catch (e) {
       // Logging nếu cần
       debugPrint('Error deleting FCM token: $e');
     }
   }
 }
-

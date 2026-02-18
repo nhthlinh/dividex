@@ -27,7 +27,10 @@ class CustomValidator {
     final missingDigit = !RegExp(r'\d').hasMatch(value);
     final missingSpecial = !RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
 
-    if (missingUppercase || missingLowercase || missingDigit || missingSpecial) {
+    if (missingUppercase ||
+        missingLowercase ||
+        missingDigit ||
+        missingSpecial) {
       return intl.passInputError3;
     }
 
@@ -95,11 +98,29 @@ class CustomValidator {
 
   String? validatePhoneNumber(String? value, AppLocalizations intl) {
     if (value == null || value.isEmpty) {
-      return intl.phoneInputError1;
+      return intl.phoneInputError1; // "Vui lòng nhập số điện thoại"
     }
-    if (!RegExp(r'^\+?[0-9]{10,15}$').hasMatch(value) && value.length < 10) {
+
+    // Xóa khoảng trắng
+    value = value.trim();
+
+    // Chuyển +84xxx → 0xxx
+    if (value.startsWith("+84")) {
+      value = "0${value.substring(3)}";
+    }
+
+    // Check đúng 10 số
+    if (value.length != 10) {
       return intl.phoneInputError2; // "Số điện thoại không hợp lệ"
     }
+
+    // Regex số điện thoại Việt Nam chuẩn
+    final vietnamPhoneRegex = RegExp(r'^(03|05|07|08|09)[0-9]{8}$');
+
+    if (!vietnamPhoneRegex.hasMatch(value)) {
+      return intl.phoneInputError2; // "Số điện thoại không hợp lệ"
+    }
+
     return null; // hợp lệ
   }
 
@@ -149,6 +170,16 @@ class CustomValidator {
     }
     if (!RegExp(r'^\d{6}$').hasMatch(value)) {
       return intl.otpInputError2;
+    }
+    return null; // valid
+  }
+
+  String? validatePin(String? value, AppLocalizations intl) {
+    if (value == null || value.isEmpty) {
+      return intl.pinInputError1;
+    }
+    if (!RegExp(r'^\d{6}$').hasMatch(value)) {
+      return intl.pinInputError2;
     }
     return null; // valid
   }

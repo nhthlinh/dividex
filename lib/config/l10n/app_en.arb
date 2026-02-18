@@ -58,7 +58,7 @@
   "expenseNameHint": "Ex: Dinner",
   "expenseAmountLabel": "Amount",
   "expenseAmountHint": "120.000",
-  "expenseUnitLabel": "Unit",
+  "expenseCurrencyLabel": "Currency",
   "expenseCategoryLabel": "Category",
   "expenseEventLabel": "Belong to event",
   "expensePayerLabel": "Payer",
@@ -159,7 +159,7 @@
   "friend": "Friend",
 
   "remind": "Remind",
-  "pay": "Pay",
+  "pay": "Settle up",
 
   "analytics": "Analytics",
   "noFriends": "You have no friend",
@@ -381,6 +381,302 @@
   "account": "Account",
   "transfer": "Transfer",
   "withdraw": "Withdraw",
-  "transactionReport": "Transaction report"
+  "transactionReport": "Transaction report",
+  
+  "friendRequest": "{userName}'s request ",
+  "@friendRequest": {
+    "placeholders": {
+      "userName": {}
+    }
+  },
+
+  "you": "You",
+  "your": "Your",
+
+  "transaction": "Transaction",
+  "searchTransactionSubtitle": "Search for specific shared expenses, bills, or payments within groups",
+  "user": "User",
+  "searchUserSubtitle": "Search for users to add as friends or participants in expenses",
+  "search": "Search",
+  "searchTransaction": "Search transaction",
+  "searchUser": "Search user",
+
+  "addGroupSubtitle": "Add a new group to share manage expense with your friend.",
+  "addMembers": "Choose members",
+  
+  "refreshFail": "Session expired, please login again",
+  "uploadImageHint": "Please upload image, size less than 100KB",
+  "chooseFile": "Choose file",
+  "fileChosen": "file chosen",
+  "noFileChosen": "No file chosen",
+  "members": "Members",
+
+  "addEventSubtitle": "Add a new event to share and manage expense easily.",
+
+  "addExpenseSubtitle": "Add a new expense to share costs easily and keep everything fair for the group.",
+  "expenseSplitType": "Choose transaction type:",
+
+  "groupNotFound": "The group was not found.",
+  "createIsDenied": "You do not have permission to create this item.",
+  "updateIsDenied": "You do not have permission to update this item.",
+  "deleteIsDenied": "You do not have permission to delete this item.",
+  "eventNotFound": "The event was not found.",
+  "expenseNotFound": "The expense was not found",
+  "friendRelationAlreadyExists": "This friend relationship already exists.",
+
+  "friendRequestNotFound": "The friend request was not found.",
+  "totalAmount": "Total amount",
+  "amount": "Amount",
+  "splitRemainingEqually": "Split remaining equally",
+  "allocated": "Allocated",
+  "noEventsInGroup": "No events in this group yet",
+  "membersText": "{count, plural, =0{No members} =1{1 member} other{{count} members}}",
+  "@membersText": {
+    "description": "Number of members in a group",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "event": "Event",
+  "expense": "Expense",
+  "groupAddMemberHint": "You can add new members to this group through",
+  "groupAddMemberQr": "Scan QR code",
+  "groupAddMemberFriends": "Add friends (already in app)",
+  "groupChangeLeader": "Change Leader",
+  "groupSettings": "Group's settings",
+  "eventSettings": "Event's settings",
+  "leave": "Leave",
+  "report": "Report",
+  "done": "DONE",
+  "notYet": "NOT YET",
+  "deleteConfirm1": "You can only remove a member after ",
+  "deleteConfirm2": "all debts in the group have been settled.",
+  "delete": "Delete",
+  "from": "From",
+  "leaveIsDenied": "Total amount is not zero, please settle up before leaving", 
+  "overview": "Overview",
+  "totalEvents": "Event attended",
+  "totalExpenses": "Expensed shared",
+  "totalSpending": "Group's total spending",
+  "userSpending": "Your total spending",
+  "contributionRate": "Contribution ratio",
+  "event_not_joined_title": "You haven't joined this event yet",
+  "event_not_joined_message": "Tap 'Join' to become a participant of this event.",
+  "join_button": "Join",
+  "cancel_button": "Cancel",
+  "leader": "Leader",
+  "contributon": "Contribution",
+  "dueDay": "Due day",
+  "billDetail": "Bill detail",
+  "image": "Image",
+  "expenseSplitNotMatch": "Expense split not match, please check again",
+  "accountNumber": "Account number",
+  "branch": "Branch",
+  "accountNumberLabel": "Type your new account number",
+  "chooseBeneficiary": "Choose beneficiary",
+  "findBeneficiary": "Find beneficiary",
+  "confirm": "Confirm",
+  "description": "Description",
+  "binLabel": "Field your bin to verify transfer",
+  "to": "To",
+  "youHaveSuccessfullyTransferred": "You have successfully transferred",
+  "transferSuccessful": "Transfer successful",
+  "youHaveSuccessfullyWithdraw": "You have successfully withdraw",
+  "withdrawSuccessful": "Withdraw successful",
+  "accountCreated": "Save your bank account infor successfully!",
+  "accountDeleted": "Delete your bank account infor successfully!",
+  "accountUpdated": "Update your bank account infor successfully!",
+  "addNewAccount": "Add new account",
+  "addAccountGuide": "Please enter your bank account information here if you wish to withdraw money to your personal account.",
+  "rechargeIntoApp": "Recharge into Dividex",
+  "balance": "Balance",
+  "showBalance": "Show balance",
+  "pleaseEnterAmount": "Please enter amount",
+  "totalDebt": "Total dept",
+  "sharedEvents": "Shared events",
+  "mutualGroups": "Mutual groups",
+  "mutualFriends": "Mutual friends",
+  "seePhoto": "See photo",
+  "changePhoto": "Change photo",
+  "deletePhoto": "Delete photo",
+  "eventAddMemberHint": "You can add new members to this event through",
+  "eventAddMembers": "Add members (already in group)",
+  "groupMember": "Member",
+  "detail": "Detail",
+  "settleUp": "Settle up",
+  "createDepositSuccess": "Deposit success",
+  "bank": "Bank",
+  "date": "Transaction day",
+  "code": "Code",
+  "walletReport": "Wallet report",
+  "netBalance": "Net balance",
+  "expenseDeletedInfo": "Expense has been soft delete, please restore or hard delete in group setting.",
+  "deleteDate": "Delete day",
+  "restore": "Restore",
+  "hardDelete": "Hard delete",
+  "deleteExpense": "Delete expense",
+  "profilePicture": "Profile picture",
+  "pinInputError1": "Please enter pin code",
+  "pinInputError2": "Pin code must has 6 number",
+  "updatePin": "Update pin code",
+  "currentPin": "Current PIN",
+  "newPin": "New PIN",
+  "confirmPin": "Confirm PIN",
+  "updatePinGuide": "Please enter your current PIN and set a new 6-digit PIN. Pin code will be used to verify your transactions. ",
+  "fee": "Fee",
+  "pinInvalid": "Pin is invalid, please set your pin in setting",
+  "insufficientBalance": "Balance is not enough",
+  "realAmount": "Converted amount",
+  "realAmountDescription": "The amount after currency conversion.",
+  
+  "originalAmount": "Original amount",
+  "originalAmountDescription": "The amount before currency conversion.",
+  "confirmTransfer": "Confirm transfer",
+  "exchangeRateMessage": "Current exchange rate: 1 {baseCurrency} = {rate} VND",
+  "convertedAmountMessage": "Converted amount: {amount} VND",
+  "continueQuestion": "Do you want to continue?",
+
+  "toSettleUpDebtInGroup": " through a transfer or any method outside the DivideX app.",
+  "outSideTransfer": "Outside transfer",
+  "pinNotSet": "Set up your pin to transfer",
+  "pinIncorrect": "Your pin is incorect",
+  "createPinGuide": "Please create a 6-digit PIN to secure your account. You’ll use this PIN to log in or confirm important actions.",
+  "createPinTitle": "Create PIN",
+  "youBorrowed": "you borrowed",
+  "youLent": "you lent",
+  "year": "Year",
+  "externalExpense": "External expense",
+  "internalExpense": "Internal expense",
+  "notifications": "Notifications",
+  "filter": "Filter",
+  "chooseTypeFilter": "Choose type of transaction",
+  "wallet": "Wallet",
+  "inOrEx": "In or ex app",
+  "conected": "Conected",
+  "lastTransaction": "Last transaction",
+
+  "eventUpdated": "{user} have updated an event {event}",
+  "@eventUpdated": {
+    "description": "Notification when someone updates an event",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "eventCreated": "{user} have created an event {event}",
+  "@eventCreated": {
+    "description": "Notification when someone creates an event",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "eventDeleted": "{user} have deleted an event {event}",
+  "@eventDeleted": {
+    "description": "Notification when someone deletes an event",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "expenseRestored": "{user} have restored an expense {expense}",
+  "@expenseRestored": {
+    "description": "Notification when someone restores a deleted expense",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseDeleted": "{user} have deleted an expense {expense}",
+  "@expenseDeleted": {
+    "description": "Notification when someone deletes an expense",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseUpdated": "{user} have updated an expense {expense}",
+  "@expenseUpdated": {
+    "description": "Notification when someone updates an expense",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseCreated": "{user} have created an expense {expense}",
+  "@expenseCreated": {
+    "description": "Notification when someone creates an expense",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "friendAccepted": "{user} accepted your friend request",
+  "@friendAccepted": {
+    "description": "Notification when someone accepts your friend request",
+    "placeholders": {
+      "user": {}
+    }
+  },
+
+  "friendRequestNoti": "{user} has sent you a friend request. message: {message}",
+  "@friendRequestNoti": {
+    "description": "Notification when someone sends a friend request with a message",
+    "placeholders": {
+      "user": {},
+      "message": {}
+    }
+  },
+
+  "friendRequestToMe": "You have received a friend request from {user}",
+  "@friendRequestToMe": {
+    "description": "Notification when you receive a friend request",
+    "placeholders": {
+      "user": {}
+    }
+  },
+
+  "leaderChanged": "{user} is new leader of group {group}",
+  "@leaderChanged": {
+    "description": "Notification when group leader changes",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
+  "groupUpdated": "{user} have updated a group {group}",
+  "@groupUpdated": {
+    "description": "Notification when someone updates a group",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
+  "deposit": "You have deposited {amount} {currency}",
+  "@deposit": {
+    "description": "Notification when user deposits money",
+    "placeholders": {
+      "amount": {},
+      "currency": {}
+    }
+  },
+  "enterMessage": "Enter message...",
+  "partnerTyping": "Partner is typing...",
+  "edit": "Edit",
+  "messageDeleted": "Message is deleted",
+  "edited": "Message is Edited"
+  
+
 
 }

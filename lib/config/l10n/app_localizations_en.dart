@@ -151,7 +151,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get expenseAmountHint => '120.000';
 
   @override
-  String get expenseUnitLabel => 'Unit';
+  String get expenseCurrencyLabel => 'Currency';
 
   @override
   String get expenseCategoryLabel => 'Category';
@@ -399,7 +399,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get remind => 'Remind';
 
   @override
-  String get pay => 'Pay';
+  String get pay => 'Settle up';
 
   @override
   String get analytics => 'Analytics';
@@ -1007,4 +1007,570 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get transactionReport => 'Transaction report';
+
+  @override
+  String friendRequest(Object userName) {
+    return '$userName\'s request ';
+  }
+
+  @override
+  String get you => 'You';
+
+  @override
+  String get your => 'Your';
+
+  @override
+  String get transaction => 'Transaction';
+
+  @override
+  String get searchTransactionSubtitle =>
+      'Search for specific shared expenses, bills, or payments within groups';
+
+  @override
+  String get user => 'User';
+
+  @override
+  String get searchUserSubtitle =>
+      'Search for users to add as friends or participants in expenses';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get searchTransaction => 'Search transaction';
+
+  @override
+  String get searchUser => 'Search user';
+
+  @override
+  String get addGroupSubtitle =>
+      'Add a new group to share manage expense with your friend.';
+
+  @override
+  String get addMembers => 'Choose members';
+
+  @override
+  String get refreshFail => 'Session expired, please login again';
+
+  @override
+  String get uploadImageHint => 'Please upload image, size less than 100KB';
+
+  @override
+  String get chooseFile => 'Choose file';
+
+  @override
+  String get fileChosen => 'file chosen';
+
+  @override
+  String get noFileChosen => 'No file chosen';
+
+  @override
+  String get members => 'Members';
+
+  @override
+  String get addEventSubtitle =>
+      'Add a new event to share and manage expense easily.';
+
+  @override
+  String get addExpenseSubtitle =>
+      'Add a new expense to share costs easily and keep everything fair for the group.';
+
+  @override
+  String get expenseSplitType => 'Choose transaction type:';
+
+  @override
+  String get groupNotFound => 'The group was not found.';
+
+  @override
+  String get createIsDenied =>
+      'You do not have permission to create this item.';
+
+  @override
+  String get updateIsDenied =>
+      'You do not have permission to update this item.';
+
+  @override
+  String get deleteIsDenied =>
+      'You do not have permission to delete this item.';
+
+  @override
+  String get eventNotFound => 'The event was not found.';
+
+  @override
+  String get expenseNotFound => 'The expense was not found';
+
+  @override
+  String get friendRelationAlreadyExists =>
+      'This friend relationship already exists.';
+
+  @override
+  String get friendRequestNotFound => 'The friend request was not found.';
+
+  @override
+  String get totalAmount => 'Total amount';
+
+  @override
+  String get amount => 'Amount';
+
+  @override
+  String get splitRemainingEqually => 'Split remaining equally';
+
+  @override
+  String get allocated => 'Allocated';
+
+  @override
+  String get noEventsInGroup => 'No events in this group yet';
+
+  @override
+  String membersText(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+      zero: 'No members',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get event => 'Event';
+
+  @override
+  String get expense => 'Expense';
+
+  @override
+  String get groupAddMemberHint =>
+      'You can add new members to this group through';
+
+  @override
+  String get groupAddMemberQr => 'Scan QR code';
+
+  @override
+  String get groupAddMemberFriends => 'Add friends (already in app)';
+
+  @override
+  String get groupChangeLeader => 'Change Leader';
+
+  @override
+  String get groupSettings => 'Group\'s settings';
+
+  @override
+  String get eventSettings => 'Event\'s settings';
+
+  @override
+  String get leave => 'Leave';
+
+  @override
+  String get report => 'Report';
+
+  @override
+  String get done => 'DONE';
+
+  @override
+  String get notYet => 'NOT YET';
+
+  @override
+  String get deleteConfirm1 => 'You can only remove a member after ';
+
+  @override
+  String get deleteConfirm2 => 'all debts in the group have been settled.';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get from => 'From';
+
+  @override
+  String get leaveIsDenied =>
+      'Total amount is not zero, please settle up before leaving';
+
+  @override
+  String get overview => 'Overview';
+
+  @override
+  String get totalEvents => 'Event attended';
+
+  @override
+  String get totalExpenses => 'Expensed shared';
+
+  @override
+  String get totalSpending => 'Group\'s total spending';
+
+  @override
+  String get userSpending => 'Your total spending';
+
+  @override
+  String get contributionRate => 'Contribution ratio';
+
+  @override
+  String get event_not_joined_title => 'You haven\'t joined this event yet';
+
+  @override
+  String get event_not_joined_message =>
+      'Tap \'Join\' to become a participant of this event.';
+
+  @override
+  String get join_button => 'Join';
+
+  @override
+  String get cancel_button => 'Cancel';
+
+  @override
+  String get leader => 'Leader';
+
+  @override
+  String get contributon => 'Contribution';
+
+  @override
+  String get dueDay => 'Due day';
+
+  @override
+  String get billDetail => 'Bill detail';
+
+  @override
+  String get image => 'Image';
+
+  @override
+  String get expenseSplitNotMatch =>
+      'Expense split not match, please check again';
+
+  @override
+  String get accountNumber => 'Account number';
+
+  @override
+  String get branch => 'Branch';
+
+  @override
+  String get accountNumberLabel => 'Type your new account number';
+
+  @override
+  String get chooseBeneficiary => 'Choose beneficiary';
+
+  @override
+  String get findBeneficiary => 'Find beneficiary';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get binLabel => 'Field your bin to verify transfer';
+
+  @override
+  String get to => 'To';
+
+  @override
+  String get youHaveSuccessfullyTransferred =>
+      'You have successfully transferred';
+
+  @override
+  String get transferSuccessful => 'Transfer successful';
+
+  @override
+  String get youHaveSuccessfullyWithdraw => 'You have successfully withdraw';
+
+  @override
+  String get withdrawSuccessful => 'Withdraw successful';
+
+  @override
+  String get accountCreated => 'Save your bank account infor successfully!';
+
+  @override
+  String get accountDeleted => 'Delete your bank account infor successfully!';
+
+  @override
+  String get accountUpdated => 'Update your bank account infor successfully!';
+
+  @override
+  String get addNewAccount => 'Add new account';
+
+  @override
+  String get addAccountGuide =>
+      'Please enter your bank account information here if you wish to withdraw money to your personal account.';
+
+  @override
+  String get rechargeIntoApp => 'Recharge into Dividex';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get showBalance => 'Show balance';
+
+  @override
+  String get pleaseEnterAmount => 'Please enter amount';
+
+  @override
+  String get totalDebt => 'Total dept';
+
+  @override
+  String get sharedEvents => 'Shared events';
+
+  @override
+  String get mutualGroups => 'Mutual groups';
+
+  @override
+  String get mutualFriends => 'Mutual friends';
+
+  @override
+  String get seePhoto => 'See photo';
+
+  @override
+  String get changePhoto => 'Change photo';
+
+  @override
+  String get deletePhoto => 'Delete photo';
+
+  @override
+  String get eventAddMemberHint =>
+      'You can add new members to this event through';
+
+  @override
+  String get eventAddMembers => 'Add members (already in group)';
+
+  @override
+  String get groupMember => 'Member';
+
+  @override
+  String get detail => 'Detail';
+
+  @override
+  String get settleUp => 'Settle up';
+
+  @override
+  String get createDepositSuccess => 'Deposit success';
+
+  @override
+  String get bank => 'Bank';
+
+  @override
+  String get date => 'Transaction day';
+
+  @override
+  String get code => 'Code';
+
+  @override
+  String get walletReport => 'Wallet report';
+
+  @override
+  String get netBalance => 'Net balance';
+
+  @override
+  String get expenseDeletedInfo =>
+      'Expense has been soft delete, please restore or hard delete in group setting.';
+
+  @override
+  String get deleteDate => 'Delete day';
+
+  @override
+  String get restore => 'Restore';
+
+  @override
+  String get hardDelete => 'Hard delete';
+
+  @override
+  String get deleteExpense => 'Delete expense';
+
+  @override
+  String get profilePicture => 'Profile picture';
+
+  @override
+  String get pinInputError1 => 'Please enter pin code';
+
+  @override
+  String get pinInputError2 => 'Pin code must has 6 number';
+
+  @override
+  String get updatePin => 'Update pin code';
+
+  @override
+  String get currentPin => 'Current PIN';
+
+  @override
+  String get newPin => 'New PIN';
+
+  @override
+  String get confirmPin => 'Confirm PIN';
+
+  @override
+  String get updatePinGuide =>
+      'Please enter your current PIN and set a new 6-digit PIN. Pin code will be used to verify your transactions. ';
+
+  @override
+  String get fee => 'Fee';
+
+  @override
+  String get pinInvalid => 'Pin is invalid, please set your pin in setting';
+
+  @override
+  String get insufficientBalance => 'Balance is not enough';
+
+  @override
+  String get realAmount => 'Converted amount';
+
+  @override
+  String get realAmountDescription => 'The amount after currency conversion.';
+
+  @override
+  String get originalAmount => 'Original amount';
+
+  @override
+  String get originalAmountDescription =>
+      'The amount before currency conversion.';
+
+  @override
+  String get confirmTransfer => 'Confirm transfer';
+
+  @override
+  String exchangeRateMessage(Object baseCurrency, Object rate) {
+    return 'Current exchange rate: 1 $baseCurrency = $rate VND';
+  }
+
+  @override
+  String convertedAmountMessage(Object amount) {
+    return 'Converted amount: $amount VND';
+  }
+
+  @override
+  String get continueQuestion => 'Do you want to continue?';
+
+  @override
+  String get toSettleUpDebtInGroup =>
+      ' through a transfer or any method outside the DivideX app.';
+
+  @override
+  String get outSideTransfer => 'Outside transfer';
+
+  @override
+  String get pinNotSet => 'Set up your pin to transfer';
+
+  @override
+  String get pinIncorrect => 'Your pin is incorect';
+
+  @override
+  String get createPinGuide =>
+      'Please create a 6-digit PIN to secure your account. You’ll use this PIN to log in or confirm important actions.';
+
+  @override
+  String get createPinTitle => 'Create PIN';
+
+  @override
+  String get youBorrowed => 'you borrowed';
+
+  @override
+  String get youLent => 'you lent';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get externalExpense => 'External expense';
+
+  @override
+  String get internalExpense => 'Internal expense';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get chooseTypeFilter => 'Choose type of transaction';
+
+  @override
+  String get wallet => 'Wallet';
+
+  @override
+  String get inOrEx => 'In or ex app';
+
+  @override
+  String get conected => 'Conected';
+
+  @override
+  String get lastTransaction => 'Last transaction';
+
+  @override
+  String eventUpdated(Object user, Object event) {
+    return '$user have updated an event $event';
+  }
+
+  @override
+  String eventCreated(Object user, Object event) {
+    return '$user have created an event $event';
+  }
+
+  @override
+  String eventDeleted(Object user, Object event) {
+    return '$user have deleted an event $event';
+  }
+
+  @override
+  String expenseRestored(Object user, Object expense) {
+    return '$user have restored an expense $expense';
+  }
+
+  @override
+  String expenseDeleted(Object user, Object expense) {
+    return '$user have deleted an expense $expense';
+  }
+
+  @override
+  String expenseUpdated(Object user, Object expense) {
+    return '$user have updated an expense $expense';
+  }
+
+  @override
+  String expenseCreated(Object user, Object expense) {
+    return '$user have created an expense $expense';
+  }
+
+  @override
+  String friendAccepted(Object user) {
+    return '$user accepted your friend request';
+  }
+
+  @override
+  String friendRequestNoti(Object user, Object message) {
+    return '$user has sent you a friend request. message: $message';
+  }
+
+  @override
+  String friendRequestToMe(Object user) {
+    return 'You have received a friend request from $user';
+  }
+
+  @override
+  String leaderChanged(Object user, Object group) {
+    return '$user is new leader of group $group';
+  }
+
+  @override
+  String groupUpdated(Object user, Object group) {
+    return '$user have updated a group $group';
+  }
+
+  @override
+  String deposit(Object amount, Object currency) {
+    return 'You have deposited $amount $currency';
+  }
+
+  @override
+  String get enterMessage => 'Enter message...';
+
+  @override
+  String get partnerTyping => 'Partner is typing...';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get messageDeleted => 'Message is deleted';
+
+  @override
+  String get edited => 'Message is Edited';
 }

@@ -12,41 +12,68 @@ class CategoryModel {
 
   // Static list of all financial categories
   static List<CategoryModel> get categories => [
-        CategoryModel(id: '1', key: 'category.food'),
-        CategoryModel(id: '2', key: 'category.transportation'),
-        CategoryModel(id: '3', key: 'category.utilities'),
-        CategoryModel(id: '4', key: 'category.entertainment'),
-        CategoryModel(id: '5', key: 'category.housing'),
-        CategoryModel(id: '6', key: 'category.healthcare'),
-        CategoryModel(id: '7', key: 'category.shopping'),
-        CategoryModel(id: '8', key: 'category.education'),
-        CategoryModel(id: '9', key: 'category.savings'),
-        CategoryModel(id: '10', key: 'category.miscellaneous'),
+        CategoryModel(id: '1', key: 'food'),
+        CategoryModel(id: '2', key: 'transportation'),
+        CategoryModel(id: '3', key: 'utilities'),
+        CategoryModel(id: '4', key: 'entertainment'),
+        CategoryModel(id: '5', key: 'housing'),
+        CategoryModel(id: '6', key: 'healthcare'),
+        CategoryModel(id: '7', key: 'shopping'),
+        CategoryModel(id: '8', key: 'education'),
+        CategoryModel(id: '9', key: 'savings'),
+        CategoryModel(id: '10', key: 'miscellaneous'),
       ];
+
+  String getImage() {
+    switch (key) {
+      case 'food':
+        return 'lib/assets/category/food.png';
+      case 'transportation':
+        return 'lib/assets/category/transportation.png';
+      case 'utilities':
+        return 'lib/assets/category/utilities.png';
+      case 'entertainment':
+        return 'lib/assets/category/entertainment.png';
+      case 'housing':
+        return 'lib/assets/category/housing.png';
+      case 'healthcare':
+        return 'lib/assets/category/healthcare.png';
+      case 'shopping':
+        return 'lib/assets/category/shopping.png';
+      case 'education':
+        return 'lib/assets/category/education.png';
+      case 'savings':
+        return 'lib/assets/category/savings.png';
+      case 'miscellaneous':
+        return 'lib/assets/category/miscellaneous.png';
+      default:
+        return 'lib/assets/category/miscellaneous.png'; // fallback
+    }
+  }
 
   String localizedName(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
 
     switch (key) {
-      case 'category.food':
+      case 'food':
         return intl.food;
-      case 'category.transportation':
+      case 'transportation':
         return intl.transportation;
-      case 'category.utilities':
+      case 'utilities':
         return intl.utilities;
-      case 'category.entertainment':
+      case 'entertainment':
         return intl.entertainment;
-      case 'category.housing':
+      case 'housing':
         return intl.housing;
-      case 'category.healthcare':
+      case 'healthcare':
         return intl.healthcare;
-      case 'category.shopping':
+      case 'shopping':
         return intl.shopping;
-      case 'category.education':
+      case 'education':
         return intl.education;
-      case 'category.savings':
+      case 'savings':
         return intl.savings;
-      case 'category.miscellaneous':
+      case 'miscellaneous':
         return intl.miscellaneous;
       default:
         return key; // fallback
@@ -58,3 +85,12 @@ class CategoryModel {
     return key;
   }
 }
+
+
+  CategoryModel? getCategoryByKey(String key) {
+    try {
+      return CategoryModel.categories.firstWhere((category) => category.key == key);
+    } catch (e) {
+      return null;
+    }
+  }

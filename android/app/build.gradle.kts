@@ -12,7 +12,7 @@ android {
     namespace = "com.example.dividex_dacn"
     compileSdk = flutter.compileSdkVersion
     //ndkVersion = flutter.ndkVersion
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "27.1.12297006"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

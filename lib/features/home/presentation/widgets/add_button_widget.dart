@@ -1,5 +1,7 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AddButtonPopup extends StatelessWidget {
   const AddButtonPopup({super.key});
@@ -14,24 +16,23 @@ class AddButtonPopup extends StatelessWidget {
         iconPath: 'lib/assets/icons/group.png',
         label: intl.addGroup,
         onTap: () {
-          
+          context.pushNamed(AppRouteNames.addGroup);
         },
       ),
       _PopupItem(
         iconPath: 'lib/assets/icons/event.png',
         label: intl.addEvent,
         onTap: () {
-          
+          context.pushNamed(AppRouteNames.addEvent);
         },
       ),
       _PopupItem(
         iconPath: 'lib/assets/icons/money-transfer.png',
         label: intl.addExpense,
         onTap: () {
-          
+          context.pushNamed(AppRouteNames.addExpense);
         },
       ),
-      // 👉 bạn có thể thêm bao nhiêu item tuỳ ý ở đây
     ];
 
     return Column(
@@ -46,7 +47,12 @@ class AddButtonPopup extends StatelessWidget {
           spacing: 16,
           runSpacing: 16,
           children: items.map((item) {
-            return _buildPopupItem(context, item.iconPath, item.label, item.onTap);
+            return _buildPopupItem(
+              context,
+              item.iconPath,
+              item.label,
+              item.onTap,
+            );
           }).toList(),
         ),
       ],
@@ -71,9 +77,9 @@ class AddButtonPopup extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
             ),
           ],
         ),

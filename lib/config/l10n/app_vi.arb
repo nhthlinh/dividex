@@ -53,7 +53,7 @@
   "expenseNameHint": "Ví dụ: Đi ăn tối",
   "expenseAmountLabel": "Tổng chi tiêu",
   "expenseAmountHint": "120.000",
-  "expenseUnitLabel": "Đơn vị",
+  "expenseCurrencyLabel": "Đơn vị",
   "expenseCategoryLabel": "Phân loại",
   "expenseEventLabel": "Thuộc sự kiện",
   "expensePayerLabel": "Người trả",
@@ -380,6 +380,303 @@
   "account": "Tài khoản",
   "transfer": "Chuyển tiền",
   "withdraw": "Rút tiền",
-  "transactionReport": "Báo cáo"
+  "transactionReport": "Báo cáo",
+
+  "friendRequest": "Yêu cầu của {userName} ",
+  "@friendRequest": {
+    "placeholders": {
+      "userName": {}
+    }
+  },
+
+  "you": "Bạn",
+  "your": "của bạn",
+
+  "transaction": "Giao dịch",
+  "searchTransactionSubtitle": "Tìm kiếm các khoản chi tiêu chung, hóa đơn hoặc khoản thanh toán trong nhóm",
+  "user": "Người dùng",
+  "searchUserSubtitle": "Tìm kiếm người dùng để thêm làm bạn bè hoặc tham gia vào chi tiêu",
+  "search": "Tìm kiếm",
+  "searchTransaction": "Tìm giao dịch",
+  "searchUser": "Tìm người dùng",
+
+  "addGroupSubtitle": "Tạo một group để quản lý chi tiêu với bạn bè",
+  "addMembers": "Chọn thành viên",
+
+  "refreshFail": "Phiên đăng nhập đã hết, vui lòng đăng nhập lại",
+  "uploadImageHint": "Hãy tải ảnh lên, chú ý dung lượng nhỏ hơn 100Kb",
+  "chooseFile": "Chọn file",
+  "fileChosen": "file đã chọn",
+  "noFileChosen": "0 file đã chọn",
+  "members": "Thành viên",
+
+  "addEventSubtitle": "Tạo một sự kiện để quản lý và chia sẻ chi tiêu dễ dàng",
+
+  "addExpenseSubtitle": "Thêm một chi tiêu mới để chia tiền với bạn bè dễ dàng hơn và giúp cho mọi thứ được công bằng trong nhóm.",
+  "expenseSplitType": "Chọn kiểu chia:",
+  "groupNotFound": "Không tìm thấy nhóm.",
+  "createIsDenied": "Bạn không có quyền tạo mục này.",
+  "updateIsDenied": "Bạn không có quyền cập nhật mục này.",
+  "deleteIsDenied": "Bạn không có quyền xóa mục này.",
+  "eventNotFound": "Không tìm thấy sự kiện.",
+  "expenseNotFound": "Không tìm thấy chi tiêu",
+  "friendRelationAlreadyExists": "Quan hệ bạn bè này đã tồn tại.",
+  "friendRequestNotFound": "Không tìm thấy lời mời kết bạn.",
+
+  "friendRequestNotFound": "The friend request was not found.",
+  
+  "totalAmount": "Tổng số tiền",
+  "amount": "Số tiền",
+  "splitRemainingEqually": "Chia đều phần còn lại",
+  "allocated": "Đã chia",
+  "noEventsInGroup": "Chưa có sự kiện nào trong nhóm",
+  "membersText": "{count, plural, =0{Không có thành viên} =1{1 thành viên} other{{count} thành viên}}",
+  "@membersText": {
+    "description": "Số lượng thành viên trong nhóm",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "event": "Sự kiện",
+  "expense": "Chi tiêu",
+  "groupAddMemberHint": "Bạn có thể thêm thành viên mới vào nhóm thông qua",
+  "groupAddMemberQr": "Quét mã QR",
+  "groupAddMemberFriends": "Thêm bạn bè (đã có trong ứng dụng)",
+  "groupChangeLeader": "Đổi Trưởng nhóm",
+  "groupSettings": "Cài đặt nhóm",
+  "eventSettings": "Cài đặt sự kiện",
+  "leave": "Rời",
+  "report": "Báo cáo",
+  "done": "XONG",
+  "notYet": "CHƯA XONG",
+  "deleteConfirm1": "Bạn chỉ có thể xóa thành viên sau khi ",
+  "deleteConfirm2": "tất cả nợ của thành viên đã được giải quyết.",
+  "delete": "Xóa",
+  "from": "từ",
+  "leaveIsDenied": "Tổng số dư không bằng 0, hãy giải quyết hết nợ trước khi rời nhóm",
+  "overview": "Tổng quan",
+
+  "totalEvents": "Sự kiện tham gia",
+  "totalExpenses": "Chi tiêu chia sẻ",
+  "totalSpending": "Nhóm đã chi",
+  "userSpending": "Bạn đã chi",
+  "contributionRate": "Tỷ lệ đóng góp",
+  "event_not_joined_title": "Bạn chưa tham gia sự kiện này",
+  "event_not_joined_message": "Nhấn 'Tham gia' để tham gia sự kiện.",
+  "join_button": "Tham gia",
+  "cancel_button": "Hủy",
+  "leader": "Nhóm trưởng",
+  "contributon": "Đóng góp",
+  "dueDay": "Ngày tới hạn",
+  "billDetail": "Thông tin bill",
+  "image": "Ảnh",
+  "expenseSplitNotMatch": "Số tiền chia không khớp, vui lòng kiểm tra lại",
+  "accountNumber": "Số tài khoản",
+  "branch": "Chi nhánh",
+  "accountNumberLabel": "Nhập số tài khoản mới của bạn",
+  "chooseBeneficiary": "Chọn người thụ hưởng",
+  "findBeneficiary": "Tìm người thụ hưởng",
+  "confirm": "Xác nhận",
+  "description": "Mô tả",
+  "binLabel": "Nhập mã pin để xác nhận chuyển khoản",
+  "to": "đến",
+  "youHaveSuccessfullyTransferred": "Bạn đã chuyển thành công",
+  "transferSuccessful": "Chuyển tiền thành công",
+  "youHaveSuccessfullyWithdraw": "Bạn đã rút thành công",
+  "withdrawSuccessful": "Rút tiền thành công",
+  "accountCreated": "Lưu thông tin tài khoản thành công!",
+  "accountDeleted": "Xóa thông tin tài khoản thành công!",
+  "accountUpdated": "Cập nhật thông tin tài khoản thành công!",
+  "addNewAccount": "Thêm tài khoản mới",
+  "addAccountGuide": "Vui lòng nhập thông tin tài khoản ngân hàng của bạn tại đây nếu bạn muốn rút tiền về tài khoản cá nhân.",
+  "rechargeIntoApp": "Nạp tiền vào Dividex",
+  "balance": "Số dư ví",
+  "showBalance": "Xem số dư",
+  "pleaseEnterAmount": "Nhập số tiền cần nạp",
+  "totalDebt": "Tổng nợ",
+  "sharedEvents": "Sự kiện cùng tham gia",
+  "mutualGroups": "Nhóm cùng tham gia",
+  "mutualFriends": "Bạn chung",
+  "seePhoto": "Xem ảnh",
+  "changePhoto": "Thay đổi ảnh",
+  "deletePhoto": "Xóa ảnh",
+  "eventAddMemberHint": "Bạn có thể thêm thành viên mới vào sự kiện qua",
+  "eventAddMembers": "Thêm thành viên (đã ở trong nhóm)",
+  "groupMember": "Thành viên",
+  "detail": "Chi tiết",
+  "settleUp": "Giải quyết",
+  "createDepositSuccess": "Thanh toán thành công",
+  "bank": "Ngân hàng",
+  "date": "Ngày thực hiện",
+  "code": "Mã",
+  "walletReport": "Báo cáo ví",
+  "netBalance": "Nợ",
+  "expenseDeletedInfo": "Chi tiêu đã được xóa tạm thời, hãy khôi phục hoặc xóa hẳn trong cài đặt group",
+  "deleteDate": "Ngày xóa",
+  "restore": "Khôi phục",
+  "hardDelete": "Xóa hẳn",
+  "deleteExpense": "Xóa chi tiêu",
+  "profilePicture": "Ảnh đại diện",
+  "pinInputError1": "Vui lòng nhập mã PIN.",
+  "pinInputError2": "Mã PIN phải gồm 6 chữ số.",
+  "updatePin": "Cập nhật mã pin",
+  "currentPin": "Mã PIN hiện tại",
+  "newPin": "Mã PIN mới",
+  "confirmPin": "Xác nhận mã PIN",
+  "updatePinGuide": "Vui lòng nhập mã PIN hiện tại và đặt mã PIN mới gồm 6 chữ số. Mã pin dùng để xác thực giao dịch cho ứng dụng",
+  "fee": "Phí chuyển tiền",
+  "pinInvalid": "Mã pin không hợp lệ, kiểm tra lại trong cài đặt",
+  "realAmount": "Số tiền sau quy đổi",
+  "realAmountDescription": "Số tiền đã được quy đổi sang đơn vị tiền tệ đích.",
+
+  "originalAmount": "Số tiền gốc",
+  "originalAmountDescription": "Số tiền trước khi quy đổi.",
+  "confirmTransfer": "Xác nhận chuyển tiền",
+  "exchangeRateMessage": "Tỉ giá hiện tại: 1 {baseCurrency} = {rate} VND",
+  "convertedAmountMessage": "Số tiền quy đổi: {amount} VND",
+  "continueQuestion": "Bạn có muốn tiếp tục không?",
+
+  "toSettleUpDebtInGroup": " thông qua chuyển khoản trong app hoặc các phương pháp trả ngoài.",
+  "outSideTransfer": "Trả ngoài",
+  "pinNotSet": "Bạn chưa tạo mã pin để giao dịch",
+  "pinIncorrect": "Mã pin của bạn không chính xác",
+  "createPinGuide": "Vui lòng tạo mã PIN gồm 6 chữ số để bảo vệ tài khoản của bạn. Mã PIN này sẽ được dùng để đăng nhập hoặc xác nhận các thao tác quan trọng.",
+  "createPinTitle": "Tạo mã PIN",
+  "youBorrowed": "bạn mượn",
+  "youLent": "bạn cho mượn",
+  "year": "Năm",
+  "externalExpense": "Giao dịch nạp vào",
+  "internalExpense": "Giao dịch trong app",
+  "notifications": "Thông báo",
+  "filter": "Bộ lọc",
+  "chooseTypeFilter": "Chọn loại giao dịch",
+  "wallet": "Ví",
+  "inOrEx": "Trong hay ngoài app",
+  "conected": "Đã kết nối",
+  "lastTransaction": "Giao dịch cuối",
+
+  "eventUpdated": "{user} đã cập nhật sự kiện {event}",
+  "@eventUpdated": {
+    "description": "Thông báo khi ai đó cập nhật sự kiện",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "eventCreated": "{user} đã tạo sự kiện {event}",
+  "@eventCreated": {
+    "description": "Thông báo khi ai đó tạo sự kiện",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "eventDeleted": "{user} đã xóa sự kiện {event}",
+  "@eventDeleted": {
+    "description": "Thông báo khi ai đó xóa sự kiện",
+    "placeholders": {
+      "user": {},
+      "event": {}
+    }
+  },
+
+  "expenseRestored": "{user} đã khôi phục khoản chi {expense}",
+  "@expenseRestored": {
+    "description": "Thông báo khi ai đó khôi phục một khoản chi đã xóa",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseDeleted": "{user} đã xóa khoản chi {expense}",
+  "@expenseDeleted": {
+    "description": "Thông báo khi ai đó xóa một khoản chi",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseUpdated": "{user} đã cập nhật khoản chi {expense}",
+  "@expenseUpdated": {
+    "description": "Thông báo khi ai đó cập nhật một khoản chi",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "expenseCreated": "{user} đã tạo khoản chi {expense}",
+  "@expenseCreated": {
+    "description": "Thông báo khi ai đó tạo một khoản chi",
+    "placeholders": {
+      "user": {},
+      "expense": {}
+    }
+  },
+
+  "friendAccepted": "{user} đã chấp nhận lời mời kết bạn của bạn",
+  "@friendAccepted": {
+    "description": "Thông báo khi ai đó chấp nhận lời mời kết bạn",
+    "placeholders": {
+      "user": {}
+    }
+  },
+
+  "friendRequestNoti": "{user} đã gửi lời mời kết bạn. Tin nhắn: {message}",
+  "@friendRequestNoti": {
+    "description": "Thông báo khi ai đó gửi lời mời kết bạn kèm tin nhắn",
+    "placeholders": {
+      "user": {},
+      "message": {}
+    }
+  },
+
+  "friendRequestToMe": "Bạn nhận được lời mời kết bạn từ {user}",
+  "@friendRequestToMe": {
+    "description": "Thông báo khi bạn nhận được lời mời kết bạn",
+    "placeholders": {
+      "user": {}
+    }
+  },
+
+  "leaderChanged": "{user} là trưởng nhóm mới của nhóm {group}",
+  "@leaderChanged": {
+    "description": "Thông báo khi trưởng nhóm được thay đổi",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
+  "groupUpdated": "{user} đã cập nhật nhóm {group}",
+  "@groupUpdated": {
+    "description": "Thông báo khi ai đó cập nhật thông tin nhóm",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
+  "deposit": "Bạn đã nạp {amount} {currency}",
+  "@deposit": {
+    "description": "Thông báo khi người dùng nạp tiền",
+    "placeholders": {
+      "amount": {},
+      "currency": {}
+    }
+  },
+  "enterMessage": "Nhập tin nhắn...",
+  "partnerTyping": "Đối phương đang nhập...",
+  "edit": "Chỉnh sửa",
+  "messageDeleted": "Tin nhắn đã bị xóa",
+  "edited": "Tin nhắn đã chỉnh sửa"
+  
+
 
 }

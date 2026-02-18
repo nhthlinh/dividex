@@ -45,8 +45,7 @@ class _InputTestScreenState extends State<InputTestScreen> {
     );
     if (picked != null) {
       setState(() {
-        dateController.text =
-            "${picked.day}/${picked.month}/${picked.year}";
+        dateController.text = "${picked.day}/${picked.month}/${picked.year}";
       });
     }
   }
@@ -78,7 +77,10 @@ class _InputTestScreenState extends State<InputTestScreen> {
                 isReadOnly: false,
                 hintText: "Enter number",
                 isRequired: true,
-                validator: (value) => CustomValidator().validateNumberInput(value, AppLocalizations.of(context)!),
+                validator: (value) => CustomValidator().validateNumberInput(
+                  value,
+                  AppLocalizations.of(context)!,
+                ),
               ),
               const SizedBox(height: 16),
               CustomTextInputWidget(
@@ -88,12 +90,15 @@ class _InputTestScreenState extends State<InputTestScreen> {
                 keyboardType: TextInputType.text,
                 isReadOnly: false,
                 obscureText: obscurePassword,
-                validator: (value) =>
-                    CustomValidator().validatePassword(value, AppLocalizations.of(context)!),
+                validator: (value) => CustomValidator().validatePassword(
+                  value,
+                  AppLocalizations.of(context)!,
+                ),
                 hintText: "Enter password",
                 suffixIcon: IconButton(
                   icon: Icon(
-                      obscurePassword ? Icons.visibility : Icons.visibility_off),
+                    obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  ),
                   onPressed: () {
                     setState(() {
                       obscurePassword = !obscurePassword;
@@ -110,8 +115,10 @@ class _InputTestScreenState extends State<InputTestScreen> {
                 keyboardType: TextInputType.emailAddress,
                 isReadOnly: false,
                 hintText: "Enter email",
-                validator: (value) =>
-                    CustomValidator().validateEmail(value, AppLocalizations.of(context)!),
+                validator: (value) => CustomValidator().validateEmail(
+                  value,
+                  AppLocalizations.of(context)!,
+                ),
               ),
               const SizedBox(height: 16),
               CustomTextInputWidget(
@@ -149,18 +156,18 @@ class _InputTestScreenState extends State<InputTestScreen> {
               ElevatedButton(
                 onPressed: () {
                   // Validate form
-                  if (_formKey.currentState!.validate()) {
-                    print("All inputs are valid!");
-                    print("Text: ${textController.text}");
-                    print("Number: ${numberController.text}");
-                    print("Password: ${passwordController.text}");
-                    print("Email: ${emailController.text}");
-                    print("Phone: ${phoneController.text}");
-                    print("Date: ${dateController.text}");
-                    print("Multi-line: ${multiLineController.text}");
-                  } else {
-                    print("Some inputs are invalid!");
-                  }
+                  // if (_formKey.currentState!.validate()) {
+                  //   debugPrint("All inputs are valid!");
+                  //   debugPrint("Text: ${textController.text}");
+                  //   debugPrint("Number: ${numberController.text}");
+                  //   debugPrint("Password: ${passwordController.text}");
+                  //   debugPrint("Email: ${emailController.text}");
+                  //   debugPrint("Phone: ${phoneController.text}");
+                  //   debugPrint("Date: ${dateController.text}");
+                  //   debugPrint("Multi-line: ${multiLineController.text}");
+                  // } else {
+                  //   debugPrint("Some inputs are invalid!");
+                  // }
                 },
                 child: const Text("Submit / Validate"),
               ),

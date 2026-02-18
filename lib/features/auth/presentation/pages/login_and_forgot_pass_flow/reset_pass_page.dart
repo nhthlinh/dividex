@@ -2,15 +2,12 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
-import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
-import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +27,8 @@ class _ResetPassPageState extends State<ResetPassPage> {
 
   bool _obscurePassword = true; // State for password visibility
   bool _obscureConfirmPassword = true; // State for confirm password visibility
+
+  final clearFormTrigger = ValueNotifier(false);
 
   @override
   void dispose() {
@@ -60,6 +59,10 @@ class _ResetPassPageState extends State<ResetPassPage> {
     final intl = AppLocalizations.of(context)!; // Get the localization instance
 
     return SimpleLayout(
+      onRefresh: () {
+        clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+        return Future.value();
+      },
       title: intl.settingChangePass,
       child: BlocBuilder<AuthBloc, AuthState>(
         // Use BlocConsumer
@@ -76,6 +79,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
     ThemeData theme,
   ) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [
         FormFieldConfig(controller: passwordController, isRequired: true),
@@ -151,6 +155,9 @@ class _ResetPassPageState extends State<ResetPassPage> {
                 onPressed: isValid
                     ? () {
                         _submitPass();
+                        // Clear the form after submission
+                        clearFormTrigger.value =
+                            !clearFormTrigger.value; // Trigger form reset
                       }
                     : null,
               ),

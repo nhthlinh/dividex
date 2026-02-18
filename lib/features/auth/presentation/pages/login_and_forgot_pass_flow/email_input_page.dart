@@ -24,6 +24,8 @@ class _EmailInputPageState extends State<EmailInputPage> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
 
+  final clearFormTrigger = ValueNotifier(false);
+
   @override
   void dispose() {
     emailController.dispose();
@@ -31,11 +33,11 @@ class _EmailInputPageState extends State<EmailInputPage> {
   }
 
   Future<void> _submitEmail() async {
-   if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       String email = emailController.text.trim();
 
       context.read<AuthBloc>().add(AuthEmailRequested(email: email));
-   }
+    }
   }
 
   @override
@@ -44,6 +46,10 @@ class _EmailInputPageState extends State<EmailInputPage> {
     final intl = AppLocalizations.of(context)!; // Get the localization instance
 
     return SimpleLayout(
+      onRefresh: () async {
+        clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+        return Future.value();
+      },
       title: intl.forgotPassword,
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -74,6 +80,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
     AuthState state,
   ) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [FormFieldConfig(controller: emailController, isRequired: true)],
       builder: (isValid) {
@@ -102,7 +109,13 @@ class _EmailInputPageState extends State<EmailInputPage> {
 
               CustomButton(
                 text: intl.send,
-                onPressed: isValid ? _submitEmail : null,
+                onPressed: isValid
+                    ? () {
+                        _submitEmail();
+                        clearFormTrigger.value =
+                            !clearFormTrigger.value; // Trigger form reset
+                      }
+                    : null,
               ),
             ],
           ),

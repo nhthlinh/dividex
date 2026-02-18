@@ -106,7 +106,7 @@
 // class LoadedEventsState extends Equatable {
 //   const LoadedEventsState({
 //     this.isLoading = true,
-//     this.page = 0,
+//     this.page = 1,
 //     this.totalPage = 0,
 //     this.events = const [],
 //   });

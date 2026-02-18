@@ -10,6 +10,7 @@ import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:Dividex/shared/services/notification/fcm.dart';
 
 part 'auth_state.dart';
 
@@ -48,17 +49,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       await HiveService.saveUser(
         UserLocalModel(
-          id: authResponse.user.id ?? '123',
+          id: authResponse.user.id ?? '',
           email: authResponse.user.email ?? '',
           fullName: authResponse.user.fullName ?? '',
-          avatarUrl: authResponse.user.avatar ?? '',
+          avatarUrl: authResponse.user.avatar,
           password: event.password,
           phoneNumber: authResponse.user.phoneNumber ?? '',
         ),
       );
 
       // Gửi FCM token sau khi đăng ký thành công
-      //await sendFcmTokenToBackend(true);
+      await sendFcmTokenToBackend(true);
 
       emit(const AuthAuthenticated());
     } catch (e) {
@@ -94,17 +95,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       await HiveService.saveUser(
         UserLocalModel(
-          id: authResponse.user.id ?? '123',
+          id: authResponse.user.id ?? '',
           email: authResponse.user.email ?? '',
           fullName: authResponse.user.fullName ?? '',
-          avatarUrl: authResponse.user.avatar ?? '',
+          avatarUrl: authResponse.user.avatar,
           password: event.password,
           phoneNumber: authResponse.user.phoneNumber ?? '',
+          countUserLogin: authResponse.countUserLogin,
         ),
       );
 
       // Gửi FCM token sau khi đăng nhập thành công
-      //await sendFcmTokenToBackend(true);
+      await sendFcmTokenToBackend(true);
 
       emit(const AuthAuthenticated());
     } catch (e) {
@@ -132,7 +134,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       // Xóa token, dữ liệu người dùng, v.v.
       emit(AuthUnauthenticated());
-      // await sendFcmTokenToBackend(false);
+      await sendFcmTokenToBackend(false);
       await HiveService.clearToken(); // Xóa token khỏi local storage
       await HiveService.clearUser(); // Xóa dữ liệu người dùng khỏi local storage
     } catch (e) {
@@ -152,10 +154,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final token = HiveService.getToken();
 
-      if (token?.accessToken != null) {
+      if (token?.accessToken != null && token?.refreshToken != null) {
         emit(const AuthAuthenticated());
         // // Gửi FCM token sau khi mở app
-        // await sendFcmTokenToBackend(true);
+        await sendFcmTokenToBackend(true);
       } else {
         emit(AuthUnauthenticated());
       }
@@ -163,7 +165,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
 
       emit(AuthUnauthenticated());
-      showCustomToast(intl.error, type: ToastType.error);
+      showCustomToast(intl.refreshFail, type: ToastType.error);
     }
   }
 
@@ -178,7 +180,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(AuthEmailSent(email: event.email));
       HiveService.saveUser(
-        UserLocalModel(id: '', email: event.email, fullName: '', avatarUrl: ''),
+        UserLocalModel(id: '', email: event.email, fullName: '', avatarUrl: null),
       );
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
@@ -205,7 +207,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       emit(AuthUnauthenticated());
-       if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
+      if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
         showCustomToast(intl.invalidOrExpiredOtp, type: ToastType.error);
       } else {
         showCustomToast(intl.error, type: ToastType.error);
@@ -227,7 +229,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       emit(AuthUnauthenticated());
-       if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
+      if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
         showCustomToast(intl.invalidOrExpiredOtp, type: ToastType.error);
       } else {
         showCustomToast(intl.error, type: ToastType.error);

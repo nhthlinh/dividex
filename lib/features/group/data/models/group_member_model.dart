@@ -1,15 +1,12 @@
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:json_annotation/json_annotation.dart';
-part 'group_member_model.g.dart';
+import 'package:Dividex/shared/utils/get_time_ago.dart';
 
-@JsonSerializable()
 class GroupMemberModel {
   final String? id;
   final GroupModel? group;
   final UserModel? user;
   final DateTime? joinedAt;
-  final bool? hasDebt;
   final double? amount;
 
   GroupMemberModel({
@@ -17,10 +14,31 @@ class GroupMemberModel {
     this.user,
     this.group,
     this.joinedAt,
-    this.hasDebt,
     this.amount,
   });
 
-  factory GroupMemberModel.fromJson(Map<String, dynamic> json) => _$GroupMemberModelFromJson(json);
-  Map<String, dynamic> toJson() => _$GroupMemberModelToJson(this);
+  factory GroupMemberModel.fromJson(Map<String, dynamic> json) =>
+      GroupMemberModel(
+        id: json['id'] as String?,
+        user: json['user'] == null
+            ? null
+            : UserModel.fromJson(json['user'] as Map<String, dynamic>),
+        group: json['group'] == null
+            ? null
+            : GroupModel.fromJson(json['group'] as Map<String, dynamic>),
+        joinedAt: json['joinedAt'] == null
+            ? null
+            : parseUTCToVN(json['joinedAt'] as String),
+        amount: json['balance'] == null
+            ? null
+            : double.tryParse(json['balance'].toString()),
+      );
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'id': id,
+    'group': group,
+    'user': user,
+    'joinedAt': joinedAt?.toIso8601String(),
+    'amount': amount,
+  };
 }

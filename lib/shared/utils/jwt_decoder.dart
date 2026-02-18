@@ -9,7 +9,6 @@ String? getCurrentUserIdFromToken(String token) {
     }
     return null;
   } catch (e) {
-    print('Lỗi khi decode token: $e');
     return null;
   }
 }

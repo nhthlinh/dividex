@@ -40,3 +40,8 @@ String getTimeAgo(DateTime dateTime, AppLocalizations intl) {
     return intl.justNow;
   }
 }
+
+DateTime parseUTCToVN(String raw) {
+  final dt = DateTime.parse(raw); // parse ra UTC
+  return dt.add(Duration(hours: 7)); // convert sang UTC+7
+}

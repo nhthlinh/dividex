@@ -7,6 +7,7 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      onRefresh: () => Future.value(),
       title: "Welcome Back",
       child: const Text("This is the Sign In Page"),
     );

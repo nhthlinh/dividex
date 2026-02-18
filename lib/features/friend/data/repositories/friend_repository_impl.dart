@@ -1,7 +1,9 @@
+import 'package:Dividex/features/friend/data/models/friend_dept.dart';
 import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:Dividex/features/friend/data/source/friend_remote_datasource.dart';
 import 'package:Dividex/features/friend/domain/friend_repository.dart';
 import 'package:Dividex/features/friend/domain/usecase.dart';
+import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -39,5 +41,20 @@ class FriendRepositoryImpl implements FriendRepository {
   @override
   Future<PagingModel<List<FriendModel>>> searchUsers(String? search, int page, int pageSize) {
     return remoteDataSource.searchUsers(search, page, pageSize);
+  }
+
+  @override
+  Future<PagingModel<List<UserModel>>> listMutualFriends(String friendshipUid, int page, int pageSize) {
+    return remoteDataSource.listMutualFriends(friendshipUid, page, pageSize);
+  }
+
+  @override
+  Future<FriendOverviewModel> getFriendOverview(String id) {
+    return remoteDataSource.getFriendOverview(id);
+  }
+
+  @override
+  Future<PagingModel<List<FriendDept>>> getFriendDepts(String friendId, int page, int pageSize) {
+    return remoteDataSource.getFriendDepts(friendId, page, pageSize);
   }
 }

@@ -5,12 +5,14 @@ class SimpleLayout extends StatelessWidget {
   final String title;
   final Widget child;
   final bool showBack;
+  final Future<void> Function() onRefresh;
 
   const SimpleLayout({
     super.key,
     required this.title,
     required this.child,
     this.showBack = true,
+    required this.onRefresh,
   });
 
   @override
@@ -18,7 +20,6 @@ class SimpleLayout extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          
           // Title + back button ở y = 50
           Positioned(
             top: 50,
@@ -31,11 +32,14 @@ class SimpleLayout extends StatelessWidget {
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -47,16 +51,14 @@ class SimpleLayout extends StatelessWidget {
             child: SizedBox(
               height: 200,
               width: double.infinity,
-              child: CustomPaint(
-                painter: WavePainter(),
-              ),
+              child: CustomPaint(painter: WavePainter()),
             ),
           ),
-          // Nội dung bo góc ở y = 100
+
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.only(top: 100),
+              padding: const EdgeInsets.only(top: 70),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
@@ -64,10 +66,18 @@ class SimpleLayout extends StatelessWidget {
                   vertical: 24,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                  color: Colors.transparent,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(32),
+                  ),
                 ),
-                child: SingleChildScrollView(child: child),
+                child: RefreshIndicator(
+                  onRefresh: onRefresh,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: child,
+                  ),
+                ),
               ),
             ),
           ),

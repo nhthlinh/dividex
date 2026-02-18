@@ -14,7 +14,6 @@ import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
-import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -43,6 +42,8 @@ class _OTPInputPageState extends State<OTPInputPage> {
   int _remainingSeconds = 300; // 5 minutes
 
   String? _userEmail;
+
+  final clearFormTrigger = ValueNotifier(false);
 
   @override
   void initState() {
@@ -108,6 +109,11 @@ class _OTPInputPageState extends State<OTPInputPage> {
     final intl = AppLocalizations.of(context)!; // Get the localization instance
 
     return SimpleLayout(
+      onRefresh: () {
+        _loadUserEmailAndStartTimer();
+        clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+        return Future.value();
+      },
       title: intl.forgotPassword,
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -131,6 +137,7 @@ class _OTPInputPageState extends State<OTPInputPage> {
 
   CustomFormWrapper otpForm(AppLocalizations intl, ThemeData theme) {
     return CustomFormWrapper(
+      clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [FormFieldConfig(controller: otpController, isRequired: true)],
       builder: (isValid) {
@@ -213,6 +220,9 @@ class _OTPInputPageState extends State<OTPInputPage> {
                 onPressed: isValid
                     ? () {
                         submitOTP(intl);
+                        // Clear the form after submission
+                        clearFormTrigger.value =
+                            !clearFormTrigger.value; // Trigger form reset
                       }
                     : null,
               ),

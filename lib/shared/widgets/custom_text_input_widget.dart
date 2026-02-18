@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:flutter/services.dart';
 
 enum InputType {
   text,
@@ -30,6 +31,8 @@ class CustomTextInputWidget<T> extends StatelessWidget {
   final Widget? prefixIcon; // Icon ở đầu
   final Widget? suffixIcon; // Icon ở cuối
   final ValueChanged<String>? onChanged; // Hàm khi nội dung thay đổi
+  final VoidCallback? onTap; // Hàm khi nhấn vào ô input
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextInputWidget({
     super.key,
@@ -46,14 +49,16 @@ class CustomTextInputWidget<T> extends StatelessWidget {
     this.onChanged,
     this.isRequired = false,
     this.obscureText = false,
+    this.onTap,
+    this.inputFormatters,
   });
 
   @override
   Widget build(BuildContext context) {
     // Config cho từng size
     final sizeConfig = {
-      TextInputSize.large: const Size(320, 70),
-      TextInputSize.medium: const Size(130, 70),
+      TextInputSize.large: const Size(340, 70),
+      TextInputSize.medium: const Size(150, 70),
       TextInputSize.small: const Size(70, 70),
     };
 
@@ -67,12 +72,12 @@ class CustomTextInputWidget<T> extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 6),
           if (label != null) ...[
             buildLabel(context),
             const SizedBox(height: 4),
           ],
           TextFormField(
+            onTap: onTap ?? () {},
             obscureText: obscureText!,
             maxLines: maxLines ?? 1,
             readOnly: isReadOnly,
@@ -109,6 +114,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
+            inputFormatters: inputFormatters,
           ),
           const SizedBox(height: 6),
         ],

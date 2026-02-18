@@ -66,7 +66,7 @@ class SquareIconButton extends StatelessWidget {
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500, color: Colors.grey),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.grey),
                   ),
                 ),
               ],
@@ -74,44 +74,6 @@ class SquareIconButton extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-/// Grid of square buttons (auto breaks into columns)
-class SquareButtonsGrid extends StatelessWidget {
-  final List<ButtonItem> items;
-  final int crossAxisCount;
-  final double spacing;
-  final double itemSize;
-
-  const SquareButtonsGrid({
-    super.key,
-    required this.items,
-    this.crossAxisCount = 3,
-    this.spacing = 12,
-    this.itemSize = 100,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // Calculate height of each row (itemSize)
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: items.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        mainAxisSpacing: spacing,
-        crossAxisSpacing: spacing,
-        childAspectRatio: 1, // square
-      ),
-      itemBuilder: (context, index) {
-        return SquareIconButton(
-          item: items[index],
-          size: itemSize,
-        );
-      },
     );
   }
 }

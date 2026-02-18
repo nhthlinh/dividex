@@ -4,6 +4,7 @@ import 'package:Dividex/config/location/locale_cubit.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/config/themes/theme_cubit.dart';
+import 'package:Dividex/shared/utils/noti_parser.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/push_noti_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -30,15 +31,27 @@ class _MyAppState extends State<MyApp> {
     _initialized = true;
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      final body = message.notification?.body ?? 'You have a new notification';
+
+      final parser = NotificationParser(AppLocalizations.of(navigatorKey.currentContext!)!);
+
+      final translated = parser.parse(body);
+
       showCustomNotification(
-        message: message.notification?.body ?? 'You have a new notification',
+        message: translated,
         type: ToastType.info,
       );
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      final body = message.notification?.body ?? 'You have a new notification';
+
+      final parser = NotificationParser(AppLocalizations.of(navigatorKey.currentContext!)!);
+
+      final translated = parser.parse(body);
+
       showCustomNotification(
-        message: message.notification?.body ?? 'You have a new notification',
+        message: translated,
         type: ToastType.info,
       );
     });

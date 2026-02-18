@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Dividex/config/routes/router.dart';
+import 'package:Dividex/core/services/device_info_service.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
@@ -26,11 +27,29 @@ abstract class DioModule {
     final options = BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 20),
       headers: {'Accept-Language': locale},
     );
 
     final dio = Dio(options);
+
+    try {
+      final deviceInfo = await DeviceInfoService.getDeviceInfo(
+        includeLocation: true,
+      );
+      options.headers.addAll({
+        'X-Platform': deviceInfo['platform'],
+        'X-Device-Model': deviceInfo['device_model'],
+        'X-OS-Version': deviceInfo['os_version'],
+        'X-Device-ID': deviceInfo['device_id'],
+        'X-App-Version': deviceInfo['app_version'],
+        'X-Location': deviceInfo['location'] != null
+            ? '${deviceInfo['location']['lat']},${deviceInfo['location']['lng']}'
+            : '',
+      });
+    } catch (e) {
+      debugPrint('Failed to get device info: $e');
+    }
 
     /// Log request/response
     dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
@@ -47,7 +66,10 @@ abstract class DioModule {
           );
 
           // BỎ QUA nếu là request refresh
-          if (options.path.contains('/auth/refresh')) {
+          if (options.path.contains('/auth/refresh') ||
+              options.path.contains(
+                'https://split-expense-s3.s3.amazonaws.com',
+              )) {
             return handler.next(options);
           }
           options.headers['Authorization'] =
@@ -62,48 +84,73 @@ abstract class DioModule {
             final errorCode = response.data['error_code'];
             final messageCode = response.data['message_code'];
 
+            // ===> THÊM CHECK NÀY
+            if ((errorCode == 403 ||
+                    messageCode == "INVALID_OR_EXPIRED_TOKEN") &&
+                response.requestOptions.path.contains('/auth/refresh')) {
+              final context = navigatorKey.currentContext!;
+              await HiveService.clearToken(); // Xóa token khỏi local storage
+              await HiveService.clearUser(); // Xóa dữ liệu người dùng khỏi local storage
+              context.read<AuthBloc>().add(AuthCheckRequested());
+              context.goNamed(AppRouteNames.splash2);
+
+              refreshQueue.clear();
+              isRefreshing = false;
+              return handler.next(err); // dừng ở đây
+            }
+
             // Trường hợp token hết hạn
             final isTokenExpired =
-                (errorCode == 403 && messageCode == "TOKEN_EXPIRED");
+                (errorCode == 403 && messageCode == "INVALID_OR_EXPIRED_TOKEN");
+
+            // debugPrint(
+            //   "isTokenExpired: $isTokenExpired, isRefreshing: $isRefreshing",
+            // );
 
             if (isTokenExpired && !isRefreshing) {
               isRefreshing = true;
+              final refreshToken = HiveService.getToken()?.refreshToken;
 
               try {
-                final refreshToken = HiveService.getToken()?.refreshToken;
                 final refreshResponse = await dio.post(
                   '/auth/refresh',
                   data: {'refresh_token': refreshToken},
                 );
 
-                final newAccessToken =
-                    refreshResponse.data['data']['access_token'];
-                final newRefreshToken =
-                    refreshResponse.data['data']['refresh_token'];
+                final statusCode = refreshResponse.statusCode;
 
-                await HiveService.saveToken(
-                  TokenLocalModel(
-                    accessToken: newAccessToken,
-                    refreshToken: newRefreshToken,
-                  ),
-                );
+                // ===> CHỈ XỬ LÝ NẾU REFRESH OK
+                if (statusCode == 200 && refreshResponse.data['data'] != null) {
+                  final newAccessToken =
+                      refreshResponse.data['data']['access_token'];
+                  final newRefreshToken =
+                      refreshResponse.data['data']['refresh_token'];
 
-                // chạy lại queue
-                for (final queued in refreshQueue) {
-                  queued(newAccessToken);
+                  await HiveService.saveToken(
+                    TokenLocalModel(
+                      accessToken: newAccessToken,
+                      refreshToken: newRefreshToken,
+                    ),
+                  );
+
+                  for (final queued in refreshQueue) {
+                    queued(newAccessToken);
+                  }
+                  refreshQueue.clear();
+                  isRefreshing = false;
+
+                  final requestOptions = response.requestOptions;
+                  requestOptions.headers['Authorization'] =
+                      'Bearer ${newAccessToken.trim()}';
+                  final retriedResponse = await dio.fetch(requestOptions);
+                  return handler.resolve(retriedResponse);
                 }
-                refreshQueue.clear();
-                isRefreshing = false;
-
-                // retry request hiện tại
-                final requestOptions = response.requestOptions;
-                requestOptions.headers['Authorization'] =
-                    'Bearer ${newAccessToken.trim()}';
-                final retriedResponse = await dio.fetch(requestOptions);
-                return handler.resolve(retriedResponse);
               } catch (e) {
-                await HiveService.clearToken();
+                // network error cũng logout
                 final context = navigatorKey.currentContext!;
+                await HiveService.clearToken(); // Xóa token khỏi local storage
+                await HiveService.clearUser(); // Xóa dữ liệu người dùng khỏi local storage
+                context.read<AuthBloc>().add(AuthCheckRequested());
                 context.goNamed(AppRouteNames.splash2);
 
                 refreshQueue.clear();

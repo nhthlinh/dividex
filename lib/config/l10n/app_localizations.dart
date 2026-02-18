@@ -374,11 +374,11 @@ abstract class AppLocalizations {
   /// **'120.000'**
   String get expenseAmountHint;
 
-  /// No description provided for @expenseUnitLabel.
+  /// No description provided for @expenseCurrencyLabel.
   ///
   /// In en, this message translates to:
-  /// **'Unit'**
-  String get expenseUnitLabel;
+  /// **'Currency'**
+  String get expenseCurrencyLabel;
 
   /// No description provided for @expenseCategoryLabel.
   ///
@@ -869,7 +869,7 @@ abstract class AppLocalizations {
   /// No description provided for @pay.
   ///
   /// In en, this message translates to:
-  /// **'Pay'**
+  /// **'Settle up'**
   String get pay;
 
   /// No description provided for @analytics.
@@ -1927,6 +1927,1014 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transaction report'**
   String get transactionReport;
+
+  /// No description provided for @friendRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'{userName}\'s request '**
+  String friendRequest(Object userName);
+
+  /// No description provided for @you.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// No description provided for @your.
+  ///
+  /// In en, this message translates to:
+  /// **'Your'**
+  String get your;
+
+  /// No description provided for @transaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get transaction;
+
+  /// No description provided for @searchTransactionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for specific shared expenses, bills, or payments within groups'**
+  String get searchTransactionSubtitle;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
+
+  /// No description provided for @searchUserSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for users to add as friends or participants in expenses'**
+  String get searchUserSubtitle;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @searchTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Search transaction'**
+  String get searchTransaction;
+
+  /// No description provided for @searchUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Search user'**
+  String get searchUser;
+
+  /// No description provided for @addGroupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new group to share manage expense with your friend.'**
+  String get addGroupSubtitle;
+
+  /// No description provided for @addMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose members'**
+  String get addMembers;
+
+  /// No description provided for @refreshFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Session expired, please login again'**
+  String get refreshFail;
+
+  /// No description provided for @uploadImageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload image, size less than 100KB'**
+  String get uploadImageHint;
+
+  /// No description provided for @chooseFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file'**
+  String get chooseFile;
+
+  /// No description provided for @fileChosen.
+  ///
+  /// In en, this message translates to:
+  /// **'file chosen'**
+  String get fileChosen;
+
+  /// No description provided for @noFileChosen.
+  ///
+  /// In en, this message translates to:
+  /// **'No file chosen'**
+  String get noFileChosen;
+
+  /// No description provided for @members.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get members;
+
+  /// No description provided for @addEventSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new event to share and manage expense easily.'**
+  String get addEventSubtitle;
+
+  /// No description provided for @addExpenseSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new expense to share costs easily and keep everything fair for the group.'**
+  String get addExpenseSubtitle;
+
+  /// No description provided for @expenseSplitType.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose transaction type:'**
+  String get expenseSplitType;
+
+  /// No description provided for @groupNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The group was not found.'**
+  String get groupNotFound;
+
+  /// No description provided for @createIsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to create this item.'**
+  String get createIsDenied;
+
+  /// No description provided for @updateIsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to update this item.'**
+  String get updateIsDenied;
+
+  /// No description provided for @deleteIsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to delete this item.'**
+  String get deleteIsDenied;
+
+  /// No description provided for @eventNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The event was not found.'**
+  String get eventNotFound;
+
+  /// No description provided for @expenseNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The expense was not found'**
+  String get expenseNotFound;
+
+  /// No description provided for @friendRelationAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'This friend relationship already exists.'**
+  String get friendRelationAlreadyExists;
+
+  /// No description provided for @friendRequestNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The friend request was not found.'**
+  String get friendRequestNotFound;
+
+  /// No description provided for @totalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total amount'**
+  String get totalAmount;
+
+  /// No description provided for @amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amount;
+
+  /// No description provided for @splitRemainingEqually.
+  ///
+  /// In en, this message translates to:
+  /// **'Split remaining equally'**
+  String get splitRemainingEqually;
+
+  /// No description provided for @allocated.
+  ///
+  /// In en, this message translates to:
+  /// **'Allocated'**
+  String get allocated;
+
+  /// No description provided for @noEventsInGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'No events in this group yet'**
+  String get noEventsInGroup;
+
+  /// Number of members in a group
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No members} =1{1 member} other{{count} members}}'**
+  String membersText(int count);
+
+  /// No description provided for @event.
+  ///
+  /// In en, this message translates to:
+  /// **'Event'**
+  String get event;
+
+  /// No description provided for @expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get expense;
+
+  /// No description provided for @groupAddMemberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add new members to this group through'**
+  String get groupAddMemberHint;
+
+  /// No description provided for @groupAddMemberQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR code'**
+  String get groupAddMemberQr;
+
+  /// No description provided for @groupAddMemberFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Add friends (already in app)'**
+  String get groupAddMemberFriends;
+
+  /// No description provided for @groupChangeLeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Leader'**
+  String get groupChangeLeader;
+
+  /// No description provided for @groupSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Group\'s settings'**
+  String get groupSettings;
+
+  /// No description provided for @eventSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Event\'s settings'**
+  String get eventSettings;
+
+  /// No description provided for @leave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get leave;
+
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'DONE'**
+  String get done;
+
+  /// No description provided for @notYet.
+  ///
+  /// In en, this message translates to:
+  /// **'NOT YET'**
+  String get notYet;
+
+  /// No description provided for @deleteConfirm1.
+  ///
+  /// In en, this message translates to:
+  /// **'You can only remove a member after '**
+  String get deleteConfirm1;
+
+  /// No description provided for @deleteConfirm2.
+  ///
+  /// In en, this message translates to:
+  /// **'all debts in the group have been settled.'**
+  String get deleteConfirm2;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @from.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get from;
+
+  /// No description provided for @leaveIsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Total amount is not zero, please settle up before leaving'**
+  String get leaveIsDenied;
+
+  /// No description provided for @overview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overview;
+
+  /// No description provided for @totalEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Event attended'**
+  String get totalEvents;
+
+  /// No description provided for @totalExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expensed shared'**
+  String get totalExpenses;
+
+  /// No description provided for @totalSpending.
+  ///
+  /// In en, this message translates to:
+  /// **'Group\'s total spending'**
+  String get totalSpending;
+
+  /// No description provided for @userSpending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your total spending'**
+  String get userSpending;
+
+  /// No description provided for @contributionRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Contribution ratio'**
+  String get contributionRate;
+
+  /// No description provided for @event_not_joined_title.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t joined this event yet'**
+  String get event_not_joined_title;
+
+  /// No description provided for @event_not_joined_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \'Join\' to become a participant of this event.'**
+  String get event_not_joined_message;
+
+  /// No description provided for @join_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get join_button;
+
+  /// No description provided for @cancel_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel_button;
+
+  /// No description provided for @leader.
+  ///
+  /// In en, this message translates to:
+  /// **'Leader'**
+  String get leader;
+
+  /// No description provided for @contributon.
+  ///
+  /// In en, this message translates to:
+  /// **'Contribution'**
+  String get contributon;
+
+  /// No description provided for @dueDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Due day'**
+  String get dueDay;
+
+  /// No description provided for @billDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Bill detail'**
+  String get billDetail;
+
+  /// No description provided for @image.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get image;
+
+  /// No description provided for @expenseSplitNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense split not match, please check again'**
+  String get expenseSplitNotMatch;
+
+  /// No description provided for @accountNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Account number'**
+  String get accountNumber;
+
+  /// No description provided for @branch.
+  ///
+  /// In en, this message translates to:
+  /// **'Branch'**
+  String get branch;
+
+  /// No description provided for @accountNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your new account number'**
+  String get accountNumberLabel;
+
+  /// No description provided for @chooseBeneficiary.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose beneficiary'**
+  String get chooseBeneficiary;
+
+  /// No description provided for @findBeneficiary.
+  ///
+  /// In en, this message translates to:
+  /// **'Find beneficiary'**
+  String get findBeneficiary;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @binLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Field your bin to verify transfer'**
+  String get binLabel;
+
+  /// No description provided for @to.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get to;
+
+  /// No description provided for @youHaveSuccessfullyTransferred.
+  ///
+  /// In en, this message translates to:
+  /// **'You have successfully transferred'**
+  String get youHaveSuccessfullyTransferred;
+
+  /// No description provided for @transferSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer successful'**
+  String get transferSuccessful;
+
+  /// No description provided for @youHaveSuccessfullyWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'You have successfully withdraw'**
+  String get youHaveSuccessfullyWithdraw;
+
+  /// No description provided for @withdrawSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw successful'**
+  String get withdrawSuccessful;
+
+  /// No description provided for @accountCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your bank account infor successfully!'**
+  String get accountCreated;
+
+  /// No description provided for @accountDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your bank account infor successfully!'**
+  String get accountDeleted;
+
+  /// No description provided for @accountUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your bank account infor successfully!'**
+  String get accountUpdated;
+
+  /// No description provided for @addNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new account'**
+  String get addNewAccount;
+
+  /// No description provided for @addAccountGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your bank account information here if you wish to withdraw money to your personal account.'**
+  String get addAccountGuide;
+
+  /// No description provided for @rechargeIntoApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Recharge into Dividex'**
+  String get rechargeIntoApp;
+
+  /// No description provided for @balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get balance;
+
+  /// No description provided for @showBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Show balance'**
+  String get showBalance;
+
+  /// No description provided for @pleaseEnterAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter amount'**
+  String get pleaseEnterAmount;
+
+  /// No description provided for @totalDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Total dept'**
+  String get totalDebt;
+
+  /// No description provided for @sharedEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared events'**
+  String get sharedEvents;
+
+  /// No description provided for @mutualGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Mutual groups'**
+  String get mutualGroups;
+
+  /// No description provided for @mutualFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Mutual friends'**
+  String get mutualFriends;
+
+  /// No description provided for @seePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'See photo'**
+  String get seePhoto;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get changePhoto;
+
+  /// No description provided for @deletePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete photo'**
+  String get deletePhoto;
+
+  /// No description provided for @eventAddMemberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add new members to this event through'**
+  String get eventAddMemberHint;
+
+  /// No description provided for @eventAddMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Add members (already in group)'**
+  String get eventAddMembers;
+
+  /// No description provided for @groupMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get groupMember;
+
+  /// No description provided for @detail.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail'**
+  String get detail;
+
+  /// No description provided for @settleUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Settle up'**
+  String get settleUp;
+
+  /// No description provided for @createDepositSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit success'**
+  String get createDepositSuccess;
+
+  /// No description provided for @bank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank'**
+  String get bank;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction day'**
+  String get date;
+
+  /// No description provided for @code.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get code;
+
+  /// No description provided for @walletReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet report'**
+  String get walletReport;
+
+  /// No description provided for @netBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Net balance'**
+  String get netBalance;
+
+  /// No description provided for @expenseDeletedInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense has been soft delete, please restore or hard delete in group setting.'**
+  String get expenseDeletedInfo;
+
+  /// No description provided for @deleteDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete day'**
+  String get deleteDate;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @hardDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard delete'**
+  String get hardDelete;
+
+  /// No description provided for @deleteExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete expense'**
+  String get deleteExpense;
+
+  /// No description provided for @profilePicture.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile picture'**
+  String get profilePicture;
+
+  /// No description provided for @pinInputError1.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter pin code'**
+  String get pinInputError1;
+
+  /// No description provided for @pinInputError2.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin code must has 6 number'**
+  String get pinInputError2;
+
+  /// No description provided for @updatePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Update pin code'**
+  String get updatePin;
+
+  /// No description provided for @currentPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Current PIN'**
+  String get currentPin;
+
+  /// No description provided for @newPin.
+  ///
+  /// In en, this message translates to:
+  /// **'New PIN'**
+  String get newPin;
+
+  /// No description provided for @confirmPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm PIN'**
+  String get confirmPin;
+
+  /// No description provided for @updatePinGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your current PIN and set a new 6-digit PIN. Pin code will be used to verify your transactions. '**
+  String get updatePinGuide;
+
+  /// No description provided for @fee.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee'**
+  String get fee;
+
+  /// No description provided for @pinInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin is invalid, please set your pin in setting'**
+  String get pinInvalid;
+
+  /// No description provided for @insufficientBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance is not enough'**
+  String get insufficientBalance;
+
+  /// No description provided for @realAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Converted amount'**
+  String get realAmount;
+
+  /// No description provided for @realAmountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount after currency conversion.'**
+  String get realAmountDescription;
+
+  /// No description provided for @originalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Original amount'**
+  String get originalAmount;
+
+  /// No description provided for @originalAmountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount before currency conversion.'**
+  String get originalAmountDescription;
+
+  /// No description provided for @confirmTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm transfer'**
+  String get confirmTransfer;
+
+  /// No description provided for @exchangeRateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Current exchange rate: 1 {baseCurrency} = {rate} VND'**
+  String exchangeRateMessage(Object baseCurrency, Object rate);
+
+  /// No description provided for @convertedAmountMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Converted amount: {amount} VND'**
+  String convertedAmountMessage(Object amount);
+
+  /// No description provided for @continueQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to continue?'**
+  String get continueQuestion;
+
+  /// No description provided for @toSettleUpDebtInGroup.
+  ///
+  /// In en, this message translates to:
+  /// **' through a transfer or any method outside the DivideX app.'**
+  String get toSettleUpDebtInGroup;
+
+  /// No description provided for @outSideTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside transfer'**
+  String get outSideTransfer;
+
+  /// No description provided for @pinNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up your pin to transfer'**
+  String get pinNotSet;
+
+  /// No description provided for @pinIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pin is incorect'**
+  String get pinIncorrect;
+
+  /// No description provided for @createPinGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Please create a 6-digit PIN to secure your account. You’ll use this PIN to log in or confirm important actions.'**
+  String get createPinGuide;
+
+  /// No description provided for @createPinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create PIN'**
+  String get createPinTitle;
+
+  /// No description provided for @youBorrowed.
+  ///
+  /// In en, this message translates to:
+  /// **'you borrowed'**
+  String get youBorrowed;
+
+  /// No description provided for @youLent.
+  ///
+  /// In en, this message translates to:
+  /// **'you lent'**
+  String get youLent;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get year;
+
+  /// No description provided for @externalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'External expense'**
+  String get externalExpense;
+
+  /// No description provided for @internalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal expense'**
+  String get internalExpense;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// No description provided for @chooseTypeFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose type of transaction'**
+  String get chooseTypeFilter;
+
+  /// No description provided for @wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get wallet;
+
+  /// No description provided for @inOrEx.
+  ///
+  /// In en, this message translates to:
+  /// **'In or ex app'**
+  String get inOrEx;
+
+  /// No description provided for @conected.
+  ///
+  /// In en, this message translates to:
+  /// **'Conected'**
+  String get conected;
+
+  /// No description provided for @lastTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Last transaction'**
+  String get lastTransaction;
+
+  /// Notification when someone updates an event
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have updated an event {event}'**
+  String eventUpdated(Object user, Object event);
+
+  /// Notification when someone creates an event
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have created an event {event}'**
+  String eventCreated(Object user, Object event);
+
+  /// Notification when someone deletes an event
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have deleted an event {event}'**
+  String eventDeleted(Object user, Object event);
+
+  /// Notification when someone restores a deleted expense
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have restored an expense {expense}'**
+  String expenseRestored(Object user, Object expense);
+
+  /// Notification when someone deletes an expense
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have deleted an expense {expense}'**
+  String expenseDeleted(Object user, Object expense);
+
+  /// Notification when someone updates an expense
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have updated an expense {expense}'**
+  String expenseUpdated(Object user, Object expense);
+
+  /// Notification when someone creates an expense
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have created an expense {expense}'**
+  String expenseCreated(Object user, Object expense);
+
+  /// Notification when someone accepts your friend request
+  ///
+  /// In en, this message translates to:
+  /// **'{user} accepted your friend request'**
+  String friendAccepted(Object user);
+
+  /// Notification when someone sends a friend request with a message
+  ///
+  /// In en, this message translates to:
+  /// **'{user} has sent you a friend request. message: {message}'**
+  String friendRequestNoti(Object user, Object message);
+
+  /// Notification when you receive a friend request
+  ///
+  /// In en, this message translates to:
+  /// **'You have received a friend request from {user}'**
+  String friendRequestToMe(Object user);
+
+  /// Notification when group leader changes
+  ///
+  /// In en, this message translates to:
+  /// **'{user} is new leader of group {group}'**
+  String leaderChanged(Object user, Object group);
+
+  /// Notification when someone updates a group
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have updated a group {group}'**
+  String groupUpdated(Object user, Object group);
+
+  /// Notification when user deposits money
+  ///
+  /// In en, this message translates to:
+  /// **'You have deposited {amount} {currency}'**
+  String deposit(Object amount, Object currency);
+
+  /// No description provided for @enterMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter message...'**
+  String get enterMessage;
+
+  /// No description provided for @partnerTyping.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner is typing...'**
+  String get partnerTyping;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @messageDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Message is deleted'**
+  String get messageDeleted;
+
+  /// No description provided for @edited.
+  ///
+  /// In en, this message translates to:
+  /// **'Message is Edited'**
+  String get edited;
 }
 
 class _AppLocalizationsDelegate

@@ -98,7 +98,6 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
                         controller: searchController,
                         onChanged: onSearchChanged,
                         decoration: inputDeco().copyWith(
-                          hintText: "Search...",
                           hintStyle: Theme.of(context)
                               .textTheme
                               .bodySmall
@@ -152,7 +151,12 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
         Center(
           child: Text(
             widget.label,
-            style: Theme.of(context).textTheme.titleSmall,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontSize: 12,
+              letterSpacing: 0,
+              height: 16 / 12,
+              color: Colors.grey,
+            ),
           ),
         ),
         Positioned(
@@ -180,7 +184,7 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             buildLabel(context),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             SizedBox(
               width: double.infinity,
               child: InputDecorator(
@@ -200,7 +204,7 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
                             Theme.of(context).textTheme.bodySmall!.fontSize!,
                       ),
                     ),
-                    const Icon(Icons.arrow_drop_down),
+                    const Icon(Icons.keyboard_arrow_down, size: 16),
                   ],
                 ),
               ),
@@ -247,7 +251,7 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
         borderRadius: BorderRadius.all(Radius.circular(15)),
         borderSide: BorderSide(color: AppThemes.primary3Color, width: 2),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
     );
   }
 
