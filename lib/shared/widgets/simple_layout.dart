@@ -73,9 +73,12 @@ class SimpleLayout extends StatelessWidget {
                 ),
                 child: RefreshIndicator(
                   onRefresh: onRefresh,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: child,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: child,
+                    ),
                   ),
                 ),
               ),

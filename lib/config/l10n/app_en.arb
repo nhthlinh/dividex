@@ -547,8 +547,8 @@
   "youBorrowed": "you borrowed",
   "youLent": "you lent",
   "year": "Year",
-  "externalExpense": "External expense",
-  "internalExpense": "Internal expense",
+  "externalExpense": "External",
+  "internalExpense": "Internal",
   "notifications": "Notifications",
   "filter": "Filter",
   "chooseTypeFilter": "Choose type of transaction",
@@ -675,7 +675,9 @@
   "partnerTyping": "Partner is typing...",
   "edit": "Edit",
   "messageDeleted": "Message is deleted",
-  "edited": "Message is Edited"
+  "edited": "Message is Edited",
+
+  "noAccountError": "You have not linked any bank account yet..."
   
 
 

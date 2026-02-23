@@ -1468,10 +1468,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get year => 'Year';
 
   @override
-  String get externalExpense => 'External expense';
+  String get externalExpense => 'External';
 
   @override
-  String get internalExpense => 'Internal expense';
+  String get internalExpense => 'Internal';
 
   @override
   String get notifications => 'Notifications';
@@ -1573,4 +1573,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get edited => 'Message is Edited';
+
+  @override
+  String get noAccountError => 'You have not linked any bank account yet...';
 }

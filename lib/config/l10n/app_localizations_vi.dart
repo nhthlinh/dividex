@@ -1466,10 +1466,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get year => 'Năm';
 
   @override
-  String get externalExpense => 'Giao dịch nạp vào';
+  String get externalExpense => 'Nạp vào';
 
   @override
-  String get internalExpense => 'Giao dịch trong app';
+  String get internalExpense => 'Trong app';
 
   @override
   String get notifications => 'Thông báo';
@@ -1571,4 +1571,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get edited => 'Tin nhắn đã chỉnh sửa';
+
+  @override
+  String get noAccountError => 'Bạn chưa liên kết với tài khoản nào ...';
 }

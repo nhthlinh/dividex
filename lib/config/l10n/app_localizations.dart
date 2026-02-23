@@ -2777,13 +2777,13 @@ abstract class AppLocalizations {
   /// No description provided for @externalExpense.
   ///
   /// In en, this message translates to:
-  /// **'External expense'**
+  /// **'External'**
   String get externalExpense;
 
   /// No description provided for @internalExpense.
   ///
   /// In en, this message translates to:
-  /// **'Internal expense'**
+  /// **'Internal'**
   String get internalExpense;
 
   /// No description provided for @notifications.
@@ -2935,6 +2935,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Message is Edited'**
   String get edited;
+
+  /// No description provided for @noAccountError.
+  ///
+  /// In en, this message translates to:
+  /// **'You have not linked any bank account yet...'**
+  String get noAccountError;
 }
 
 class _AppLocalizationsDelegate

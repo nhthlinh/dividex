@@ -547,8 +547,8 @@
   "youBorrowed": "bạn mượn",
   "youLent": "bạn cho mượn",
   "year": "Năm",
-  "externalExpense": "Giao dịch nạp vào",
-  "internalExpense": "Giao dịch trong app",
+  "externalExpense": "Nạp vào",
+  "internalExpense": "Trong app",
   "notifications": "Thông báo",
   "filter": "Bộ lọc",
   "chooseTypeFilter": "Chọn loại giao dịch",
@@ -675,7 +675,10 @@
   "partnerTyping": "Đối phương đang nhập...",
   "edit": "Chỉnh sửa",
   "messageDeleted": "Tin nhắn đã bị xóa",
-  "edited": "Tin nhắn đã chỉnh sửa"
+  "edited": "Tin nhắn đã chỉnh sửa",
+  
+  "noAccountError": "Bạn chưa liên kết với tài khoản nào ..."
+
   
 
 
