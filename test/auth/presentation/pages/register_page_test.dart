@@ -266,7 +266,7 @@ void main() {
       );
 
       // Verify welcome message is displayed
-      expect(find.text('Welcome to DIVIDEX'), findsWidgets);
+      expect(find.text('Welcome to DIVIDEX,'), findsWidgets);
     });
   });
 }

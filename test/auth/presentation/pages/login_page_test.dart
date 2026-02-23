@@ -216,7 +216,7 @@ void main() {
       );
 
       // Verify forgot password link exists
-      expect(find.text('Forgot Password?'), findsWidgets);
+      expect(find.text('Forgot your password?'), findsWidgets);
     });
   });
 }

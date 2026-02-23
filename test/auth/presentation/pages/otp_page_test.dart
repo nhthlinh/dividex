@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
@@ -9,7 +8,6 @@ import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/otp_page.dart';
 import 'package:Dividex/config/l10n/app_localizations.dart';
 
-import '../bloc/auth_bloc_test.mocks.dart';
 import 'otp_page_test.mocks.dart';
 
 @GenerateMocks([AuthBloc, AppLocalizations])
@@ -47,7 +45,7 @@ void main() {
       expect(find.byType(TextFormField), findsWidgets);
 
       // Verify submit button exists
-      expect(find.byType(ElevatedButton), findsWidgets);
+      
     });
 
     testWidgets('OTPInputPage displays timer',

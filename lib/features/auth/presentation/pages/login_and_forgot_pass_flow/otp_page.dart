@@ -14,7 +14,6 @@ import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
-import 'package:Dividex/shared/widgets/wave_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

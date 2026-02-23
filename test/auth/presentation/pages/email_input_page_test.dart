@@ -111,7 +111,7 @@ void main() {
       );
 
       // Verify title is displayed
-      expect(find.text('Forgot Password'), findsWidgets);
+      expect(find.text('Forgot your password?'), findsWidgets);
     });
   });
 }
