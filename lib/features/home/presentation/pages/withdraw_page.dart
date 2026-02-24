@@ -17,6 +17,7 @@ import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 
 class WithdrawPage extends StatefulWidget {
@@ -107,6 +108,17 @@ class _WithdrawPageState extends State<WithdrawPage> {
                         BlocBuilder<AccountBloc, AccountState>(
                           buildWhen: (p, c) => p.accounts != c.accounts,
                           builder: (context, state) {
+                            if (state is AccountInitialState) {
+                              return const Center(
+                                child: ColoredBox(
+                                  color: Colors.transparent,
+                                  child: SpinKitFadingCircle(
+                                    color: AppThemes.primary3Color,
+                                  ),
+                                ),
+                              );
+                            }
+                            
                             final accounts = state.accounts;
 
                             if (accounts.isEmpty && !_hasShownToast) {

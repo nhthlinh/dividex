@@ -12,6 +12,10 @@ class AccountState {
   AccountState(this.accounts);
 }
 
+class AccountInitialState extends AccountState {
+  AccountInitialState() : super([]);
+}
+
 class AccountEvent {}
 
 class GetAccountsEvent extends AccountEvent {}
@@ -35,9 +39,9 @@ class DeleteAccountEvent extends AccountEvent {
 }
 
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
-  AccountBloc() : super(AccountState([])) {
+  AccountBloc() : super(AccountInitialState()) {
     on<GetAccountsEvent>((event, emit) async {
-      emit(AccountState([]));
+      emit(AccountInitialState());
       try {
         final useCase = await getIt.getAsync<AccountUseCase>();
         final accounts = await useCase.getAccounts(1, 1000);
