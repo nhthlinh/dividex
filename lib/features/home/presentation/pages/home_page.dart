@@ -109,6 +109,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _submitRating(int rating, int loginCount) async {
     try {
       context.read<UserBloc>().add(ReviewEvent(stars: rating));
+      HiveService.saveUser(HiveService.getUser().copyWith(countUserLogin: loginCount + 1));
     } catch (e) {
       // Xử lý lỗi nếu cần
     }

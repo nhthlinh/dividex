@@ -130,6 +130,7 @@ class _NotiPageState extends State<NotiPage> {
                   notis[index].relatedUid,
                   context,
                   notis[index].fromUser,
+                  notis[index].content,
                 ),
               },
               child: Row(
@@ -155,6 +156,8 @@ class _NotiPageState extends State<NotiPage> {
                             AppLocalizations.of(context)!,
                           ).parse(notis[index].content),
                           style: Theme.of(context).textTheme.titleSmall,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 8),
                         Text(
