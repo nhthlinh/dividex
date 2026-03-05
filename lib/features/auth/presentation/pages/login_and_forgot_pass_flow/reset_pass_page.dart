@@ -43,10 +43,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
 
       // Dispatch ResetPasswordRequested event
       context.read<AuthBloc>().add(
-        AuthResetPasswordRequested(
-          newPassword: password,
-          token: widget.token,
-        ),
+        AuthResetPasswordRequested(newPassword: password, token: widget.token),
       );
 
       context.goNamed(AppRouteNames.login);
@@ -88,7 +85,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
           isRequired: true,
         ),
       ],
-      builder: (isValid) {
+      builder: (isValid, isSubmitting, setSubmitting) {
         return ContentCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -152,14 +149,18 @@ class _ResetPassPageState extends State<ResetPassPage> {
 
               CustomButton(
                 text: intl.settingChangePass,
-                onPressed: isValid
-                    ? () {
+                onPressed: (!isValid || isSubmitting)
+                    ? null
+                    : () async {
+                        setSubmitting(true);
+
                         _submitPass();
                         // Clear the form after submission
                         clearFormTrigger.value =
                             !clearFormTrigger.value; // Trigger form reset
-                      }
-                    : null,
+
+                        setSubmitting(false);
+                      },
               ),
             ],
           ),

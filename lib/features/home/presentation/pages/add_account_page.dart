@@ -68,7 +68,8 @@ class _AddAccountPageState extends State<AddAccountPage> {
       currentIndex: 0,
       child: SimpleLayout(
         onRefresh: () {
-          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          clearFormTrigger.value =
+              !clearFormTrigger.value; // Trigger form reset
           return Future.value();
         }, // No specific refresh logic needed for this page
         title: intl.account,
@@ -80,7 +81,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
             FormFieldConfig(selectedValue: selectedBranch, isRequired: true),
             FormFieldConfig(selectedValue: selectedCurrency, isRequired: true),
           ],
-          builder: (isValid) => Column(
+          builder: (isValid, isSubmitting, setSubmitting) => Column(
             children: [
               CustomTextInputWidget(
                 size: TextInputSize.large,
@@ -213,11 +214,15 @@ class _AddAccountPageState extends State<AddAccountPage> {
               const SizedBox(height: 16),
               CustomButton(
                 text: intl.add,
-                onPressed: isValid
-                    ? () {
+                onPressed: (!isValid || isSubmitting)
+                    ? null
+                    : () async {
+                        setSubmitting(true);
+
                         _submit();
-                      }
-                    : null,
+
+                        setSubmitting(false);
+                      },
               ),
             ],
           ),

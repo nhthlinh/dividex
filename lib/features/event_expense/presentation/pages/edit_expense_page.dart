@@ -268,7 +268,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
         ),
         FormFieldConfig(controller: dateController, isRequired: true),
       ],
-      builder: (isValid) => Column(
+      builder: (isValid, isSubmitting, setSubmitting) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
@@ -553,7 +553,17 @@ class _EditExpensePageState extends State<EditExpensePage> {
 
           CustomButton(
             text: intl.save,
-            onPressed: (isValid && userDebts.isNotEmpty) ? submitExpense : null,
+            onPressed: (!isValid || isSubmitting || userDebts.isEmpty)
+                ? null
+                : () async {
+                    setSubmitting(true);
+
+                    submitExpense();
+                    clearFormTrigger.value =
+                        !clearFormTrigger.value; // Trigger form reset
+
+                    setSubmitting(false);
+                  },
           ),
           const SizedBox(height: 20),
           CustomButton(

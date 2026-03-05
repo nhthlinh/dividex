@@ -67,7 +67,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
             return SimpleLayout(
               onRefresh: () {
-                clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+                clearFormTrigger.value =
+                    !clearFormTrigger.value; // Trigger form reset
                 return Future.value();
               },
               title: intl.profileSetting,
@@ -80,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     isRequired: true,
                   ),
                 ],
-                builder: (valid) => Column(
+                builder: (isValid, isSubmitting, setSubmitting) => Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 16),
@@ -146,8 +147,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     CustomButton(
                       text: intl.save,
                       size: ButtonSize.large,
-                      onPressed: valid
-                          ? () {
+
+                      onPressed: (!isValid || isSubmitting)
+                          ? null
+                          : () async {
+                              setSubmitting(true);
+
                               context.read<UserBloc>().add(
                                 UpdateMeEvent(
                                   name: name.text,
@@ -160,8 +165,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       : null,
                                 ),
                               );
-                            }
-                          : null,
+
+                              setSubmitting(false);
+                            },
                     ),
                   ],
                 ),

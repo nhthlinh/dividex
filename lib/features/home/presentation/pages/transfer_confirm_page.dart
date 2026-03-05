@@ -238,7 +238,7 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                 fields: [
                   FormFieldConfig(controller: binController, isRequired: true),
                 ],
-                builder: (isValid) {
+                builder: (isValid, isSubmitting, setSubmitting) {
                   return Column(
                     children: [
                       CustomTextInputWidget(
@@ -254,7 +254,15 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                       const SizedBox(height: 24),
                       CustomButton(
                         text: intl.confirm,
-                        onPressed: isValid ? _submit : null,
+                        onPressed: (!isValid || isSubmitting)
+                            ? null
+                            : () async {
+                                setSubmitting(true);
+
+                                _submit();
+
+                                setSubmitting(false);
+                              },
                       ),
                     ],
                   );

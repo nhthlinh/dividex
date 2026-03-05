@@ -146,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
         FormFieldConfig(controller: numberController, isRequired: true),
         FormFieldConfig(controller: passwordController, isRequired: true),
       ],
-      builder: (isValid) {
+      builder: (isValid, isSubmitting, setSubmitting) {
         return Column(
           children: [
             //Name
@@ -221,27 +221,33 @@ class _RegisterPageState extends State<RegisterPage> {
             // Button chỉ enable khi isValid == true
             CustomButton(
               text: intl.register,
-              onPressed: (!isValid || state is AuthLoading)
+              onPressed: (!isValid || isSubmitting || state is AuthLoading)
                   ? null
-                  : () {
+                  : () async {
+                      setSubmitting(true);
+
                       _submitRegister();
                       // Clear the form after submission
-                      clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+                      clearFormTrigger.value =
+                          !clearFormTrigger.value; // Trigger form reset
+
+                      setSubmitting(false);
                     },
             ),
 
             const SizedBox(height: 24),
 
-          // Already have an account? Login
-          CustomTextButton(
-            description: intl.registerPageToLogin, // "Already have an account?"
-            label: intl.login, // "Login"
-            onPressed: () {
-              context.pushNamed(AppRouteNames.login);
-            },
-          ),
+            // Already have an account? Login
+            CustomTextButton(
+              description:
+                  intl.registerPageToLogin, // "Already have an account?"
+              label: intl.login, // "Login"
+              onPressed: () {
+                context.pushNamed(AppRouteNames.login);
+              },
+            ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         );
       },

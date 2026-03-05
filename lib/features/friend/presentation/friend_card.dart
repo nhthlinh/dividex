@@ -257,15 +257,17 @@ class _FriendCardState extends State<FriendCard> {
             fields: [
               FormFieldConfig(controller: controller, isRequired: true),
             ],
-            builder: (isValid) => CustomButton(
+            builder: (isValid, isSubmitting, setSubmitting) => CustomButton(
               text: intl.send,
-              onPressed: (controller.text.isEmpty) ? null : () {
+              onPressed: (controller.text.isEmpty || isSubmitting) ? null : () {
+                setSubmitting(true);
                 context.read<FriendBloc>().add(
                   SendFriendRequestEvent(
                     widget.friend.friendUid,
                     message: controller.text.isEmpty ? null : controller.text,
                   ),
                 );
+                setSubmitting(false);
                 Navigator.of(context).pop();
               },
               size: ButtonSize.medium,

@@ -59,7 +59,7 @@ class _TransferPageState extends State<TransferPage> {
     CurrencyEnum.vnd,
   );
   String? groupId;
-  
+
   final clearFormTrigger = ValueNotifier(false);
 
   @override
@@ -203,7 +203,8 @@ class _TransferPageState extends State<TransferPage> {
       currentIndex: 0,
       child: SimpleLayout(
         onRefresh: () {
-          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          clearFormTrigger.value =
+              !clearFormTrigger.value; // Trigger form reset
           context.read<LoadedFriendsBloc>().add(
             event.InitialEvent(HiveService.getUser().id),
           );
@@ -232,7 +233,7 @@ class _TransferPageState extends State<TransferPage> {
             FormFieldConfig(controller: originalAmount, isRequired: true),
             FormFieldConfig(selectedValue: selectedToUser, isRequired: true),
           ],
-          builder: (isValid) {
+          builder: (isValid, isSubmitting, setSubmitting) {
             return Column(
               children: [
                 ContentCard(
@@ -507,7 +508,15 @@ class _TransferPageState extends State<TransferPage> {
                   builder: (context, toUser, _) {
                     return CustomButton(
                       text: intl.confirm,
-                      onPressed: (isValid && toUser != null) ? _submit : null,
+                      onPressed: (!isValid || isSubmitting || toUser == null)
+                          ? null
+                          : () async {
+                              setSubmitting(true);
+
+                              _submit();
+
+                              setSubmitting(false);
+                            },
                     );
                   },
                 ),

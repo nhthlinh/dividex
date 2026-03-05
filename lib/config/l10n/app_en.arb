@@ -677,7 +677,8 @@
   "messageDeleted": "Message is deleted",
   "edited": "Message is Edited",
 
-  "noAccountError": "You have not linked any bank account yet..."
+  "noAccountError": "You have not linked any bank account yet...",
+  "commingSoon": "This feature is coming soon."
   
 
 

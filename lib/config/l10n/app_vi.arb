@@ -677,7 +677,8 @@
   "messageDeleted": "Tin nhắn đã bị xóa",
   "edited": "Tin nhắn đã chỉnh sửa",
   
-  "noAccountError": "Bạn chưa liên kết với tài khoản nào ..."
+  "noAccountError": "Bạn chưa liên kết với tài khoản nào ...",
+  "commingSoon": "Tính năng này sẽ sớm được ra mắt."
 
   
 

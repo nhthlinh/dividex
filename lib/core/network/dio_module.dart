@@ -27,7 +27,7 @@ abstract class DioModule {
     final options = BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 100),
       headers: {'Accept-Language': locale},
     );
 

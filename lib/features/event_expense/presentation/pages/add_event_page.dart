@@ -130,7 +130,7 @@ class _AddEventPageState extends State<AddEventPage> {
         FormFieldConfig(controller: eventEndDateController, isRequired: true),
         FormFieldConfig(selectedValue: selectedGroup, isRequired: true),
       ],
-      builder: (isValid) => Column(
+      builder: (isValid, isSubmitting, setSubmitting) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
@@ -268,14 +268,18 @@ class _AddEventPageState extends State<AddEventPage> {
           const SizedBox(height: 30),
           CustomButton(
             text: intl.add,
-            onPressed: (isValid && selectedMembers.isNotEmpty)
-                ? () {
+            onPressed: (!isValid || isSubmitting || selectedMembers.isEmpty)
+                ? null
+                : () async {
+                    setSubmitting(true);
+
                     submitEvent();
                     // Clear the form after submission
                     clearFormTrigger.value =
                         !clearFormTrigger.value; // Trigger form reset
-                  }
-                : null,
+
+                    setSubmitting(false);
+                  },
           ),
           const SizedBox(height: 30),
         ],

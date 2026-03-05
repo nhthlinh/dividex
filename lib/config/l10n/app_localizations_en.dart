@@ -1576,4 +1576,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noAccountError => 'You have not linked any bank account yet...';
+
+  @override
+  String get commingSoon => 'This feature is coming soon.';
 }

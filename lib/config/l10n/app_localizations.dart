@@ -2941,6 +2941,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You have not linked any bank account yet...'**
   String get noAccountError;
+
+  /// No description provided for @commingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is coming soon.'**
+  String get commingSoon;
 }
 
 class _AppLocalizationsDelegate

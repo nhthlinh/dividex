@@ -69,7 +69,8 @@ class _WithdrawPageState extends State<WithdrawPage> {
       child: SimpleLayout(
         onRefresh: () {
           context.read<AccountBloc>().add(GetAccountsEvent());
-          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          clearFormTrigger.value =
+              !clearFormTrigger.value; // Trigger form reset
           return Future.value();
         },
         title: intl.withdraw,
@@ -80,7 +81,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
             FormFieldConfig(controller: amountController, isRequired: true),
             FormFieldConfig(selectedValue: selectedToAccount, isRequired: true),
           ],
-          builder: (isValid) {
+          builder: (isValid, isSubmitting, setSubmitting) {
             return SizedBox(
               height: MediaQuery.of(context).size.height * 0.7,
               child: Column(
@@ -118,7 +119,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                 ),
                               );
                             }
-                            
+
                             final accounts = state.accounts;
 
                             if (accounts.isEmpty && !_hasShownToast) {
@@ -135,66 +136,66 @@ class _WithdrawPageState extends State<WithdrawPage> {
                             }
 
                             return ValueListenableBuilder<BankAccount?>(
-                                valueListenable: selectedToAccount,
-                                builder: (context, value, _) {
-                                  return CustomDropdownWidget<BankAccount>(
-                                    label: intl.account,
-                                    value: selectedToAccount.value,
-                                    options: accounts,
-                                    displayString: (account) =>
-                                        '${account.accountNumber} ${account.bankName}',
-                                    buildOption: (account, selected) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 6,
-                                          horizontal: 4,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              account.bankName,
+                              valueListenable: selectedToAccount,
+                              builder: (context, value, _) {
+                                return CustomDropdownWidget<BankAccount>(
+                                  label: intl.account,
+                                  value: selectedToAccount.value,
+                                  options: accounts,
+                                  displayString: (account) =>
+                                      '${account.accountNumber} ${account.bankName}',
+                                  buildOption: (account, selected) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 6,
+                                        horizontal: 4,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            account.bankName,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  color: selected
+                                                      ? AppThemes.primary3Color
+                                                      : Colors.grey,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            child: Text(
+                                              account.accountNumber,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyMedium
                                                   ?.copyWith(
                                                     color: selected
-                                                        ? AppThemes.primary3Color
+                                                        ? AppThemes
+                                                              .primary3Color
                                                         : Colors.grey,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                             ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Text(
-                                                account.accountNumber,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                      color: selected
-                                                          ? AppThemes.primary3Color
-                                                          : Colors.grey,
-                                                      fontWeight: FontWeight.w500,
-                                                    ),
-                                              ),
+                                          ),
+                                          if (selected)
+                                            const Icon(
+                                              Icons.check,
+                                              color: AppThemes.primary3Color,
                                             ),
-                                            if (selected)
-                                              const Icon(
-                                                Icons.check,
-                                                color: AppThemes.primary3Color,
-                                              ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    onChanged: (val) {
-                                      selectedToAccount.value = val;
-                                    },
-                                    isRequired: true,
-                                  );
-                                },
-                              );
-
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  onChanged: (val) {
+                                    selectedToAccount.value = val;
+                                  },
+                                  isRequired: true,
+                                );
+                              },
+                            );
                           },
                         ),
 
@@ -224,7 +225,8 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                     setState(() {
                                       if (amountController.text !=
                                           amount.toString()) {
-                                        amountController.text = amount.toString();
+                                        amountController.text = amount
+                                            .toString();
                                       } else {
                                         amountController.text = '0';
                                       }
@@ -239,14 +241,21 @@ class _WithdrawPageState extends State<WithdrawPage> {
                             }),
                           ],
                         ),
-
                       ],
                     ),
                   ),
                   const Spacer(),
                   CustomButton(
                     text: intl.confirm,
-                    onPressed: isValid ? _submit : null,
+                    onPressed: (!isValid || isSubmitting)
+                        ? null
+                        : () async {
+                            setSubmitting(true);
+
+                            _submit();
+
+                            setSubmitting(false);
+                          },
                   ),
                 ],
               ),

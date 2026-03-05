@@ -1574,4 +1574,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get noAccountError => 'Bạn chưa liên kết với tài khoản nào ...';
+
+  @override
+  String get commingSoon => 'Tính năng này sẽ sớm được ra mắt.';
 }

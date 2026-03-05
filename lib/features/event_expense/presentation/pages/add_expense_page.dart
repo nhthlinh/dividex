@@ -232,7 +232,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
       child: SimpleLayout(
         onRefresh: () async => {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+            clearFormTrigger.value =
+                !clearFormTrigger.value; // Trigger form reset
             _showOptionDialog();
           }),
         },
@@ -261,7 +262,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
         ),
         FormFieldConfig(controller: dateController, isRequired: true),
       ],
-      builder: (isValid) => Column(
+      builder: (isValid, isSubmitting, setSubmitting) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
@@ -326,16 +327,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
                             ),
                             child: Row(
                               children: [
-                                // if (b.avatarUrl != null)
-                                //   Image.network(
-                                //     b.avatarUrl!,
-                                //     width: 50,
-                                //     height: 50,
-                                //     errorBuilder: (context, error, stackTrace) =>
-                                //         const Icon(Icons.group),
-                                //   )
-                                // else
-                                //   const Icon(Icons.group),
                                 Text(
                                   b.code,
                                   style: Theme.of(context).textTheme.bodyMedium
@@ -588,16 +579,21 @@ class _AddExpensePageState extends State<AddExpensePage> {
           CustomButton(
             text: intl.add,
             onPressed:
-                (isValid &&
-                    userDebts.isNotEmpty &&
+                (!isValid ||
+                    isSubmitting ||
+                    userDebts.isEmpty ||
                     userDebts.fold<double>(
                           0,
                           (previousValue, element) =>
                               previousValue + (element.amount),
-                        ) ==
+                        ) !=
                         (double.tryParse(expenseAmountController.text) ?? 0))
-                ? submitExpense
-                : null,
+                ? null
+                : () async {
+                    setSubmitting(true);
+                    submitExpense();
+                    setSubmitting(false);
+                  },
           ),
           const SizedBox(height: 20),
         ],

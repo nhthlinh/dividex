@@ -1,4 +1,5 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
@@ -17,12 +18,14 @@ import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
+import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/settle_up_pop_up.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 
 class FriendProfilePage extends StatefulWidget {
   final String friendId;
@@ -554,7 +557,17 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                     children: [
                                       CustomButton(
                                         text: intl.detail,
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          context.pushNamed(
+                                            AppRouteNames.groupDetail,
+                                            pathParameters: {'groupId': group.id ?? ''},
+                                            extra: {
+                                              'groupName': group.name ?? '',
+                                              'groupAvatarUrl': group.avatarUrl?.publicUrl ?? '',
+                                              'leaderId': group.leader?.id ?? '',
+                                            },
+                                          );
+                                        },
                                         size: ButtonSize.medium,
                                         type: ButtonType.secondary,
                                         customColor: AppThemes.infoColor,
@@ -578,7 +591,10 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                               groupId: group.id ?? '',
                                             );
                                           } else {
-                                            // Xử lý nhắc nhở
+                                            showCustomToast(
+                                              intl.commingSoon,
+                                              type: ToastType.info,
+                                            );
                                           }
                                         },
                                         size: ButtonSize.medium,
@@ -695,11 +711,12 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
         CustomFormWrapper(
           clearTrigger: ValueNotifier(false),
           fields: [FormFieldConfig(controller: controller, isRequired: true)],
-          builder: (isValid) => CustomButton(
+          builder: (isValid, isSubmitting, setSubmitting) => CustomButton(
             text: intl.send,
-            onPressed: (controller.text.isEmpty)
+            onPressed: (controller.text.isEmpty || isSubmitting)
                 ? null
                 : () {
+                    setSubmitting(true);
                     context.read<FriendBloc>().add(
                       SendFriendRequestEvent(
                         friend.id ?? '',
@@ -708,6 +725,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                             : controller.text,
                       ),
                     );
+                    setSubmitting(false);
                     Navigator.of(context).pop();
                   },
             size: ButtonSize.medium,

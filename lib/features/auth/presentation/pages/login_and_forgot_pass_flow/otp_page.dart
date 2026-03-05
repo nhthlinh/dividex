@@ -99,7 +99,9 @@ class _OTPInputPageState extends State<OTPInputPage> {
     if (_formKey.currentState!.validate()) {
       String otp = otpController.text.trim();
 
-      context.read<AuthBloc>().add(AuthOtpSubmitted(otp: otp, email: _userEmail!));
+      context.read<AuthBloc>().add(
+        AuthOtpSubmitted(otp: otp, email: _userEmail!),
+      );
     }
   }
 
@@ -140,7 +142,7 @@ class _OTPInputPageState extends State<OTPInputPage> {
       clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [FormFieldConfig(controller: otpController, isRequired: true)],
-      builder: (isValid) {
+      builder: (isValid, isSubmitting, setSubmitting) {
         return ContentCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -217,14 +219,18 @@ class _OTPInputPageState extends State<OTPInputPage> {
               const SizedBox(height: 12),
               CustomButton(
                 text: intl.settingChangePass,
-                onPressed: isValid
-                    ? () {
+                onPressed: (!isValid || isSubmitting)
+                    ? null
+                    : () async {
+                        setSubmitting(true);
+
                         submitOTP(intl);
                         // Clear the form after submission
                         clearFormTrigger.value =
                             !clearFormTrigger.value; // Trigger form reset
-                      }
-                    : null,
+
+                        setSubmitting(false);
+                      },
               ),
 
               const SizedBox(height: 16), // Add bottom padding

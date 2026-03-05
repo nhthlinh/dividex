@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
         FormFieldConfig(controller: passwordController, isRequired: true),
       ],
       formKey: _formKey,
-      builder: (isValid) {
+      builder: (isValid, isSubmitting, setSubmitting) {
         return Column(
           children: [
             //Email
@@ -172,9 +172,11 @@ class _LoginPageState extends State<LoginPage> {
             //Login Button
             CustomButton(
               text: intl.login,
-              onPressed: (!isValid)
+              onPressed: (!isValid || isSubmitting)
                   ? null
-                  : () {
+                  : () async {
+                      setSubmitting(true);
+
                       if (_formKey.currentState!.validate()) {
                         // If the form is valid, proceed with login
                         final email = emailController.text.trim();
@@ -188,6 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                         clearFormTrigger.value =
                             !clearFormTrigger.value; // Trigger form reset
                       }
+                      setSubmitting(false);
                     },
             ),
 

@@ -74,7 +74,8 @@ class _AddGroupPageState extends State<AddGroupPage> {
       currentIndex: 0,
       child: SimpleLayout(
         onRefresh: () {
-          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          clearFormTrigger.value =
+              !clearFormTrigger.value; // Trigger form reset
           return Future.value();
         },
         title: intl.addGroup,
@@ -90,7 +91,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
       fields: [
         FormFieldConfig(controller: groupNameController, isRequired: true),
       ],
-      builder: (isValid) {
+      builder: (isValid, isSubmitting, setSubmitting) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
 
@@ -190,9 +191,15 @@ class _AddGroupPageState extends State<AddGroupPage> {
             const SizedBox(height: 30),
             CustomButton(
               text: intl.add,
-              onPressed: (isValid && selectedMembers.isNotEmpty)
-                  ? submitGroup
-                  : null,
+              onPressed: (!isValid || isSubmitting || selectedMembers.isEmpty)
+                  ? null
+                  : () async {
+                      setSubmitting(true);
+
+                      submitGroup();
+
+                      setSubmitting(false);
+                    },
             ),
             const SizedBox(height: 30),
           ],

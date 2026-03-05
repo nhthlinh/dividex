@@ -4,6 +4,7 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -69,7 +70,12 @@ Future<void> showSettleUpDialog({
               text: intl.outSideTransfer,
               size: ButtonSize.medium,
               type: ButtonType.secondary,
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => {
+                showCustomToast(
+                  intl.commingSoon,
+                  type: ToastType.info,
+                ),
+              },
             ),
             const SizedBox(width: 12),
             CustomButton(

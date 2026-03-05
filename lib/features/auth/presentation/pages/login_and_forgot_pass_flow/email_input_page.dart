@@ -83,7 +83,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
       clearTrigger: clearFormTrigger,
       formKey: _formKey,
       fields: [FormFieldConfig(controller: emailController, isRequired: true)],
-      builder: (isValid) {
+      builder: (isValid, isSubmitting, setSubmitting) {
         return ContentCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,13 +109,18 @@ class _EmailInputPageState extends State<EmailInputPage> {
 
               CustomButton(
                 text: intl.send,
-                onPressed: isValid
-                    ? () {
+
+                onPressed: (!isValid || isSubmitting)
+                    ? null
+                    : () async {
+                        setSubmitting(true);
+
                         _submitEmail();
                         clearFormTrigger.value =
                             !clearFormTrigger.value; // Trigger form reset
-                      }
-                    : null,
+
+                        setSubmitting(false);
+                      },
               ),
             ],
           ),
