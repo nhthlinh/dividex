@@ -2971,6 +2971,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'By Amount'**
   String get byAmount;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @noPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'No one selected'**
+  String get noPeople;
 }
 
 class _AppLocalizationsDelegate

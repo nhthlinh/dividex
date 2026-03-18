@@ -1590,4 +1590,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get byAmount => 'Theo số tiền';
+
+  @override
+  String get reset => 'Đặt lại';
+
+  @override
+  String get noPeople => 'Chưa chọn người trả';
 }

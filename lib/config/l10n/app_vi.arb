@@ -684,7 +684,9 @@
 
   "showMoreInfo": "Thêm thông tin",
   "byItem": "Theo món",
-  "byAmount": "Theo số tiền"
+  "byAmount": "Theo số tiền",
+  "reset": "Đặt lại",
+  "noPeople": "Chưa chọn người trả"
 
   
 

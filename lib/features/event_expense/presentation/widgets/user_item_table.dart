@@ -1,14 +1,13 @@
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/split_page.dart';
 import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:flutter/material.dart';
-
 
 class UserItemShare {
   final UserModel? user;
@@ -22,17 +21,16 @@ class UserItemShare {
     required this.amount,
     required this.percent,
     this.selected = false,
-    required this.items
+    required this.items,
   });
 }
-
 
 class UserItemTableWidget extends StatefulWidget {
   final List<UserModel> users;
   final List<UserDebt> usersDebt;
   final double totalAmount;
   final ValueChanged<List<UserDebt>> onChanged;
-  final List<ImageExpenseItemModel> items; 
+  final List<ImageExpenseItemModel> items;
 
   const UserItemTableWidget({
     super.key,
@@ -40,7 +38,7 @@ class UserItemTableWidget extends StatefulWidget {
     required this.usersDebt,
     required this.totalAmount,
     required this.onChanged,
-    required this.items
+    required this.items,
   });
 
   @override
@@ -51,10 +49,13 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
   late List<UserItemShare> users;
   Map<int, List<int>> itemUserMap = {};
   bool isSelectingItems = true;
+  List<bool> isExpanded = [];
 
   @override
   void initState() {
     super.initState();
+    isExpanded = List.filled(widget.items.length, false);
+
     users = widget.users.map((user) {
       return UserItemShare(user: user, amount: 0, percent: 0, items: []);
     }).toList();
@@ -63,7 +64,8 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
     for (var debt in widget.usersDebt) {
       final u = users.firstWhere(
         (x) => x.user?.id == debt.userId,
-        orElse: () => UserItemShare(user: null, amount: 0, percent: 0, items: []),
+        orElse: () =>
+            UserItemShare(user: null, amount: 0, percent: 0, items: []),
       );
       if (u.user != null) {
         u.selected = true;
@@ -138,21 +140,16 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
       children: [
         // Rows
         if (isSelectingItems)
-          _buildItemSelection()
+          _buildItemSelection(intl)
         else
           _buildUserSummary(),
-
-        const SizedBox(height: 16),
 
         Container(
           width: 340,
           margin: const EdgeInsets.symmetric(vertical: 16),
           child: Column(
             children: [
-              CustomTextButton(
-                label: intl.expenseSplitEquallyLabel,
-                onPressed: reset,
-              ),
+              CustomTextButton(label: intl.reset, onPressed: reset),
               const SizedBox(height: 8),
               Divider(),
 
@@ -164,8 +161,8 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                     IconButton(
                       onPressed: () {
                         setState(() => isSelectingItems = true);
-                      }, 
-                      icon: Icon(Icons.navigate_next)
+                      },
+                      icon: Icon(Icons.navigate_next),
                     ),
                   TestInGrey(text: intl.allocated),
                   Text(
@@ -179,9 +176,9 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                       onPressed: () {
                         _calculateFromItems();
                         setState(() => isSelectingItems = false);
-                        _notifyParent(); 
-                      }, 
-                      icon: Icon(Icons.navigate_next)
+                        _notifyParent();
+                      },
+                      icon: Icon(Icons.navigate_next),
                     ),
                 ],
               ),
@@ -192,76 +189,166 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
     );
   }
 
-  Widget _buildItemSelection() {
+  String formatName(String name) {
+    if (name.length <= 25) return name;
+    return '${name.substring(0, 10)}...${name.substring(name.length - 10)}';
+  }
+
+  Widget _buildItemSelection(AppLocalizations intl) {
     return ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: widget.items.length,
       itemBuilder: (context, itemIndex) {
         final item = widget.items[itemIndex];
         final selectedUsers = itemUserMap[itemIndex] ?? [];
 
-        return Container(
-          margin: const EdgeInsets.all(12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            children: [
-              // Header item
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'x${item.quantity} ${item.name}',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    item.totalPrice.toStringAsFixed(0),
-                    style: const TextStyle(
-                      color: Colors.redAccent,
-                      fontWeight: FontWeight.bold,
+        return InkWell(
+          child: Container(
+            margin: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              children: [
+                // Header item
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          // quantity + name
+                          Expanded(
+                            child: RichText(
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                style: DefaultTextStyle.of(context).style,
+                                children: [
+                                  TextSpan(
+                                    text: 'x${item.quantity.toInt()} ',
+                                    style: const TextStyle(
+                                      color: AppThemes.primary3Color,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: formatName(item.name),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          // price
+                          Text(
+                            formatNumber(item.totalPrice),
+                            style: const TextStyle(
+                              color: AppThemes.primary3Color,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // icon up/down
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isExpanded[itemIndex] = !isExpanded[itemIndex];
+                        });
+                      },
+                      icon: Icon(
+                        isExpanded[itemIndex]
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+
+                if (isExpanded[itemIndex]) ...[
+                  // List user chọn
+                  ...List.generate(users.length, (userIndex) {
+                    final user = users[userIndex];
+                    final isChecked = selectedUsers.contains(userIndex);
+
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      // Avatar
+                      leading: CircleAvatar(
+                        radius: 22,
+                        backgroundImage:
+                            (user.user!.avatar != null &&
+                                user.user!.avatar!.publicUrl.isNotEmpty)
+                            ? NetworkImage(user.user!.avatar!.publicUrl)
+                            : NetworkImage(
+                                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.user!.fullName ?? 'User')}&background=random&color=fff',
+                              ),
+                      ),
+                      title: Text(
+                        user.user!.fullName ?? '',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                      ),
+                      trailing: Icon(
+                        isChecked ? Icons.check : Icons.check_box_outline_blank,
+                        color: isChecked
+                            ? AppThemes.primary3Color
+                            : Colors.grey,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          final list = itemUserMap[itemIndex] ?? [];
+                          if (list.contains(userIndex)) {
+                            list.remove(userIndex);
+                          } else {
+                            list.add(userIndex);
+                          }
+                          itemUserMap[itemIndex] = list;
+                        });
+                      },
+                    );
+                  }),
+                ] else if (!isExpanded[itemIndex] &&
+                    (itemUserMap[itemIndex] ?? []).isEmpty) ...[
+                  Text(intl.noPeople),
+                ] else ...[
+                  SizedBox(
+                    height: 50,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: (itemUserMap[itemIndex] ?? []).map((userIndex) {
+                        final user = users[userIndex];
+
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundImage:
+                                (user.user!.avatar != null &&
+                                    user.user!.avatar!.publicUrl.isNotEmpty)
+                                ? NetworkImage(user.user!.avatar!.publicUrl)
+                                : NetworkImage(
+                                    'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.user!.fullName ?? 'User')}&background=random&color=fff',
+                                  ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ],
-              ),
-
-              const SizedBox(height: 8),
-
-              // List user chọn
-              ...List.generate(users.length, (userIndex) {
-                final user = users[userIndex];
-                final isChecked = selectedUsers.contains(userIndex);
-
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      user.user!.avatar?.publicUrl ?? '',
-                    ),
-                  ),
-                  title: Text(user.user!.fullName ?? ''),
-                  trailing: Icon(
-                    isChecked
-                        ? Icons.check
-                        : Icons.check_box_outline_blank,
-                    color: isChecked ? Colors.red : Colors.grey,
-                  ),
-                  onTap: () {
-                    setState(() {
-                      final list = itemUserMap[itemIndex] ?? [];
-                      if (list.contains(userIndex)) {
-                        list.remove(userIndex);
-                      } else {
-                        list.add(userIndex);
-                      }
-                      itemUserMap[itemIndex] = list;
-                    });
-                  },
-                );
-              })
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -271,6 +358,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
   Widget _buildUserSummary() {
     return ListView.builder(
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: users.length,
       itemBuilder: (context, index) {
         return _buildUserRow(users[index], index);
@@ -293,11 +381,11 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
             radius: 22,
             backgroundImage:
                 (user.user!.avatar != null &&
-                        user.user!.avatar!.publicUrl.isNotEmpty)
-                    ? NetworkImage(user.user!.avatar!.publicUrl)
-                    : NetworkImage(
-                        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.user!.fullName ?? 'User')}&background=random&color=fff',
-                      ),
+                    user.user!.avatar!.publicUrl.isNotEmpty)
+                ? NetworkImage(user.user!.avatar!.publicUrl)
+                : NetworkImage(
+                    'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.user!.fullName ?? 'User')}&background=random&color=fff',
+                  ),
           ),
 
           const SizedBox(width: 12),
@@ -333,10 +421,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                 // Items text
                 Text(
                   _buildItemsText(user.items),
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                 ),
               ],
             ),
@@ -347,10 +432,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
             children: [
               Text(
                 user.percent.toStringAsFixed(1),
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
               ),
             ],
           ),
@@ -370,9 +452,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
               //_recalculate(index);
             },
             child: Icon(
-              user.selected
-                  ? Icons.check_circle
-                  : Icons.radio_button_unchecked,
+              user.selected ? Icons.check_circle : Icons.radio_button_unchecked,
               color: user.selected ? Colors.redAccent : Colors.grey,
             ),
           ),

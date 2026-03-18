@@ -1592,4 +1592,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get byAmount => 'By Amount';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get noPeople => 'No one selected';
 }

@@ -34,7 +34,7 @@ class SplitPage extends StatefulWidget {
     required this.initialType,
     required this.amount,
     required this.onChanged,
-    required this.items
+    required this.items,
   });
 
   @override
@@ -44,7 +44,6 @@ class SplitPage extends StatefulWidget {
 class _SplitPageState extends State<SplitPage> {
   List<UserDebt> _currentDebts = [];
   bool isCustomByAmount = true;
-
 
   @override
   void initState() {
@@ -101,8 +100,9 @@ class _SplitPageState extends State<SplitPage> {
                       setState(() {
                         if (value == false && widget.items != []) {
                           isCustomByAmount = false;
-                        } 
-                        isCustomByAmount = true;
+                        } else {
+                          isCustomByAmount = true;
+                        }
                       });
                     },
                   ),
@@ -120,13 +120,13 @@ class _SplitPageState extends State<SplitPage> {
                 totalAmount: widget.amount,
                 onChanged: _onUsersChanged,
               ),
-            ] else if (widget.items != []) ...[
+            ] else if (widget.items != [] && !isCustomByAmount) ...[
               UserItemTableWidget(
                 usersDebt: _currentDebts,
                 users: widget.initialUsers,
                 totalAmount: widget.amount,
                 onChanged: _onUsersChanged,
-                items: []
+                items: widget.items,
               ),
             ],
 
