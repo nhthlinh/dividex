@@ -63,6 +63,10 @@ class _AddExpensePageState extends State<AddExpensePage> {
   List<UserModel> users = [];
   List<UserModel> usersInEvent = [];
 
+  List<ImageExpenseItemModel> items = [];
+  bool showMoreInfomation = false;
+
+
   final List<CurrencyEnum> _units = getAllCurrencies().map((e) => e).toList();
 
   final clearFormTrigger = ValueNotifier(false);
@@ -76,6 +80,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   }
 
   void _showOptionDialog() {
+    final intl = AppLocalizations.of(context)!;
     showCustomDialog(
       context: context,
       content: Column(
@@ -103,11 +108,33 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     text: 'Scanning',
                     onPressed: () async {
                       Navigator.pop(context);
-                      final result = await context.pushNamed(
-                        AppRouteNames.scanExpense,
-                      );
+                      // final result = await context.pushNamed(
+                      //   AppRouteNames.scanExpense,
+                      // );
+                      final result = {
+                        'imageInfo': ImageExpenseModel(
+                          items: [
+                            ImageExpenseItemModel(name: "Bánh nướng Jambon bát bửu 1Trứng 180g", quantity: 1.0, unitPrice: 60000.0, totalPrice: 60000.0),
+                            ImageExpenseItemModel(name: "Bánh nướng Đậu xanh 1Trứng180g (66)", quantity: 1.0, unitPrice: 50370.0, totalPrice: 50370.0),
+                            ImageExpenseItemModel(name: "Bánh dẻo Trà Ô Long trái cây 180g trứng (5TTD)", quantity: 1.0, unitPrice: 41480.0, totalPrice: 41480.0),
+                            ImageExpenseItemModel(name: "Bánh nướng Gà cuộn rong biển 1Trứng 180g (66GR)", quantity: 1.0, unitPrice: 66000.0, totalPrice: 66000.0),
+                            ImageExpenseItemModel(name: "Hộp hoa mẫu đơn size 36*28*8cm", quantity: 1.0, unitPrice: 110000.0, totalPrice: 110000.0),
+                            ImageExpenseItemModel(name: "Túi giấy 36*28", quantity: 1.0, unitPrice: 15000.0, totalPrice: 15000.0),
+                          ],
+                          name: "Bánh trung thu và hộp quà",
+                          category: "food",
+                          totalAmount: 363798.0,
+                          currency: "VND",
+                          note: null,
+                          expenseDate: DateTime.parse("2025-09-23T00:00:00+07:00"),
+                          endDate: null
+                        ),
+                        'bytes': Uint8List(0)
+                      };
                       if (result != null && mounted) {
                         _handleScanResult(result);
+                      } else {
+                        showCustomToast(intl.cantReadImage, type: ToastType.error);
                       }
                     },
                     size: ButtonSize.medium,
@@ -149,6 +176,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
     reminderController.text = DateFormat(
       "dd/MM/yyyy",
     ).format((imageInfo.expenseDate ?? DateTime.now()).add(Duration(days: 3)));
+
+    items = imageInfo.items;
   }
 
   @override
@@ -205,7 +234,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
           expenseNameController.text,
           double.tryParse(expenseAmountController.text) ?? 0,
           _selectedCurrency.value.code,
-          _selectedCategory.value!.key,
+          _selectedCategory.value?.key,
           _selectedEvent!.id!,
           _selectedPayer!.id,
           noteController.text,
@@ -251,7 +280,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
         FormFieldConfig(controller: expenseNameController, isRequired: true),
         FormFieldConfig(controller: expenseAmountController, isRequired: true),
         FormFieldConfig(selectedValue: _selectedCurrency, isRequired: true),
-        FormFieldConfig(selectedValue: _selectedCategory, isRequired: true),
+        // FormFieldConfig(selectedValue: _selectedCategory, isRequired: true),
         FormFieldConfig(
           controller: selectedEventTextEditingController,
           isRequired: true,
@@ -373,52 +402,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
             ),
           ),
           const SizedBox(height: 16),
-          ValueListenableBuilder<CategoryModel?>(
-            valueListenable: _selectedCategory,
-            builder: (context, value, _) {
-              return CustomDropdownWidget<CategoryModel>(
-                label: intl.expenseCategoryLabel,
-                value: _selectedCategory.value,
-                options: CategoryModel.categories,
-                displayString: (b) => b.localizedName(context),
-                buildOption: (b, selected) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 6,
-                      horizontal: 4,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            b.localizedName(context),
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: selected
-                                      ? AppThemes.primary3Color
-                                      : Colors.grey,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                        ),
-                        if (selected)
-                          const Icon(
-                            Icons.check,
-                            color: AppThemes.primary3Color,
-                          ),
-                      ],
-                    ),
-                  );
-                },
-                onChanged: (val) {
-                  _selectedCategory.value = val;
-                },
-                isRequired: true,
-              );
-            },
-          ),
-
-          const SizedBox(height: 16),
 
           CustomTextInputWidget(
             size: TextInputSize.large,
@@ -444,8 +427,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
               );
             },
           ),
-
           const SizedBox(height: 8),
+          
           if (_selectedEvent != null) ...[
             CustomTextInputWidget(
               size: TextInputSize.large,
@@ -487,18 +470,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
               },
             ),
           ],
-
           const SizedBox(height: 8),
-          CustomTextInputWidget(
-            size: TextInputSize.large,
-            isReadOnly: false,
-            label: intl.expenseNoteLabel,
-            controller: noteController,
-            keyboardType: TextInputType.text,
-            maxLines: 4,
-          ),
-          const SizedBox(height: 16),
-
+          
           SizedBox(
             width: 340,
             child: Row(
@@ -531,37 +504,11 @@ class _AddExpensePageState extends State<AddExpensePage> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
-
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                intl.addExpenseImageLabel,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontSize: 12,
-                  letterSpacing: 0,
-                  height: 16 / 12,
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 8),
-              ImagePickerWidget(
-                initialImage: images.isNotEmpty ? images.first : null,
-                type: PickerType.gallery,
-                onFilesPicked: (imageBytesList) {
-                  setState(() {
-                    images = imageBytesList;
-                  });
-                },
-              ),
-            ],
-          ),
 
           if (_selectedEvent != null &&
               expenseAmountController.text.isNotEmpty) ...[
             const SizedBox(height: 16),
+
             BlocProvider(
               create: (context) => LoadedUsersBloc()
                 ..add(
@@ -574,7 +521,114 @@ class _AddExpensePageState extends State<AddExpensePage> {
             ),
           ],
 
-          const SizedBox(height: 20),
+          Row(
+            children: [
+              Text(
+                intl.showMoreInfo,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontSize: 12,
+                  letterSpacing: 0,
+                  height: 16 / 12,
+                  color: Colors.grey,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    showMoreInfomation = !showMoreInfomation;
+                  });
+                }, 
+                icon: !showMoreInfomation
+                  ? const Icon(Icons.keyboard_arrow_up)
+                  : const Icon(Icons.keyboard_arrow_down),
+              )
+            ],
+          ),
+          if (showMoreInfomation) ...[
+            // Category
+            ValueListenableBuilder<CategoryModel?>(
+              valueListenable: _selectedCategory,
+              builder: (context, value, _) {
+                return CustomDropdownWidget<CategoryModel>(
+                  label: intl.expenseCategoryLabel,
+                  value: _selectedCategory.value,
+                  options: CategoryModel.categories,
+                  displayString: (b) => b.localizedName(context),
+                  buildOption: (b, selected) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 6,
+                        horizontal: 4,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              b.localizedName(context),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: selected
+                                        ? AppThemes.primary3Color
+                                        : Colors.grey,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                          ),
+                          if (selected)
+                            const Icon(
+                              Icons.check,
+                              color: AppThemes.primary3Color,
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                  onChanged: (val) {
+                    _selectedCategory.value = val;
+                  },
+                  isRequired: true,
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            // Note
+            CustomTextInputWidget(
+              size: TextInputSize.large,
+              isReadOnly: false,
+              label: intl.expenseNoteLabel,
+              controller: noteController,
+              keyboardType: TextInputType.text,
+              maxLines: 4,
+            ),
+            const SizedBox(height: 16),
+            // Image
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  intl.addExpenseImageLabel,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontSize: 12,
+                    letterSpacing: 0,
+                    height: 16 / 12,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ImagePickerWidget(
+                  initialImage: images.isNotEmpty ? images.first : null,
+                  type: PickerType.gallery,
+                  onFilesPicked: (imageBytesList) {
+                    setState(() {
+                      images = imageBytesList;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
 
           CustomButton(
             text: intl.add,
@@ -653,6 +707,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     });
                   },
                   'amount': double.parse(expenseAmountController.text),
+                  'items': items
                 },
               );
 

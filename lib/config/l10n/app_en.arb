@@ -678,7 +678,12 @@
   "edited": "Message is Edited",
 
   "noAccountError": "You have not linked any bank account yet...",
-  "commingSoon": "This feature is coming soon."
+  "commingSoon": "This feature is coming soon.",
+  "cantReadImage": "Unable to scan the image to read the bill. Please try again with a clearer image or check your connection.",
+  "showMoreInfo": "More information",
+  "byItem": "By Item",
+  "byAmount": "By Amount"
+
   
 
 

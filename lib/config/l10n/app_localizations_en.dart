@@ -1579,4 +1579,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commingSoon => 'This feature is coming soon.';
+
+  @override
+  String get cantReadImage =>
+      'Unable to scan the image to read the bill. Please try again with a clearer image or check your connection.';
+
+  @override
+  String get showMoreInfo => 'More information';
+
+  @override
+  String get byItem => 'By Item';
+
+  @override
+  String get byAmount => 'By Amount';
 }

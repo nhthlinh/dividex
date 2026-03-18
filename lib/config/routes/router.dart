@@ -43,6 +43,7 @@ import 'package:Dividex/features/home/presentation/pages/transfer_success_page.d
 import 'package:Dividex/features/home/presentation/pages/withdraw_page.dart';
 import 'package:Dividex/features/home/presentation/pages/withdraw_success_page.dart';
 import 'package:Dividex/features/home/presentation/recharge_report.dart';
+import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/image/presentation/pages/expense_ocr_page.dart';
 import 'package:Dividex/features/message/presentation/bloc/chat_bloc.dart';
@@ -980,6 +981,7 @@ GoRouter buildRouter(BuildContext context) {
               onChanged: (list) =>
                   (extra['onChanged'] as ValueChanged<List<UserDebt>>)(list),
               amount: extra['amount'] as double,
+              items: extra['items'] as List<ImageExpenseItemModel>
             ),
           );
         },

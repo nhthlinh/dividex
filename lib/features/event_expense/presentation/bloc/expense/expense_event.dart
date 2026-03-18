@@ -10,7 +10,7 @@ class CreateExpenseEvent extends ExpenseEvent {
   final String name;
   final double totalAmount;
   final String currency;
-  final String category;
+  final String? category;
   final String eventId;
   final String? paidById;
 

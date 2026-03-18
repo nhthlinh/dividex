@@ -20,7 +20,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     String name,
     double totalAmount,
     String currency,
-    String category,
+    String? category,
     String eventId,
     String? paidById,
     String? note,

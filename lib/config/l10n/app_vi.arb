@@ -678,7 +678,13 @@
   "edited": "Tin nhắn đã chỉnh sửa",
   
   "noAccountError": "Bạn chưa liên kết với tài khoản nào ...",
-  "commingSoon": "Tính năng này sẽ sớm được ra mắt."
+  "commingSoon": "Tính năng này sẽ sớm được ra mắt.",
+
+  "cantReadImage": "Không thể quét ảnh để đọc hóa đơn. Vui lòng thử lại với ảnh rõ nét hơn hoặc kiểm tra kết nối của bạn.",
+
+  "showMoreInfo": "Thêm thông tin",
+  "byItem": "Theo món",
+  "byAmount": "Theo số tiền"
 
   
 

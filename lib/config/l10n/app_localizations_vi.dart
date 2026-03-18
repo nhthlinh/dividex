@@ -1577,4 +1577,17 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get commingSoon => 'Tính năng này sẽ sớm được ra mắt.';
+
+  @override
+  String get cantReadImage =>
+      'Không thể quét ảnh để đọc hóa đơn. Vui lòng thử lại với ảnh rõ nét hơn hoặc kiểm tra kết nối của bạn.';
+
+  @override
+  String get showMoreInfo => 'Thêm thông tin';
+
+  @override
+  String get byItem => 'Theo món';
+
+  @override
+  String get byAmount => 'Theo số tiền';
 }

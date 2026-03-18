@@ -2947,6 +2947,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This feature is coming soon.'**
   String get commingSoon;
+
+  /// No description provided for @cantReadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to scan the image to read the bill. Please try again with a clearer image or check your connection.'**
+  String get cantReadImage;
+
+  /// No description provided for @showMoreInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'More information'**
+  String get showMoreInfo;
+
+  /// No description provided for @byItem.
+  ///
+  /// In en, this message translates to:
+  /// **'By Item'**
+  String get byItem;
+
+  /// No description provided for @byAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'By Amount'**
+  String get byAmount;
 }
 
 class _AppLocalizationsDelegate

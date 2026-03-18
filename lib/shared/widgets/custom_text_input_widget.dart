@@ -33,6 +33,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
   final ValueChanged<String>? onChanged; // Hàm khi nội dung thay đổi
   final VoidCallback? onTap; // Hàm khi nhấn vào ô input
   final List<TextInputFormatter>? inputFormatters;
+  final bool hasBottomSpace;
 
   const CustomTextInputWidget({
     super.key,
@@ -51,6 +52,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
     this.obscureText = false,
     this.onTap,
     this.inputFormatters,
+    this.hasBottomSpace = true,
   });
 
   @override
@@ -116,7 +118,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
             ),
             inputFormatters: inputFormatters,
           ),
-          const SizedBox(height: 6),
+          if (hasBottomSpace) const SizedBox(height: 6),
         ],
       ),
     );
