@@ -981,7 +981,7 @@ GoRouter buildRouter(BuildContext context) {
               onChanged: (list) =>
                   (extra['onChanged'] as ValueChanged<List<UserDebt>>)(list),
               amount: extra['amount'] as double,
-              items: extra['items'] as List<ImageExpenseItemModel>
+              items: extra['items'] as List<ImageExpenseItemModel>?
             ),
           );
         },

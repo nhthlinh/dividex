@@ -1596,4 +1596,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get noPeople => 'Chưa chọn người trả';
+
+  @override
+  String get expenseSplitNoItems =>
+      'Không tìm thấy danh sách món. Hãy quét lại hóa đơn để chia theo món.';
+
+  @override
+  String get addFee => 'Phí/thuế đã được phân bổ';
+
+  @override
+  String get disFee => 'Giảm giá đã được phân bổ';
 }

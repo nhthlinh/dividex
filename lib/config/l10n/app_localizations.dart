@@ -2983,6 +2983,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No one selected'**
   String get noPeople;
+
+  /// No description provided for @expenseSplitNoItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Item list not found. Please scan the receipt again to split by items.'**
+  String get expenseSplitNoItems;
+
+  /// No description provided for @addFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional fees have been distributed'**
+  String get addFee;
+
+  /// No description provided for @disFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount has been applied and distributed'**
+  String get disFee;
 }
 
 class _AppLocalizationsDelegate

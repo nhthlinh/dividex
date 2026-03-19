@@ -686,7 +686,10 @@
   "byItem": "Theo món",
   "byAmount": "Theo số tiền",
   "reset": "Đặt lại",
-  "noPeople": "Chưa chọn người trả"
+  "noPeople": "Chưa chọn người trả",
+  "expenseSplitNoItems": "Không tìm thấy danh sách món. Hãy quét lại hóa đơn để chia theo món.",
+  "addFee": "Phí/thuế đã được phân bổ",
+  "disFee": "Giảm giá đã được phân bổ"
 
   
 

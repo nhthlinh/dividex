@@ -684,7 +684,10 @@
   "byItem": "By Item",
   "byAmount": "By Amount",
   "reset": "Reset",
-  "noPeople": "No one selected"
+  "noPeople": "No one selected",
+  "expenseSplitNoItems": "Item list not found. Please scan the receipt again to split by items.",
+  "addFee": "Additional fees have been distributed",
+  "disFee": "Discount has been applied and distributed"
 
   
 

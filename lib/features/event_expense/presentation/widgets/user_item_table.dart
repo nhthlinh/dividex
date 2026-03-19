@@ -75,6 +75,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
             : 0;
       }
     }
+    _calculateFromItems();
   }
 
   void reset() {
@@ -95,6 +96,39 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
     widget.onChanged(debts);
   }
 
+  // void _calculateFromItems() {
+  //   // reset
+  //   for (var u in users) {
+  //     u.amount = 0;
+  //     u.items = [];
+  //     u.selected = false;
+  //   }
+
+  //   for (int i = 0; i < widget.items.length; i++) {
+  //     final item = widget.items[i];
+  //     final selectedUsers = itemUserMap[i] ?? [];
+
+  //     if (selectedUsers.isEmpty) continue;
+
+  //     final share = item.totalPrice / selectedUsers.length;
+
+  //     for (var userIndex in selectedUsers) {
+  //       final user = users[userIndex];
+  //       user.amount += share;
+  //       user.selected = true;
+  //       user.items.add(item);
+  //     }
+  //   }
+
+  //   // tính percent
+  //   for (var u in users) {
+  //     u.percent = widget.totalAmount > 0
+  //         ? (u.amount / widget.totalAmount) * 100
+  //         : 0;
+  //   }
+  // }
+  double _delta = 0;
+
   void _calculateFromItems() {
     // reset
     for (var u in users) {
@@ -103,6 +137,9 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
       u.selected = false;
     }
 
+    double itemsTotal = 0;
+
+    // 1. Chia theo item
     for (int i = 0; i < widget.items.length; i++) {
       final item = widget.items[i];
       final selectedUsers = itemUserMap[i] ?? [];
@@ -110,6 +147,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
       if (selectedUsers.isEmpty) continue;
 
       final share = item.totalPrice / selectedUsers.length;
+      itemsTotal += item.totalPrice;
 
       for (var userIndex in selectedUsers) {
         final user = users[userIndex];
@@ -119,7 +157,21 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
       }
     }
 
-    // tính percent
+    // 2. Tính phần chênh lệch (tax / discount)
+    _delta = widget.totalAmount - itemsTotal;
+
+    // 3. Tổng tiền user đang có (trước khi cộng delta)
+    double currentTotal = users.fold(0, (sum, u) => sum + u.amount);
+
+    if (currentTotal > 0 && _delta != 0) {
+      // 4. Phân bổ delta theo tỷ lệ
+      for (var u in users) {
+        final ratio = u.amount / currentTotal;
+        u.amount += _delta * ratio;
+      }
+    }
+
+    // 5. Tính percent
     for (var u in users) {
       u.percent = widget.totalAmount > 0
           ? (u.amount / widget.totalAmount) * 100
@@ -132,6 +184,40 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
     super.dispose();
   }
 
+  Widget _buildAdjustmentInfo(AppLocalizations intl) {
+    final isExtra = _delta > 0;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+        children: [
+          Icon(
+            isExtra ? Icons.add_circle_outline : Icons.remove_circle_outline,
+            size: 16,
+            color: isExtra ? Colors.orange : Colors.green,
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              isExtra
+                  ? intl.addFee
+                  : intl.disFee,
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            ),
+          ),
+          Text(
+            formatNumber(_delta.abs()),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: isExtra ? Colors.orange : Colors.green,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
@@ -141,15 +227,18 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
         // Rows
         if (isSelectingItems)
           _buildItemSelection(intl)
-        else
+        else ...[
           _buildUserSummary(),
+          if (_delta != 0) _buildAdjustmentInfo(intl),
+        ],
 
         Container(
           width: 340,
           margin: const EdgeInsets.symmetric(vertical: 16),
           child: Column(
             children: [
-              CustomTextButton(label: intl.reset, onPressed: reset),
+              if (!isSelectingItems)
+                CustomTextButton(label: intl.reset, onPressed: reset),
               const SizedBox(height: 8),
               Divider(),
 
@@ -162,11 +251,11 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                       onPressed: () {
                         setState(() => isSelectingItems = true);
                       },
-                      icon: Icon(Icons.navigate_next),
+                      icon: Icon(Icons.navigate_before),
                     ),
                   TestInGrey(text: intl.allocated),
                   Text(
-                    '${users.where((u) => u.selected).fold<double>(0, (sum, u) => sum + u.amount).toStringAsFixed(0)}/${widget.totalAmount.toStringAsFixed(0)}',
+                    '${formatNumber(users.where((u) => u.selected).fold<double>(0, (sum, u) => sum + u.amount))}/${formatNumber(widget.totalAmount)}',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: AppThemes.primary3Color,
                     ),
@@ -230,16 +319,18 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                                 children: [
                                   TextSpan(
                                     text: 'x${item.quantity.toInt()} ',
-                                    style: const TextStyle(
-                                      color: AppThemes.primary3Color,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(
+                                          color: AppThemes.primary3Color,
+                                        ),
                                   ),
                                   TextSpan(
                                     text: formatName(item.name),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
                                   ),
                                 ],
                               ),
@@ -249,10 +340,8 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                           // price
                           Text(
                             formatNumber(item.totalPrice),
-                            style: const TextStyle(
-                              color: AppThemes.primary3Color,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(color: AppThemes.primary3Color),
                           ),
                         ],
                       ),
@@ -284,7 +373,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                       contentPadding: EdgeInsets.zero,
                       // Avatar
                       leading: CircleAvatar(
-                        radius: 22,
+                        radius: 18,
                         backgroundImage:
                             (user.user!.avatar != null &&
                                 user.user!.avatar!.publicUrl.isNotEmpty)
@@ -295,9 +384,10 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                       ),
                       title: Text(
                         user.user!.fullName ?? '',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 16,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: isChecked
+                              ? AppThemes.primary3Color
+                              : Colors.grey.shade800,
                         ),
                       ),
                       trailing: Icon(
@@ -321,7 +411,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                   }),
                 ] else if (!isExpanded[itemIndex] &&
                     (itemUserMap[itemIndex] ?? []).isEmpty) ...[
-                  Text(intl.noPeople),
+                  SizedBox.shrink(),
                 ] else ...[
                   SizedBox(
                     height: 50,
@@ -357,6 +447,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
 
   Widget _buildUserSummary() {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: users.length,
@@ -368,10 +459,10 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
 
   Widget _buildUserRow(UserItemShare user, int index) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: user.selected ? Colors.white : Colors.grey.shade200,
+        color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -398,31 +489,29 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
                 // Name
                 Text(
                   user.user!.fullName ?? '',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
 
                 const SizedBox(height: 4),
 
                 // Amount (đỏ giống hình)
                 Text(
-                  user.amount.toStringAsFixed(0),
-                  style: const TextStyle(
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                  formatNumber(user.amount),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: AppThemes.primary3Color,
                   ),
                 ),
 
                 const SizedBox(height: 4),
 
                 // Items text
-                Text(
-                  _buildItemsText(user.items),
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                ),
+                if (user.items.isNotEmpty)
+                  Text(
+                    _buildItemsText(user.items),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -432,7 +521,9 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
             children: [
               Text(
                 user.percent.toStringAsFixed(1),
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
               ),
             ],
           ),
@@ -453,7 +544,7 @@ class _UserItemTableWidgetState extends State<UserItemTableWidget> {
             },
             child: Icon(
               user.selected ? Icons.check_circle : Icons.radio_button_unchecked,
-              color: user.selected ? Colors.redAccent : Colors.grey,
+              color: user.selected ? AppThemes.primary3Color : Colors.grey,
             ),
           ),
         ],

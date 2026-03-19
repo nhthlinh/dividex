@@ -1598,4 +1598,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noPeople => 'No one selected';
+
+  @override
+  String get expenseSplitNoItems =>
+      'Item list not found. Please scan the receipt again to split by items.';
+
+  @override
+  String get addFee => 'Additional fees have been distributed';
+
+  @override
+  String get disFee => 'Discount has been applied and distributed';
 }

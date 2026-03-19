@@ -108,29 +108,29 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     text: 'Scanning',
                     onPressed: () async {
                       Navigator.pop(context);
-                      // final result = await context.pushNamed(
-                      //   AppRouteNames.scanExpense,
-                      // );
-                      final result = {
-                        'imageInfo': ImageExpenseModel(
-                          items: [
-                            ImageExpenseItemModel(name: "Bánh nướng Jambon bát bửu 1Trứng 180g", quantity: 1.0, unitPrice: 60000.0, totalPrice: 60000.0),
-                            ImageExpenseItemModel(name: "Bánh nướng Đậu xanh 1Trứng180g (66)", quantity: 1.0, unitPrice: 50370.0, totalPrice: 50370.0),
-                            ImageExpenseItemModel(name: "Bánh dẻo Trà Ô Long trái cây 180g trứng (5TTD)", quantity: 1.0, unitPrice: 41480.0, totalPrice: 41480.0),
-                            ImageExpenseItemModel(name: "Bánh nướng Gà cuộn rong biển 1Trứng 180g (66GR)", quantity: 1.0, unitPrice: 66000.0, totalPrice: 66000.0),
-                            ImageExpenseItemModel(name: "Hộp hoa mẫu đơn size 36*28*8cm", quantity: 1.0, unitPrice: 110000.0, totalPrice: 110000.0),
-                            ImageExpenseItemModel(name: "Túi giấy 36*28", quantity: 1.0, unitPrice: 15000.0, totalPrice: 15000.0),
-                          ],
-                          name: "Bánh trung thu và hộp quà",
-                          category: "food",
-                          totalAmount: 363798.0,
-                          currency: "VND",
-                          note: null,
-                          expenseDate: DateTime.parse("2025-09-23T00:00:00+07:00"),
-                          endDate: null
-                        ),
-                        'bytes': Uint8List(0)
-                      };
+                      final result = await context.pushNamed(
+                        AppRouteNames.scanExpense,
+                      );
+                      // final result = {
+                      //   'imageInfo': ImageExpenseModel(
+                      //     items: [
+                      //       ImageExpenseItemModel(name: "Bánh nướng Jambon bát bửu 1Trứng 180g", quantity: 1.0, unitPrice: 60000.0, totalPrice: 60000.0),
+                      //       ImageExpenseItemModel(name: "Bánh nướng Đậu xanh 1Trứng180g (66)", quantity: 1.0, unitPrice: 50370.0, totalPrice: 50370.0),
+                      //       ImageExpenseItemModel(name: "Bánh dẻo Trà Ô Long trái cây 180g trứng (5TTD)", quantity: 1.0, unitPrice: 41480.0, totalPrice: 41480.0),
+                      //       ImageExpenseItemModel(name: "Bánh nướng Gà cuộn rong biển 1Trứng 180g (66GR)", quantity: 1.0, unitPrice: 66000.0, totalPrice: 66000.0),
+                      //       ImageExpenseItemModel(name: "Hộp hoa mẫu đơn size 36*28*8cm", quantity: 1.0, unitPrice: 110000.0, totalPrice: 110000.0),
+                      //       ImageExpenseItemModel(name: "Túi giấy 36*28", quantity: 1.0, unitPrice: 15000.0, totalPrice: 15000.0),
+                      //     ],
+                      //     name: "Bánh trung thu và hộp quà",
+                      //     category: "food",
+                      //     totalAmount: 342850.0,
+                      //     currency: "VND",
+                      //     note: null,
+                      //     expenseDate: DateTime.parse("2025-09-23T00:00:00+07:00"),
+                      //     endDate: null
+                      //   ),
+                      //   'bytes': Uint8List(0)
+                      // };
                       if (result != null && mounted) {
                         _handleScanResult(result);
                       } else {
@@ -538,7 +538,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     showMoreInfomation = !showMoreInfomation;
                   });
                 }, 
-                icon: !showMoreInfomation
+                icon: showMoreInfomation
                   ? const Icon(Icons.keyboard_arrow_up)
                   : const Icon(Icons.keyboard_arrow_down),
               )
