@@ -3049,6 +3049,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Note: {content}'**
   String content(Object content);
+
+  /// No description provided for @cancelDepositError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to cancel deposit.'**
+  String get cancelDepositError;
 }
 
 class _AppLocalizationsDelegate

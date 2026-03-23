@@ -1,5 +1,6 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/recharge/data/models/recharge_model.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/features/recharge/presentation/widgets/balance_widget.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
@@ -115,7 +116,7 @@ class _RechargePageState extends State<RechargePage> {
                             child: CustomButton(
                               size: ButtonSize.medium,
                               text:
-                                  '${formatNumber(amount)} ${HiveService.getUser().preferredCurrency ?? 'VND'}',
+                                  formatNumber(amount),
                               onPressed: () {
                                 setState(() {
                                   if (amountController.text !=
@@ -157,7 +158,7 @@ class _RechargePageState extends State<RechargePage> {
                   } else if (state is PayOsCheckOutLinkState) {
                     showTransferPopup(
                       context,
-                      state.link.paymentLinkId,
+                      state.link
                     );
                   }
                 },
@@ -170,15 +171,19 @@ class _RechargePageState extends State<RechargePage> {
     );
   }
 
-  void showTransferPopup(BuildContext context, String qrData) {
+  void showTransferPopup(BuildContext context, PayOSResponseModel link) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => TransferPopup(qrData: qrData),
-    );
+      builder: (_) => TransferPopup(qrData: link.checkoutUrl),
+    ).then((value) {
+      context.read<RechargeBloc>().add(GetWalletEvent());
+      context.read<RechargeBloc>().add(CancelDepositEvent(link.orderCode));
+
+    });
   }
 
   Widget _buildVnPayWebView(String link) {

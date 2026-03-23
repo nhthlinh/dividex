@@ -65,4 +65,9 @@ class RechargeRepositoryImpl implements RechargeRepository {
   Future<bool> transfer(double originalAmount, double realAmount, String currency, String toAccount, String description, {String? groupId, String? token}) {
     return remoteDataSource.transfer(originalAmount, realAmount, currency, toAccount, description, groupId: groupId, token: token);
   }
+  
+  @override
+  Future<void> cancelDeposit(int id) {
+    return remoteDataSource.cancelDeposit(id);
+  }
 }

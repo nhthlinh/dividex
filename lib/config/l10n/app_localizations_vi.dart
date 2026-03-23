@@ -1638,4 +1638,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String content(Object content) {
     return 'Nội dung: $content';
   }
+
+  @override
+  String get cancelDepositError => 'Không thể hủy lệnh nạp tiền.';
 }

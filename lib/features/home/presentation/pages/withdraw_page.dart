@@ -220,7 +220,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                 child: CustomButton(
                                   size: ButtonSize.medium,
                                   text:
-                                      '${formatNumber(amount)} ${HiveService.getUser().preferredCurrency ?? 'VND'}',
+                                      formatNumber(amount),
                                   onPressed: () {
                                     setState(() {
                                       if (amountController.text !=

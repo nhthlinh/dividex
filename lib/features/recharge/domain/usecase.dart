@@ -25,6 +25,12 @@ class RechargeUseCase {
     return rechargeRepository.createDeposit(amount, currency, bankCode);
   }
 
+  Future<void> cancelDeposit(
+    int id
+  ) async {
+    return rechargeRepository.cancelDeposit(id);
+  }
+
   Future<void> createWithdraw(
     double amount,
     String accountNumber,

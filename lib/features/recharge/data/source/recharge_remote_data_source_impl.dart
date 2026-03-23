@@ -234,4 +234,11 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
       return response.data['success'] == 'SUCCESS';
     });
   }
+  
+  @override
+  Future<void> cancelDeposit(int id) {
+    return apiCallWrapper(() async {
+      await dio.put('/payment/payos/${id.toString()}/cancel');
+    });
+  }
 }

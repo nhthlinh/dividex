@@ -710,5 +710,6 @@
     "placeholders": {
       "content": {}
     }
-  }
+  },
+  "cancelDepositError": "Failed to cancel deposit."
 }

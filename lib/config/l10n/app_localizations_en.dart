@@ -1639,4 +1639,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String content(Object content) {
     return 'Note: $content';
   }
+
+  @override
+  String get cancelDepositError => 'Failed to cancel deposit.';
 }

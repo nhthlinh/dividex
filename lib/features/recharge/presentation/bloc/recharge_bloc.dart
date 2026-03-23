@@ -28,6 +28,13 @@ class CreateDepositEvent extends RechargeEvent {
   CreateDepositEvent(this.amount, this.currency, this.bankCode);
 }
 
+class CancelDepositEvent extends RechargeEvent {
+  final int id;
+
+  CancelDepositEvent(this.id);
+}
+
+
 class CreateWithdrawEvent extends RechargeEvent {
   final double amount;
   final String accountNumber;
@@ -207,6 +214,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
   RechargeBloc() : super(RechargeState()) {
     on<DepositEvent>(_onDeposit);
     on<CreateDepositEvent>(_onCreateDeposit);
+    on<CancelDepositEvent>(_onCancelDeposit);
     on<CreateWithdrawEvent>(_onCreateWithdraw);
     on<GetWalletEvent>(_onGetWallet);
     on<GetDepositDetailEvent>(_onGetDepositDetail);
@@ -248,6 +256,19 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future<void> _onCancelDeposit(
+    CancelDepositEvent event,
+    Emitter<RechargeState> emit,
+  ) async {
+    try {
+      final usecase = await getIt.getAsync<RechargeUseCase>();
+      await usecase.cancelDeposit(event.id);
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.cancelDepositError, type: ToastType.error);
     }
   }
 

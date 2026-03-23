@@ -712,5 +712,6 @@
     "placeholders": {
       "content": {}
     }
-  }
+  },
+  "cancelDepositError": "Không thể hủy lệnh nạp tiền."
 }
