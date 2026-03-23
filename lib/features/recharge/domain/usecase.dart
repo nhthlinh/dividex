@@ -10,12 +10,11 @@ class RechargeUseCase {
 
   RechargeUseCase({required this.rechargeRepository});
 
-  Future<String> deposit(
+  Future<PayOSResponseModel> deposit(
     double amount,
     String currency,
-    String bankCode,
   ) async {
-    return rechargeRepository.deposit(amount, currency, bankCode);
+    return rechargeRepository.deposit(amount, currency);
   }
 
   Future<void> createDeposit(

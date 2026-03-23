@@ -91,6 +91,7 @@ dependencies:
   flutter_native_splash: ^2.4.7
   vietqr_core: ^0.2.5+1
   another_flushbar: ^1.12.32
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

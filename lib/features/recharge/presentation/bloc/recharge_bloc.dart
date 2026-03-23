@@ -16,9 +16,8 @@ class RechargeEvent {}
 class DepositEvent extends RechargeEvent {
   final double amount;
   final String currency;
-  final String bankCode;
 
-  DepositEvent(this.amount, this.currency, this.bankCode);
+  DepositEvent(this.amount, this.currency);
 }
 
 class CreateDepositEvent extends RechargeEvent {
@@ -110,6 +109,12 @@ class VnPayLinkState extends RechargeState {
   final String link;
 
   VnPayLinkState(this.link);
+}
+
+class PayOsCheckOutLinkState extends RechargeState {
+  final PayOSResponseModel link;
+
+  PayOsCheckOutLinkState(this.link);
 }
 
 class RechargeSuccessState extends RechargeState {}
@@ -218,11 +223,10 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
       final usecase = await getIt.getAsync<RechargeUseCase>();
       final link = await usecase.deposit(
         event.amount,
-        event.currency,
-        event.bankCode,
+        event.currency
       );
 
-      emit(VnPayLinkState(link));
+      emit(PayOsCheckOutLinkState(link));
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);

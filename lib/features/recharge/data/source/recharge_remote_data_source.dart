@@ -3,7 +3,7 @@ import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 
 abstract class RechargeRemoteDataSource {
-  Future<String> deposit(double amount, String currency, String bankCode);
+  Future<PayOSResponseModel> deposit(double amount, String currency);
   Future<void> createDeposit(double amount, String currency, String bankCode);
   Future<void> createWithdraw(
     double amount,

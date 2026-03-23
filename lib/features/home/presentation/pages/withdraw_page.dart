@@ -205,7 +205,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                           controller: amountController,
                           keyboardType: TextInputType.number,
                           isReadOnly: false,
-                          label: intl.amount,
+                          label: intl.amountLabel,
                           isRequired: true,
                           validator: (value) =>
                               CustomValidator().validateAmount(value, intl),

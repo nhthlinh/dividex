@@ -17,14 +17,14 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
   RechargeRemoteDatasourceImpl(this.dio);
 
   @override
-  Future<String> deposit(double amount, String currency, String bankCode) {
+  Future<PayOSResponseModel> deposit(double amount, String currency) {
     return apiCallWrapper(() async {
-      final response = await dio.get(
-        '/payment',
-        data: {'amount': amount, 'currency': currency, 'bank_code': bankCode},
+      final response = await dio.post(
+        '/payment/payos/create-link',
+        data: {'amount': amount, 'currency': currency, 'description': 'Deposit ${amount.toString()} $currency', 'item_name': 'Deposit ${amount.toString()} $currency'},
       );
 
-      return response.data['data']['payment_url'];
+      return PayOSResponseModel.fromJson(response.data['data']);
     });
   }
 

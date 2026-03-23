@@ -145,3 +145,23 @@ class WithdrawTransactionModel {
     );
   }
 }
+
+class PayOSResponseModel {
+  final int orderCode;
+  final String checkoutUrl;
+  final String paymentLinkId;
+
+  PayOSResponseModel({
+    required this.orderCode,
+    required this.checkoutUrl,
+    required this.paymentLinkId
+  });
+
+  factory PayOSResponseModel.fromJson(Map<String, dynamic> json) {
+    return PayOSResponseModel(
+      orderCode: json['order_code'],
+      checkoutUrl: json['checkout_url'],
+      paymentLinkId: json['payment_link_id'],
+    );
+  }
+}

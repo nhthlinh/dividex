@@ -12,8 +12,8 @@ class RechargeRepositoryImpl implements RechargeRepository {
   RechargeRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<String> deposit(double amount, String currency, String bankCode) {
-    return remoteDataSource.deposit(amount, currency, bankCode);
+  Future<PayOSResponseModel> deposit(double amount, String currency) {
+    return remoteDataSource.deposit(amount, currency);
   }
 
   @override

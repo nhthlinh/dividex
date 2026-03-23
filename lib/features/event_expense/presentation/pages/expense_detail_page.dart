@@ -9,6 +9,7 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/image/presentation/pages/image_page.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
@@ -130,8 +131,8 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                   const Divider(height: 1, color: AppThemes.borderColor),
                   const SizedBox(height: 16),
                   buildGroupInfoRow(
-                    intl.amount,
-                    expense.totalAmount.toString() +
+                    intl.amountLabel,
+                    formatNumber(expense.totalAmount!.toInt()) +
                         (expense.currency?.code ?? ''),
                   ),
                   buildGroupInfoRow(

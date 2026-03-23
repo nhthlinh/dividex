@@ -1110,7 +1110,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get totalAmount => 'Total amount';
 
   @override
-  String get amount => 'Amount';
+  String get amountLabel => 'Amount';
 
   @override
   String get splitRemainingEqually => 'Split remaining equally';
@@ -1592,4 +1592,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get byAmount => 'By Amount';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get noPeople => 'No one selected';
+
+  @override
+  String get expenseSplitNoItems =>
+      'Item list not found. Please scan the receipt again to split by items.';
+
+  @override
+  String get addFee => 'Additional fees have been distributed';
+
+  @override
+  String get disFee => 'Discount has been applied and distributed';
+
+  @override
+  String get topUpTitle => 'Top up via QR';
+
+  @override
+  String get scanQrInstruction => 'Scan the QR code to top up';
+
+  @override
+  String get scanQrDesc =>
+      'Please use your banking app to scan the QR code above.';
+
+  @override
+  String get noManualTransfer => 'Manual bank transfer is not supported.';
+
+  @override
+  String get warningManual => '⚠️ Transfers without QR will not be recognized.';
+
+  @override
+  String orderCode(Object code) {
+    return 'Transaction ID: $code';
+  }
+
+  @override
+  String amount(Object amount) {
+    return 'Amount: $amount';
+  }
+
+  @override
+  String content(Object content) {
+    return 'Note: $content';
+  }
 }

@@ -426,7 +426,7 @@
 
   "friendRequestNotFound": "The friend request was not found.",
   "totalAmount": "Total amount",
-  "amount": "Amount",
+  "amountLabel": "Amount",
   "splitRemainingEqually": "Split remaining equally",
   "allocated": "Allocated",
   "noEventsInGroup": "No events in this group yet",
@@ -682,9 +682,33 @@
   "cantReadImage": "Unable to scan the image to read the bill. Please try again with a clearer image or check your connection.",
   "showMoreInfo": "More information",
   "byItem": "By Item",
-  "byAmount": "By Amount"
-
-  
-
-
+  "byAmount": "By Amount",
+  "reset": "Reset",
+  "noPeople": "No one selected",
+  "expenseSplitNoItems": "Item list not found. Please scan the receipt again to split by items.",
+  "addFee": "Additional fees have been distributed",
+  "disFee": "Discount has been applied and distributed",
+  "topUpTitle": "Top up via QR",
+  "scanQrInstruction": "Scan the QR code to top up",
+  "scanQrDesc": "Please use your banking app to scan the QR code above.",
+  "noManualTransfer": "Manual bank transfer is not supported.",
+  "warningManual": "⚠️ Transfers without QR will not be recognized.",
+  "orderCode": "Transaction ID: {code}",
+  "@orderCode": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "amount": "Amount: {amount}",
+  "@amount": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "content": "Note: {content}",
+  "@content": {
+    "placeholders": {
+      "content": {}
+    }
+  }
 }

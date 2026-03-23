@@ -426,7 +426,7 @@
   "friendRequestNotFound": "The friend request was not found.",
   
   "totalAmount": "Tổng số tiền",
-  "amount": "Số tiền",
+  "amountLabel": "Số tiền",
   "splitRemainingEqually": "Chia đều phần còn lại",
   "allocated": "Đã chia",
   "noEventsInGroup": "Chưa có sự kiện nào trong nhóm",
@@ -684,9 +684,33 @@
 
   "showMoreInfo": "Thêm thông tin",
   "byItem": "Theo món",
-  "byAmount": "Theo số tiền"
-
-  
-
-
+  "byAmount": "Theo số tiền",
+  "reset": "Đặt lại",
+  "noPeople": "Chưa chọn người trả",
+  "expenseSplitNoItems": "Không tìm thấy danh sách món. Hãy quét lại hóa đơn để chia theo món.",
+  "addFee": "Phí/thuế đã được phân bổ",
+  "disFee": "Giảm giá đã được phân bổ",
+  "topUpTitle": "Nạp tiền bằng QR",
+  "scanQrInstruction": "Quét mã QR để nạp tiền",
+  "scanQrDesc": "Vui lòng sử dụng ứng dụng ngân hàng để quét mã QR bên trên.",
+  "noManualTransfer": "Không hỗ trợ chuyển khoản thủ công.",
+  "warningManual": "⚠️ Chuyển khoản không qua QR sẽ không được ghi nhận.",
+  "orderCode": "Mã giao dịch: {code}",
+  "@orderCode": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "amount": "Số tiền: {amount}",
+  "@amount": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "content": "Nội dung: {content}",
+  "@content": {
+    "placeholders": {
+      "content": {}
+    }
+  }
 }

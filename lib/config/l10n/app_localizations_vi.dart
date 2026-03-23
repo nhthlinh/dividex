@@ -1109,7 +1109,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get totalAmount => 'Tổng số tiền';
 
   @override
-  String get amount => 'Số tiền';
+  String get amountLabel => 'Số tiền';
 
   @override
   String get splitRemainingEqually => 'Chia đều phần còn lại';
@@ -1590,4 +1590,52 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get byAmount => 'Theo số tiền';
+
+  @override
+  String get reset => 'Đặt lại';
+
+  @override
+  String get noPeople => 'Chưa chọn người trả';
+
+  @override
+  String get expenseSplitNoItems =>
+      'Không tìm thấy danh sách món. Hãy quét lại hóa đơn để chia theo món.';
+
+  @override
+  String get addFee => 'Phí/thuế đã được phân bổ';
+
+  @override
+  String get disFee => 'Giảm giá đã được phân bổ';
+
+  @override
+  String get topUpTitle => 'Nạp tiền bằng QR';
+
+  @override
+  String get scanQrInstruction => 'Quét mã QR để nạp tiền';
+
+  @override
+  String get scanQrDesc =>
+      'Vui lòng sử dụng ứng dụng ngân hàng để quét mã QR bên trên.';
+
+  @override
+  String get noManualTransfer => 'Không hỗ trợ chuyển khoản thủ công.';
+
+  @override
+  String get warningManual =>
+      '⚠️ Chuyển khoản không qua QR sẽ không được ghi nhận.';
+
+  @override
+  String orderCode(Object code) {
+    return 'Mã giao dịch: $code';
+  }
+
+  @override
+  String amount(Object amount) {
+    return 'Số tiền: $amount';
+  }
+
+  @override
+  String content(Object content) {
+    return 'Nội dung: $content';
+  }
 }

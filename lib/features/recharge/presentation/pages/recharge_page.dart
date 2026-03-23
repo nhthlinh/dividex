@@ -15,6 +15,7 @@ import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart' as webview;
 
 class RechargePage extends StatefulWidget {
@@ -52,7 +53,7 @@ class _RechargePageState extends State<RechargePage> {
     double a = double.parse(amountController.text.trim());
 
     //Gọi api nạp tiền, mà chưa có api
-    context.read<RechargeBloc>().add(DepositEvent(a, 'VND', 'NCB'));
+    context.read<RechargeBloc>().add(DepositEvent(a, 'VND'));
   }
 
   @override
@@ -99,7 +100,7 @@ class _RechargePageState extends State<RechargePage> {
                       controller: amountController,
                       keyboardType: TextInputType.number,
                       isReadOnly: false,
-                      label: intl.amount,
+                      label: intl.amountLabel,
                       isRequired: true,
                       validator: (value) =>
                           CustomValidator().validateAmount(value, intl),
@@ -153,6 +154,11 @@ class _RechargePageState extends State<RechargePage> {
                         child: _buildVnPayWebView(state.link),
                       ),
                     );
+                  } else if (state is PayOsCheckOutLinkState) {
+                    showTransferPopup(
+                      context,
+                      state.link.paymentLinkId,
+                    );
                   }
                 },
                 child: Container(), // BlocBuilder không cần thiết
@@ -161,6 +167,17 @@ class _RechargePageState extends State<RechargePage> {
           ),
         ),
       ),
+    );
+  }
+
+  void showTransferPopup(BuildContext context, String qrData) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => TransferPopup(qrData: qrData),
     );
   }
 
@@ -194,5 +211,83 @@ class _RechargePageState extends State<RechargePage> {
       ..loadRequest(Uri.parse(link));
 
     return SafeArea(child: webview.WebViewWidget(controller: controller));
+  }
+}
+
+class TransferPopup extends StatelessWidget {
+  final String qrData;
+
+  const TransferPopup({super.key, required this.qrData});
+
+  @override
+  Widget build(BuildContext context) {
+    final intl = AppLocalizations.of(context)!;
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  intl.topUpTitle,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                )
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Card QR
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    intl.scanQrInstruction,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // QR từ link
+                  QrImageView(
+                    data: qrData, // <-- link QR truyền vào
+                    size: 300,
+                  ),
+
+                  const SizedBox(height: 12),
+                  Text(
+                    '${intl.scanQrDesc}\n${intl.noManualTransfer}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  Text(
+                    intl.warningManual,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              )
+            ),
+
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
   }
 }

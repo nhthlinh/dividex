@@ -5,7 +5,6 @@ import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/split_page.dart';
 import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:flutter/material.dart';
 

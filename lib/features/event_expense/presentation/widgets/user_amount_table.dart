@@ -155,7 +155,7 @@ class _UserTableWidgetState extends State<UserTableWidget> {
           child: Row(
             children: [
               Expanded(flex: 3, child: SizedBox.shrink()),
-              Expanded(flex: 2, child: TestInGrey(text: intl.amount)),
+              Expanded(flex: 2, child: TestInGrey(text: intl.amountLabel)),
               Expanded(
                 flex: 2,
                 child: Center(child: TestInGrey(text: "%")),
