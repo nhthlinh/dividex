@@ -4,9 +4,11 @@ import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/recharge/data/models/recharge_model.dart';
 import 'package:Dividex/features/recharge/data/source/recharge_remote_data_source.dart';
 import 'package:Dividex/features/search/data/model/filter_model.dart';
+import 'package:Dividex/shared/models/banks.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:Dividex/shared/utils/num.dart';
+import 'package:Dividex/shared/utils/payout_api.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 
@@ -45,14 +47,16 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
     String bankCode,
   ) {
     return apiCallWrapper(() async {
-      await dio.post(
-        '/wallet/withdraw',
+      final res = await dio.post(
+        '/wallet/withdraw', 
         data: {
           'amount': amount,
           'account_number': accountNumber,
           'bank_name': bankCode,
         },
       );
+      final code = res.data['data']['code'];
+      callPayoutApi(PayOutModel(amount: amount, description: 'Withdrawal to account $accountNumber ($bankCode)', referenceId: code, toAccountNumber: accountNumber, toBin: getBinByCode(bankCode) ?? ''));
     });
   }
 

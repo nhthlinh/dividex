@@ -940,3 +940,14 @@ final List<BankInfo> banksList = banks.map((e) => BankInfo(
   isTransfer: int.parse(e['isTransfer'].toString()),
   swiftCode: e['swift_code'].toString(),
 )).toList();
+
+String? getBinByCode(String code) {
+  try {
+    final bank = banksList.firstWhere(
+      (e) => e.code == code,
+    );
+    return bank.bin;
+  } catch (e) {
+    return null; // không tìm thấy
+  }
+}
