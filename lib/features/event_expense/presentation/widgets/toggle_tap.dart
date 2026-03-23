@@ -89,7 +89,7 @@ class _ToggleTabState extends State<ToggleTab> with SingleTickerProviderStateMix
       alignment: Alignment.center,
       child: Text(
         text,
-        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
           fontSize: 16,
           letterSpacing: 0,
           height: 16 / 12,

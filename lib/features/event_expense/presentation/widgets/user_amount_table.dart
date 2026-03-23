@@ -4,6 +4,7 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/split_page.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:flutter/material.dart';
@@ -195,7 +196,7 @@ class _UserTableWidgetState extends State<UserTableWidget> {
                 children: [
                   TestInGrey(text: intl.allocated),
                   Text(
-                    '${users.where((u) => u.selected).fold<double>(0, (sum, u) => sum + u.amount).toStringAsFixed(0)}/${widget.totalAmount.toStringAsFixed(0)}',
+                    '${formatNumber(users.where((u) => u.selected).fold<double>(0, (sum, u) => sum + u.amount))}/${formatNumber(widget.totalAmount)}',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: AppThemes.primary3Color,
                     ),

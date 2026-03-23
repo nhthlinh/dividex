@@ -144,16 +144,16 @@ class _EditExpensePageState extends State<EditExpensePage> {
         }
       }
 
-      // debugPrint('🔍 Submitting expense with details:');
-      // debugPrint('- name: ${expenseNameController.text}');
-      // debugPrint('- amount: ${expenseAmountController.text}');
-      // debugPrint('- payer: ${_selectedPayer?.fullName}');
-      // debugPrint('- category: ${_selectedCategory.value?.key}');
-      // debugPrint('- currency: ${_selectedCurrency.value.code}');
-      // debugPrint('- date: $formattedDate');
-      // debugPrint('- reminder: $formattedReminder');
-      // debugPrint('- split type: $splitType');
-      // debugPrint('- user debts: $userDebts');
+      debugPrint('🔍 Submitting expense with details:');
+      debugPrint('- name: ${expenseNameController.text}');
+      debugPrint('- amount: ${expenseAmountController.text}');
+      debugPrint('- payer: ${_selectedPayer?.fullName}');
+      debugPrint('- category: ${_selectedCategory.value?.key}');
+      debugPrint('- currency: ${_selectedCurrency.value.code}');
+      debugPrint('- date: $formattedDate');
+      debugPrint('- reminder: $formattedReminder');
+      debugPrint('- split type: $splitType');
+      debugPrint('- user debts: $userDebts');
 
       context.read<ExpenseBloc>().add(
         UpdateExpenseEvent(
@@ -168,7 +168,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
           remindAt: formattedReminder,
           splitType: splitType,
           userDebts: userDebts,
-          //images.whereType<Uint8List>().toList(),
+          // images.whereType<Uint8List>().toList(),
         ),
       );
 
@@ -204,12 +204,24 @@ class _EditExpensePageState extends State<EditExpensePage> {
                   !clearFormTrigger.value; // Trigger form reset
               return Future.value();
             },
-            title: intl.addExpense,
+            title: intl.edit,
             child: expenseForm(intl, state.expense),
           );
         },
       ),
     );
+  }
+
+  SplitTypeEnum detectSplitType(List<UserDebt> users) {
+    if (users.isEmpty) return SplitTypeEnum.equal;
+
+    final firstAmount = users[0].amount;
+
+    final isAllEqual = users.every(
+      (u) => u.amount == firstAmount,
+    );
+
+    return isAllEqual ? SplitTypeEnum.equal : SplitTypeEnum.custom;
   }
 
   CustomFormWrapper expenseForm(AppLocalizations intl, ExpenseModel expense) {
@@ -238,9 +250,9 @@ class _EditExpensePageState extends State<EditExpensePage> {
           : '';
 
       userDebts = expense.userDebtInfos!
-          .map((e) => UserDebt(amount: e.amount, userId: e.user.id ?? ''))
+          .map((e) => UserDebt(amount: e.amount.abs(), userId: e.user.id ?? ''))
           .toList();
-      splitType = expense.splitType ?? SplitTypeEnum.equal;
+      splitType = expense.splitType ?? detectSplitType(userDebts);
     }
 
     _isInitialized = true;

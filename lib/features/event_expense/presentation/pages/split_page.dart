@@ -23,7 +23,7 @@ class SplitPage extends StatefulWidget {
   final SplitTypeEnum initialType;
   final double amount;
   final Function(List<UserDebt> value) onChanged;
-  final List<ImageExpenseItemModel> items;
+  final List<ImageExpenseItemModel>? items;
 
   const SplitPage({
     super.key,
@@ -34,7 +34,7 @@ class SplitPage extends StatefulWidget {
     required this.initialType,
     required this.amount,
     required this.onChanged,
-    required this.items
+    required this.items,
   });
 
   @override
@@ -44,7 +44,6 @@ class SplitPage extends StatefulWidget {
 class _SplitPageState extends State<SplitPage> {
   List<UserDebt> _currentDebts = [];
   bool isCustomByAmount = true;
-
 
   @override
   void initState() {
@@ -101,8 +100,9 @@ class _SplitPageState extends State<SplitPage> {
                       setState(() {
                         if (value == false && widget.items != []) {
                           isCustomByAmount = false;
-                        } 
-                        isCustomByAmount = true;
+                        } else {
+                          isCustomByAmount = true;
+                        }
                       });
                     },
                   ),
@@ -120,13 +120,24 @@ class _SplitPageState extends State<SplitPage> {
                 totalAmount: widget.amount,
                 onChanged: _onUsersChanged,
               ),
-            ] else if (widget.items != []) ...[
+            ] else if (widget.items != null && widget.items!.isNotEmpty && !isCustomByAmount) ...[
               UserItemTableWidget(
                 usersDebt: _currentDebts,
                 users: widget.initialUsers,
                 totalAmount: widget.amount,
                 onChanged: _onUsersChanged,
-                items: []
+                items: widget.items ?? [],
+              ),
+            ] else ...[
+              Container(
+                width: 340,
+                margin: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  intl.expenseSplitNoItems,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
+                ),
               ),
             ],
 
@@ -134,9 +145,11 @@ class _SplitPageState extends State<SplitPage> {
 
             CustomButton(
               text: intl.accept,
-              onPressed: () {
-                context.pop(_currentDebts);
-              },
+              onPressed: _currentDebts.map((e) => e.amount).fold<double>(0, (sum, amount) => sum + amount) == widget.amount
+                  ? () {
+                      context.pop(_currentDebts);
+                    }
+                  : null,
             ),
           ],
         ),

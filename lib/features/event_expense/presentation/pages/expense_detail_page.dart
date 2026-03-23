@@ -117,14 +117,14 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                           ),
                         ],
                       ),
-                      Text(
-                        expense.currency != null
-                            ? '${expense.totalAmount} ${expense.currency?.code}'
-                            : '',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: AppThemes.infoColor,
-                        ),
-                      ),
+                      // Text(
+                      //   expense.currency != null
+                      //       ? '${formatNumber(expense.totalAmount!.toInt())} ${expense.currency?.code}'
+                      //       : '',
+                      //   style: theme.textTheme.titleMedium?.copyWith(
+                      //     color: AppThemes.infoColor,
+                      //   ),
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 16),
