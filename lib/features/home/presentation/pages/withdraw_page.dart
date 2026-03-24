@@ -4,7 +4,6 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
-import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';

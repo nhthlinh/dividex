@@ -117,7 +117,7 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
   @override
   Future<void> reviewApp(int stars) async {
     return apiCallWrapper(() async {
-      await dio.post('/users/review', data: {
+      await dio.put('/users/review', data: {
         'rate': stars,
       });
     });

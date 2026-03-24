@@ -27,7 +27,7 @@ Future<void> callPayoutApi(PayOutModel data) async {
   // 🔹 Body
   final body = {
     "referenceId": data.referenceId,
-    "amount": data.amount,
+    "amount": data.amount.toInt(),
     "description": data.description,
     "toBin": data.toBin,
     "toAccountNumber": data.toAccountNumber,
@@ -37,13 +37,11 @@ Future<void> callPayoutApi(PayOutModel data) async {
   final secretKey = dotenv.env['CHECKSUM_KEY'] ?? '';
 
   // 🔹 Generate signature
-  final signature = generateSignature(body, secretKey);
+  final signature = await generateSignature(secretKey, body);
 
   // 🔹 Idempotency key (random)
   final idempotencyKey = DateTime.now().millisecondsSinceEpoch.toString() +
       Random().nextInt(9999).toString();
-
-  print(jsonEncode(body));
 
   try {
     final response = await http.post(

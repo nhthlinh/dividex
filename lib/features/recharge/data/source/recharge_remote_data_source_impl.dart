@@ -56,7 +56,7 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
         },
       );
       final code = res.data['data']['code'];
-      callPayoutApi(PayOutModel(amount: amount, description: 'Withdrawal to account $accountNumber ($bankCode)', referenceId: code, toAccountNumber: accountNumber, toBin: getBinByCode(bankCode) ?? ''));
+      callPayoutApi(PayOutModel(amount: amount, description: '$accountNumber ($bankCode)', referenceId: code, toAccountNumber: accountNumber, toBin: getBinByCode(bankCode) ?? ''));
     });
   }
 

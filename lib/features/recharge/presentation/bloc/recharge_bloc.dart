@@ -11,7 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RechargeState {}
 
+class DepositSuccessState extends RechargeState {}
+
 class RechargeEvent {}
+
+class DepositSuccessEvent extends RechargeEvent {}
 
 class DepositEvent extends RechargeEvent {
   final double amount;
@@ -215,6 +219,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
     on<DepositEvent>(_onDeposit);
     on<CreateDepositEvent>(_onCreateDeposit);
     on<CancelDepositEvent>(_onCancelDeposit);
+    on<DepositSuccessEvent>(_onDepositSuccessEvent);
     on<CreateWithdrawEvent>(_onCreateWithdraw);
     on<GetWalletEvent>(_onGetWallet);
     on<GetDepositDetailEvent>(_onGetDepositDetail);
@@ -270,6 +275,13 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.cancelDepositError, type: ToastType.error);
     }
+  }
+
+  Future<void> _onDepositSuccessEvent(
+    DepositSuccessEvent event,
+    Emitter<RechargeState> emit,
+  ) async {
+    emit(DepositSuccessState());
   }
 
   Future<void> _onCreateWithdraw(
