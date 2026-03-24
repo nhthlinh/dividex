@@ -246,7 +246,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                   const Spacer(),
                   CustomButton(
                     text: intl.confirm,
-                    onPressed: (!isValid || isSubmitting)
+                    onPressed: ((!isValid || isSubmitting))
                         ? null
                         : () async {
                             setSubmitting(true);

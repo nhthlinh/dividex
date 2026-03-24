@@ -473,7 +473,7 @@
   "image": "Image",
   "expenseSplitNotMatch": "Expense split not match, please check again",
   "accountNumber": "Account number",
-  "branch": "Branch",
+  "bank": "Bank",
   "accountNumberLabel": "Type your new account number",
   "chooseBeneficiary": "Choose beneficiary",
   "findBeneficiary": "Find beneficiary",
@@ -711,5 +711,10 @@
       "content": {}
     }
   },
-  "cancelDepositError": "Failed to cancel deposit."
+  "cancelDepositError": "Failed to cancel deposit.",
+  "cannotOpenBankApp": "Unable to open your bank app",
+  "openInBankApp": "Open in your bank app",
+  "failedToSaveQr": "Failed to save QR code",
+  "savedToGallery": "Saved to gallery",
+  "downloadQr": "Download QR code"
 }

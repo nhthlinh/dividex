@@ -96,28 +96,28 @@ class _AddAccountPageState extends State<AddAccountPage> {
                 valueListenable: selectedBranch,
                 builder: (context, value, _) {
                   return CustomDropdownWidget<BankInfo>(
-                    label: intl.branch,
+                    label: intl.bank,
                     value: value,
                     options: banksList,
-                    displayString: (b) => '${b.shortName} - ${b.code}',
+                    displayString: (b) => b.shortName,
                     buildOption: (b, selected) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 6,
+                          vertical: 0,
                           horizontal: 4,
                         ),
                         child: Row(
                           children: [
                             Image.network(
                               b.logo,
-                              width: 24,
-                              height: 24,
+                              height: 50,
+                              width: 100,
                               errorBuilder: (context, error, stackTrace) =>
                                   const Icon(Icons.account_balance),
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              b.shortName,
+                              b.code,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     color: selected
@@ -127,18 +127,6 @@ class _AddAccountPageState extends State<AddAccountPage> {
                                   ),
                             ),
                             const SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                b.code,
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      color: selected
-                                          ? AppThemes.primary3Color
-                                          : Colors.grey,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                              ),
-                            ),
                             if (selected)
                               const Icon(
                                 Icons.check,

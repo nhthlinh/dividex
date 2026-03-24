@@ -31,6 +31,10 @@ class RechargeUseCase {
     return rechargeRepository.cancelDeposit(id);
   }
 
+  Future<bool> isDepositSuccessful(String referenceId) async {
+    return rechargeRepository.isDepositSuccessful(referenceId);
+  }
+
   Future<void> createWithdraw(
     double amount,
     String accountNumber,

@@ -70,4 +70,9 @@ class RechargeRepositoryImpl implements RechargeRepository {
   Future<void> cancelDeposit(int id) {
     return remoteDataSource.cancelDeposit(id);
   }
+  
+  @override
+  Future<bool> isDepositSuccessful(String referenceId) {
+    return remoteDataSource.isDepositSuccessful(referenceId);
+  }
 }

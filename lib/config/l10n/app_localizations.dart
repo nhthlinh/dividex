@@ -2342,11 +2342,11 @@ abstract class AppLocalizations {
   /// **'Account number'**
   String get accountNumber;
 
-  /// No description provided for @branch.
+  /// No description provided for @bank.
   ///
   /// In en, this message translates to:
-  /// **'Branch'**
-  String get branch;
+  /// **'Bank'**
+  String get bank;
 
   /// No description provided for @accountNumberLabel.
   ///
@@ -2545,12 +2545,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deposit success'**
   String get createDepositSuccess;
-
-  /// No description provided for @bank.
-  ///
-  /// In en, this message translates to:
-  /// **'Bank'**
-  String get bank;
 
   /// No description provided for @date.
   ///
@@ -3055,6 +3049,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to cancel deposit.'**
   String get cancelDepositError;
+
+  /// No description provided for @cannotOpenBankApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open your bank app'**
+  String get cannotOpenBankApp;
+
+  /// No description provided for @openInBankApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in your bank app'**
+  String get openInBankApp;
+
+  /// No description provided for @failedToSaveQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save QR code'**
+  String get failedToSaveQr;
+
+  /// No description provided for @savedToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to gallery'**
+  String get savedToGallery;
+
+  /// No description provided for @downloadQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Download QR code'**
+  String get downloadQr;
 }
 
 class _AppLocalizationsDelegate

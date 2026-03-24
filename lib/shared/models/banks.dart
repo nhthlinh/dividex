@@ -11,6 +11,8 @@ class BankInfo {
   final int isTransfer;
   final String? swiftCode;
 
+  final bool canOpen;
+
   BankInfo({
     required this.id,
     required this.name,
@@ -23,6 +25,7 @@ class BankInfo {
     required this.support,
     required this.isTransfer,
     this.swiftCode,
+    this.canOpen = false,
   });
 }
 
@@ -40,6 +43,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "ICBVVNVX",
+    "canOpen": true,
   },
   {
     "id": 43,
@@ -54,6 +58,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "BFTVVNVX",
+    "canOpen": true,
   },
   {
     "id": 4,
@@ -68,6 +73,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "BIDVVNVX",
+    "canOpen": true,
   },
   {
     "id": 42,
@@ -82,6 +88,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "VBAAVNVX",
+    "canOpen": true,
   },
   {
     "id": 26,
@@ -96,6 +103,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "ORCOVNVX",
+    "canOpen": false,
   },
   {
     "id": 21,
@@ -110,6 +118,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "MSCBVNVX",
+    "canOpen": true,
   },
   {
     "id": 38,
@@ -124,6 +133,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "VTCBVNVX",
+    "canOpen": true,
   },
   {
     "id": 2,
@@ -138,6 +148,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "ASCBVNVX",
+    "canOpen": true,
   },
   {
     "id": 47,
@@ -152,6 +163,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "VPBKVNVX",
+    "canOpen": true,
   },
   {
     "id": 39,
@@ -166,6 +178,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "TPBVVNVX",
+    "canOpen": true,
   },
   {
     "id": 36,
@@ -180,6 +193,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "SGTTVNVX",
+    "canOpen": false,
   },
   {
     "id": 12,
@@ -194,6 +208,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "HDBCVNVX",
+    "canOpen": true,
   },
   {
     "id": 44,
@@ -208,6 +223,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "VCBCVNVX",
+    "canOpen": false,
   },
   {
     "id": 31,
@@ -222,6 +238,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "SACLVNVX",
+    "canOpen": true,
   },
   {
     "id": 45,
@@ -236,6 +253,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "VNIBVNVX",
+    "canOpen": false,
   },
   {
     "id": 35,
@@ -250,6 +268,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "SHBAVNVX",
+    "canOpen": false,
   },
   {
     "id": 10,
@@ -264,6 +283,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "EBVIVNVX",
+    "canOpen": false,
   },
   {
     "id": 22,
@@ -278,6 +298,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "MCOBVNVX",
+    "canOpen": false,
   },
   {
     "id": 53,
@@ -292,6 +313,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": null,
+    "canOpen": true,
   },
   {
     "id": 54,
@@ -306,6 +328,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 57,
@@ -321,6 +344,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 58,
@@ -335,6 +359,7 @@ const banks = [
     "support": 0,
     "isTransfer": 1,
     "swift_code": null,
+    "canOpen": true,
   },
   {
     "id": 56,
@@ -349,6 +374,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 34,
@@ -363,6 +389,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "SBITVNVX",
+    "canOpen": true,
   },
   {
     "id": 3,
@@ -377,6 +404,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "NASCVNVX",
+    "canOpen": false,
   },
   {
     "id": 64,
@@ -391,6 +419,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "WBVNVNVX",
+    "canOpen": false,
   },
   {
     "id": 30,
@@ -405,6 +434,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "WBVNVNVX",
+    "canOpen": false,
   },
   {
     "id": 27,
@@ -419,6 +449,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "OCBKUS3M",
+    "canOpen": false,
   },
   {
     "id": 24,
@@ -433,6 +464,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "NVBAVNVX",
+    "canOpen": true,
   },
   {
     "id": 37,
@@ -447,6 +479,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "SHBKVNVX",
+    "canOpen": true,
   },
   {
     "id": 1,
@@ -461,6 +494,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "ABBKVNVX",
+    "canOpen": false,
   },
   {
     "id": 41,
@@ -475,6 +509,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "VNACVNVX",
+    "canOpen": false,
   },
   {
     "id": 23,
@@ -489,6 +524,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "NAMAVNVX",
+    "canOpen": true,
   },
   {
     "id": 29,
@@ -503,6 +539,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "PGBLVNVX",
+    "canOpen": false,
   },
   {
     "id": 46,
@@ -517,6 +554,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "VNTTVNVX",
+    "canOpen": true,
   },
   {
     "id": 5,
@@ -531,6 +569,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "BVBVVNVX",
+    "canOpen": true,
   },
   {
     "id": 33,
@@ -545,6 +584,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "SEAVVNVX",
+    "canOpen": true,
   },
   {
     "id": 52,
@@ -559,6 +599,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": null,
+    "canOpen": true,
   },
   {
     "id": 20,
@@ -573,6 +614,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "LVBKVNVX",
+    "canOpen": true,
   },
   {
     "id": 19,
@@ -587,6 +629,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "KLBKVNVX",
+    "canOpen": true,
   },
   {
     "id": 55,
@@ -601,6 +644,7 @@ const banks = [
     "support": 3,
     "isTransfer": 1,
     "swift_code": "KASIVNVX",
+    "canOpen": false,
   },
   {
     "id": 62,
@@ -615,6 +659,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 61,
@@ -629,6 +674,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 60,
@@ -643,6 +689,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 59,
@@ -657,6 +704,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 63,
@@ -671,6 +719,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 6,
@@ -685,6 +734,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": "GTBAVNVX",
+    "canOpen": false,
   },
   {
     "id": 7,
@@ -699,6 +749,7 @@ const banks = [
     "support": 0,
     "isTransfer": 1,
     "swift_code": "CIBBVNVN",
+    "canOpen": true,
   },
   {
     "id": 8,
@@ -713,6 +764,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": "DBSSVNVX",
+    "canOpen": false,
   },
   {
     "id": 9,
@@ -727,6 +779,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": "EACBVNVX",
+    "canOpen": false,
   },
   {
     "id": 28,
@@ -741,6 +794,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": "VIDPVNVX",
+    "canOpen": true,
   },
   {
     "id": 51,
@@ -755,6 +809,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 50,
@@ -769,6 +824,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 49,
@@ -783,6 +839,7 @@ const banks = [
     "support": 0,
     "isTransfer": 1,
     "swift_code": null,
+    "canOpen": true,
   },
   {
     "id": 48,
@@ -797,6 +854,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 11,
@@ -811,6 +869,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": "GBNKVNVX",
+    "canOpen": false,
   },
   {
     "id": 13,
@@ -825,6 +884,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": "HLBBVNVX",
+    "canOpen": false,
   },
   {
     "id": 14,
@@ -839,6 +899,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": "HSBCVNVX",
+    "canOpen": false,
   },
   {
     "id": 15,
@@ -853,6 +914,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 16,
@@ -867,6 +929,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 25,
@@ -881,6 +944,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 40,
@@ -895,6 +959,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 18,
@@ -909,6 +974,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": null,
+    "canOpen": false,
   },
   {
     "id": 32,
@@ -923,6 +989,7 @@ const banks = [
     "support": 0,
     "isTransfer": 0,
     "swift_code": "SCBLVNVX",
+    "canOpen": false,
   },
 ];
 
@@ -940,6 +1007,10 @@ final List<BankInfo> banksList = banks.map((e) => BankInfo(
   isTransfer: int.parse(e['isTransfer'].toString()),
   swiftCode: e['swift_code'].toString(),
 )).toList();
+
+final List<BankInfo> banksCanOpen = banksList
+    .where((e) => e.canOpen)
+    .toList();
 
 String? getBinByCode(String code) {
   try {

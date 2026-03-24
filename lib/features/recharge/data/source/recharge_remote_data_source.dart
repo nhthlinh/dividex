@@ -6,6 +6,7 @@ abstract class RechargeRemoteDataSource {
   Future<PayOSResponseModel> deposit(double amount, String currency);
   Future<void> createDeposit(double amount, String currency, String bankCode);
   Future<void> cancelDeposit(int id);
+  Future<bool> isDepositSuccessful(String referenceId);
   Future<void> createWithdraw(
     double amount,
     String accountNumber,

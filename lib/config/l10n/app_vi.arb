@@ -474,7 +474,7 @@
   "image": "Ảnh",
   "expenseSplitNotMatch": "Số tiền chia không khớp, vui lòng kiểm tra lại",
   "accountNumber": "Số tài khoản",
-  "branch": "Chi nhánh",
+  "bank": "Ngân hàng",
   "accountNumberLabel": "Nhập số tài khoản mới của bạn",
   "chooseBeneficiary": "Chọn người thụ hưởng",
   "findBeneficiary": "Tìm người thụ hưởng",
@@ -713,5 +713,10 @@
       "content": {}
     }
   },
-  "cancelDepositError": "Không thể hủy lệnh nạp tiền."
+  "cancelDepositError": "Không thể hủy lệnh nạp tiền.",
+  "cannotOpenBankApp": "Không thể mở ứng dụng ngân hàng",
+  "openInBankApp": "Mở trong ứng dụng ngân hàng",
+  "failedToSaveQr": "Không thể lưu mã QR",
+  "savedToGallery": "Đã lưu mã QR vào thư viện",
+  "downloadQr": "Tải mã QR về máy"
 }

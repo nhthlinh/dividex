@@ -1240,7 +1240,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountNumber => 'Account number';
 
   @override
-  String get branch => 'Branch';
+  String get bank => 'Bank';
 
   @override
   String get accountNumberLabel => 'Type your new account number';
@@ -1343,9 +1343,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createDepositSuccess => 'Deposit success';
-
-  @override
-  String get bank => 'Bank';
 
   @override
   String get date => 'Transaction day';
@@ -1642,4 +1639,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancelDepositError => 'Failed to cancel deposit.';
+
+  @override
+  String get cannotOpenBankApp => 'Unable to open your bank app';
+
+  @override
+  String get openInBankApp => 'Open in your bank app';
+
+  @override
+  String get failedToSaveQr => 'Failed to save QR code';
+
+  @override
+  String get savedToGallery => 'Saved to gallery';
+
+  @override
+  String get downloadQr => 'Download QR code';
 }

@@ -13,9 +13,17 @@ class RechargeState {}
 
 class DepositSuccessState extends RechargeState {}
 
+class RechargeLoading extends RechargeState {}
+
 class RechargeEvent {}
 
 class DepositSuccessEvent extends RechargeEvent {}
+
+class CheckRechargeStatusEvent extends RechargeEvent {
+  final String referenceId;
+
+  CheckRechargeStatusEvent(this.referenceId);
+}
 
 class DepositEvent extends RechargeEvent {
   final double amount;
@@ -226,6 +234,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
     on<GetWithdrawDetailEvent>(_onGetWithdrawDetail);
     on<TransferEvent>(_onTransferEvent);
     on<GetWalletInfoEvent>(_onGetWalletInfo);
+    on<CheckRechargeStatusEvent>(_onCheckRechargeStatus);
   }
 
   Future<void> _onDeposit(
@@ -284,10 +293,29 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
     emit(DepositSuccessState());
   }
 
+  Future<void> _onCheckRechargeStatus(
+    CheckRechargeStatusEvent event,
+    Emitter<RechargeState> emit,
+  ) async {
+    if (state is DepositSuccessState) return;
+    try {
+      final usecase = await getIt.getAsync<RechargeUseCase>();
+      final result = await usecase.isDepositSuccessful(event.referenceId);
+
+      if (result) {
+        emit(DepositSuccessState());
+      }
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
   Future<void> _onCreateWithdraw(
     CreateWithdrawEvent event,
     Emitter<RechargeState> emit,
   ) async {
+    emit(RechargeLoading());
     try {
       final usecase = await getIt.getAsync<RechargeUseCase>();
       await usecase.createWithdraw(

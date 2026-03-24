@@ -1239,7 +1239,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get accountNumber => 'Số tài khoản';
 
   @override
-  String get branch => 'Chi nhánh';
+  String get bank => 'Ngân hàng';
 
   @override
   String get accountNumberLabel => 'Nhập số tài khoản mới của bạn';
@@ -1341,9 +1341,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get createDepositSuccess => 'Thanh toán thành công';
-
-  @override
-  String get bank => 'Ngân hàng';
 
   @override
   String get date => 'Ngày thực hiện';
@@ -1641,4 +1638,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cancelDepositError => 'Không thể hủy lệnh nạp tiền.';
+
+  @override
+  String get cannotOpenBankApp => 'Không thể mở ứng dụng ngân hàng';
+
+  @override
+  String get openInBankApp => 'Mở trong ứng dụng ngân hàng';
+
+  @override
+  String get failedToSaveQr => 'Không thể lưu mã QR';
+
+  @override
+  String get savedToGallery => 'Đã lưu mã QR vào thư viện';
+
+  @override
+  String get downloadQr => 'Tải mã QR về máy';
 }

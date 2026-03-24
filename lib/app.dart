@@ -4,7 +4,6 @@ import 'package:Dividex/config/location/locale_cubit.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/config/themes/theme_cubit.dart';
-import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/shared/utils/noti_parser.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/push_noti_widget.dart';
@@ -39,8 +38,6 @@ class _MyAppState extends State<MyApp> {
       final translated = parser.parse(body);
 
       if (body.contains('topped up')) {
-        context.read<RechargeBloc>().add(DepositSuccessEvent());
-
         Future.delayed(const Duration(milliseconds: 300), () {
           showCustomNotification(
             message: translated,
@@ -63,8 +60,6 @@ class _MyAppState extends State<MyApp> {
       final translated = parser.parse(body);
 
       if (body.contains('topped up')) {
-        context.read<RechargeBloc>().add(DepositSuccessEvent());
-
         Future.delayed(const Duration(milliseconds: 300), () {
           showCustomNotification(
             message: translated,

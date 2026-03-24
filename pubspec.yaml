@@ -92,6 +92,7 @@ dependencies:
   vietqr_core: ^0.2.5+1
   another_flushbar: ^1.12.32
   qr_flutter: ^4.1.0
+  gal: ^2.0.0
 
 dev_dependencies:
   flutter_test:

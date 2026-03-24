@@ -1,13 +1,18 @@
+import 'dart:async';
+
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/recharge/data/models/recharge_model.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/features/recharge/presentation/widgets/balance_widget.dart';
+import 'package:Dividex/shared/models/banks.dart';
+import 'package:Dividex/shared/utils/download_qr.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
+import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
@@ -17,6 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart' as webview;
+import 'package:url_launcher/url_launcher.dart';
 
 class RechargePage extends StatefulWidget {
   const RechargePage({super.key});
@@ -114,8 +120,7 @@ class _RechargePageState extends State<RechargePage> {
                             margin: const EdgeInsets.all(4),
                             child: CustomButton(
                               size: ButtonSize.medium,
-                              text:
-                                  formatNumber(amount),
+                              text: formatNumber(amount),
                               onPressed: () {
                                 setState(() {
                                   if (amountController.text !=
@@ -155,10 +160,7 @@ class _RechargePageState extends State<RechargePage> {
                       ),
                     );
                   } else if (state is PayOsCheckOutLinkState) {
-                    showTransferPopup(
-                      context,
-                      state.link
-                    );
+                    showTransferPopup(context, state.link);
                   }
                 },
                 child: Container(), // BlocBuilder không cần thiết
@@ -210,10 +212,11 @@ class _RechargePageState extends State<RechargePage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-       builder: (bottomSheetContext) {
+      builder: (bottomSheetContext) {
         return TransferPopup(
+          orderCode: link.orderCode,
           qrData: link.qrCode,
-          bottomSheetContext: bottomSheetContext, // 👈 truyền xuống
+          bottomSheetContext: bottomSheetContext,
         );
       },
     ).then((value) {
@@ -224,14 +227,19 @@ class _RechargePageState extends State<RechargePage> {
       }
     });
   }
-
 }
 
 class TransferPopup extends StatefulWidget {
   final String qrData;
+  final int orderCode;
   final BuildContext bottomSheetContext;
 
-  const TransferPopup({super.key, required this.qrData, required  this.bottomSheetContext});
+  const TransferPopup({
+    super.key,
+    required this.orderCode,
+    required this.qrData,
+    required this.bottomSheetContext,
+  });
 
   @override
   State<TransferPopup> createState() => _TransferPopupState();
@@ -239,6 +247,33 @@ class TransferPopup extends StatefulWidget {
 
 class _TransferPopupState extends State<TransferPopup> {
   bool _closed = false;
+  ValueNotifier<BankInfo?> selectedBranch = ValueNotifier(null);
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _startPolling();
+  }
+
+  void _startPolling() {
+    _timer = Timer.periodic(const Duration(seconds: 7), (_) {
+      if (_closed) return;
+
+      context.read<RechargeBloc>().add(
+        CheckRechargeStatusEvent(widget.orderCode.toString()),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); 
+    selectedBranch.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
@@ -252,8 +287,14 @@ class _TransferPopupState extends State<TransferPopup> {
             _closed = true;
 
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (Navigator.of(widget.bottomSheetContext, rootNavigator: true).canPop()) {
-                Navigator.of(widget.bottomSheetContext, rootNavigator: true).pop('success');
+              if (Navigator.of(
+                widget.bottomSheetContext,
+                rootNavigator: true,
+              ).canPop()) {
+                Navigator.of(
+                  widget.bottomSheetContext,
+                  rootNavigator: true,
+                ).pop('success');
               }
             });
           }
@@ -269,12 +310,17 @@ class _TransferPopupState extends State<TransferPopup> {
                 children: [
                   Text(
                     intl.topUpTitle,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   IconButton(
-                    onPressed: () => Navigator.of(widget.bottomSheetContext, rootNavigator: true).pop('cancel'),
+                    onPressed: () => Navigator.of(
+                      widget.bottomSheetContext,
+                      rootNavigator: true,
+                    ).pop('cancel'),
                     icon: const Icon(Icons.close),
-                  )
+                  ),
                 ],
               ),
 
@@ -289,38 +335,134 @@ class _TransferPopupState extends State<TransferPopup> {
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      intl.scanQrInstruction,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 12),
-
                     // QR từ link
-                    QrImageView(
-                      data: widget.qrData, 
-                      size: 300,
+                    RepaintBoundary(
+                      key: qrKey,
+                      child: QrImageView(
+                        data: widget.qrData,
+                        size: 250,
+                        backgroundColor: Colors.white, // rất quan trọng
+                      ),
                     ),
 
                     const SizedBox(height: 12),
+
                     Text(
-                      '${intl.scanQrDesc}\n${intl.noManualTransfer}',
+                      '${intl.scanQrDesc} ${intl.noManualTransfer}',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall!.copyWith(color: Colors.grey),
                     ),
-                    Text(
-                      intl.warningManual,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
+
+                    const SizedBox(height: 12),
+
+                    CustomButton(
+                      text: intl.downloadQr,
+                      onPressed: () async {
+                        final success = await saveQrImage();
+                        if (success) {
+                          showCustomToast(
+                            intl.savedToGallery,
+                            type: ToastType.success,
+                          );
+                        } else {
+                          showCustomToast(
+                            intl.failedToSaveQr,
+                            type: ToastType.error,
+                          );
+                        }
+                      },
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    ValueListenableBuilder<BankInfo?>(
+                      valueListenable: selectedBranch,
+                      builder: (context, value, _) {
+                        return CustomDropdownWidget<BankInfo>(
+                          label: intl.bank,
+                          value: value,
+                          options: banksList,
+                          displayString: (b) => b.shortName,
+                          buildOption: (b, selected) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 0,
+                                horizontal: 4,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    b.logo,
+                                    height: 50,
+                                    width: 100,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.account_balance),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    b.code,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: selected
+                                              ? AppThemes.primary3Color
+                                              : Colors.grey,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  if (selected)
+                                    const Icon(
+                                      Icons.check,
+                                      color: AppThemes.primary3Color,
+                                    ),
+                                ],
+                              ),
+                            );
+                          },
+                          onChanged: (val) {
+                            selectedBranch.value = val;
+                          },
+                          isRequired: true,
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    CustomButton(
+                      text: intl.openInBankApp,
+                      onPressed: () async {
+                        final uri = Uri.parse(
+                          'https://dl.vietqr.io/pay?app=${selectedBranch.value?.code.toLowerCase() ?? ''}',
+                        );
+
+                        try {
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } catch (e) {
+                          showCustomToast(
+                            intl.cannotOpenBankApp,
+                            type: ToastType.error,
+                          );
+                        }
+                      },
                     ),
                   ],
-                )
+                ),
               ),
 
               const SizedBox(height: 16),
             ],
           ),
         ),
-      )
+      ),
     );
   }
 }
