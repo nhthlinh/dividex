@@ -33,6 +33,7 @@ import 'package:Dividex/features/group/presentation/pages/group_setting.dart';
 import 'package:Dividex/features/group/presentation/pages/hard_delete_expense.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
+import 'package:Dividex/features/home/presentation/bloc/account/verify_account_bloc.dart';
 import 'package:Dividex/features/home/presentation/pages/account_detail_page.dart';
 import 'package:Dividex/features/home/presentation/pages/account_page.dart';
 import 'package:Dividex/features/home/presentation/pages/add_account_page.dart';
@@ -526,9 +527,16 @@ GoRouter buildRouter(BuildContext context) {
                 name: AppRouteNames.addAccount,
                 pageBuilder: (BuildContext context, GoRouterState state) {
                   return buildPageWithDefaultTransition(
-                    child: BlocProvider<AccountBloc>(
-                      create: (context) => AccountBloc(),
-                      child: AddAccountPage(),
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider<AccountBloc>(
+                          create: (context) => AccountBloc(),
+                        ),
+                        BlocProvider<VerifyAccountBloc>(
+                          create: (context) => VerifyAccountBloc(),
+                        ),
+                      ],
+                      child: AddAccountPage()
                     ),
                   );
                 },

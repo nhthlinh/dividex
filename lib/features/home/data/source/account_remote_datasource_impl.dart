@@ -2,6 +2,9 @@ import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/data/source/account_remote_datasource.dart';
+import 'package:Dividex/shared/models/banks.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: AccountRemoteDataSource)
@@ -65,6 +68,38 @@ class AccountRemoteDatasourceImpl implements AccountRemoteDataSource {
       }
 
       return content.map((item) => BankAccount.fromJson(item)).toList();
+    });
+  }
+  
+  @override
+  Future<String> verifyAccount(String accountNumber, String bankCode) {
+    return apiCallWrapper(() async {
+      final String host = dotenv.env['VIETQR_IO_HOST'] ?? '';
+      final res = await dio.post(
+        '$host/lookup',
+        data: {
+          "bin": getBinByCode(bankCode),
+          "accountNumber": accountNumber
+        },
+        options: Options(
+          headers: {
+            'x-api-key': dotenv.env['VIETQR_IO_API_KEY'] ?? '',
+            'x-client-id': dotenv.env['VIETQR_IO_CLIENT_ID'] ?? '',
+          },
+        ),
+      );
+      if (res.statusCode == 200) {
+        final data = res.data;
+
+        // check code API
+        if (data['code'] != '00') {
+          throw Exception('Error');
+        }
+      
+        return data['data']['accountName'];
+      }
+
+      throw Exception('Error');
     });
   }
 }

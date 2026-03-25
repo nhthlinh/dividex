@@ -30,4 +30,6 @@ class MessageCode {
 
   static const String pinNotSet = 'PIN_NOT_SET';
   static const String pinIncorrect = 'PIN_INCORRECT';
+
+  static const String bankAccountIsExist = 'BANK_ACCOUNT_IS_EXISTS';
 }

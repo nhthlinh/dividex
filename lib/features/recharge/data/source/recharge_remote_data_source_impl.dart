@@ -268,8 +268,9 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
   @override
   Future<bool> isDepositSuccessful(String referenceId) async {
     return apiCallWrapper(() async {
+      final String payOsHost = dotenv.env['PAY_OS_HOST'] ?? '';
       final res = await dio.get(
-        'https://api-merchant.payos.vn/v2/payment-requests/$referenceId',
+        '$payOsHost/payment-requests/$referenceId',
         options: Options(
           headers: {
             'x-api-key': dotenv.env['API_KEY'] ?? '',

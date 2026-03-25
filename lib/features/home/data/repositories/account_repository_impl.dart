@@ -28,4 +28,9 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<List<BankAccount>> getAccounts(int page, int pageSize) {
     return remoteDataSource.getAccounts(page, pageSize);
   }
+  
+  @override
+  Future<String> verifyAccount(String accountNumber, String bankCode) {
+    return remoteDataSource.verifyAccount(accountNumber, bankCode);
+  }
 }

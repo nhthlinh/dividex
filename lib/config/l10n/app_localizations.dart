@@ -3079,6 +3079,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download QR code'**
   String get downloadQr;
+
+  /// No description provided for @bankAccountIsExist.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank account already exists'**
+  String get bankAccountIsExist;
+
+  /// No description provided for @accountName.
+  ///
+  /// In en, this message translates to:
+  /// **'Account holder name'**
+  String get accountName;
 }
 
 class _AppLocalizationsDelegate

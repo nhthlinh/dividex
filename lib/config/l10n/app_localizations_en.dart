@@ -1654,4 +1654,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get downloadQr => 'Download QR code';
+
+  @override
+  String get bankAccountIsExist => 'Bank account already exists';
+
+  @override
+  String get accountName => 'Account holder name';
 }

@@ -5,4 +5,5 @@ abstract class AccountRepository {
   Future<void> createAccount(BankAccount account);
   Future<void> updateAccount(BankAccount account);
   Future<void> deleteAccount(String accountId);
+  Future<String> verifyAccount(String accountNumber, String bankCode);
 }

@@ -383,7 +383,7 @@ class _TransferPopupState extends State<TransferPopup> {
                         return CustomDropdownWidget<BankInfo>(
                           label: intl.bank,
                           value: value,
-                          options: banksList,
+                          options: banksCanOpen,
                           displayString: (b) => b.shortName,
                           buildOption: (b, selected) {
                             return Padding(

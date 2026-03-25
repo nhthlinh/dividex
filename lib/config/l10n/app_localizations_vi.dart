@@ -1653,4 +1653,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get downloadQr => 'Tải mã QR về máy';
+
+  @override
+  String get bankAccountIsExist => 'Tài khoản ngân hàng đã tồn tại';
+
+  @override
+  String get accountName => 'Tên chủ tài khoản';
 }

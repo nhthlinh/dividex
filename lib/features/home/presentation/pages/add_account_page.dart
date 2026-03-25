@@ -2,6 +2,7 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
+import 'package:Dividex/features/home/presentation/bloc/account/verify_account_bloc.dart';
 import 'package:Dividex/shared/models/banks.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
@@ -22,6 +23,7 @@ class AddAccountPage extends StatefulWidget {
 
 class _AddAccountPageState extends State<AddAccountPage> {
   final accountNumber = TextEditingController();
+  final accountName = TextEditingController();
   final branch = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<BankInfo?> selectedBranch = ValueNotifier(null);
@@ -34,6 +36,25 @@ class _AddAccountPageState extends State<AddAccountPage> {
   @override
   void initState() {
     super.initState();
+
+    accountNumber.addListener(_checkAndTrigger);
+    selectedBranch.addListener(_checkAndTrigger);
+  }
+
+  void _checkAndTrigger() {
+    final acc = accountNumber.text.trim();
+    final bank = selectedBranch.value;
+
+    if (acc.isNotEmpty && bank != null) {
+      _onAccountBankReady();
+    }
+  }
+
+  void _onAccountBankReady() {
+    String accNumber = accountNumber.text.trim();
+    context.read<VerifyAccountBloc>().add(
+      VerifyAccountEvent(accNumber, selectedBranch.value?.code ?? ''),
+    );
   }
 
   @override
@@ -80,6 +101,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
             FormFieldConfig(controller: accountNumber, isRequired: true),
             FormFieldConfig(selectedValue: selectedBranch, isRequired: true),
             FormFieldConfig(selectedValue: selectedCurrency, isRequired: true),
+            FormFieldConfig(controller: accountName, isRequired: true),
           ],
           builder: (isValid, isSubmitting, setSubmitting) => Column(
             children: [
@@ -143,6 +165,22 @@ class _AddAccountPageState extends State<AddAccountPage> {
                   );
                 },
               ),
+              const SizedBox(height: 8),
+              BlocListener<VerifyAccountBloc, VerifyAccountState>(
+                listener: (context, state) {
+                  if (state is VerifyAccountSuccessState) {
+                    accountName.text = state.accountName;
+                  } 
+                },
+                child: CustomTextInputWidget(
+                  size: TextInputSize.large,
+                  controller: accountName,
+                  keyboardType: TextInputType.text,
+                  isReadOnly: true,
+                  isRequired: true,
+                  label: intl.accountName,
+                ),
+              ),   
               const SizedBox(height: 8),
               ValueListenableBuilder<CurrencyEnum>(
                 valueListenable: selectedCurrency,

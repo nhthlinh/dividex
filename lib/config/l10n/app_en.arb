@@ -716,5 +716,7 @@
   "openInBankApp": "Open in your bank app",
   "failedToSaveQr": "Failed to save QR code",
   "savedToGallery": "Saved to gallery",
-  "downloadQr": "Download QR code"
+  "downloadQr": "Download QR code",
+  "bankAccountIsExist": "Bank account already exists",
+  "accountName": "Account holder name"
 }

@@ -718,5 +718,7 @@
   "openInBankApp": "Mở trong ứng dụng ngân hàng",
   "failedToSaveQr": "Không thể lưu mã QR",
   "savedToGallery": "Đã lưu mã QR vào thư viện",
-  "downloadQr": "Tải mã QR về máy"
+  "downloadQr": "Tải mã QR về máy",
+  "bankAccountIsExist": "Tài khoản ngân hàng đã tồn tại",
+  "accountName": "Tên chủ tài khoản"
 }
