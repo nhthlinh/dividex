@@ -1006,6 +1006,7 @@ final List<BankInfo> banksList = banks.map((e) => BankInfo(
   support: int.parse(e['support'].toString()),
   isTransfer: int.parse(e['isTransfer'].toString()),
   swiftCode: e['swift_code'].toString(),
+  canOpen: e['canOpen'] as bool,
 )).toList();
 
 final List<BankInfo> banksCanOpen = banksList

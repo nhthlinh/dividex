@@ -301,165 +301,167 @@ class _TransferPopupState extends State<TransferPopup> {
         },
         child: Container(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    intl.topUpTitle,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(
-                      widget.bottomSheetContext,
-                      rootNavigator: true,
-                    ).pop('cancel'),
-                    icon: const Icon(Icons.close),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Card QR
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: Column(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // QR từ link
-                    RepaintBoundary(
-                      key: qrKey,
-                      child: QrImageView(
-                        data: widget.qrData,
-                        size: 250,
-                        backgroundColor: Colors.white, // rất quan trọng
+                    Text(
+                      intl.topUpTitle,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-
-                    const SizedBox(height: 12),
-
-                    Text(
-                      '${intl.scanQrDesc} ${intl.noManualTransfer}',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall!.copyWith(color: Colors.grey),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    CustomButton(
-                      text: intl.downloadQr,
-                      onPressed: () async {
-                        final success = await saveQrImage();
-                        if (success) {
-                          showCustomToast(
-                            intl.savedToGallery,
-                            type: ToastType.success,
-                          );
-                        } else {
-                          showCustomToast(
-                            intl.failedToSaveQr,
-                            type: ToastType.error,
-                          );
-                        }
-                      },
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    ValueListenableBuilder<BankInfo?>(
-                      valueListenable: selectedBranch,
-                      builder: (context, value, _) {
-                        return CustomDropdownWidget<BankInfo>(
-                          label: intl.bank,
-                          value: value,
-                          options: banksCanOpen,
-                          displayString: (b) => b.shortName,
-                          buildOption: (b, selected) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 0,
-                                horizontal: 4,
-                              ),
-                              child: Row(
-                                children: [
-                                  Image.network(
-                                    b.logo,
-                                    height: 50,
-                                    width: 100,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(Icons.account_balance),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    b.code,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: selected
-                                              ? AppThemes.primary3Color
-                                              : Colors.grey,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  if (selected)
-                                    const Icon(
-                                      Icons.check,
-                                      color: AppThemes.primary3Color,
-                                    ),
-                                ],
-                              ),
-                            );
-                          },
-                          onChanged: (val) {
-                            selectedBranch.value = val;
-                          },
-                          isRequired: true,
-                        );
-                      },
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    CustomButton(
-                      text: intl.openInBankApp,
-                      onPressed: () async {
-                        final uri = Uri.parse(
-                          'https://dl.vietqr.io/pay?app=${selectedBranch.value?.code.toLowerCase() ?? ''}',
-                        );
-
-                        try {
-                          await launchUrl(
-                            uri,
-                            mode: LaunchMode.externalApplication,
-                          );
-                        } catch (e) {
-                          showCustomToast(
-                            intl.cannotOpenBankApp,
-                            type: ToastType.error,
-                          );
-                        }
-                      },
+                    IconButton(
+                      onPressed: () => Navigator.of(
+                        widget.bottomSheetContext,
+                        rootNavigator: true,
+                      ).pop('cancel'),
+                      icon: const Icon(Icons.close),
                     ),
                   ],
                 ),
-              ),
-
-              const SizedBox(height: 16),
-            ],
+            
+                const SizedBox(height: 16),
+            
+                // Card QR
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Column(
+                    children: [
+                      // QR từ link
+                      RepaintBoundary(
+                        key: qrKey,
+                        child: QrImageView(
+                          data: widget.qrData,
+                          size: 250,
+                          backgroundColor: Colors.white, // rất quan trọng
+                        ),
+                      ),
+            
+                      const SizedBox(height: 12),
+            
+                      Text(
+                        '${intl.scanQrDesc} ${intl.noManualTransfer}',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                      ),
+            
+                      const SizedBox(height: 12),
+            
+                      CustomButton(
+                        text: intl.downloadQr,
+                        onPressed: () async {
+                          final success = await saveQrImage();
+                          if (success) {
+                            showCustomToast(
+                              intl.savedToGallery,
+                              type: ToastType.success,
+                            );
+                          } else {
+                            showCustomToast(
+                              intl.failedToSaveQr,
+                              type: ToastType.error,
+                            );
+                          }
+                        },
+                      ),
+            
+                      const SizedBox(height: 12),
+            
+                      ValueListenableBuilder<BankInfo?>(
+                        valueListenable: selectedBranch,
+                        builder: (context, value, _) {
+                          return CustomDropdownWidget<BankInfo>(
+                            label: intl.bank,
+                            value: value,
+                            options: banksCanOpen,
+                            displayString: (b) => b.shortName,
+                            buildOption: (b, selected) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 0,
+                                  horizontal: 4,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.network(
+                                      b.logo,
+                                      height: 50,
+                                      width: 100,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              const Icon(Icons.account_balance),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      b.code,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: selected
+                                                ? AppThemes.primary3Color
+                                                : Colors.grey,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    if (selected)
+                                      const Icon(
+                                        Icons.check,
+                                        color: AppThemes.primary3Color,
+                                      ),
+                                  ],
+                                ),
+                              );
+                            },
+                            onChanged: (val) {
+                              selectedBranch.value = val;
+                            },
+                            isRequired: true,
+                          );
+                        },
+                      ),
+            
+                      const SizedBox(height: 12),
+            
+                      CustomButton(
+                        text: intl.openInBankApp,
+                        onPressed: () async {
+                          final uri = Uri.parse(
+                            'https://dl.vietqr.io/pay?app=${selectedBranch.value?.code.toLowerCase() ?? ''}',
+                          );
+            
+                          try {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } catch (e) {
+                            showCustomToast(
+                              intl.cannotOpenBankApp,
+                              type: ToastType.error,
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+            
+                const SizedBox(height: 16),
+              ],
+            ),
           ),
         ),
       ),
