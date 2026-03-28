@@ -6,6 +6,7 @@ class DateInputField extends StatefulWidget {
   final String label;
   final String hintText;
   final TextEditingController controller;
+  final Key? textFieldKey;
   final bool isRequired;
   final FormFieldValidator<String>? validator;
   final TextInputSize size;
@@ -16,6 +17,7 @@ class DateInputField extends StatefulWidget {
     required this.label,
     required this.hintText,
     required this.controller,
+    this.textFieldKey,
     this.isRequired = false,
     this.validator,
     required this.size,
@@ -54,7 +56,9 @@ class _DateInputFieldState extends State<DateInputField> {
       );
 
       setState(() {
-        widget.controller.text = DateFormat('h:mm a - dd/MM/yyyy').format(combinedDateTime);
+        widget.controller.text = DateFormat(
+          'h:mm a - dd/MM/yyyy',
+        ).format(combinedDateTime);
       });
       return;
     } else {
@@ -62,8 +66,6 @@ class _DateInputFieldState extends State<DateInputField> {
         widget.controller.text = DateFormat('dd/MM/yyyy').format(picked);
       });
     }
-
-    
   }
 
   @override
@@ -75,11 +77,11 @@ class _DateInputFieldState extends State<DateInputField> {
       label: widget.label,
       hintText: widget.hintText,
       controller: widget.controller,
+      textFieldKey: widget.textFieldKey,
       isReadOnly: true,
       suffixIcon: IconButton(
         icon: const Icon(Icons.calendar_today),
-        onPressed: () =>
-            _selectDate(context),
+        onPressed: () => _selectDate(context),
       ), // Mở DatePicker khi tap
       validator: widget.validator,
     );

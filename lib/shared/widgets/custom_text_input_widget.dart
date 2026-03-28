@@ -4,15 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:flutter/services.dart';
 
-enum InputType {
-  text,
-  number,
-  password,
-  email,
-  phone,
-  date,
-  multiLine,
-}
+enum InputType { text, number, password, email, phone, date, multiLine }
 
 enum TextInputSize { large, medium, small }
 
@@ -21,6 +13,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
   final String? label;
   final String? hintText;
   final TextEditingController controller;
+  final Key? textFieldKey;
 
   final bool? obscureText; // Ẩn hiện văn bản
   final String? Function(String?)? validator; // Hàm kiểm tra lỗi
@@ -41,6 +34,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
     this.label,
     this.hintText,
     required this.controller,
+    this.textFieldKey,
     this.validator,
     required this.keyboardType,
     required this.isReadOnly,
@@ -79,6 +73,7 @@ class CustomTextInputWidget<T> extends StatelessWidget {
             const SizedBox(height: 4),
           ],
           TextFormField(
+            key: textFieldKey,
             onTap: onTap ?? () {},
             obscureText: obscureText!,
             maxLines: maxLines ?? 1,

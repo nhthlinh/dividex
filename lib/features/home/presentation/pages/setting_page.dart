@@ -27,6 +27,8 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  static const Key logoutButtonKey = Key('settings_logout_button');
+
   final oldPin = TextEditingController();
   final newPin = TextEditingController();
   final confirmNewPin = TextEditingController();
@@ -263,6 +265,7 @@ class _SettingPageState extends State<SettingPage> {
 
               Center(
                 child: CustomButton(
+                  buttonKey: logoutButtonKey,
                   text: intl.signOut,
                   onPressed: () {
                     final authBloc = context.read<AuthBloc>();

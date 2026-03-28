@@ -49,6 +49,20 @@ class GroupSettingPage extends StatefulWidget {
 }
 
 class _GroupSettingPageState extends State<GroupSettingPage> {
+  static const Key inviteFriendsButtonKey = Key(
+    'group_setting_invite_friends_button',
+  );
+  static const Key inviteSaveButtonKey = Key(
+    'group_setting_invite_save_button',
+  );
+  static const Key groupNameInputKey = Key('group_setting_name_input');
+  static const Key ownerSaveButtonKey = Key('group_setting_owner_save_button');
+  static const Key leaveButtonKey = Key('group_setting_leave_button');
+  static const Key dissolveButtonKey = Key('group_setting_dissolve_button');
+  static const Key confirmRemoveMemberButtonKey = Key(
+    'group_setting_confirm_remove_member_button',
+  );
+
   final TextEditingController controller = TextEditingController();
   // Chọn thêm
   List<UserModel> selectedMembers = [];
@@ -172,6 +186,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
               ),
               CustomButton(
                 text: intl.delete,
+                buttonKey: confirmRemoveMemberButtonKey,
                 onPressed: () {
                   context.pop();
                   completer.complete(true);
@@ -354,6 +369,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       ),
                       CustomButton(
                         text: intl.friend,
+                        buttonKey: inviteFriendsButtonKey,
                         onPressed: () {
                           context.pushNamed(
                             AppRouteNames.chooseMember,
@@ -393,6 +409,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                     const SizedBox(height: 16),
                     CustomButton(
                       text: intl.save,
+                      buttonKey: inviteSaveButtonKey,
                       onPressed: () {
                         updateGroup();
                       },
@@ -480,6 +497,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                     CustomTextInputWidget(
                       size: TextInputSize.large,
                       controller: controller,
+                      textFieldKey: groupNameInputKey,
                       keyboardType: TextInputType.text,
                       isReadOnly: false,
                       hintText: intl.groupNameHint,
@@ -595,10 +613,24 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
 
               CustomButton(
                 text: intl.save,
+                buttonKey: ownerSaveButtonKey,
                 onPressed: () {
                   updateGroup();
                 },
                 customColor: AppThemes.successColor,
+              ),
+
+              const SizedBox(height: 10),
+
+              CustomButton(
+                text: intl.delete,
+                buttonKey: dissolveButtonKey,
+                onPressed: () {
+                  context.read<group_bloc.GroupBloc>().add(
+                    group_event.DeleteGroupEvent(widget.groupId),
+                  );
+                },
+                customColor: AppThemes.errorColor,
               ),
 
               const SizedBox(height: 16),
@@ -606,6 +638,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
 
             CustomButton(
               text: intl.leave,
+              buttonKey: leaveButtonKey,
               onPressed: () {
                 context.read<group_bloc.GroupBloc>().add(
                   group_event.LeaveGroupEvent(widget.groupId),

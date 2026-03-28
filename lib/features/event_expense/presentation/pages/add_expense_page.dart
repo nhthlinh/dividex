@@ -34,13 +34,46 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AddExpensePage extends StatefulWidget {
-  const AddExpensePage({super.key});
+  final LoadedUsersBloc? loadedUsersBloc;
+  final bool showCreateOptionDialogOnInit;
+  final EventModel? initialSelectedEvent;
+  final UserModel? initialSelectedPayer;
+  final bool bypassValidationForTesting;
+
+  const AddExpensePage({
+    super.key,
+    this.loadedUsersBloc,
+    this.showCreateOptionDialogOnInit = true,
+    this.initialSelectedEvent,
+    this.initialSelectedPayer,
+    this.bypassValidationForTesting = false,
+  });
 
   @override
   State<AddExpensePage> createState() => _AddExpensePageState();
 }
 
 class _AddExpensePageState extends State<AddExpensePage> {
+  static const Key manualOptionButtonKey = Key(
+    'expense_create_manual_option_button',
+  );
+  static const Key scanningOptionButtonKey = Key(
+    'expense_create_scanning_option_button',
+  );
+  static const Key nameInputKey = Key('expense_create_name_input');
+  static const Key amountInputKey = Key('expense_create_amount_input');
+  static const Key eventInputKey = Key('expense_create_event_input');
+  static const Key payerInputKey = Key('expense_create_payer_input');
+  static const Key dateInputKey = Key('expense_create_date_input');
+  static const Key reminderInputKey = Key('expense_create_reminder_input');
+  static const Key splitEqualOptionKey = Key(
+    'expense_create_split_equal_option',
+  );
+  static const Key splitCustomOptionKey = Key(
+    'expense_create_split_custom_option',
+  );
+  static const Key submitButtonKey = Key('expense_create_submit_button');
+
   final formKey = GlobalKey<FormState>();
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController expenseAmountController = TextEditingController();
@@ -66,7 +99,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
   List<ImageExpenseItemModel> items = [];
   bool showMoreInfomation = false;
 
-
   final List<CurrencyEnum> _units = getAllCurrencies().map((e) => e).toList();
 
   final clearFormTrigger = ValueNotifier(false);
@@ -74,9 +106,23 @@ class _AddExpensePageState extends State<AddExpensePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showOptionDialog();
-    });
+
+    _selectedEvent = widget.initialSelectedEvent;
+    if (_selectedEvent != null) {
+      selectedEventTextEditingController.text = _selectedEvent!.name ?? '----';
+    }
+
+    _selectedPayer = widget.initialSelectedPayer;
+    if (_selectedPayer != null) {
+      selectedPayerTextEditingController.text =
+          _selectedPayer!.fullName ?? '----';
+    }
+
+    if (widget.showCreateOptionDialogOnInit) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showOptionDialog();
+      });
+    }
   }
 
   void _showOptionDialog() {
@@ -97,6 +143,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 children: [
                   CustomButton(
                     text: 'Manually',
+                    buttonKey: manualOptionButtonKey,
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -106,6 +153,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   ),
                   CustomButton(
                     text: 'Scanning',
+                    buttonKey: scanningOptionButtonKey,
                     onPressed: () async {
                       Navigator.pop(context);
                       final result = await context.pushNamed(
@@ -134,7 +182,10 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       if (result != null && mounted) {
                         _handleScanResult(result);
                       } else {
-                        showCustomToast(intl.cantReadImage, type: ToastType.error);
+                        showCustomToast(
+                          intl.cantReadImage,
+                          type: ToastType.error,
+                        );
                       }
                     },
                     size: ButtonSize.medium,
@@ -194,8 +245,16 @@ class _AddExpensePageState extends State<AddExpensePage> {
   }
 
   void submitExpense() {
-    if (formKey.currentState?.validate() ?? false) {
+    if (widget.bypassValidationForTesting ||
+        (formKey.currentState?.validate() ?? false)) {
       final intl = AppLocalizations.of(context)!;
+      final selectedEvent = _selectedEvent ?? widget.initialSelectedEvent;
+      final selectedPayer = _selectedPayer ?? widget.initialSelectedPayer;
+
+      if (selectedEvent == null || selectedPayer == null) {
+        return;
+      }
+
       final formattedDate = DateFormat(
         "yyyy-MM-dd HH:mm",
       ).format(DateFormat("h:mm a - dd/MM/yyyy").parse(dateController.text));
@@ -235,8 +294,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
           double.tryParse(expenseAmountController.text) ?? 0,
           _selectedCurrency.value.code,
           _selectedCategory.value?.key,
-          _selectedEvent!.id!,
-          _selectedPayer!.id,
+          selectedEvent.id!,
+          selectedPayer.id,
           noteController.text,
           formattedDate,
           formattedReminder,
@@ -246,7 +305,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
         ),
       );
 
-      Navigator.of(context).pop();
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -312,6 +373,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
             label: intl.expenseNameLabel,
             hintText: intl.expenseNameHint,
             controller: expenseNameController,
+            textFieldKey: nameInputKey,
             keyboardType: TextInputType.text,
             validator: (value) {
               return CustomValidator().validateName(value, intl);
@@ -332,6 +394,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     label: intl.expenseAmountLabel,
                     hintText: intl.expenseAmountHint,
                     controller: expenseAmountController,
+                    textFieldKey: amountInputKey,
                     keyboardType: TextInputType.number,
                     validator: (value) =>
                         CustomValidator().validateAmount(value, intl),
@@ -406,6 +469,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
           CustomTextInputWidget(
             size: TextInputSize.large,
             controller: selectedEventTextEditingController,
+            textFieldKey: eventInputKey,
             keyboardType: TextInputType.text,
             isReadOnly: true,
             isRequired: true,
@@ -428,11 +492,12 @@ class _AddExpensePageState extends State<AddExpensePage> {
             },
           ),
           const SizedBox(height: 8),
-          
+
           if (_selectedEvent != null) ...[
             CustomTextInputWidget(
               size: TextInputSize.large,
               controller: selectedPayerTextEditingController,
+              textFieldKey: payerInputKey,
               keyboardType: TextInputType.text,
               isReadOnly: true,
               isRequired: true,
@@ -471,7 +536,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
             ),
           ],
           const SizedBox(height: 8),
-          
+
           SizedBox(
             width: 340,
             child: Row(
@@ -483,6 +548,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     label: intl.expenseDateLabel,
                     hintText: '4:30 p.m - 13/05/2025',
                     controller: dateController,
+                    textFieldKey: dateInputKey,
                     size: TextInputSize.large,
                     isRequired: true,
                     validator: null,
@@ -496,6 +562,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     label: intl.expenseReminderLabel,
                     hintText: '13/05/2025',
                     controller: reminderController,
+                    textFieldKey: reminderInputKey,
                     size: TextInputSize.medium,
                     isRequired: true,
                     validator: null,
@@ -509,16 +576,21 @@ class _AddExpensePageState extends State<AddExpensePage> {
               expenseAmountController.text.isNotEmpty) ...[
             const SizedBox(height: 16),
 
-            BlocProvider(
-              create: (context) => LoadedUsersBloc()
-                ..add(
-                  user_event.InitialEvent(
-                    _selectedEvent?.id,
-                    user_event.LoadType.eventParticipants,
+            (widget.loadedUsersBloc != null)
+                ? BlocProvider<LoadedUsersBloc>.value(
+                    value: widget.loadedUsersBloc!,
+                    child: twoOptionSelector(intl),
+                  )
+                : BlocProvider(
+                    create: (context) => LoadedUsersBloc()
+                      ..add(
+                        user_event.InitialEvent(
+                          _selectedEvent?.id,
+                          user_event.LoadType.eventParticipants,
+                        ),
+                      ),
+                    child: twoOptionSelector(intl),
                   ),
-                ),
-              child: twoOptionSelector(intl),
-            ),
           ],
 
           Row(
@@ -537,11 +609,11 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   setState(() {
                     showMoreInfomation = !showMoreInfomation;
                   });
-                }, 
+                },
                 icon: showMoreInfomation
-                  ? const Icon(Icons.keyboard_arrow_up)
-                  : const Icon(Icons.keyboard_arrow_down),
-              )
+                    ? const Icon(Icons.keyboard_arrow_up)
+                    : const Icon(Icons.keyboard_arrow_down),
+              ),
             ],
           ),
           if (showMoreInfomation) ...[
@@ -632,6 +704,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
           CustomButton(
             text: intl.add,
+            buttonKey: submitButtonKey,
             onPressed:
                 (!isValid ||
                     isSubmitting ||
@@ -684,6 +757,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
           leftIcon: 'lib/assets/icons/balance.png',
           rightLabel: intl.expenseSplitCustomLabel,
           rightIcon: 'lib/assets/icons/unbalance.png',
+          leftOptionKey: splitEqualOptionKey,
+          rightOptionKey: splitCustomOptionKey,
           onSelectionChanged: (value) async {
             double totalEntered = double.parse(expenseAmountController.text);
             if (totalEntered.isNaN || totalEntered <= 0) {
@@ -707,7 +782,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     });
                   },
                   'amount': double.parse(expenseAmountController.text),
-                  'items': items
+                  'items': items,
                 },
               );
 
