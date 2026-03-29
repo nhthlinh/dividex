@@ -3,7 +3,6 @@ import 'package:Dividex/features/auth/data/models/token_respond_model.dart';
 import 'package:Dividex/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:Dividex/features/auth/data/source/auth_remote_datasource.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

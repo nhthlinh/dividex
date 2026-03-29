@@ -1,5 +1,4 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/features/search/presentation/pages/filter_page.dart';
 import 'package:Dividex/features/search/presentation/wallet_filter.dart';
 import 'package:flutter/material.dart';

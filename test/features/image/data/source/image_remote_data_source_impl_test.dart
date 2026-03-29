@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:Dividex/core/network/dio_client.dart';
-import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/image/data/models/image_presign_url_model.dart';
 import 'package:Dividex/features/image/data/source/image_remote_data_source_impl.dart';
 import 'package:dio/dio.dart';

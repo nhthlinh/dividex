@@ -15,6 +15,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddAccountPage extends StatefulWidget {
+  static const Key accountNumberInputKey = Key('add_account_number_input');
+  static const Key bankDropdownKey = Key('add_account_bank_dropdown');
+  static const Key accountNameInputKey = Key('add_account_name_input');
+  static const Key currencyDropdownKey = Key('add_account_currency_dropdown');
+  static const Key submitButtonKey = Key('add_account_submit_button');
+
   const AddAccountPage({super.key});
 
   @override
@@ -106,6 +112,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
           builder: (isValid, isSubmitting, setSubmitting) => Column(
             children: [
               CustomTextInputWidget(
+                textFieldKey: AddAccountPage.accountNumberInputKey,
                 size: TextInputSize.large,
                 controller: accountNumber,
                 keyboardType: TextInputType.number,
@@ -118,6 +125,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
                 valueListenable: selectedBranch,
                 builder: (context, value, _) {
                   return CustomDropdownWidget<BankInfo>(
+                    key: AddAccountPage.bankDropdownKey,
                     label: intl.bank,
                     value: value,
                     options: banksList,
@@ -170,9 +178,10 @@ class _AddAccountPageState extends State<AddAccountPage> {
                 listener: (context, state) {
                   if (state is VerifyAccountSuccessState) {
                     accountName.text = state.accountName;
-                  } 
+                  }
                 },
                 child: CustomTextInputWidget(
+                  textFieldKey: AddAccountPage.accountNameInputKey,
                   size: TextInputSize.large,
                   controller: accountName,
                   keyboardType: TextInputType.text,
@@ -180,12 +189,13 @@ class _AddAccountPageState extends State<AddAccountPage> {
                   isRequired: true,
                   label: intl.accountName,
                 ),
-              ),   
+              ),
               const SizedBox(height: 8),
               ValueListenableBuilder<CurrencyEnum>(
                 valueListenable: selectedCurrency,
                 builder: (context, value, _) {
                   return CustomDropdownWidget<CurrencyEnum>(
+                    key: AddAccountPage.currencyDropdownKey,
                     label: intl.expenseCurrencyLabel,
                     value: selectedCurrency.value,
                     options: getAllCurrencies().map((e) => e).toList(),
@@ -239,6 +249,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
               ),
               const SizedBox(height: 16),
               CustomButton(
+                buttonKey: AddAccountPage.submitButtonKey,
                 text: intl.add,
                 onPressed: (!isValid || isSubmitting)
                     ? null

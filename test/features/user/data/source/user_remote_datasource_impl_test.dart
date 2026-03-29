@@ -1,5 +1,4 @@
 import 'package:Dividex/core/network/dio_client.dart';
-import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/data/source/user_remote_datasource_impl.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:dio/dio.dart';

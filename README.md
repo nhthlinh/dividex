@@ -158,9 +158,7 @@ Output:
     Delete expense
     Hiển thị đúng danh sách expense
 7. DEBT / SPLIT
-    Tính toán nợ đúng sau khi thêm expense
-    Tối ưu nợ (reduce transactions)
-    Update lại nợ sau khi thanh toán
+    Thanh toán nợ từ trong group
     Hiển thị đúng ai nợ ai
 8. WALLET / PAYMENT
     Nạp tiền vào ví thành công
