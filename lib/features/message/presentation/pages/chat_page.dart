@@ -243,15 +243,6 @@ class ChatPage extends StatefulWidget {
 
   const ChatPage({super.key, required this.roomName, required this.roomId});
 
-  static const Key messageInputKey = Key('chat_message_input');
-  static const Key sendButtonKey = Key('chat_message_send_button');
-  static Key messageBubbleKey(String messageId) => Key('chat_message_$messageId');
-  static Key messageEditOptionKey(String messageId) => Key('chat_message_edit_$messageId');
-  static Key messageDeleteOptionKey(String messageId) => Key('chat_message_delete_$messageId');
-  static const Key editTextFieldKey = Key('chat_edit_message_input');
-  static const Key editAcceptButtonKey = Key('chat_edit_message_accept_button');
-  static const Key editCancelButtonKey = Key('chat_edit_message_cancel_button');
-
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
@@ -446,7 +437,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     }
 
     return Container(
-      key: ChatPage.messageBubbleKey(m.id ?? ''),
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: Row(
@@ -542,7 +532,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       content: Column(
         children: [
           SettingOption(
-            key: ChatPage.messageEditOptionKey(m.id ?? ''),
             label: intl.edit,
             context: context,
             onTap: () {
@@ -570,7 +559,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                     CustomTextInputWidget(
                       size: TextInputSize.large,
                       controller: _editController,
-                      textFieldKey: ChatPage.editTextFieldKey,
                       keyboardType: TextInputType.text,
                       isReadOnly: false,
                     ),
@@ -578,7 +566,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         CustomButton(
-                          key: ChatPage.editAcceptButtonKey,
                           text: intl.accept,
                           onPressed: () {
                             final newContent = _editController.text;
@@ -600,7 +587,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                         ),
 
                         CustomButton(
-                          key: ChatPage.editCancelButtonKey,
                           text: intl.cancel,
                           onPressed: () {
                             Navigator.pop(context); // Close the dialog
@@ -617,7 +603,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             },
           ),
           SettingOption(
-            key: ChatPage.messageDeleteOptionKey(m.id ?? ''),
             label: intl.delete,
             context: context,
             onTap: () {
@@ -664,7 +649,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
           children: [
             Expanded(
               child: TextField(
-                key: ChatPage.messageInputKey,
                 controller: _controller,
                 onChanged: _onTextChanged,
                 onSubmitted: (_) => _send(),
@@ -684,7 +668,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             Consumer<ChatProvider>(
               builder: (c, prov, _) {
                 return IconButton(
-                  key: ChatPage.sendButtonKey,
                   onPressed: prov.sending ? null : _send,
                   icon: prov.sending
                       ? CircularProgressIndicator()
