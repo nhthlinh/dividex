@@ -17,6 +17,8 @@ import 'package:go_router/go_router.dart';
 class ChatAllPage extends StatefulWidget {
   const ChatAllPage({super.key});
 
+  static Key groupCardKey(String groupId) => Key('chat_group_card_$groupId');
+
   @override
   State<ChatAllPage> createState() => _ChatAllPageState();
 }
@@ -185,6 +187,7 @@ class _ChatAllPageState extends State<ChatAllPage> {
     AppLocalizations intl,
   ) {
     return ContentCard(
+      key: ChatAllPage.groupCardKey(group.id ?? ''),
       onTap: () {
         context.pushNamed(
           AppRouteNames.chatInGroup,
