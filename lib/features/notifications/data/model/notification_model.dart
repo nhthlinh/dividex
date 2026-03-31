@@ -45,7 +45,9 @@ enum NotiType {
   SYSTEM("System", "System Notification"),
   WARNING("Warning", "Warning Notification"),
   ANNOUNCEMENT("Announcement", "Announcement Notification"),
-  REMINDER2("Reminder", "Reminder");
+  REMINDER2("Reminder", "Reminder"),
+
+  MESSAGE_RECEIVED("MESSAGE_RECEIVED", "Message Received");
 
   final String code;
   final String description;
@@ -158,6 +160,11 @@ enum NotiType {
         context.pushNamed(
           AppRouteNames.expenseDetail,
           pathParameters: {"id": relatedUid},
+        );
+        break;
+      case NotiType.MESSAGE_RECEIVED:
+        context.pushNamed(
+          AppRouteNames.chat,
         );
         break;
 
