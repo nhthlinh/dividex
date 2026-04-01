@@ -1,170 +1,213 @@
 # DIVIDEX
-Đây là project ĐỒ ÁN CHUYÊN NGÀNH và LUẬN VĂN TỐT NGHIỆP. Công nghệ sử dụng là FLUTTER.
 
----
-## 0. **Auth Module** (Quản lý xác thực)
+**DIVIDEX** là ứng dụng di động giúp quản lý và chia sẻ chi phí nhóm một cách dễ dàng và công bằng. Ứng dụng hỗ trợ người dùng theo dõi chi tiêu, tính toán nợ nần và thanh toán trực tuyến.
 
-* **Presentation:** màn hình đăng nhập, đăng ký.
-* **Domain:** `UseCases` như `LoginUser`, `RegisterUser`. Repository interface: `AuthRepository`.
-* **Data:** implementation của `AuthRepository` (gọi API / DB), model `UserModel`.
+**Dự án:** Đồ Án Chuyên Ngành - DACN-251  
+**Công nghệ:** Flutter + Firebase
 
 ---
 
----
-## 1. **User Module** (Quản lý người dùng)
+## Tính Năng Chính
 
-* **Presentation:** màn hình đăng nhập, đăng ký, chỉnh sửa profile, danh sách bạn bè.
-* **Domain:** `UseCases` như `UpdateProfile`, `AddFriend`. Repository interface: `UserRepository`.
-* **Data:** implementation của `UserRepository` (gọi API / DB), model `UserModel`.
+### Quản lý Tài Khoản
+- Đăng ký, đăng nhập tài khoản
+- Chỉnh sửa thông tin cá nhân
+- Quản lý danh sách bạn bè
 
----
+### Quản lý Nhóm
+- Tạo và quản lý các nhóm chia chi phí
+- Mời thành viên qua QR code
+- Cập nhật, xóa nhóm
 
-## 2. **Group Module** (Quản lý nhóm chia chi phí)
+### Quản lý Chi Phí
+- Tạo sự kiện/hoạt động nhóm
+- Thêm khoản chi tiêu chi tiết
+- Đính kèm hóa đơn (hình ảnh)
+- Lịch sử chi tiêu, tìm kiếm và lọc
 
-* **Presentation:** màn hình tạo nhóm, quản lý thành viên, quét QR mời.
-* **Domain:** `CreateGroup`, `InviteMember`, `UpdateGroup`, `DeleteGroup`. Repository interface: `GroupRepository`.
-* **Data:** API + DB cho `GroupRepository`, model `GroupModel`.
+### Thông Minh & AI
+- OCR nhận dạng hóa đơn tự động
 
----
-
-## 3. **Event & Expense Module** (Sự kiện & chi tiêu)
-
-* **Presentation:** màn hình tạo sự kiện, thêm khoản chi tiêu, đính kèm ảnh hóa đơn.
-* **Domain:** `CreateEvent`, `AddExpense`, `AttachReceipt`, `GetExpensesByEvent`. Repository: `EventRepository`, `ExpenseRepository`.
-* **Data:** implementation cho event + expense.
-
----
-
-## 4. **Settlement Module** (Tính toán & chia chi phí)
-
-* **Presentation:** giao diện xem số tiền cần trả/được nhận.
-* **Domain:** `CalculateSettlement`, `GetBalanceByUser`, `MarkAsPaid`.
-* **Data:** thực hiện logic chia tiền hoặc gọi service thanh toán.
+### Thanh Toán
+- Tính toán tự động cho các khoản nợ
+- Xem số tiền cần trả/được nhận
+- Tích hợp cổng thanh toán (VietQR, v.v.)
 
 ---
 
-## 5. **History & Search Module** (Lịch sử chi tiêu + tìm kiếm)
+## Kiến Trúc Dự Án
 
-* **Presentation:** màn hình lịch sử, filter, search bar.
-* **Domain:** `GetHistoryByGroup`, `FilterExpenses`, `SearchExpenses`.
-* **Data:** query DB theo filter/search.
-
----
-
-## 6. **Payment Module** (Thanh toán & tích hợp cổng thanh toán)
-
-* **Presentation:** nút chuyển tiền, màn hình confirm.
-* **Domain:** `PayDebt`, `Withdraw`, `Deposit`. Repository: `PaymentRepository`.
-* **Data:** tích hợp VietQR / cổng thanh toán khác.
-
----
-
-## 7. **AI Assistant Module** (OCR + Chatbot)
-
-* **Presentation:** giao diện upload bill, khung chat AI.
-* **Domain:** `ParseBillWithOCR`, `AskChatbot`.
-* **Data:** gọi dịch vụ AI (OCR, NLP, Chatbot).
-
----
-
-## 8. **Admin Module**
-
-* **Presentation:** dashboard quản trị (user list, report).
-* **Domain:** `BanUser`, `ViewSystemLogs`, `ResetPassword`.
-* **Data:** API quản trị.
+Dự án tuân theo **Clean Architecture** kết hợp **BLoC Pattern**:
 
 ```
+lib/
+├── features/           # Các tính năng chính
+│   ├── auth/           # Xác thực
+│   ├── user/           # Quản lý người dùng
+│   ├── group/          # Quản lý nhóm
+│   ├── expense/        # Quản lý chi phí
+│   ├── settlement/     # Tính toán chia tiền
+│   ├── payment/        # Thanh toán
+│   ├── ai_assistant/   # AI & OCR
+│   └── admin/          # Quản trị
+├── core/               # Lõi ứng dụng
+├── shared/             # Dùng chung (widgets, utils)
+├── config/             # Cấu hình
+└── main.dart           # Entry point
+```
+
+### Cấu Trúc Module
+
+Mỗi module trong `features/` được chia thành 3 lớp:
+
+- **Presentation:** UI, Widgets, BLoC
+- **Domain:** Use Cases, Repository Interface, Entities
+- **Data:** Implementation Repository, Models, API Calls
+
+---
+
+## Tech Stack
+
+| Công cụ | Phiên bản | Mục đích |
+|---------|----------|---------|
+| **Flutter** | ^3.8.0 | Framework chính |
+| **Flutter BLoC** | ^9.1.1 | State Management |
+| **Provider** | ^6.0.5 | Dependency Injection |
+| **GoRouter** | ^15.1.3 | Navigation & Routing |
+| **Dio** | ^5.0.0 | HTTP Client |
+| **Firebase** | - | Backend & Authentication |
+| **Hive** | ^2.2.3 | Local Database |
+| **Shared Preferences** | ^2.5.3 | Cài đặt nhẹ |
+| **Intl** | ^0.20.2 | Internationalization |
+| **GetIt** | - | Service Locator |
+
+---
+
+## Requirements
+
+- Flutter SDK ^3.8.0
+- Dart ^3.8.0
+- Android SDK (untuk build Android)
+- Xcode (untuk build iOS)
+
+---
+
+## Hướng Dẫn Cài Đặt
+
+### 1. Clone Repository
+
+```bash
+git clone <repository-url>
+cd dividex
+```
+
+### 2. Cài Đặt Dependencies
+
+```bash
+flutter pub get
+```
+
+### 3. Code Generation (BLoC, JSON, Routing)
+
+```bash
 flutter pub run build_runner build --delete-conflicting-outputs
-flutter run -d chrome
+```
+
+### 4. Setup Firebase
+
+- Tạo Firebase project trên [Firebase Console](https://console.firebase.google.com)
+- Tải `google-services.json` (Android) và `GoogleService-Info.plist` (iOS)
+- Đặt vào thư mục tương ứng
+
+### 5. Setup Environment Variables
+
+```bash
+cp .env.example .env
+# Chỉnh sửa .env với các thông tin cần thiết
+```
+
+### 6. Generate Localization
+
+```bash
 flutter gen-l10n
 ```
 
-## Promt
+### 7. Run Ứng Dụng
 
-You are a senior Flutter QA automation engineer.
+```bash
+# Chạy trên web
+flutter run -d chrome
 
-Write an integration test using Flutter integration_test package.
+# Hoặc chạy trên thiết bị thực/emulator
+flutter run
+```
 
-Test case:
-- Name: {{TEST_NAME}}
-- Description: {{DESCRIPTION}}
+---
 
-Requirements:
-- Use WidgetTester
-- Use find.byKey for UI elements
-- Follow Given - When - Then structure
-- Include full runnable test code
-- Mock API if needed
-- Handle async with pumpAndSettle
+## Testing
 
-App context:
-- Expense Splitter app
-- Features: auth, group, expense, wallet, debt
+[TESTCASE DETAIL](./TEST_COVERAGE_REPORT.md)
 
-Output:
-- Full Dart test file
-- Clean, production-ready code
+### Run Unit Tests
 
+```bash
+flutter test
+```
 
-1. AUTH
-    Login thành công với email + password đúng
-    Login fail khi sai password
-    Login fail khi email không tồn tại
-    Validate email sai format
-    Không cho login khi để trống field
-    Register thành công
-    Register fail khi email đã tồn tại
-    OTP verify đúng → cho đổi password
-    OTP sai hoặc hết hạn thì không cho vào màn đổi password
-    Reset password thành công và quay về login
-    Reset password fail do token không hợp lệ
-2. USER PROFILE
-    Update profile thành công
-    Upload avatar thành công
-    Validate input profile (name rỗng)
-    Logout → quay về login screen
-3. FRIEND
-    Tìm user theo email thành công
-    Không tìm thấy user → show “User not found”
-    Gửi request kết bạn thành công
-    Không gửi request nếu đã là bạn
-    Accept request → thành bạn
-    Reject request → không thành bạn
-    Không cho gửi request khi message rỗng
-    Không accept/reject khi friendshipUid null
-4. GROUP
-    Tạo group thành công
-    Tạo group fail khi không nhập tên
-    Invite member thành công
-    Remove member khỏi group
-    Update group info
-    Non-owner không được edit group
-    Owner có thể dissolve group
-    User rời group thành công
-5. EVENT
-    Tạo event trong group
-    Edit event info
-    Xóa event
-    Add member vào event
-    Không cho tạo event nếu không thuộc group
-    Load danh sách event đúng
-6. EXPENSE
-    Tạo expense thành công
-    Chia đều tiền cho các member
-    Chia custom amount
-    Không cho tạo expense khi amount = 0
-    Attach bill image (OCR)
-    Edit expense
-    Delete expense
-    Hiển thị đúng danh sách expense
-7. DEBT / SPLIT
-    Thanh toán nợ từ trong group
-    Hiển thị đúng ai nợ ai
-8. WALLET / PAYMENT
-    Nạp tiền vào ví thành công
-    Thanh toán nợ bằng ví khi đủ tiền
-    Thanh toán fail khi không đủ tiền
-    Xác nhận thanh toán ngoài app
-9. SEARCH / REPORT
-    Tìm kiếm expense theo filter
-    Hiển thị report (tổng chi, thống kê)
+### Run Integration Tests
+
+```bash
+flutter test integration_test/
+```
+
+### Check Test Coverage
+
+```bash
+flutter test --coverage
+lcov --list coverage/lcov.info
+```
+
+---
+
+## Scripts
+
+```bash
+# Clean và rebuild
+flutter clean
+flutter pub get
+flutter pub run build_runner build --delete-conflicting-outputs
+
+# Analyze code
+dart analyze
+
+# Format code
+dart format lib/
+
+# Check localization
+flutter gen-l10n
+```
+
+---
+
+## Coding Standards
+
+- Tuân theo [Dart Style Guide](https://dart.dev/guides/language/effective-dart/style)
+- Sử dụng `flutter analyze` để kiểm tra code quality
+- Mỗi feature phải có unit tests
+
+---
+
+## Contribution
+
+1. Tạo branch mới cho feature: `git checkout -b feature/your-feature`
+2. Commit changes: `git commit -m 'Add feature: ...'`
+3. Push lên repository: `git push origin feature/your-feature`
+4. Tạo Pull Request
+
+---
+
+## License
+
+Dự án này được phát triển cho mục đích học tập.
+
+---

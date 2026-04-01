@@ -70,7 +70,7 @@ class RouteTestTracker {
   int get totalAttempts => routeResults.length;
 
   void printSummary() {
-    debugPrint('\n' + ('=' * 60));
+    debugPrint('\n${'=' * 60}');
     debugPrint('ROUTE TRAVERSAL TEST SUMMARY');
     debugPrint('=' * 60);
     debugPrint('Total Routes Tested: $totalAttempts');
@@ -192,7 +192,7 @@ void main() {
       for (final route in allRoutes) {
         expect(route.isNotEmpty, isTrue,
             reason: 'Route name should not be empty: $route');
-        expect(route.length > 0, isTrue,
+        expect(route.isNotEmpty, isTrue,
             reason: 'Route should be a valid string: $route');
         tracker.recordAttempt(route, true);
       }
@@ -251,6 +251,7 @@ void main() {
         (WidgetTester tester) async {
       // This test serves as a final verification of all routes
       var totalRoutes = 0;
+      // ignore: unused_local_variable
       var totalCategories = 0;
 
       for (final entry in routesByCategory.entries) {

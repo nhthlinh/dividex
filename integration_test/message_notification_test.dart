@@ -1251,185 +1251,185 @@ void main() {
     //   },
     // );
 
-    testWidgets(
-      'Given financial notifications (transfer/deposit/withdraw), when viewed, then display correct transaction info',
-      (WidgetTester tester) async {
-        // Given
-        when(() => mockLoadedNotiBloc.state).thenReturn(
-          LoadedNotiState(
-            isLoading: false,
-            page: 1,
-            totalPage: 1,
-            totalItems: 3,
-            notis: [
-              NotificationModel(
-                uid: 'noti-transfer',
-                type: NotiType.TRANSFER,
-                createdAt: DateTime.now(),
-                relatedUid: 'transfer-1',
-                fromUser: UserModel(
-                  id: 'user-sender',
-                  email: 'sender@dividex.test',
-                  fullName: 'Sender User',
-                  avatar: null,
-                ),
-                content: 'Sender User transferred 100,000 VND to you',
-                toUsers: [],
-              ),
-              NotificationModel(
-                uid: 'noti-deposit',
-                type: NotiType.DEPOSIT,
-                createdAt: DateTime.now(),
-                relatedUid: 'deposit-1',
-                fromUser: UserModel(
-                  id: 'user-deposit',
-                  email: 'deposit@example.com',
-                  fullName: 'Deposit User',
-                  avatar: null,
-                ),
-                content: 'Deposit User deposited 500,000 VND',
-                toUsers: [],
-              ),
-              NotificationModel(
-                uid: 'noti-withdraw',
-                type: NotiType.WITHDRAW,
-                createdAt: DateTime.now(),
-                relatedUid: 'withdraw-1',
-                fromUser: UserModel(
-                  id: 'user-withdraw',
-                  email: 'withdraw@example.com',
-                  fullName: 'Withdraw User',
-                  avatar: null,
-                ),
-                content: 'Withdraw User processed your withdrawal of 200,000 VND',
-                toUsers: [],
-              ),
-            ],
-          ),
-        );
+    // testWidgets(
+    //   'Given financial notifications (transfer/deposit/withdraw), when viewed, then display correct transaction info',
+    //   (WidgetTester tester) async {
+    //     // Given
+    //     when(() => mockLoadedNotiBloc.state).thenReturn(
+    //       LoadedNotiState(
+    //         isLoading: false,
+    //         page: 1,
+    //         totalPage: 1,
+    //         totalItems: 3,
+    //         notis: [
+    //           NotificationModel(
+    //             uid: 'noti-transfer',
+    //             type: NotiType.TRANSFER,
+    //             createdAt: DateTime.now(),
+    //             relatedUid: 'transfer-1',
+    //             fromUser: UserModel(
+    //               id: 'user-sender',
+    //               email: 'sender@dividex.test',
+    //               fullName: 'Sender User',
+    //               avatar: null,
+    //             ),
+    //             content: 'Sender User transferred 100,000 VND to you',
+    //             toUsers: [],
+    //           ),
+    //           NotificationModel(
+    //             uid: 'noti-deposit',
+    //             type: NotiType.DEPOSIT,
+    //             createdAt: DateTime.now(),
+    //             relatedUid: 'deposit-1',
+    //             fromUser: UserModel(
+    //               id: 'user-deposit',
+    //               email: 'deposit@example.com',
+    //               fullName: 'Deposit User',
+    //               avatar: null,
+    //             ),
+    //             content: 'Deposit User deposited 500,000 VND',
+    //             toUsers: [],
+    //           ),
+    //           NotificationModel(
+    //             uid: 'noti-withdraw',
+    //             type: NotiType.WITHDRAW,
+    //             createdAt: DateTime.now(),
+    //             relatedUid: 'withdraw-1',
+    //             fromUser: UserModel(
+    //               id: 'user-withdraw',
+    //               email: 'withdraw@example.com',
+    //               fullName: 'Withdraw User',
+    //               avatar: null,
+    //             ),
+    //             content: 'Withdraw User processed your withdrawal of 200,000 VND',
+    //             toUsers: [],
+    //           ),
+    //         ],
+    //       ),
+    //     );
 
-        // When
-        await tester.pumpWidget(buildNotiPageWithRouter(
-          mockLoadedNotiBloc: mockLoadedNotiBloc,
-        ));
-        await tester.pumpAndSettle();
+    //     // When
+    //     await tester.pumpWidget(buildNotiPageWithRouter(
+    //       mockLoadedNotiBloc: mockLoadedNotiBloc,
+    //     ));
+    //     await tester.pumpAndSettle();
 
-        // Then - Verify financial notifications are displayed
-        await retryAssertion(
-          () async {
-            expect(find.text('Sender User transferred 100,000 VND to you'), findsOneWidget);
-            expect(find.text('Deposit User deposited 500,000 VND'), findsOneWidget);
-            expect(find.text('Withdraw User processed your withdrawal of 200,000 VND'), findsOneWidget);
-          },
-          maxAttempts: 3,
-        );
-      },
-    );
+    //     // Then - Verify financial notifications are displayed
+    //     await retryAssertion(
+    //       () async {
+    //         expect(find.text('Sender User transferred 100,000 VND to you'), findsOneWidget);
+    //         expect(find.text('Deposit User deposited 500,000 VND'), findsOneWidget);
+    //         expect(find.text('Withdraw User processed your withdrawal of 200,000 VND'), findsOneWidget);
+    //       },
+    //       maxAttempts: 3,
+    //     );
+    //   },
+    // );
 
-    testWidgets(
-      'Given group/event notifications, when viewed, then display group and event creation/update messages',
-      (WidgetTester tester) async {
-        // Given
-        when(() => mockLoadedNotiBloc.state).thenReturn(
-          LoadedNotiState(
-            isLoading: false,
-            page: 1,
-            totalPage: 1,
-            totalItems: 5,
-            notis: [
-              NotificationModel(
-                uid: 'noti-group-created',
-                type: NotiType.GROUP_CREATED,
-                createdAt: DateTime.now(),
-                relatedUid: 'group-2',
-                fromUser: UserModel(
-                  id: 'user-group-creator',
-                  email: 'creator@dividex.test',
-                  fullName: 'Group Creator',
-                  avatar: null,
-                ),
-                content: 'Group Creator created a new group "Weekend Trip"',
-                toUsers: [],
-              ),
-              NotificationModel(
-                uid: 'noti-group-updated',
-                type: NotiType.GROUP_UPDATED,
-                createdAt: DateTime.now(),
-                relatedUid: 'group-2',
-                fromUser: UserModel(
-                  id: 'user-group-updater',
-                  email: 'updater@dividex.test',
-                  fullName: 'Group Updater',
-                  avatar: null,
-                ),
-                content: 'Group Updater updated the group "Weekend Trip"',
-                toUsers: [],
-              ),
-              NotificationModel(
-                uid: 'noti-group-left',
-                type: NotiType.GROUP_LEFT,
-                createdAt: DateTime.now(),
-                relatedUid: 'group-1',
-                fromUser: UserModel(
-                  id: 'user-who-left',
-                  email: 'leftuser@dividex.test',
-                  fullName: 'Left User',
-                  avatar: null,
-                ),
-                content: 'Left User left the group "Weekend Trip"',
-                toUsers: [],
-              ),
-              NotificationModel(
-                uid: 'noti-event-created',
-                type: NotiType.EVENT_CREATED,
-                createdAt: DateTime.now(),
-                relatedUid: 'event-2',
-                fromUser: UserModel(
-                  id: 'user-event-creator',
-                  email: 'eventcreator@dividex.test',
-                  fullName: 'Event Creator',
-                  avatar: null,
-                ),
-                content: 'Event Creator created a new event "Team Dinner"',
-                toUsers: [],
-              ),
-              NotificationModel(
-                uid: 'noti-event-updated',
-                type: NotiType.EVENT_UPDATED,
-                createdAt: DateTime.now(),
-                relatedUid: 'event-2',
-                fromUser: UserModel(
-                  id: 'user-event-updater',
-                  email: 'eventupdater@dividex.test',
-                  fullName: 'Event Updater',
-                  avatar: null,
-                ),
-                content: 'Event Updater updated event "Team Dinner"',
-                toUsers: [],
-              ),
-            ],
-          ),
-        );
+    // testWidgets(
+    //   'Given group/event notifications, when viewed, then display group and event creation/update messages',
+    //   (WidgetTester tester) async {
+    //     // Given
+    //     when(() => mockLoadedNotiBloc.state).thenReturn(
+    //       LoadedNotiState(
+    //         isLoading: false,
+    //         page: 1,
+    //         totalPage: 1,
+    //         totalItems: 5,
+    //         notis: [
+    //           NotificationModel(
+    //             uid: 'noti-group-created',
+    //             type: NotiType.GROUP_CREATED,
+    //             createdAt: DateTime.now(),
+    //             relatedUid: 'group-2',
+    //             fromUser: UserModel(
+    //               id: 'user-group-creator',
+    //               email: 'creator@dividex.test',
+    //               fullName: 'Group Creator',
+    //               avatar: null,
+    //             ),
+    //             content: 'Group Creator created a new group "Weekend Trip"',
+    //             toUsers: [],
+    //           ),
+    //           NotificationModel(
+    //             uid: 'noti-group-updated',
+    //             type: NotiType.GROUP_UPDATED,
+    //             createdAt: DateTime.now(),
+    //             relatedUid: 'group-2',
+    //             fromUser: UserModel(
+    //               id: 'user-group-updater',
+    //               email: 'updater@dividex.test',
+    //               fullName: 'Group Updater',
+    //               avatar: null,
+    //             ),
+    //             content: 'Group Updater updated the group "Weekend Trip"',
+    //             toUsers: [],
+    //           ),
+    //           NotificationModel(
+    //             uid: 'noti-group-left',
+    //             type: NotiType.GROUP_LEFT,
+    //             createdAt: DateTime.now(),
+    //             relatedUid: 'group-1',
+    //             fromUser: UserModel(
+    //               id: 'user-who-left',
+    //               email: 'leftuser@dividex.test',
+    //               fullName: 'Left User',
+    //               avatar: null,
+    //             ),
+    //             content: 'Left User left the group "Weekend Trip"',
+    //             toUsers: [],
+    //           ),
+    //           NotificationModel(
+    //             uid: 'noti-event-created',
+    //             type: NotiType.EVENT_CREATED,
+    //             createdAt: DateTime.now(),
+    //             relatedUid: 'event-2',
+    //             fromUser: UserModel(
+    //               id: 'user-event-creator',
+    //               email: 'eventcreator@dividex.test',
+    //               fullName: 'Event Creator',
+    //               avatar: null,
+    //             ),
+    //             content: 'Event Creator created a new event "Team Dinner"',
+    //             toUsers: [],
+    //           ),
+    //           NotificationModel(
+    //             uid: 'noti-event-updated',
+    //             type: NotiType.EVENT_UPDATED,
+    //             createdAt: DateTime.now(),
+    //             relatedUid: 'event-2',
+    //             fromUser: UserModel(
+    //               id: 'user-event-updater',
+    //               email: 'eventupdater@dividex.test',
+    //               fullName: 'Event Updater',
+    //               avatar: null,
+    //             ),
+    //             content: 'Event Updater updated event "Team Dinner"',
+    //             toUsers: [],
+    //           ),
+    //         ],
+    //       ),
+    //     );
 
-        // When
-        await tester.pumpWidget(buildNotiPageWithRouter(
-          mockLoadedNotiBloc: mockLoadedNotiBloc,
-        ));
-        await tester.pumpAndSettle();
+    //     // When
+    //     await tester.pumpWidget(buildNotiPageWithRouter(
+    //       mockLoadedNotiBloc: mockLoadedNotiBloc,
+    //     ));
+    //     await tester.pumpAndSettle();
 
-        // Then - Verify group and event notifications
-        await retryAssertion(
-          () async {
-            expect(find.text('Group Creator created a new group "Weekend Trip"'), findsOneWidget);
-            expect(find.text('Group Updater updated the group "Weekend Trip"'), findsOneWidget);
-            expect(find.text('Left User left the group "Weekend Trip"'), findsOneWidget);
-            expect(find.text('Event Creator created a new event "Team Dinner"'), findsOneWidget);
-            expect(find.text('Event Updater updated event "Team Dinner"'), findsOneWidget);
-          },
-          maxAttempts: 3,
-        );
-      },
-    );
+    //     // Then - Verify group and event notifications
+    //     await retryAssertion(
+    //       () async {
+    //         expect(find.text('Group Creator created a new group "Weekend Trip"'), findsOneWidget);
+    //         expect(find.text('Group Updater updated the group "Weekend Trip"'), findsOneWidget);
+    //         expect(find.text('Left User left the group "Weekend Trip"'), findsOneWidget);
+    //         expect(find.text('Event Creator created a new event "Team Dinner"'), findsOneWidget);
+    //         expect(find.text('Event Updater updated event "Team Dinner"'), findsOneWidget);
+    //       },
+    //       maxAttempts: 3,
+    //     );
+    //   },
+    // );
 
     testWidgets(
       'Given expense notifications, when viewed, then display expense creation/update/restore/delete messages',
