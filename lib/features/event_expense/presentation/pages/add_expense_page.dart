@@ -34,13 +34,46 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AddExpensePage extends StatefulWidget {
-  const AddExpensePage({super.key});
+  final LoadedUsersBloc? loadedUsersBloc;
+  final bool showCreateOptionDialogOnInit;
+  final EventModel? initialSelectedEvent;
+  final UserModel? initialSelectedPayer;
+  final bool bypassValidationForTesting;
+
+  const AddExpensePage({
+    super.key,
+    this.loadedUsersBloc,
+    this.showCreateOptionDialogOnInit = true,
+    this.initialSelectedEvent,
+    this.initialSelectedPayer,
+    this.bypassValidationForTesting = false,
+  });
 
   @override
   State<AddExpensePage> createState() => _AddExpensePageState();
 }
 
 class _AddExpensePageState extends State<AddExpensePage> {
+  static const Key manualOptionButtonKey = Key(
+    'expense_create_manual_option_button',
+  );
+  static const Key scanningOptionButtonKey = Key(
+    'expense_create_scanning_option_button',
+  );
+  static const Key nameInputKey = Key('expense_create_name_input');
+  static const Key amountInputKey = Key('expense_create_amount_input');
+  static const Key eventInputKey = Key('expense_create_event_input');
+  static const Key payerInputKey = Key('expense_create_payer_input');
+  static const Key dateInputKey = Key('expense_create_date_input');
+  static const Key reminderInputKey = Key('expense_create_reminder_input');
+  static const Key splitEqualOptionKey = Key(
+    'expense_create_split_equal_option',
+  );
+  static const Key splitCustomOptionKey = Key(
+    'expense_create_split_custom_option',
+  );
+  static const Key submitButtonKey = Key('expense_create_submit_button');
+
   final formKey = GlobalKey<FormState>();
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController expenseAmountController = TextEditingController();
@@ -63,6 +96,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
   List<UserModel> users = [];
   List<UserModel> usersInEvent = [];
 
+  List<ImageExpenseItemModel> items = [];
+  bool showMoreInfomation = false;
+
   final List<CurrencyEnum> _units = getAllCurrencies().map((e) => e).toList();
 
   final clearFormTrigger = ValueNotifier(false);
@@ -70,12 +106,27 @@ class _AddExpensePageState extends State<AddExpensePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showOptionDialog();
-    });
+
+    _selectedEvent = widget.initialSelectedEvent;
+    if (_selectedEvent != null) {
+      selectedEventTextEditingController.text = _selectedEvent!.name ?? '----';
+    }
+
+    _selectedPayer = widget.initialSelectedPayer;
+    if (_selectedPayer != null) {
+      selectedPayerTextEditingController.text =
+          _selectedPayer!.fullName ?? '----';
+    }
+
+    if (widget.showCreateOptionDialogOnInit) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showOptionDialog();
+      });
+    }
   }
 
   void _showOptionDialog() {
+    final intl = AppLocalizations.of(context)!;
     showCustomDialog(
       context: context,
       content: Column(
@@ -92,6 +143,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 children: [
                   CustomButton(
                     text: 'Manually',
+                    buttonKey: manualOptionButtonKey,
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -101,13 +153,39 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   ),
                   CustomButton(
                     text: 'Scanning',
+                    buttonKey: scanningOptionButtonKey,
                     onPressed: () async {
                       Navigator.pop(context);
                       final result = await context.pushNamed(
                         AppRouteNames.scanExpense,
                       );
+                      // final result = {
+                      //   'imageInfo': ImageExpenseModel(
+                      //     items: [
+                      //       ImageExpenseItemModel(name: "Bánh nướng Jambon bát bửu 1Trứng 180g", quantity: 1.0, unitPrice: 60000.0, totalPrice: 60000.0),
+                      //       ImageExpenseItemModel(name: "Bánh nướng Đậu xanh 1Trứng180g (66)", quantity: 1.0, unitPrice: 50370.0, totalPrice: 50370.0),
+                      //       ImageExpenseItemModel(name: "Bánh dẻo Trà Ô Long trái cây 180g trứng (5TTD)", quantity: 1.0, unitPrice: 41480.0, totalPrice: 41480.0),
+                      //       ImageExpenseItemModel(name: "Bánh nướng Gà cuộn rong biển 1Trứng 180g (66GR)", quantity: 1.0, unitPrice: 66000.0, totalPrice: 66000.0),
+                      //       ImageExpenseItemModel(name: "Hộp hoa mẫu đơn size 36*28*8cm", quantity: 1.0, unitPrice: 110000.0, totalPrice: 110000.0),
+                      //       ImageExpenseItemModel(name: "Túi giấy 36*28", quantity: 1.0, unitPrice: 15000.0, totalPrice: 15000.0),
+                      //     ],
+                      //     name: "Bánh trung thu và hộp quà",
+                      //     category: "food",
+                      //     totalAmount: 342850.0,
+                      //     currency: "VND",
+                      //     note: null,
+                      //     expenseDate: DateTime.parse("2025-09-23T00:00:00+07:00"),
+                      //     endDate: null
+                      //   ),
+                      //   'bytes': Uint8List(0)
+                      // };
                       if (result != null && mounted) {
                         _handleScanResult(result);
+                      } else {
+                        showCustomToast(
+                          intl.cantReadImage,
+                          type: ToastType.error,
+                        );
                       }
                     },
                     size: ButtonSize.medium,
@@ -149,6 +227,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
     reminderController.text = DateFormat(
       "dd/MM/yyyy",
     ).format((imageInfo.expenseDate ?? DateTime.now()).add(Duration(days: 3)));
+
+    items = imageInfo.items;
   }
 
   @override
@@ -165,8 +245,16 @@ class _AddExpensePageState extends State<AddExpensePage> {
   }
 
   void submitExpense() {
-    if (formKey.currentState?.validate() ?? false) {
+    if (widget.bypassValidationForTesting ||
+        (formKey.currentState?.validate() ?? false)) {
       final intl = AppLocalizations.of(context)!;
+      final selectedEvent = _selectedEvent ?? widget.initialSelectedEvent;
+      final selectedPayer = _selectedPayer ?? widget.initialSelectedPayer;
+
+      if (selectedEvent == null || selectedPayer == null) {
+        return;
+      }
+
       final formattedDate = DateFormat(
         "yyyy-MM-dd HH:mm",
       ).format(DateFormat("h:mm a - dd/MM/yyyy").parse(dateController.text));
@@ -205,9 +293,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
           expenseNameController.text,
           double.tryParse(expenseAmountController.text) ?? 0,
           _selectedCurrency.value.code,
-          _selectedCategory.value!.key,
-          _selectedEvent!.id!,
-          _selectedPayer!.id,
+          _selectedCategory.value?.key,
+          selectedEvent.id!,
+          selectedPayer.id,
           noteController.text,
           formattedDate,
           formattedReminder,
@@ -217,7 +305,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
         ),
       );
 
-      Navigator.of(context).pop();
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -232,7 +322,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
       child: SimpleLayout(
         onRefresh: () async => {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+            clearFormTrigger.value =
+                !clearFormTrigger.value; // Trigger form reset
             _showOptionDialog();
           }),
         },
@@ -250,7 +341,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
         FormFieldConfig(controller: expenseNameController, isRequired: true),
         FormFieldConfig(controller: expenseAmountController, isRequired: true),
         FormFieldConfig(selectedValue: _selectedCurrency, isRequired: true),
-        FormFieldConfig(selectedValue: _selectedCategory, isRequired: true),
+        // FormFieldConfig(selectedValue: _selectedCategory, isRequired: true),
         FormFieldConfig(
           controller: selectedEventTextEditingController,
           isRequired: true,
@@ -261,7 +352,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
         ),
         FormFieldConfig(controller: dateController, isRequired: true),
       ],
-      builder: (isValid) => Column(
+      builder: (isValid, isSubmitting, setSubmitting) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
@@ -282,6 +373,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
             label: intl.expenseNameLabel,
             hintText: intl.expenseNameHint,
             controller: expenseNameController,
+            textFieldKey: nameInputKey,
             keyboardType: TextInputType.text,
             validator: (value) {
               return CustomValidator().validateName(value, intl);
@@ -302,6 +394,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     label: intl.expenseAmountLabel,
                     hintText: intl.expenseAmountHint,
                     controller: expenseAmountController,
+                    textFieldKey: amountInputKey,
                     keyboardType: TextInputType.number,
                     validator: (value) =>
                         CustomValidator().validateAmount(value, intl),
@@ -326,16 +419,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
                             ),
                             child: Row(
                               children: [
-                                // if (b.avatarUrl != null)
-                                //   Image.network(
-                                //     b.avatarUrl!,
-                                //     width: 50,
-                                //     height: 50,
-                                //     errorBuilder: (context, error, stackTrace) =>
-                                //         const Icon(Icons.group),
-                                //   )
-                                // else
-                                //   const Icon(Icons.group),
                                 Text(
                                   b.code,
                                   style: Theme.of(context).textTheme.bodyMedium
@@ -382,56 +465,11 @@ class _AddExpensePageState extends State<AddExpensePage> {
             ),
           ),
           const SizedBox(height: 16),
-          ValueListenableBuilder<CategoryModel?>(
-            valueListenable: _selectedCategory,
-            builder: (context, value, _) {
-              return CustomDropdownWidget<CategoryModel>(
-                label: intl.expenseCategoryLabel,
-                value: _selectedCategory.value,
-                options: CategoryModel.categories,
-                displayString: (b) => b.localizedName(context),
-                buildOption: (b, selected) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 6,
-                      horizontal: 4,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            b.localizedName(context),
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: selected
-                                      ? AppThemes.primary3Color
-                                      : Colors.grey,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                        ),
-                        if (selected)
-                          const Icon(
-                            Icons.check,
-                            color: AppThemes.primary3Color,
-                          ),
-                      ],
-                    ),
-                  );
-                },
-                onChanged: (val) {
-                  _selectedCategory.value = val;
-                },
-                isRequired: true,
-              );
-            },
-          ),
-
-          const SizedBox(height: 16),
 
           CustomTextInputWidget(
             size: TextInputSize.large,
             controller: selectedEventTextEditingController,
+            textFieldKey: eventInputKey,
             keyboardType: TextInputType.text,
             isReadOnly: true,
             isRequired: true,
@@ -453,12 +491,13 @@ class _AddExpensePageState extends State<AddExpensePage> {
               );
             },
           ),
-
           const SizedBox(height: 8),
+
           if (_selectedEvent != null) ...[
             CustomTextInputWidget(
               size: TextInputSize.large,
               controller: selectedPayerTextEditingController,
+              textFieldKey: payerInputKey,
               keyboardType: TextInputType.text,
               isReadOnly: true,
               isRequired: true,
@@ -496,17 +535,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
               },
             ),
           ],
-
           const SizedBox(height: 8),
-          CustomTextInputWidget(
-            size: TextInputSize.large,
-            isReadOnly: false,
-            label: intl.expenseNoteLabel,
-            controller: noteController,
-            keyboardType: TextInputType.text,
-            maxLines: 4,
-          ),
-          const SizedBox(height: 16),
 
           SizedBox(
             width: 340,
@@ -519,6 +548,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     label: intl.expenseDateLabel,
                     hintText: '4:30 p.m - 13/05/2025',
                     controller: dateController,
+                    textFieldKey: dateInputKey,
                     size: TextInputSize.large,
                     isRequired: true,
                     validator: null,
@@ -532,6 +562,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     label: intl.expenseReminderLabel,
                     hintText: '13/05/2025',
                     controller: reminderController,
+                    textFieldKey: reminderInputKey,
                     size: TextInputSize.medium,
                     isRequired: true,
                     validator: null,
@@ -540,14 +571,32 @@ class _AddExpensePageState extends State<AddExpensePage> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
 
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          if (_selectedEvent != null &&
+              expenseAmountController.text.isNotEmpty) ...[
+            const SizedBox(height: 16),
+
+            (widget.loadedUsersBloc != null)
+                ? BlocProvider<LoadedUsersBloc>.value(
+                    value: widget.loadedUsersBloc!,
+                    child: twoOptionSelector(intl),
+                  )
+                : BlocProvider(
+                    create: (context) => LoadedUsersBloc()
+                      ..add(
+                        user_event.InitialEvent(
+                          _selectedEvent?.id,
+                          user_event.LoadType.eventParticipants,
+                        ),
+                      ),
+                    child: twoOptionSelector(intl),
+                  ),
+          ],
+
+          Row(
             children: [
               Text(
-                intl.addExpenseImageLabel,
+                intl.showMoreInfo,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontSize: 12,
                   letterSpacing: 0,
@@ -555,49 +604,123 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   color: Colors.grey,
                 ),
               ),
-              const SizedBox(height: 8),
-              ImagePickerWidget(
-                initialImage: images.isNotEmpty ? images.first : null,
-                type: PickerType.gallery,
-                onFilesPicked: (imageBytesList) {
+              IconButton(
+                onPressed: () {
                   setState(() {
-                    images = imageBytesList;
+                    showMoreInfomation = !showMoreInfomation;
                   });
                 },
+                icon: showMoreInfomation
+                    ? const Icon(Icons.keyboard_arrow_up)
+                    : const Icon(Icons.keyboard_arrow_down),
               ),
             ],
           ),
-
-          if (_selectedEvent != null &&
-              expenseAmountController.text.isNotEmpty) ...[
+          if (showMoreInfomation) ...[
+            // Category
+            ValueListenableBuilder<CategoryModel?>(
+              valueListenable: _selectedCategory,
+              builder: (context, value, _) {
+                return CustomDropdownWidget<CategoryModel>(
+                  label: intl.expenseCategoryLabel,
+                  value: _selectedCategory.value,
+                  options: CategoryModel.categories,
+                  displayString: (b) => b.localizedName(context),
+                  buildOption: (b, selected) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 6,
+                        horizontal: 4,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              b.localizedName(context),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: selected
+                                        ? AppThemes.primary3Color
+                                        : Colors.grey,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                          ),
+                          if (selected)
+                            const Icon(
+                              Icons.check,
+                              color: AppThemes.primary3Color,
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                  onChanged: (val) {
+                    _selectedCategory.value = val;
+                  },
+                  isRequired: true,
+                );
+              },
+            ),
             const SizedBox(height: 16),
-            BlocProvider(
-              create: (context) => LoadedUsersBloc()
-                ..add(
-                  user_event.InitialEvent(
-                    _selectedEvent?.id,
-                    user_event.LoadType.eventParticipants,
+            // Note
+            CustomTextInputWidget(
+              size: TextInputSize.large,
+              isReadOnly: false,
+              label: intl.expenseNoteLabel,
+              controller: noteController,
+              keyboardType: TextInputType.text,
+              maxLines: 4,
+            ),
+            const SizedBox(height: 16),
+            // Image
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  intl.addExpenseImageLabel,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontSize: 12,
+                    letterSpacing: 0,
+                    height: 16 / 12,
+                    color: Colors.grey,
                   ),
                 ),
-              child: twoOptionSelector(intl),
+                const SizedBox(height: 8),
+                ImagePickerWidget(
+                  initialImage: images.isNotEmpty ? images.first : null,
+                  type: PickerType.gallery,
+                  onFilesPicked: (imageBytesList) {
+                    setState(() {
+                      images = imageBytesList;
+                    });
+                  },
+                ),
+              ],
             ),
+            const SizedBox(height: 16),
           ],
-
-          const SizedBox(height: 20),
 
           CustomButton(
             text: intl.add,
+            buttonKey: submitButtonKey,
             onPressed:
-                (isValid &&
-                    userDebts.isNotEmpty &&
+                (!isValid ||
+                    isSubmitting ||
+                    userDebts.isEmpty ||
                     userDebts.fold<double>(
                           0,
                           (previousValue, element) =>
                               previousValue + (element.amount),
-                        ) ==
+                        ) !=
                         (double.tryParse(expenseAmountController.text) ?? 0))
-                ? submitExpense
-                : null,
+                ? null
+                : () async {
+                    setSubmitting(true);
+                    submitExpense();
+                    setSubmitting(false);
+                  },
           ),
           const SizedBox(height: 20),
         ],
@@ -634,6 +757,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
           leftIcon: 'lib/assets/icons/balance.png',
           rightLabel: intl.expenseSplitCustomLabel,
           rightIcon: 'lib/assets/icons/unbalance.png',
+          leftOptionKey: splitEqualOptionKey,
+          rightOptionKey: splitCustomOptionKey,
           onSelectionChanged: (value) async {
             double totalEntered = double.parse(expenseAmountController.text);
             if (totalEntered.isNaN || totalEntered <= 0) {
@@ -657,6 +782,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     });
                   },
                   'amount': double.parse(expenseAmountController.text),
+                  'items': items,
                 },
               );
 

@@ -6,6 +6,7 @@ import 'package:Dividex/config/themes/theme_cubit.dart';
 import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/home/presentation/bloc/bottom_nav_visibility_cubit.dart';
+import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/shared/bloc/app_bloc_observer.dart';
 import 'package:Dividex/shared/bootstrap/error_handler.dart';
 import 'package:Dividex/shared/bootstrap/firebase_service.dart';
@@ -44,6 +45,7 @@ Future<void> bootstrap() async {
           BlocProvider(create: (_) => BottomNavVisibilityCubit()),
           BlocProvider(create: (_) => AuthBloc()),
           BlocProvider(create: (_) => LoadedNotiBloc()),
+          BlocProvider(create: (_) => RechargeBloc()),
           BlocProvider(create: (_) => LocaleCubit()..loadLocale()),
           BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
           //ChangeNotifierProvider(create: (_) => AppRefreshNotifier())

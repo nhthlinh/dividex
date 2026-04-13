@@ -170,7 +170,7 @@ class _SearchTransactionPageState extends State<SearchTransactionPage> {
                             info: state.depositDetail.code,
                           ),
                           CustomRow(
-                            title: intl.amount,
+                            title: intl.amountLabel,
                             info:
                                 '${formatNumber(state.depositDetail.amount)} ${state.depositDetail.currency.code}',
                           ),
@@ -195,7 +195,7 @@ class _SearchTransactionPageState extends State<SearchTransactionPage> {
                             info: state.withdrawDetail.code,
                           ),
                           CustomRow(
-                            title: intl.amount,
+                            title: intl.amountLabel,
                             info:
                                 '${formatNumber(state.withdrawDetail.amount)} ${state.withdrawDetail.bankAccount.currency?.code}',
                           ),

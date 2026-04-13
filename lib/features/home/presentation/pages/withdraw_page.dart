@@ -4,10 +4,10 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
-import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
+import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
 import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
@@ -20,6 +20,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 
 class WithdrawPage extends StatefulWidget {
+  static const Key accountDropdownKey = Key('withdraw_account_dropdown');
+  static const Key amountInputKey = Key('withdraw_amount_input');
+  static const Key submitButtonKey = Key('withdraw_submit_button');
+
   const WithdrawPage({super.key});
 
   @override
@@ -57,6 +61,8 @@ class _WithdrawPageState extends State<WithdrawPage> {
     }
   }
 
+  bool _hasShownToast = false; // To track if the toast has been shown
+
   @override
   Widget build(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
@@ -66,7 +72,8 @@ class _WithdrawPageState extends State<WithdrawPage> {
       child: SimpleLayout(
         onRefresh: () {
           context.read<AccountBloc>().add(GetAccountsEvent());
-          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          clearFormTrigger.value =
+              !clearFormTrigger.value; // Trigger form reset
           return Future.value();
         },
         title: intl.withdraw,
@@ -77,160 +84,183 @@ class _WithdrawPageState extends State<WithdrawPage> {
             FormFieldConfig(controller: amountController, isRequired: true),
             FormFieldConfig(selectedValue: selectedToAccount, isRequired: true),
           ],
-          builder: (isValid) {
+          builder: (isValid, isSubmitting, setSubmitting) {
             return SizedBox(
               height: MediaQuery.of(context).size.height * 0.7,
               child: Column(
                 children: [
-                  BlocListener<RechargeBloc, RechargeState>(
-                    listenWhen: (p, c) => p != c,
-                    listener: (context, state) {
-                      double a = double.parse(
-                        amountController.text.trim().replaceAll('.', ''),
-                      );
-                      BankAccount toAccount = selectedToAccount.value!;
-                      if (state is RechargeSuccessState) {
-                        context.pushNamed(
-                          AppRouteNames.withdrawSuccess,
-                          extra: {'toAccount': toAccount, 'amount': a},
-                        );
-                      }
-                    },
-                    child: SizedBox.shrink(),
-                  ),
-
-                  BlocBuilder<AccountBloc, AccountState>(
-                    buildWhen: (p, c) => p.accounts != c.accounts,
-                    builder: (context, state) {
-                      if (state.accounts.isEmpty) {
-                        return Center(
-                          child: SpinKitFadingCircle(
-                            color: AppThemes.primary3Color,
-                          ),
-                        );
-                      } else {
-                        final accounts = state.accounts;
-
-                        if (accounts.isEmpty) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (!context.mounted) return;
-                            showCustomToast(
-                              'You have not linked any bank account yet. Please add an account to proceed with withdrawal.',
-                              type: ToastType.error,
+                  ContentCard(
+                    child: Column(
+                      children: [
+                        BlocListener<RechargeBloc, RechargeState>(
+                          listenWhen: (p, c) => p != c,
+                          listener: (context, state) {
+                            double a = double.parse(
+                              amountController.text.trim().replaceAll('.', ''),
                             );
-                          });
-                        }
+                            BankAccount toAccount = selectedToAccount.value!;
+                            if (state is RechargeSuccessState) {
+                              context.pushNamed(
+                                AppRouteNames.withdrawSuccess,
+                                extra: {'toAccount': toAccount, 'amount': a},
+                              );
+                            }
+                          },
+                          child: SizedBox.shrink(),
+                        ),
 
-                        return ValueListenableBuilder<BankAccount?>(
-                          valueListenable: selectedToAccount,
-                          builder: (context, value, _) {
-                            return CustomDropdownWidget<BankAccount>(
-                              label: intl.account,
-                              value: selectedToAccount.value,
-                              options: accounts,
-                              displayString: (account) =>
-                                  '${account.accountNumber} ${account.bankName}',
-                              buildOption: (account, selected) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 6,
-                                    horizontal: 4,
+                        BlocBuilder<AccountBloc, AccountState>(
+                          buildWhen: (p, c) => p.accounts != c.accounts,
+                          builder: (context, state) {
+                            if (state is AccountInitialState) {
+                              return const Center(
+                                child: ColoredBox(
+                                  color: Colors.transparent,
+                                  child: SpinKitFadingCircle(
+                                    color: AppThemes.primary3Color,
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        account.bankName,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              color: selected
-                                                  ? AppThemes.primary3Color
-                                                  : Colors.grey,
-                                              fontWeight: FontWeight.w500,
+                                ),
+                              );
+                            }
+
+                            final accounts = state.accounts;
+
+                            if (accounts.isEmpty && !_hasShownToast) {
+                              _hasShownToast = true;
+
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (!context.mounted) return;
+
+                                showCustomToast(
+                                  intl.noAccountError,
+                                  type: ToastType.error,
+                                );
+                              });
+                            }
+
+                            return ValueListenableBuilder<BankAccount?>(
+                              valueListenable: selectedToAccount,
+                              builder: (context, value, _) {
+                                return CustomDropdownWidget<BankAccount>(
+                                  key: WithdrawPage.accountDropdownKey,
+                                  label: intl.account,
+                                  value: selectedToAccount.value,
+                                  options: accounts,
+                                  displayString: (account) =>
+                                      '${account.accountNumber} ${account.bankName}',
+                                  buildOption: (account, selected) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 6,
+                                        horizontal: 4,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            account.bankName,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  color: selected
+                                                      ? AppThemes.primary3Color
+                                                      : Colors.grey,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            child: Text(
+                                              account.accountNumber,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: selected
+                                                        ? AppThemes
+                                                              .primary3Color
+                                                        : Colors.grey,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
                                             ),
+                                          ),
+                                          if (selected)
+                                            const Icon(
+                                              Icons.check,
+                                              color: AppThemes.primary3Color,
+                                            ),
+                                        ],
                                       ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        child: Text(
-                                          account.accountNumber,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: selected
-                                                    ? AppThemes.primary3Color
-                                                    : Colors.grey,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                        ),
-                                      ),
-                                      if (selected)
-                                        const Icon(
-                                          Icons.check,
-                                          color: AppThemes.primary3Color,
-                                        ),
-                                    ],
-                                  ),
+                                    );
+                                  },
+                                  onChanged: (val) {
+                                    selectedToAccount.value = val;
+                                  },
+                                  isRequired: true,
                                 );
                               },
-                              onChanged: (val) {
-                                selectedToAccount.value = val;
-                              },
-                              isRequired: true,
                             );
                           },
-                        );
-                      }
-                    },
-                  ),
+                        ),
 
-                  const SizedBox(height: 16),
-                  CustomTextInputWidget(
-                    size: TextInputSize.large,
-                    controller: amountController,
-                    keyboardType: TextInputType.number,
-                    isReadOnly: false,
-                    label: intl.amount,
-                    isRequired: true,
-                    validator: (value) =>
-                        CustomValidator().validateAmount(value, intl),
-                  ),
+                        const SizedBox(height: 16),
+                        CustomTextInputWidget(
+                          textFieldKey: WithdrawPage.amountInputKey,
+                          size: TextInputSize.large,
+                          controller: amountController,
+                          keyboardType: TextInputType.number,
+                          isReadOnly: false,
+                          label: intl.amountLabel,
+                          isRequired: true,
+                          validator: (value) =>
+                              CustomValidator().validateAmount(value, intl),
+                        ),
 
-                  Wrap(
-                    alignment: WrapAlignment.start,
-                    children: [
-                      ...amountExample.map((amount) {
-                        return Container(
-                          margin: const EdgeInsets.all(4),
-                          child: CustomButton(
-                            size: ButtonSize.medium,
-                            text:
-                                '${formatNumber(amount)} ${HiveService.getUser().preferredCurrency ?? 'VND'}',
-                            onPressed: () {
-                              setState(() {
-                                if (amountController.text !=
-                                    amount.toString()) {
-                                  amountController.text = amount.toString();
-                                } else {
-                                  amountController.text = '0';
-                                }
-                              });
-                            },
-                            customColor:
-                                amountController.text != amount.toString()
-                                ? const Color.fromARGB(137, 232, 140, 160)
-                                : AppThemes.primary3Color,
-                          ),
-                        );
-                      }),
-                    ],
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          children: [
+                            ...amountExample.map((amount) {
+                              return Container(
+                                margin: const EdgeInsets.all(4),
+                                child: CustomButton(
+                                  size: ButtonSize.medium,
+                                  text: formatNumber(amount),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (amountController.text !=
+                                          amount.toString()) {
+                                        amountController.text = amount
+                                            .toString();
+                                      } else {
+                                        amountController.text = '0';
+                                      }
+                                    });
+                                  },
+                                  customColor:
+                                      amountController.text != amount.toString()
+                                      ? const Color.fromARGB(137, 232, 140, 160)
+                                      : AppThemes.primary3Color,
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-
                   const Spacer(),
                   CustomButton(
+                    buttonKey: WithdrawPage.submitButtonKey,
                     text: intl.confirm,
-                    onPressed: isValid ? _submit : null,
+                    onPressed: ((!isValid || isSubmitting))
+                        ? null
+                        : () async {
+                            setSubmitting(true);
+
+                            _submit();
+
+                            setSubmitting(false);
+                          },
                   ),
                 ],
               ),

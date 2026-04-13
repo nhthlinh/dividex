@@ -88,7 +88,7 @@ class _AccountPageState extends State<AccountDetailPage> {
               Row(
                 children: [
                   Text(
-                    intl.branch,
+                    intl.bank,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: Colors.grey),

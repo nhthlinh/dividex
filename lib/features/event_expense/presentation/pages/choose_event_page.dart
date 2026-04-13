@@ -30,6 +30,9 @@ class ChooseEventPage extends StatefulWidget {
 }
 
 class _ChooseEventPageState extends State<ChooseEventPage> {
+  static const Key searchInputKey = Key('choose_event_search_input');
+  static const Key searchButtonKey = Key('choose_event_search_button');
+
   final TextEditingController _searchController = TextEditingController();
   final List<bool> isVisible = [];
   EventModel? selectedEvent;
@@ -75,7 +78,9 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
               keyboardType: TextInputType.text,
               label: intl.searchTab,
               controller: _searchController,
+              textFieldKey: searchInputKey,
               suffixIcon: IconButton(
+                key: searchButtonKey,
                 onPressed: () {
                   context.read<EventDataBloc>().add(
                     InitialEvent(searchQuery: _searchController.text),
@@ -200,6 +205,7 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
             return Column(
               children: [
                 InfoCard(
+                  key: Key('choose_event_group_${group.id ?? index}'),
                   title: group.name ?? '',
                   leading: CircleAvatar(
                     radius: 20,
@@ -233,6 +239,9 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
                               final isSelected = event.id == selectedEvent?.id;
 
                               return ContentCard(
+                                key: Key(
+                                  'choose_event_item_${event.id ?? index}',
+                                ),
                                 onTap: () => _toggleEvent(event),
                                 child: Row(
                                   children: [

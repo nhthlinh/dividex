@@ -426,7 +426,7 @@
 
   "friendRequestNotFound": "The friend request was not found.",
   "totalAmount": "Total amount",
-  "amount": "Amount",
+  "amountLabel": "Amount",
   "splitRemainingEqually": "Split remaining equally",
   "allocated": "Allocated",
   "noEventsInGroup": "No events in this group yet",
@@ -473,7 +473,7 @@
   "image": "Image",
   "expenseSplitNotMatch": "Expense split not match, please check again",
   "accountNumber": "Account number",
-  "branch": "Branch",
+  "bank": "Bank",
   "accountNumberLabel": "Type your new account number",
   "chooseBeneficiary": "Choose beneficiary",
   "findBeneficiary": "Find beneficiary",
@@ -547,8 +547,8 @@
   "youBorrowed": "you borrowed",
   "youLent": "you lent",
   "year": "Year",
-  "externalExpense": "External expense",
-  "internalExpense": "Internal expense",
+  "externalExpense": "External",
+  "internalExpense": "Internal",
   "notifications": "Notifications",
   "filter": "Filter",
   "chooseTypeFilter": "Choose type of transaction",
@@ -675,8 +675,48 @@
   "partnerTyping": "Partner is typing...",
   "edit": "Edit",
   "messageDeleted": "Message is deleted",
-  "edited": "Message is Edited"
-  
+  "edited": "Message is Edited",
 
-
+  "noAccountError": "You have not linked any bank account yet...",
+  "commingSoon": "This feature is coming soon.",
+  "cantReadImage": "Unable to scan the image to read the bill. Please try again with a clearer image or check your connection.",
+  "showMoreInfo": "More information",
+  "byItem": "By Item",
+  "byAmount": "By Amount",
+  "reset": "Reset",
+  "noPeople": "No one selected",
+  "expenseSplitNoItems": "Item list not found. Please scan the receipt again to split by items.",
+  "addFee": "Additional fees have been distributed",
+  "disFee": "Discount has been applied and distributed",
+  "topUpTitle": "Top up via QR",
+  "scanQrInstruction": "Scan the QR code to top up",
+  "scanQrDesc": "Please use your banking app to scan the QR code above.",
+  "noManualTransfer": "Manual bank transfer is not supported.",
+  "warningManual": "⚠️ Transfers without QR will not be recognized.",
+  "orderCode": "Transaction ID: {code}",
+  "@orderCode": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "amount": "Amount: {amount}",
+  "@amount": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "content": "Note: {content}",
+  "@content": {
+    "placeholders": {
+      "content": {}
+    }
+  },
+  "cancelDepositError": "Failed to cancel deposit.",
+  "cannotOpenBankApp": "Unable to open your bank app",
+  "openInBankApp": "Open in your bank app",
+  "failedToSaveQr": "Failed to save QR code",
+  "savedToGallery": "Saved to gallery",
+  "downloadQr": "Download QR code",
+  "bankAccountIsExist": "Bank account already exists",
+  "accountName": "Account holder name"
 }

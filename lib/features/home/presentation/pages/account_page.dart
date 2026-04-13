@@ -120,7 +120,7 @@ class _AccountPageState extends State<AccountPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  intl.branch,
+                                  intl.bank,
                                   style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(color: Colors.grey),
                                 ),

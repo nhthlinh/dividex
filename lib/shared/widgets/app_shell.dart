@@ -81,7 +81,7 @@ class _AppShellState extends State<AppShell> {
                         _buildNavItem(context, 0, Icons.home, 'Home'),
                         _buildNavItem(context, 1, Icons.search, 'Search'),
                         const SizedBox(width: 60),
-                        _buildNavItem(context, 2, Icons.mail_outline, 'Mail'),
+                        _buildNavItem(context, 2, Icons.chat, 'Chat'),
                         _buildNavItem(context, 3, Icons.settings_outlined, 'Settings'),
                       ],
                     ),

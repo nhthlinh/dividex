@@ -20,6 +20,17 @@ class AuthAuthenticated extends AuthState {
 
 class AuthUnauthenticated extends AuthState {}
 
+class AuthResetPasswordSuccess extends AuthState {}
+
+class AuthResetPasswordFailure extends AuthState {
+  final String message;
+
+  const AuthResetPasswordFailure({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class AuthEmailSent extends AuthState {
   final String email;
   const AuthEmailSent({required this.email});
@@ -32,7 +43,11 @@ class AuthEmailChecked extends AuthState {
   final String email;
   final String token;
   final bool isValid;
-  const AuthEmailChecked({required this.email, required this.token, required this.isValid});
+  const AuthEmailChecked({
+    required this.email,
+    required this.token,
+    required this.isValid,
+  });
 
   @override
   List<Object?> get props => [email, token, isValid];
@@ -45,6 +60,3 @@ class AuthEmailTimeout extends AuthState {
   @override
   List<Object?> get props => [email];
 }
-
-
-

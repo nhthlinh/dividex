@@ -7,6 +7,8 @@ import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:Dividex/shared/utils/num.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 
@@ -17,14 +19,19 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
   RechargeRemoteDatasourceImpl(this.dio);
 
   @override
-  Future<String> deposit(double amount, String currency, String bankCode) {
+  Future<PayOSResponseModel> deposit(double amount, String currency) {
     return apiCallWrapper(() async {
-      final response = await dio.get(
-        '/payment',
-        data: {'amount': amount, 'currency': currency, 'bank_code': bankCode},
+      final response = await dio.post(
+        '/payment/payos/create-link',
+        data: {
+          'amount': amount,
+          'currency': currency,
+          'description': 'Deposit ${amount.toString()} $currency',
+          'item_name': 'Deposit ${amount.toString()} $currency',
+        },
       );
 
-      return response.data['data']['payment_url'];
+      return PayOSResponseModel.fromJson(response.data['data']);
     });
   }
 
@@ -48,11 +55,15 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
       await dio.post(
         '/wallet/withdraw',
         data: {
-          'amount': amount,
+          'amount': amount.toInt(),
           'account_number': accountNumber,
           'bank_name': bankCode,
+          'description': 'Withdraw $amount',
         },
       );
+      // final code = res.data['data']['code'];
+      // callPayoutApi(
+      //   PayOutModel(amount: amount, description: '$accountNumber ($bankCode)', referenceId: code, toAccountNumber: accountNumber, toBin: getBinByCode(bankCode) ?? ''));
     });
   }
 
@@ -92,8 +103,8 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
         'fullName': res.data['data']['full_name'].toString(),
         // 'latestTime': getTimeAgo(DateTime.parse(res.data['data']['latest_time']), intl),
         'latestTime': res.data['data']['latest_time'] != null
-          ? getTimeAgo(DateTime.parse(res.data['data']['latest_time']), intl)
-          : '', // hoặc '' nếu bạn muốn hiển thị chuỗi trống
+            ? getTimeAgo(DateTime.parse(res.data['data']['latest_time']), intl)
+            : '', // hoặc '' nếu bạn muốn hiển thị chuỗi trống
       };
     });
   }
@@ -124,8 +135,10 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
       final queryParams = {
         'page': page,
         'page_size': pageSize,
-        if (filter?.start != null) 'start': DateFormat("yyyy-MM-dd HH:mm").format(filter!.start!),
-        if (filter?.end != null) 'end': DateFormat("yyyy-MM-dd HH:mm").format(filter!.end!),
+        if (filter?.start != null)
+          'start': DateFormat("yyyy-MM-dd HH:mm").format(filter!.start!),
+        if (filter?.end != null)
+          'end': DateFormat("yyyy-MM-dd HH:mm").format(filter!.end!),
         if (filter?.minAmount != null) 'min_amount': filter!.minAmount,
         if (filter?.maxAmount != null) 'max_amount': filter!.maxAmount,
         if (filter?.code?.isNotEmpty ?? false) 'code': filter!.code,
@@ -163,8 +176,10 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
         'page': page,
         'page_size': pageSize,
 
-        if (filter?.start != null) 'start': DateFormat("yyyy-MM-dd HH:mm").format(filter!.start!),
-        if (filter?.end != null) 'end': DateFormat("yyyy-MM-dd HH:mm").format(filter!.end!),
+        if (filter?.start != null)
+          'start': DateFormat("yyyy-MM-dd HH:mm").format(filter!.start!),
+        if (filter?.end != null)
+          'end': DateFormat("yyyy-MM-dd HH:mm").format(filter!.end!),
         if (filter?.minAmount != null) 'min_amount': filter!.minAmount,
         if (filter?.maxAmount != null) 'max_amount': filter!.maxAmount,
         if (filter?.groupId?.isNotEmpty ?? false) 'group_id': filter!.groupId,
@@ -232,6 +247,60 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
       final response = await dio.post('/wallet/transaction', data: data);
 
       return response.data['success'] == 'SUCCESS';
+    });
+  }
+
+  @override
+  Future<void> cancelDeposit(int id) {
+    return apiCallWrapper(() async {
+      await dio.put('/payment/payos/${id.toString()}/cancel');
+    });
+  }
+
+  // @override
+  // Future<bool> isDepositSuccessful(String referenceId) {
+  //   return apiCallWrapper(() async {
+  //     final response = await dio.get('/payment/payos/$referenceId');
+  //     return response.data['data']['status'] == 'SUCCESS';
+  //   });
+  // }
+
+  @override
+  Future<bool> isDepositSuccessful(String referenceId) async {
+    return apiCallWrapper(() async {
+      final String payOsHost = dotenv.env['PAY_OS_HOST'] ?? '';
+      final res = await dio.get(
+        '$payOsHost/payment-requests/$referenceId',
+        options: Options(
+          headers: {
+            'x-api-key': dotenv.env['API_KEY'] ?? '',
+            'x-client-id': dotenv.env['CLIENT_ID'] ?? '',
+          },
+        ),
+      );
+      if (res.statusCode == 200) {
+        final data = res.data;
+
+        // check code API
+        if (data['code'] != '00') {
+          return false;
+        }
+
+        final paymentData = data['data'];
+
+        final status = paymentData['status'];
+        final amount = paymentData['amount'];
+        final amountPaid = paymentData['amountPaid'];
+
+        // điều kiện thành công
+        if (status == 'PAID' || amountPaid >= amount) {
+          return true;
+        }
+
+        return false;
+      }
+
+      return false;
     });
   }
 }

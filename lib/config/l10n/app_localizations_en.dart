@@ -1110,7 +1110,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get totalAmount => 'Total amount';
 
   @override
-  String get amount => 'Amount';
+  String get amountLabel => 'Amount';
 
   @override
   String get splitRemainingEqually => 'Split remaining equally';
@@ -1240,7 +1240,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountNumber => 'Account number';
 
   @override
-  String get branch => 'Branch';
+  String get bank => 'Bank';
 
   @override
   String get accountNumberLabel => 'Type your new account number';
@@ -1343,9 +1343,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createDepositSuccess => 'Deposit success';
-
-  @override
-  String get bank => 'Bank';
 
   @override
   String get date => 'Transaction day';
@@ -1468,10 +1465,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get year => 'Year';
 
   @override
-  String get externalExpense => 'External expense';
+  String get externalExpense => 'External';
 
   @override
-  String get internalExpense => 'Internal expense';
+  String get internalExpense => 'Internal';
 
   @override
   String get notifications => 'Notifications';
@@ -1573,4 +1570,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get edited => 'Message is Edited';
+
+  @override
+  String get noAccountError => 'You have not linked any bank account yet...';
+
+  @override
+  String get commingSoon => 'This feature is coming soon.';
+
+  @override
+  String get cantReadImage =>
+      'Unable to scan the image to read the bill. Please try again with a clearer image or check your connection.';
+
+  @override
+  String get showMoreInfo => 'More information';
+
+  @override
+  String get byItem => 'By Item';
+
+  @override
+  String get byAmount => 'By Amount';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get noPeople => 'No one selected';
+
+  @override
+  String get expenseSplitNoItems =>
+      'Item list not found. Please scan the receipt again to split by items.';
+
+  @override
+  String get addFee => 'Additional fees have been distributed';
+
+  @override
+  String get disFee => 'Discount has been applied and distributed';
+
+  @override
+  String get topUpTitle => 'Top up via QR';
+
+  @override
+  String get scanQrInstruction => 'Scan the QR code to top up';
+
+  @override
+  String get scanQrDesc =>
+      'Please use your banking app to scan the QR code above.';
+
+  @override
+  String get noManualTransfer => 'Manual bank transfer is not supported.';
+
+  @override
+  String get warningManual => '⚠️ Transfers without QR will not be recognized.';
+
+  @override
+  String orderCode(Object code) {
+    return 'Transaction ID: $code';
+  }
+
+  @override
+  String amount(Object amount) {
+    return 'Amount: $amount';
+  }
+
+  @override
+  String content(Object content) {
+    return 'Note: $content';
+  }
+
+  @override
+  String get cancelDepositError => 'Failed to cancel deposit.';
+
+  @override
+  String get cannotOpenBankApp => 'Unable to open your bank app';
+
+  @override
+  String get openInBankApp => 'Open in your bank app';
+
+  @override
+  String get failedToSaveQr => 'Failed to save QR code';
+
+  @override
+  String get savedToGallery => 'Saved to gallery';
+
+  @override
+  String get downloadQr => 'Download QR code';
+
+  @override
+  String get bankAccountIsExist => 'Bank account already exists';
+
+  @override
+  String get accountName => 'Account holder name';
 }

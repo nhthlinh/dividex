@@ -3,6 +3,7 @@ import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/core/di/injection.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/domain/usecase.dart';
+import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,6 +11,10 @@ class AccountState {
   final List<BankAccount> accounts;
 
   AccountState(this.accounts);
+}
+
+class AccountInitialState extends AccountState {
+  AccountInitialState() : super([]);
 }
 
 class AccountEvent {}
@@ -35,9 +40,9 @@ class DeleteAccountEvent extends AccountEvent {
 }
 
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
-  AccountBloc() : super(AccountState([])) {
+  AccountBloc() : super(AccountInitialState()) {
     on<GetAccountsEvent>((event, emit) async {
-      emit(AccountState([]));
+      emit(AccountInitialState());
       try {
         final useCase = await getIt.getAsync<AccountUseCase>();
         final accounts = await useCase.getAccounts(1, 1000);
@@ -59,7 +64,11 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         showCustomToast(intl.accountCreated, type: ToastType.success);
       } catch (e) {
         final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
-        showCustomToast(intl.error, type: ToastType.error);
+        if (e.toString().contains(MessageCode.bankAccountIsExist)) {
+          showCustomToast(intl.bankAccountIsExist, type: ToastType.error);
+        } else {
+          showCustomToast(intl.error, type: ToastType.error);
+        }
       }
     });
 

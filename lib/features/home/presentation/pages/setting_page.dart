@@ -27,6 +27,8 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  static const Key logoutButtonKey = Key('settings_logout_button');
+
   final oldPin = TextEditingController();
   final newPin = TextEditingController();
   final confirmNewPin = TextEditingController();
@@ -42,7 +44,8 @@ class _SettingPageState extends State<SettingPage> {
       currentIndex: 3,
       child: Layout(
         onRefresh: () {
-          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          clearFormTrigger.value =
+              !clearFormTrigger.value; // Trigger form reset
           return Future.value();
         },
         title: intl.settings,
@@ -187,15 +190,14 @@ class _SettingPageState extends State<SettingPage> {
                           isRequired: true,
                         ),
                       ],
-                      builder: (valid) => Column(
+                      builder: (isValid, isSubmitting, setSubmitting) => Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             intl.updatePinGuide,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: AppThemes.primary3Color,
-                                ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(color: AppThemes.primary3Color),
                           ),
                           const SizedBox(height: 16),
                           CustomTextInputWidget(
@@ -234,8 +236,11 @@ class _SettingPageState extends State<SettingPage> {
                           Center(
                             child: CustomButton(
                               text: intl.save,
-                              onPressed: valid
-                                  ? () {
+                              onPressed: (!isValid || isSubmitting)
+                                  ? null
+                                  : () async {
+                                      setSubmitting(true);
+
                                       if (_formKey.currentState!.validate()) {
                                         context.read<UserBloc>().add(
                                           UpdatePinEvent(
@@ -244,8 +249,9 @@ class _SettingPageState extends State<SettingPage> {
                                           ),
                                         );
                                       }
-                                    }
-                                  : null,
+
+                                      setSubmitting(false);
+                                    },
                               size: ButtonSize.medium,
                             ),
                           ),
@@ -259,6 +265,7 @@ class _SettingPageState extends State<SettingPage> {
 
               Center(
                 child: CustomButton(
+                  buttonKey: logoutButtonKey,
                   text: intl.signOut,
                   onPressed: () {
                     final authBloc = context.read<AuthBloc>();

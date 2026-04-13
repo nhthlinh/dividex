@@ -3,8 +3,10 @@ import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 
 abstract class RechargeRepository {
-  Future<String> deposit(double amount, String currency, String bankCode);
+  Future<PayOSResponseModel> deposit(double amount, String currency);
   Future<void> createDeposit(double amount, String currency, String bankCode);
+  Future<void> cancelDeposit(int id);
+  Future<bool> isDepositSuccessful(String referenceId);
   Future<void> createWithdraw(double amount, String accountNumber, String bankCode);
   Future<String> getWallet();
   Future<Map<String, dynamic>> getWalletInfo();

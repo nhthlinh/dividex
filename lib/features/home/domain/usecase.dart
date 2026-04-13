@@ -20,4 +20,7 @@ class AccountUseCase {
   Future<void> deleteAccount(String accountId) {
     return repository.deleteAccount(accountId);
   }
+  Future<String> verifyAccount(String accountNumber, String bankCode) {
+    return repository.verifyAccount(accountNumber, bankCode);
+  }
 }

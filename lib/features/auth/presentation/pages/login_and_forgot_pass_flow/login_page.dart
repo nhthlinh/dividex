@@ -21,6 +21,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  static const Key emailInputKey = Key('login_email_input');
+  static const Key passwordInputKey = Key('login_password_input');
+  static const Key loginButtonKey = Key('login_submit_button');
+
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -56,45 +60,45 @@ class _LoginPageState extends State<LoginPage> {
           if (state is AuthAuthenticated) {
             // Navigate to home page on successful authentication
             context.goNamed(AppRouteNames.home);
-          } 
+          }
         },
         child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      intl.welcomeBackMessage,
-                      style: theme.textTheme.headlineLarge?.copyWith(
-                        color: AppThemes.primary3Color,
-                      ),
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    intl.welcomeBackMessage,
+                    style: theme.textTheme.headlineLarge?.copyWith(
+                      color: AppThemes.primary3Color,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      intl.signInAccountPrompt,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    intl.signInAccountPrompt,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
 
-              const SizedBox(height: 16), // Spacing before logo
+            const SizedBox(height: 16), // Spacing before logo
 
-              Image.asset(
-                'lib/assets/images/login_image.png',
-                width: 220,
-                height: 170,
-              ),
-              const SizedBox(height: 8), // Spacing after logo
+            Image.asset(
+              'lib/assets/images/login_image.png',
+              width: 220,
+              height: 170,
+            ),
+            const SizedBox(height: 8), // Spacing after logo
 
-              loginForm(intl, context, theme),
-            ],
-          ),
+            loginForm(intl, context, theme),
+          ],
+        ),
       ),
     );
   }
@@ -111,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
         FormFieldConfig(controller: passwordController, isRequired: true),
       ],
       formKey: _formKey,
-      builder: (isValid) {
+      builder: (isValid, isSubmitting, setSubmitting) {
         return Column(
           children: [
             //Email
@@ -120,6 +124,7 @@ class _LoginPageState extends State<LoginPage> {
               isRequired: true,
               hintText: intl.emailLabel,
               controller: emailController,
+              textFieldKey: emailInputKey,
               keyboardType: TextInputType
                   .emailAddress, // Suggest email keyboard// Add email icon
               validator: (value) {
@@ -134,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
               isRequired: true,
               hintText: intl.passwordLabel,
               controller: passwordController,
+              textFieldKey: passwordInputKey,
               obscureText: _obscurePassword,
               keyboardType: TextInputType.visiblePassword,
               maxLines: 1, // Add lock icon
@@ -154,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
               size: TextInputSize.large,
               isReadOnly: false,
             ),
-            
+
             const SizedBox(height: 12), // Spacing between password fields
             // forgot password
             Align(
@@ -172,9 +178,12 @@ class _LoginPageState extends State<LoginPage> {
             //Login Button
             CustomButton(
               text: intl.login,
-              onPressed: (!isValid)
+              buttonKey: loginButtonKey,
+              onPressed: (!isValid || isSubmitting)
                   ? null
-                  : () {
+                  : () async {
+                      setSubmitting(true);
+
                       if (_formKey.currentState!.validate()) {
                         // If the form is valid, proceed with login
                         final email = emailController.text.trim();
@@ -188,6 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                         clearFormTrigger.value =
                             !clearFormTrigger.value; // Trigger form reset
                       }
+                      setSubmitting(false);
                     },
             ),
 

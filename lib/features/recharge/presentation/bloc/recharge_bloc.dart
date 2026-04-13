@@ -11,14 +11,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RechargeState {}
 
+class DepositSuccessState extends RechargeState {}
+
+class RechargeLoading extends RechargeState {}
+
 class RechargeEvent {}
+
+class DepositSuccessEvent extends RechargeEvent {}
+
+class CheckRechargeStatusEvent extends RechargeEvent {
+  final String referenceId;
+
+  CheckRechargeStatusEvent(this.referenceId);
+}
 
 class DepositEvent extends RechargeEvent {
   final double amount;
   final String currency;
-  final String bankCode;
 
-  DepositEvent(this.amount, this.currency, this.bankCode);
+  DepositEvent(this.amount, this.currency);
 }
 
 class CreateDepositEvent extends RechargeEvent {
@@ -28,6 +39,13 @@ class CreateDepositEvent extends RechargeEvent {
 
   CreateDepositEvent(this.amount, this.currency, this.bankCode);
 }
+
+class CancelDepositEvent extends RechargeEvent {
+  final int id;
+
+  CancelDepositEvent(this.id);
+}
+
 
 class CreateWithdrawEvent extends RechargeEvent {
   final double amount;
@@ -110,6 +128,12 @@ class VnPayLinkState extends RechargeState {
   final String link;
 
   VnPayLinkState(this.link);
+}
+
+class PayOsCheckOutLinkState extends RechargeState {
+  final PayOSResponseModel link;
+
+  PayOsCheckOutLinkState(this.link);
 }
 
 class RechargeSuccessState extends RechargeState {}
@@ -202,12 +226,15 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
   RechargeBloc() : super(RechargeState()) {
     on<DepositEvent>(_onDeposit);
     on<CreateDepositEvent>(_onCreateDeposit);
+    on<CancelDepositEvent>(_onCancelDeposit);
+    on<DepositSuccessEvent>(_onDepositSuccessEvent);
     on<CreateWithdrawEvent>(_onCreateWithdraw);
     on<GetWalletEvent>(_onGetWallet);
     on<GetDepositDetailEvent>(_onGetDepositDetail);
     on<GetWithdrawDetailEvent>(_onGetWithdrawDetail);
     on<TransferEvent>(_onTransferEvent);
     on<GetWalletInfoEvent>(_onGetWalletInfo);
+    on<CheckRechargeStatusEvent>(_onCheckRechargeStatus);
   }
 
   Future<void> _onDeposit(
@@ -218,11 +245,10 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
       final usecase = await getIt.getAsync<RechargeUseCase>();
       final link = await usecase.deposit(
         event.amount,
-        event.currency,
-        event.bankCode,
+        event.currency
       );
 
-      emit(VnPayLinkState(link));
+      emit(PayOsCheckOutLinkState(link));
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
@@ -247,10 +273,49 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
     }
   }
 
+  Future<void> _onCancelDeposit(
+    CancelDepositEvent event,
+    Emitter<RechargeState> emit,
+  ) async {
+    try {
+      final usecase = await getIt.getAsync<RechargeUseCase>();
+      await usecase.cancelDeposit(event.id);
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.cancelDepositError, type: ToastType.error);
+    }
+  }
+
+  Future<void> _onDepositSuccessEvent(
+    DepositSuccessEvent event,
+    Emitter<RechargeState> emit,
+  ) async {
+    emit(DepositSuccessState());
+  }
+
+  Future<void> _onCheckRechargeStatus(
+    CheckRechargeStatusEvent event,
+    Emitter<RechargeState> emit,
+  ) async {
+    if (state is DepositSuccessState) return;
+    try {
+      final usecase = await getIt.getAsync<RechargeUseCase>();
+      final result = await usecase.isDepositSuccessful(event.referenceId);
+
+      if (result) {
+        emit(DepositSuccessState());
+      }
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
   Future<void> _onCreateWithdraw(
     CreateWithdrawEvent event,
     Emitter<RechargeState> emit,
   ) async {
+    emit(RechargeLoading());
     try {
       final usecase = await getIt.getAsync<RechargeUseCase>();
       await usecase.createWithdraw(

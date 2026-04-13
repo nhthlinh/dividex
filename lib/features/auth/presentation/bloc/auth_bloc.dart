@@ -180,7 +180,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(AuthEmailSent(email: event.email));
       HiveService.saveUser(
-        UserLocalModel(id: '', email: event.email, fullName: '', avatarUrl: null),
+        UserLocalModel(
+          id: '',
+          email: event.email,
+          fullName: '',
+          avatarUrl: null,
+        ),
       );
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
@@ -225,13 +230,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await resetPasswordUseCase.resetPassword(event.newPassword, event.token);
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.success, type: ToastType.success);
-      emit(AuthUnauthenticated());
+      emit(AuthResetPasswordSuccess());
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
-      emit(AuthUnauthenticated());
       if (e.toString().contains(MessageCode.invalidOrExpiredOtp)) {
+        emit(
+          const AuthResetPasswordFailure(
+            message: MessageCode.invalidOrExpiredOtp,
+          ),
+        );
         showCustomToast(intl.invalidOrExpiredOtp, type: ToastType.error);
       } else {
+        emit(const AuthResetPasswordFailure(message: 'UNKNOWN_ERROR'));
         showCustomToast(intl.error, type: ToastType.error);
       }
     }

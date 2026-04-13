@@ -14,8 +14,12 @@ class FormFieldConfig<T> {
 
 class CustomFormWrapper extends StatefulWidget {
   final List<FormFieldConfig> fields;
-  final Widget Function(bool isValid)
-  builder; // callback: truyền trạng thái hợp lệ
+  final Widget Function(
+    bool isValid,
+    bool isSubmitting,
+    void Function(bool) setSubmitting,
+  )
+  builder;
   final GlobalKey<FormState>? formKey;
   final ValueNotifier<bool> clearTrigger;
 
@@ -33,6 +37,7 @@ class CustomFormWrapper extends StatefulWidget {
 
 class _CustomFormWrapperState extends State<CustomFormWrapper> {
   bool _isValid = false;
+  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -46,6 +51,30 @@ class _CustomFormWrapperState extends State<CustomFormWrapper> {
     }
     _validate();
     widget.clearTrigger.addListener(_clearForm);
+  }
+
+  void startSubmit() {
+    setState(() {
+      _isSubmitting = true;
+      _isValid = false; // Disable form while submitting
+    });
+  }
+
+  void finishSubmit() {
+    setState(() {
+      _isSubmitting = false;
+      _validate(); // Re-validate after submission
+    });
+  }
+
+  void _setSubmitting(bool value) {
+    if (_isSubmitting != value) {
+      if (value) {
+        startSubmit();
+      } else {
+        finishSubmit();
+      }
+    }
   }
 
   @override
@@ -105,7 +134,7 @@ class _CustomFormWrapperState extends State<CustomFormWrapper> {
   Widget build(BuildContext context) {
     return Form(
       key: widget.formKey ?? GlobalKey<FormState>(),
-      child: widget.builder(_isValid),
+      child: widget.builder(_isValid, _isSubmitting, _setSubmitting),
     );
   }
 }

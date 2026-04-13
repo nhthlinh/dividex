@@ -1,4 +1,5 @@
 import 'package:Dividex/config/routes/router.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 enum ToastType {
@@ -19,141 +20,60 @@ Color getToastColor(ToastType type) {
 }
 
 void showCustomToast(String message, {ToastType type = ToastType.info}) {
-  final overlay = navigatorKey.currentState?.overlay;
-  if (overlay == null) {
-    return;
-  }
+  final context = navigatorKey.currentState?.overlay?.context;
+  if (context == null) return;
 
-  final overlayEntry = OverlayEntry(
-    builder: (context) => _AnimatedBorderToast(
-      type: type,
-      message: Text(
-        message,
-        style: Theme.of(
-          context,
-        ).textTheme.bodySmall?.copyWith(color: getToastColor(type)),
-      ),
+  Flushbar(
+    flushbarPosition: FlushbarPosition.TOP,
+    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    borderRadius: BorderRadius.circular(12),
+    duration: const Duration(seconds: 2),
+    backgroundColor: getToastColor(type),
+    icon: Icon(
+      type == ToastType.success
+          ? Icons.check_circle
+          : type == ToastType.error
+              ? Icons.error
+              : Icons.info,
+      color: Colors.white,
     ),
-  );
-
-  overlay.insert(overlayEntry);
-
-  Future.delayed(const Duration(seconds: 2), () {
-    overlayEntry.remove();
-  });
+    messageText: Text(
+      message,
+      style: const TextStyle(color: Colors.white),
+    ),
+  ).show(context);
 }
 
-class _AnimatedBorderToast extends StatefulWidget {
-  final Text message;
+class AppFlushbar extends StatelessWidget {
+  final String message;
   final ToastType type;
 
-  const _AnimatedBorderToast({required this.message, required this.type});
-
-  @override
-  State<_AnimatedBorderToast> createState() => _AnimatedBorderToastState();
-}
-
-class _AnimatedBorderToastState extends State<_AnimatedBorderToast>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  late Animation<Offset> _slideAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1), // Thời gian trượt vào
-    );
-
-    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(1.0, 0.0),  // Từ bên phải
-      end: const Offset(-0.05, 0.0),               // Vị trí cuối cùng
-    ).animate(_animation);
-
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  const AppFlushbar({
+    super.key,
+    required this.message,
+    this.type = ToastType.info,
+  });
 
   @override
   Widget build(BuildContext context) {
-
-    return Positioned(
-      top: 90,
-      left: MediaQuery.of(context).size.width * 0.1,
-      width: MediaQuery.of(context).size.width * 0.9,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: Material(
-          color: Theme.of(context).colorScheme.surface, 
-          elevation: 8.0, 
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: widget.message,
-              ),
-              Positioned.fill(
-                child: CustomPaint(
-                  painter: BorderProgressPainter(
-                    progress: _controller,
-                    color: getToastColor(widget.type),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+    return Flushbar(
+      flushbarPosition: FlushbarPosition.TOP,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      borderRadius: BorderRadius.circular(8),
+      duration: const Duration(seconds: 2),
+      backgroundColor: getToastColor(type),
+      icon: Icon(
+        type == ToastType.success
+            ? Icons.check_circle
+            : type == ToastType.error
+                ? Icons.error
+                : Icons.info,
+        color: Colors.white,
+      ),
+      messageText: Text(
+        message,
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }
-}
-
-class BorderProgressPainter extends CustomPainter {
-  final Animation<double> progress;
-  final Color color;
-
-  BorderProgressPainter({required this.progress, required this.color})
-    : super(repaint: progress);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(10)));
-
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
-
-    final pathMetrics = path.computeMetrics();
-
-    for (final metric in pathMetrics) {
-      final totalLength = metric.length * progress.value;
-
-      final pathToDraw = metric.extractPath(0, totalLength);
-
-      canvas.drawPath(pathToDraw, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(BorderProgressPainter oldDelegate) =>
-      oldDelegate.progress != progress || oldDelegate.color != color;
 }

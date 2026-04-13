@@ -22,6 +22,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  static const Key nameInputKey = Key('register_name_input');
+  static const Key emailInputKey = Key('register_email_input');
+  static const Key phoneInputKey = Key('register_phone_input');
+  static const Key passwordInputKey = Key('register_password_input');
+  static const Key registerButtonKey = Key('register_submit_button');
+
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -146,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
         FormFieldConfig(controller: numberController, isRequired: true),
         FormFieldConfig(controller: passwordController, isRequired: true),
       ],
-      builder: (isValid) {
+      builder: (isValid, isSubmitting, setSubmitting) {
         return Column(
           children: [
             //Name
@@ -155,6 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
               isRequired: true,
               hintText: intl.nameLabel,
               controller: nameController,
+              textFieldKey: nameInputKey,
               keyboardType:
                   TextInputType.name, // Suggest name keyboard// Add name icon
               validator: (value) {
@@ -169,6 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
               isRequired: true,
               hintText: intl.emailLabel,
               controller: emailController,
+              textFieldKey: emailInputKey,
               keyboardType: TextInputType
                   .emailAddress, // Suggest email keyboard// Add email icon
               validator: (value) {
@@ -183,6 +191,7 @@ class _RegisterPageState extends State<RegisterPage> {
               isRequired: true,
               hintText: intl.phoneLabel,
               controller: numberController,
+              textFieldKey: phoneInputKey,
               keyboardType: TextInputType.phone,
               validator: (value) {
                 return CustomValidator().validatePhoneNumber(value, intl);
@@ -196,6 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
               isRequired: true,
               hintText: intl.passwordLabel,
               controller: passwordController,
+              textFieldKey: passwordInputKey,
               obscureText: _obscurePassword,
               keyboardType: TextInputType.visiblePassword,
               maxLines: 1, // Add lock icon
@@ -221,27 +231,34 @@ class _RegisterPageState extends State<RegisterPage> {
             // Button chỉ enable khi isValid == true
             CustomButton(
               text: intl.register,
-              onPressed: (!isValid || state is AuthLoading)
+              buttonKey: registerButtonKey,
+              onPressed: (!isValid || isSubmitting || state is AuthLoading)
                   ? null
-                  : () {
+                  : () async {
+                      setSubmitting(true);
+
                       _submitRegister();
                       // Clear the form after submission
-                      clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+                      clearFormTrigger.value =
+                          !clearFormTrigger.value; // Trigger form reset
+
+                      setSubmitting(false);
                     },
             ),
 
             const SizedBox(height: 24),
 
-          // Already have an account? Login
-          CustomTextButton(
-            description: intl.registerPageToLogin, // "Already have an account?"
-            label: intl.login, // "Login"
-            onPressed: () {
-              context.pushNamed(AppRouteNames.login);
-            },
-          ),
+            // Already have an account? Login
+            CustomTextButton(
+              description:
+                  intl.registerPageToLogin, // "Already have an account?"
+              label: intl.login, // "Login"
+              onPressed: () {
+                context.pushNamed(AppRouteNames.login);
+              },
+            ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         );
       },

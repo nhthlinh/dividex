@@ -62,7 +62,8 @@ class _ChangePassPageState extends State<ChangePassPage> {
       currentIndex: 3,
       child: SimpleLayout(
         onRefresh: () async {
-          clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+          clearFormTrigger.value =
+              !clearFormTrigger.value; // Trigger form reset
           return Future.value();
         },
         title: intl.settingChangePass,
@@ -85,7 +86,7 @@ class _ChangePassPageState extends State<ChangePassPage> {
                   isRequired: true,
                 ),
               ],
-              builder: (isValid) => ContentCard(
+              builder: (isValid, isSubmitting, setSubmitting) => ContentCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -183,13 +184,17 @@ class _ChangePassPageState extends State<ChangePassPage> {
 
                     CustomButton(
                       text: intl.settingChangePass,
-                      onPressed: isValid
-                          ? () {
+                      onPressed: (!isValid || isSubmitting)
+                          ? null
+                          : () async {
+                              setSubmitting(true);
+
                               _submitPass();
                               clearFormTrigger.value =
                                   !clearFormTrigger.value; // Trigger form reset
-                            }
-                          : null,
+
+                              setSubmitting(false);
+                            },
                     ),
                   ],
                 ),

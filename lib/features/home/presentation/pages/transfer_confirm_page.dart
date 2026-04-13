@@ -17,6 +17,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class TransferConfirmPage extends StatefulWidget {
+  static const Key pinInputKey = Key('transfer_confirm_pin_input');
+  static const Key submitButtonKey = Key('transfer_confirm_submit_button');
+
   final UserModel toUser;
   final double originalAmount;
   final double realAmount;
@@ -238,10 +241,11 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                 fields: [
                   FormFieldConfig(controller: binController, isRequired: true),
                 ],
-                builder: (isValid) {
+                builder: (isValid, isSubmitting, setSubmitting) {
                   return Column(
                     children: [
                       CustomTextInputWidget(
+                        textFieldKey: TransferConfirmPage.pinInputKey,
                         size: TextInputSize.large,
                         controller: binController,
                         keyboardType: TextInputType.number,
@@ -253,8 +257,17 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
                       ),
                       const SizedBox(height: 24),
                       CustomButton(
+                        buttonKey: TransferConfirmPage.submitButtonKey,
                         text: intl.confirm,
-                        onPressed: isValid ? _submit : null,
+                        onPressed: (!isValid || isSubmitting)
+                            ? null
+                            : () async {
+                                setSubmitting(true);
+
+                                _submit();
+
+                                setSubmitting(false);
+                              },
                       ),
                     ],
                   );

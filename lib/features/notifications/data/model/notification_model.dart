@@ -16,6 +16,7 @@ import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
+import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +40,14 @@ enum NotiType {
   EXPENSE_UPDATED("EXPENSE_UPDATED", "Expense Updated"),
   EXPENSE_RESTORED("EXPENSE_RESTORED", "Expense Restored"),
   EXPENSE_SOFT_DELETED("EXPENSE_SOFT_DELETED", "Expense Soft Deleted"),
-  EXPENSE_HARD_DELETED("EXPENSE_HARD_DELETED", "Expense Hard Deleted");
+  EXPENSE_HARD_DELETED("EXPENSE_HARD_DELETED", "Expense Hard Deleted"),
+
+  SYSTEM("System", "System Notification"),
+  WARNING("Warning", "Warning Notification"),
+  ANNOUNCEMENT("Announcement", "Announcement Notification"),
+  REMINDER2("Reminder", "Reminder"),
+
+  MESSAGE_RECEIVED("MESSAGE_RECEIVED", "Message Received");
 
   final String code;
   final String description;
@@ -57,6 +65,7 @@ enum NotiType {
     String relatedUid,
     BuildContext context,
     UserModel fromUser,
+    String content,
   ) async {
     final intl = AppLocalizations.of(context)!;
 
@@ -67,10 +76,6 @@ enum NotiType {
           AppRouteNames.friendProfile,
           pathParameters: {'id': fromUser.id ?? ''},
         );
-        break;
-
-      case NotiType.REMINDER:
-        // Navigate to reminders page
         break;
 
       case NotiType.TRANSFER:
@@ -157,8 +162,19 @@ enum NotiType {
           pathParameters: {"id": relatedUid},
         );
         break;
+      case NotiType.MESSAGE_RECEIVED:
+        context.pushNamed(
+          AppRouteNames.chat,
+        );
+        break;
 
       case NotiType.EXPENSE_HARD_DELETED:
+      case NotiType.REMINDER:
+      case NotiType.REMINDER2:
+      case NotiType.SYSTEM:
+      case NotiType.WARNING:  
+      case NotiType.ANNOUNCEMENT:
+        showCustomDialog(context: context, content: Text(content));
         break;
     }
   }
@@ -171,7 +187,7 @@ class NotificationModel {
   final String content;
   final NotiType type;
   final String relatedUid;
-  final List<String> toUsers;
+  final List<UserModel> toUsers;
 
   NotificationModel({
     required this.fromUser,
@@ -184,15 +200,19 @@ class NotificationModel {
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
-    return NotificationModel(
+    try {
+      return NotificationModel(
       fromUser: UserModel.fromJson(json['from_user']),
       uid: json['uid'],
       createdAt: parseUTCToVN(json['created_at']),
       content: json['content'],
       type: NotiType.fromString(json['type']),
-      relatedUid: json['related_uid'],
-      toUsers: List<String>.from(json['to_users']),
+      relatedUid: json['related_uid'] ?? '',
+      toUsers: List<UserModel>.from(json['to_users'].map((e) => UserModel.fromJson(e))),
     );
+    } catch (e, stackTrace) {
+      throw Exception('Failed to parse NotificationModel: $e, StackTrace: $stackTrace');
+    }
   }
 
   NotificationModel copyWith({
@@ -202,7 +222,7 @@ class NotificationModel {
     String? content,
     NotiType? type,
     String? relatedUid,
-    List<String>? toUsers,
+    List<UserModel>? toUsers,
   }) {
     return NotificationModel(
       fromUser: fromUser ?? this.fromUser,

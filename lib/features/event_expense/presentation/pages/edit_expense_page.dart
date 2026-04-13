@@ -39,13 +39,31 @@ import 'package:intl/intl.dart';
 
 class EditExpensePage extends StatefulWidget {
   final String expenseId;
-  const EditExpensePage({super.key, required this.expenseId});
+  final LoadedUsersBloc? loadedUsersBloc;
+
+  const EditExpensePage({
+    super.key,
+    required this.expenseId,
+    this.loadedUsersBloc,
+  });
 
   @override
   State<EditExpensePage> createState() => _EditExpensePageState();
 }
 
 class _EditExpensePageState extends State<EditExpensePage> {
+  static const Key nameInputKey = Key('expense_edit_name_input');
+  static const Key amountInputKey = Key('expense_edit_amount_input');
+  static const Key payerInputKey = Key('expense_edit_payer_input');
+  static const Key dateInputKey = Key('expense_edit_date_input');
+  static const Key reminderInputKey = Key('expense_edit_reminder_input');
+  static const Key splitEqualOptionKey = Key('expense_edit_split_equal_option');
+  static const Key splitCustomOptionKey = Key(
+    'expense_edit_split_custom_option',
+  );
+  static const Key saveButtonKey = Key('expense_edit_save_button');
+  static const Key deleteButtonKey = Key('expense_edit_delete_button');
+
   final formKey = GlobalKey<FormState>();
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController expenseAmountController = TextEditingController();
@@ -144,16 +162,16 @@ class _EditExpensePageState extends State<EditExpensePage> {
         }
       }
 
-      // debugPrint('🔍 Submitting expense with details:');
-      // debugPrint('- name: ${expenseNameController.text}');
-      // debugPrint('- amount: ${expenseAmountController.text}');
-      // debugPrint('- payer: ${_selectedPayer?.fullName}');
-      // debugPrint('- category: ${_selectedCategory.value?.key}');
-      // debugPrint('- currency: ${_selectedCurrency.value.code}');
-      // debugPrint('- date: $formattedDate');
-      // debugPrint('- reminder: $formattedReminder');
-      // debugPrint('- split type: $splitType');
-      // debugPrint('- user debts: $userDebts');
+      debugPrint('🔍 Submitting expense with details:');
+      debugPrint('- name: ${expenseNameController.text}');
+      debugPrint('- amount: ${expenseAmountController.text}');
+      debugPrint('- payer: ${_selectedPayer?.fullName}');
+      debugPrint('- category: ${_selectedCategory.value?.key}');
+      debugPrint('- currency: ${_selectedCurrency.value.code}');
+      debugPrint('- date: $formattedDate');
+      debugPrint('- reminder: $formattedReminder');
+      debugPrint('- split type: $splitType');
+      debugPrint('- user debts: $userDebts');
 
       context.read<ExpenseBloc>().add(
         UpdateExpenseEvent(
@@ -168,11 +186,13 @@ class _EditExpensePageState extends State<EditExpensePage> {
           remindAt: formattedReminder,
           splitType: splitType,
           userDebts: userDebts,
-          //images.whereType<Uint8List>().toList(),
+          // images.whereType<Uint8List>().toList(),
         ),
       );
 
-      Navigator.of(context).pop();
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -204,12 +224,22 @@ class _EditExpensePageState extends State<EditExpensePage> {
                   !clearFormTrigger.value; // Trigger form reset
               return Future.value();
             },
-            title: intl.addExpense,
+            title: intl.edit,
             child: expenseForm(intl, state.expense),
           );
         },
       ),
     );
+  }
+
+  SplitTypeEnum detectSplitType(List<UserDebt> users) {
+    if (users.isEmpty) return SplitTypeEnum.equal;
+
+    final firstAmount = users[0].amount;
+
+    final isAllEqual = users.every((u) => u.amount == firstAmount);
+
+    return isAllEqual ? SplitTypeEnum.equal : SplitTypeEnum.custom;
   }
 
   CustomFormWrapper expenseForm(AppLocalizations intl, ExpenseModel expense) {
@@ -238,9 +268,9 @@ class _EditExpensePageState extends State<EditExpensePage> {
           : '';
 
       userDebts = expense.userDebtInfos!
-          .map((e) => UserDebt(amount: e.amount, userId: e.user.id ?? ''))
+          .map((e) => UserDebt(amount: e.amount.abs(), userId: e.user.id ?? ''))
           .toList();
-      splitType = expense.splitType ?? SplitTypeEnum.equal;
+      splitType = expense.splitType ?? detectSplitType(userDebts);
     }
 
     _isInitialized = true;
@@ -268,7 +298,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
         ),
         FormFieldConfig(controller: dateController, isRequired: true),
       ],
-      builder: (isValid) => Column(
+      builder: (isValid, isSubmitting, setSubmitting) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
@@ -289,6 +319,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
             label: intl.expenseNameLabel,
             hintText: intl.expenseNameHint,
             controller: expenseNameController,
+            textFieldKey: nameInputKey,
             keyboardType: TextInputType.text,
             validator: (value) {
               return CustomValidator().validateName(value, intl);
@@ -309,6 +340,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
                     label: intl.expenseAmountLabel,
                     hintText: intl.expenseAmountHint,
                     controller: expenseAmountController,
+                    textFieldKey: amountInputKey,
                     keyboardType: TextInputType.number,
                     validator: (value) =>
                         CustomValidator().validateAmount(value, intl),
@@ -429,6 +461,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
           CustomTextInputWidget(
             size: TextInputSize.large,
             controller: selectedPayerTextEditingController,
+            textFieldKey: payerInputKey,
             keyboardType: TextInputType.text,
             isReadOnly: true,
             isRequired: true,
@@ -487,6 +520,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
                     label: intl.expenseDateLabel,
                     hintText: '4:30 p.m - 13/05/2025',
                     controller: dateController,
+                    textFieldKey: dateInputKey,
                     size: TextInputSize.large,
                     isRequired: true,
                     validator: null,
@@ -500,6 +534,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
                     label: intl.expenseReminderLabel,
                     hintText: '13/05/2025',
                     controller: reminderController,
+                    textFieldKey: reminderInputKey,
                     size: TextInputSize.medium,
                     isRequired: true,
                     validator: null,
@@ -538,32 +573,51 @@ class _EditExpensePageState extends State<EditExpensePage> {
           ),
 
           const SizedBox(height: 16),
-          BlocProvider(
-            create: (context) => LoadedUsersBloc()
-              ..add(
-                user_event.InitialEvent(
-                  expense.event,
-                  user_event.LoadType.eventParticipants,
+          (widget.loadedUsersBloc != null)
+              ? BlocProvider<LoadedUsersBloc>.value(
+                  value: widget.loadedUsersBloc!,
+                  child: twoOptionSelector(intl, expense),
+                )
+              : BlocProvider(
+                  create: (context) => LoadedUsersBloc()
+                    ..add(
+                      user_event.InitialEvent(
+                        expense.event,
+                        user_event.LoadType.eventParticipants,
+                      ),
+                    ),
+                  child: twoOptionSelector(intl, expense),
                 ),
-              ),
-            child: twoOptionSelector(intl, expense),
-          ),
 
           const SizedBox(height: 20),
 
           CustomButton(
             text: intl.save,
-            onPressed: (isValid && userDebts.isNotEmpty) ? submitExpense : null,
+            buttonKey: saveButtonKey,
+            onPressed: (!isValid || isSubmitting || userDebts.isEmpty)
+                ? null
+                : () async {
+                    setSubmitting(true);
+
+                    submitExpense();
+                    clearFormTrigger.value =
+                        !clearFormTrigger.value; // Trigger form reset
+
+                    setSubmitting(false);
+                  },
           ),
           const SizedBox(height: 20),
           CustomButton(
             text: intl.delete,
+            buttonKey: deleteButtonKey,
             onPressed: () {
               showCustomToast(intl.expenseDeletedInfo, type: ToastType.success);
               context.read<ExpenseBloc>().add(
                 SoftDeleteExpenseEvent(expenseId: widget.expenseId),
               );
-              Navigator.of(context).pop();
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
             },
             customColor: AppThemes.errorColor,
             type: ButtonType.secondary,
@@ -602,6 +656,8 @@ class _EditExpensePageState extends State<EditExpensePage> {
           leftIcon: 'lib/assets/icons/balance.png',
           rightLabel: intl.expenseSplitCustomLabel,
           rightIcon: 'lib/assets/icons/unbalance.png',
+          leftOptionKey: splitEqualOptionKey,
+          rightOptionKey: splitCustomOptionKey,
           onSelectionChanged: (value) async {
             double totalEntered = double.parse(expenseAmountController.text);
             if (totalEntered.isNaN || totalEntered <= 0) {

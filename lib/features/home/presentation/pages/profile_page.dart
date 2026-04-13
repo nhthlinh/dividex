@@ -29,6 +29,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  static const Key pageKey = Key('profile_page');
+  static const Key avatarWidgetKey = Key('profile_avatar_widget');
+  static const Key nameInputKey = Key('profile_name_input');
+  static const Key saveButtonKey = Key('profile_save_button');
+
   final name = TextEditingController();
   final email = TextEditingController();
   final phone = TextEditingController();
@@ -66,8 +71,10 @@ class _ProfilePageState extends State<ProfilePage> {
             selectedCurrency.value = user.currency ?? CurrencyEnum.vnd;
 
             return SimpleLayout(
+              key: pageKey,
               onRefresh: () {
-                clearFormTrigger.value = !clearFormTrigger.value; // Trigger form reset
+                clearFormTrigger.value =
+                    !clearFormTrigger.value; // Trigger form reset
                 return Future.value();
               },
               title: intl.profileSetting,
@@ -80,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     isRequired: true,
                   ),
                 ],
-                builder: (valid) => Column(
+                builder: (isValid, isSubmitting, setSubmitting) => Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 16),
@@ -89,6 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: BlocBuilder<ImageBloc, ImageState>(
                         builder: (context, state) {
                           return ImageUpdateDeleteWidget(
+                            key: avatarWidgetKey,
                             label: intl.profilePicture,
                             nameForExampleImage: user.fullName ?? '',
                             isAvatar: true,
@@ -108,6 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     CustomTextInputWidget(
                       size: TextInputSize.large,
                       controller: name,
+                      textFieldKey: nameInputKey,
                       keyboardType: TextInputType.text,
                       isReadOnly: false,
                       isRequired: true,
@@ -145,9 +154,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 24),
                     CustomButton(
                       text: intl.save,
+                      buttonKey: saveButtonKey,
                       size: ButtonSize.large,
-                      onPressed: valid
-                          ? () {
+
+                      onPressed: (!isValid || isSubmitting)
+                          ? null
+                          : () async {
+                              setSubmitting(true);
+
                               context.read<UserBloc>().add(
                                 UpdateMeEvent(
                                   name: name.text,
@@ -160,8 +174,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       : null,
                                 ),
                               );
-                            }
-                          : null,
+
+                              setSubmitting(false);
+                            },
                     ),
                   ],
                 ),
