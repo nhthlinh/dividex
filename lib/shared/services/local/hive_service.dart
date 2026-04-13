@@ -1,3 +1,4 @@
+import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/shared/services/local/hive_boxes.dart';
 import 'package:Dividex/shared/services/local/hive_keys.dart';
 import 'package:Dividex/shared/services/local/models/setting_local_model.dart';
@@ -9,14 +10,17 @@ class HiveService {
   // Initialize Hive and open all boxes
   static Future<void> initialize({bool reset = false}) async {
     await Hive.initFlutter();
-    if (!Hive.isAdapterRegistered(1)) {
+    if (!Hive.isAdapterRegistered(3)) {
       Hive.registerAdapter(UserLocalModelAdapter());
     }
-    if (!Hive.isAdapterRegistered(2)) {
+    if (!Hive.isAdapterRegistered(1)) {
       Hive.registerAdapter(SettingsLocalModelAdapter());
     }
-    if (!Hive.isAdapterRegistered(3)) {
+    if (!Hive.isAdapterRegistered(2)) {
       Hive.registerAdapter(TokenLocalModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(4)) {
+      Hive.registerAdapter(ImageModelAdapter());
     }
     if (reset) {
       await Hive.close(); 

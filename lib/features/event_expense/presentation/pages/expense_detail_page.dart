@@ -99,23 +99,27 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            expense.name ?? '',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: AppThemes.primary3Color,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              expense.name ?? '',
+                              maxLines: 1, 
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: AppThemes.primary3Color,
+                              ),
                             ),
-                          ),
-                          Text(
-                            formatted,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              fontSize: 12,
-                              color: Colors.grey,
+                            Text(
+                              formatted,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       // Text(
                       //   expense.currency != null
@@ -354,13 +358,13 @@ class ExpenseCard extends StatelessWidget {
               ),
       ),
       subtitle:
-          '${(expense.amount.abs() / totalAmount * 100).toStringAsFixed(2)} %',
+          '${formatNumber(expense.amount.abs() / totalAmount * 100)} %',
       trailing: Column(
         children: [
           Text(
             (expense.amount >= 0
-                ? '+ ${expense.amount} $currency'
-                : '- ${expense.amount.abs()} $currency'),
+                ? '+ ${formatNumber(expense.amount)} $currency'
+                : '- ${formatNumber(expense.amount.abs())} $currency'),
             style: TextStyle(
               color: (expense.amount >= 0)
                   ? AppThemes.successColor

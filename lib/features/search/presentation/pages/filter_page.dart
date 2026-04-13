@@ -39,20 +39,21 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  FilterType type = FilterType.all;
-  FilterType typeBig = FilterType.all;
+  FilterType type = FilterType.expense;
+  FilterType typeBig = FilterType.expense;
 
   @override
   void initState() {
     super.initState();
-    typeBig =
-        widget.filterType == FilterType.externalTransaction ||
-            widget.filterType == FilterType.internalTransaction
-        ? FilterType.transaction
-        : widget.filterType == FilterType.expense
-        ? FilterType.expense
-        : FilterType.all;
-    type = widget.filterType;
+    // typeBig =
+    //     widget.filterType == FilterType.externalTransaction ||
+    //         widget.filterType == FilterType.internalTransaction
+    //     ? FilterType.transaction
+    //     : widget.filterType == FilterType.expense
+    //     ? FilterType.expense
+    //     : FilterType.all;
+    typeBig = FilterType.expense;
+    type = FilterType.expense;
   }
 
   @override
@@ -63,15 +64,16 @@ class _FilterPageState extends State<FilterPage> {
       currentIndex: 1,
       child: SimpleLayout(
         onRefresh: () {
-          typeBig =
-              widget.filterType == FilterType.externalTransaction ||
-                  widget.filterType == FilterType.internalTransaction
-              ? FilterType.transaction
-              : widget.filterType == FilterType.expense
-              ? FilterType.expense
-              : FilterType.all;
-          type = widget.filterType;
-          
+          // typeBig =
+          //     widget.filterType == FilterType.externalTransaction ||
+          //         widget.filterType == FilterType.internalTransaction
+          //     ? FilterType.transaction
+          //     : widget.filterType == FilterType.expense
+          //     ? FilterType.expense
+          //     : FilterType.all;
+          typeBig = FilterType.expense;
+          type = FilterType.expense;
+
           return Future.value();
         },
         title: intl.filter,
@@ -84,54 +86,54 @@ class _FilterPageState extends State<FilterPage> {
             ),
             SizedBox(height: 8),
 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  intl.chooseTypeFilter,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontSize: 12,
-                    letterSpacing: 0,
-                    height: 16 / 12,
-                    color: Colors.grey,
-                  ),
-                ),
+            // Column(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   children: [
+            //     Text(
+            //       intl.chooseTypeFilter,
+            //       style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            //         fontSize: 12,
+            //         letterSpacing: 0,
+            //         height: 16 / 12,
+            //         color: Colors.grey,
+            //       ),
+            //     ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    filterTypeBigButton(intl.wallet, FilterType.transaction),
-                    filterTypeBigButton(intl.expense, FilterType.expense),
-                  ],
-                ),
-              ],
-            ),
+            //     Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //       children: [
+            //         filterTypeBigButton(intl.wallet, FilterType.transaction),
+            //         filterTypeBigButton(intl.expense, FilterType.expense),
+            //       ],
+            //     ),
+            //   ],
+            // ),
 
-            if (typeBig == FilterType.transaction) ...[
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    intl.inOrEx,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontSize: 12,
-                      letterSpacing: 0,
-                      height: 16 / 12,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  filterTypeButton(
-                    intl.internalExpense,
-                    FilterType.internalTransaction,
-                  ),
-                  filterTypeButton(
-                    intl.externalExpense,
-                    FilterType.externalTransaction,
-                  ),
-                ],
-              ),
-            ],
+            // if (typeBig == FilterType.transaction) ...[
+            //   const SizedBox(height: 8),
+            //   Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //     children: [
+            //       Text(
+            //         intl.inOrEx,
+            //         style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            //           fontSize: 12,
+            //           letterSpacing: 0,
+            //           height: 16 / 12,
+            //           color: Colors.grey,
+            //         ),
+            //       ),
+            //       filterTypeButton(
+            //         intl.internalExpense,
+            //         FilterType.internalTransaction,
+            //       ),
+            //       filterTypeButton(
+            //         intl.externalExpense,
+            //         FilterType.externalTransaction,
+            //       ),
+            //     ],
+            //   ),
+            // ],
 
             if (type == FilterType.expense) ...[
               ExpenseFilterWidget(
@@ -152,17 +154,19 @@ class _FilterPageState extends State<FilterPage> {
                   Navigator.pop(context);
                 },
               ),
-            ] else if (type == FilterType.internalTransaction) ...[
-              TransactionFilterWidget(
-                key: const ValueKey('internal'),
-                type: FilterType.internalTransaction,
-                internalFilter: widget.initialInternalFilter,
-                onApplyInternal: (filter) {
-                  widget.onApplyInternal?.call(filter);
-                  Navigator.pop(context);
-                },
-              ),
             ],
+            
+            // else if (type == FilterType.internalTransaction) ...[
+            //   TransactionFilterWidget(
+            //     key: const ValueKey('internal'),
+            //     type: FilterType.internalTransaction,
+            //     internalFilter: widget.initialInternalFilter,
+            //     onApplyInternal: (filter) {
+            //       widget.onApplyInternal?.call(filter);
+            //       Navigator.pop(context);
+            //     },
+            //   ),
+            // ],
 
             const SizedBox(height: 16),
             CustomButton(

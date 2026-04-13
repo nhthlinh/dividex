@@ -1,5 +1,4 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
@@ -17,7 +16,6 @@ import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:go_router/go_router.dart';
 
 class WithdrawPage extends StatefulWidget {
   static const Key accountDropdownKey = Key('withdraw_account_dropdown');
@@ -95,15 +93,15 @@ class _WithdrawPageState extends State<WithdrawPage> {
                         BlocListener<RechargeBloc, RechargeState>(
                           listenWhen: (p, c) => p != c,
                           listener: (context, state) {
-                            double a = double.parse(
-                              amountController.text.trim().replaceAll('.', ''),
-                            );
-                            BankAccount toAccount = selectedToAccount.value!;
+                            // double a = double.parse(
+                            //   amountController.text.trim().replaceAll('.', ''),
+                            // );
+                            // BankAccount toAccount = selectedToAccount.value!;
                             if (state is RechargeSuccessState) {
-                              context.pushNamed(
-                                AppRouteNames.withdrawSuccess,
-                                extra: {'toAccount': toAccount, 'amount': a},
-                              );
+                              // context.pushNamed(
+                              //   AppRouteNames.withdrawSuccess,
+                              //   extra: {'toAccount': toAccount, 'amount': a},
+                              // );
                             }
                           },
                           child: SizedBox.shrink(),

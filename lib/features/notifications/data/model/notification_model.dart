@@ -81,7 +81,7 @@ enum NotiType {
       case NotiType.TRANSFER:
       case NotiType.DEPOSIT:
       case NotiType.WITHDRAW:
-        context.pushNamed(AppRouteNames.walletReport);
+        //context.pushNamed(AppRouteNames.walletReport);
         break;
 
       case NotiType.GROUP_CREATED:

@@ -272,7 +272,7 @@ List<Widget> buildGroupedExpenseList(
           leading: CircleAvatar(
             radius: 20,
             backgroundColor: Colors.grey,
-            backgroundImage: NetworkImage(
+            backgroundImage: AssetImage(
               getCategoryByKey(expense.category ?? '')?.getImage() ??
                   'lib/assets/icons/money-transfer.png',
             ),

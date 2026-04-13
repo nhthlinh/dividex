@@ -86,29 +86,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final loginUseCase = await getIt.getAsync<LoginUseCase>();
       final authResponse = await loginUseCase.call(event.email, event.password);
 
-      await HiveService.saveToken(
-        TokenLocalModel(
-          accessToken: authResponse.accessToken,
-          refreshToken: authResponse.refreshToken,
-        ),
-      );
+      try {
+        await HiveService.saveToken(
+          TokenLocalModel(
+            accessToken: authResponse.accessToken,
+            refreshToken: authResponse.refreshToken,
+          ),
+        );
 
-      await HiveService.saveUser(
-        UserLocalModel(
-          id: authResponse.user.id ?? '',
-          email: authResponse.user.email ?? '',
-          fullName: authResponse.user.fullName ?? '',
-          avatarUrl: authResponse.user.avatar,
-          password: event.password,
-          phoneNumber: authResponse.user.phoneNumber ?? '',
-          countUserLogin: authResponse.countUserLogin,
-        ),
-      );
+        await HiveService.saveUser(
+          UserLocalModel(
+            id: authResponse.user.id ?? '',
+            email: authResponse.user.email ?? '',
+            fullName: authResponse.user.fullName ?? '',
+            avatarUrl: authResponse.user.avatar,
+            password: event.password,
+            phoneNumber: authResponse.user.phoneNumber ?? '',
+            countUserLogin: authResponse.countUserLogin,
+          ),
+        );
 
-      // Gửi FCM token sau khi đăng nhập thành công
-      await sendFcmTokenToBackend(true);
+        // Gửi FCM token sau khi đăng nhập thành công
+        await sendFcmTokenToBackend(true);
 
-      emit(const AuthAuthenticated());
+        emit(const AuthAuthenticated());
+      } catch (e, stack) {
+        print('Error: $e\nStack: $stack');
+      }
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
 

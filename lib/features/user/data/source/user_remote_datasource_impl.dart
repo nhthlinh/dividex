@@ -4,6 +4,8 @@ import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/data/source/user_remote_datasource.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:Dividex/shared/services/local/models/user_local_model.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: UserRemoteDataSource)
@@ -29,16 +31,22 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           'order_by': 'updated_at',
         },
       );
-      if ((response.data['data']['content'] as List).isNotEmpty) {
-        return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => UserModel.fromJson(item))
-              .toList(),
-        );
-      } else {
-        throw Exception('Failed to load users');
-      }
+      // if ((response.data['data']['content'] as List).isNotEmpty) {
+      //   return PagingModel.fromJson(
+      //     response.data,
+      //     (jsonList) => (jsonList['content'] as List)
+      //         .map((item) => UserModel.fromJson(item))
+      //         .toList(),
+      //   );
+      // } else {
+      //   throw Exception('Failed to load users');
+      // }
+      final content = (response.data['data']['content'] as List?) ?? [];
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => content.map((item) => UserModel.fromJson(item)).toList(),
+      );
     } catch (e) {
       rethrow;
     }
@@ -60,16 +68,22 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
         'order_by': 'updated_at',
       },
     );
-    if ((response.data['data']['content'] as List).isNotEmpty) {
-      return PagingModel.fromJson(
-        response.data,
-        (jsonList) => (jsonList['content'] as List)
-            .map((item) => UserModel.fromJson(item['user']))
-            .toList(),
-      );
-    } else {
-      throw Exception('Failed to load users');
-    }
+    // if ((response.data['data']['content'] as List).isNotEmpty) {
+    //   return PagingModel.fromJson(
+    //     response.data,
+    //     (jsonList) => (jsonList['content'] as List)
+    //         .map((item) => UserModel.fromJson(item['user']))
+    //         .toList(),
+    //   );
+    // } else {
+    //   throw Exception('Failed to load users');
+    // }
+    final content = (response.data['data']['content'] as List?) ?? [];
+
+    return PagingModel.fromJson(
+      response.data,
+      (jsonList) => content.map((item) => UserModel.fromJson(item['user'])).toList(),
+    );
   }
 
   @override
@@ -92,16 +106,23 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           'sort_type': sortType,
         },
       );
-      if ((response.data['data']['content'] as List).isNotEmpty) {
-        return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => UserModel.fromJson(item['user']))
-              .toList(),
-        );
-      } else {
-        throw Exception('Failed to load users');
-      }
+      // if ((response.data['data']['content'] as List).isNotEmpty) {
+      //   return PagingModel.fromJson(
+      //     response.data,
+      //     (jsonList) => (jsonList['content'] as List)
+      //         .map((item) => UserModel.fromJson(item['user']))
+      //         .toList(),
+      //   );
+      // } else {
+      //   throw Exception('Failed to load users');
+      // }
+
+      final content = (response.data['data']['content'] as List?) ?? [];
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => content.map((item) => UserModel.fromJson(item['user'])).toList(),
+      );
     });
   }
 
@@ -109,7 +130,19 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
   Future<UserModel> getMe() async {
     return apiCallWrapper(() async {
       final response = await dio.get('/auth/me');
-      return UserModel.fromJson(response.data['data']);
+      final newUser = UserModel.fromJson(response.data['data']);
+
+      await HiveService.saveUser(
+        UserLocalModel(
+          id: newUser.id ?? '',
+          email: newUser.email ?? '',
+          fullName: newUser.fullName ?? '',
+          avatarUrl: newUser.avatar,
+          phoneNumber: newUser.phoneNumber ?? '',
+        ),
+      );
+
+      return newUser;
     });
   }
 
@@ -123,7 +156,18 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
   @override
   Future<void> updateMe(String name, CurrencyEnum currency) async {
     return apiCallWrapper(() async {
-      await dio.put('/auth/me', data: {'full_name': name});
+      final response = await dio.put('/auth/me', data: {'full_name': name});
+      final newUser = UserModel.fromJson(response.data['data']);
+
+      await HiveService.saveUser(
+        UserLocalModel(
+          id: newUser.id ?? '',
+          email: newUser.email ?? '',
+          fullName: newUser.fullName ?? '',
+          avatarUrl: newUser.avatar,
+          phoneNumber: newUser.phoneNumber ?? '',
+        ),
+      );
     });
   }
 

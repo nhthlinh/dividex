@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<RechargeBloc>().add(GetWalletInfoEvent());
+    context.read<UserBloc>().add(GetMeEvent());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAndShowRatingDialog();
@@ -109,7 +110,9 @@ class _HomePageState extends State<HomePage> {
   Future<void> _submitRating(int rating, int loginCount) async {
     try {
       context.read<UserBloc>().add(ReviewEvent(stars: rating));
-      HiveService.saveUser(HiveService.getUser().copyWith(countUserLogin: loginCount + 1));
+      HiveService.saveUser(
+        HiveService.getUser().copyWith(countUserLogin: loginCount + 1),
+      );
     } catch (e) {
       // Xử lý lỗi nếu cần
     }
@@ -123,6 +126,7 @@ class _HomePageState extends State<HomePage> {
       child: Layout(
         onRefresh: () {
           context.read<RechargeBloc>().add(GetWalletInfoEvent());
+          context.read<UserBloc>().add(GetMeEvent());
           return Future.value();
         },
         isHomePage: true,
@@ -147,39 +151,39 @@ class _HomePageState extends State<HomePage> {
   SquareButtonsWrap buttonGrid(AppLocalizations intl, BuildContext context) {
     return SquareButtonsWrap(
       items: [
-        ButtonItem(
-          icon: Image.asset(
-            'lib/assets/icons/account.png',
-            width: 28,
-            height: 28,
-          ),
-          label: intl.account,
-          onTap: () {
-            context.pushNamed(AppRouteNames.account);
-          },
-        ),
-        ButtonItem(
-          icon: Image.asset(
-            'lib/assets/icons/transfer.png',
-            width: 28,
-            height: 28,
-          ),
-          label: intl.transfer,
-          onTap: () {
-            context.pushNamed(AppRouteNames.transfer);
-          },
-        ),
-        ButtonItem(
-          icon: Image.asset(
-            'lib/assets/icons/withdraw.png',
-            width: 28,
-            height: 28,
-          ),
-          label: intl.withdraw,
-          onTap: () {
-            context.pushNamed(AppRouteNames.withdraw);
-          },
-        ),
+        // ButtonItem(
+        //   icon: Image.asset(
+        //     'lib/assets/icons/account.png',
+        //     width: 28,
+        //     height: 28,
+        //   ),
+        //   label: intl.account,
+        //   onTap: () {
+        //     context.pushNamed(AppRouteNames.account);
+        //   },
+        // ),
+        // ButtonItem(
+        //   icon: Image.asset(
+        //     'lib/assets/icons/transfer.png',
+        //     width: 28,
+        //     height: 28,
+        //   ),
+        //   label: intl.transfer,
+        //   onTap: () {
+        //     context.pushNamed(AppRouteNames.transfer);
+        //   },
+        // ),
+        // ButtonItem(
+        //   icon: Image.asset(
+        //     'lib/assets/icons/withdraw.png',
+        //     width: 28,
+        //     height: 28,
+        //   ),
+        //   label: intl.withdraw,
+        //   onTap: () {
+        //     context.pushNamed(AppRouteNames.withdraw);
+        //   },
+        // ),
         ButtonItem(
           icon: Image.asset(
             'lib/assets/icons/friend.png',
@@ -213,17 +217,17 @@ class _HomePageState extends State<HomePage> {
             context.pushNamed(AppRouteNames.transactionReport);
           },
         ),
-        ButtonItem(
-          icon: Image.asset(
-            'lib/assets/icons/wallet_report.png',
-            width: 28,
-            height: 28,
-          ),
-          label: intl.walletReport,
-          onTap: () {
-            context.pushNamed(AppRouteNames.walletReport);
-          },
-        ),
+        // ButtonItem(
+        //   icon: Image.asset(
+        //     'lib/assets/icons/wallet_report.png',
+        //     width: 28,
+        //     height: 28,
+        //   ),
+        //   label: intl.walletReport,
+        //   onTap: () {
+        //     context.pushNamed(AppRouteNames.walletReport);
+        //   },
+        // ),
       ],
     );
   }

@@ -129,38 +129,39 @@ class _FancyCardState extends State<FancyCard> {
                                 ),
                               ],
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      intl.balance,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(color: Colors.white),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    GestureDetector(
-                                      onTap: onToggleBalance,
-                                      child: Icon(
-                                        hideBalance
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                // ---- Balance ----
-                                Text(
-                                  hideBalance ? "••••••••" : state.balance,
-                                  style: Theme.of(context).textTheme.titleLarge
-                                      ?.copyWith(color: Colors.white),
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: [
+                            //     Row(
+                            //       children: [
+                            //         Text(
+                            //           intl.balance,
+                            //           style: Theme.of(context)
+                            //               .textTheme
+                            //               .titleSmall
+                            //               ?.copyWith(color: Colors.white),
+                            //         ),
+                            //         const SizedBox(width: 6),
+                            //         GestureDetector(
+                            //           onTap: onToggleBalance,
+                            //           child: Icon(
+                            //             hideBalance
+                            //                 ? Icons.visibility_off
+                            //                 : Icons.visibility,
+                            //             color: Colors.white,
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     // ---- Balance ----
+                            //     Text(
+                            //       hideBalance ? "••••••••" : state.balance,
+                            //       style: Theme.of(context).textTheme.titleLarge
+                            //           ?.copyWith(color: Colors.white),
+                            //     ),
+                            //   ],
+                            // ),
+                          
                           ],
                         ),
 

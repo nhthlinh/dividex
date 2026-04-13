@@ -96,8 +96,8 @@ class _TransferPageState extends State<TransferPage> {
 
   Future<void> _handleTransfer(BuildContext context) async {
     double a = double.parse(originalAmount.text.trim().replaceAll('.', ''));
-    String des = description.text;
-    UserModel toUser = selectedToUser.value!;
+    // String des = description.text;
+    // UserModel toUser = selectedToUser.value!;
     final intl = AppLocalizations.of(context)!;
 
     if (_selectedCurrency.value != CurrencyEnum.vnd) {
@@ -150,17 +150,17 @@ class _TransferPageState extends State<TransferPage> {
 
           // Nếu người dùng đồng ý -> chuyển sang trang xác nhận
           if (confirm == true) {
-            context.pushNamed(
-              AppRouteNames.transferConfirm,
-              extra: {
-                'toUser': toUser,
-                'originalAmount': a,
-                'realAmount': converted,
-                'currency': _selectedCurrency.value,
-                'description': des.isNotEmpty ? des : null,
-                'groupId': groupId,
-              },
-            );
+            // context.pushNamed(
+            //   AppRouteNames.transferConfirm,
+            //   extra: {
+            //     'toUser': toUser,
+            //     'originalAmount': a,
+            //     'realAmount': converted,
+            //     'currency': _selectedCurrency.value,
+            //     'description': des.isNotEmpty ? des : null,
+            //     'groupId': groupId,
+            //   },
+            // );
           }
         } else {
           showCustomToast(
@@ -176,17 +176,17 @@ class _TransferPageState extends State<TransferPage> {
       return;
     }
 
-    context.pushNamed(
-      AppRouteNames.transferConfirm,
-      extra: {
-        'toUser': toUser,
-        'originalAmount': a,
-        'realAmount': a,
-        'currency': _selectedCurrency.value,
-        'description': des.isNotEmpty ? des : null,
-        'groupId': groupId,
-      },
-    );
+    // context.pushNamed(
+    //   AppRouteNames.transferConfirm,
+    //   extra: {
+    //     'toUser': toUser,
+    //     'originalAmount': a,
+    //     'realAmount': a,
+    //     'currency': _selectedCurrency.value,
+    //     'description': des.isNotEmpty ? des : null,
+    //     'groupId': groupId,
+    //   },
+    // );
   }
 
   void _submit() {

@@ -1,13 +1,12 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 Future<void> showSettleUpDialog({
   required BuildContext context,
@@ -17,7 +16,7 @@ Future<void> showSettleUpDialog({
   required String groupId,
 }) async {
   final formattedAmount =
-      '${amount.toStringAsFixed(0)} ${currency.code.toUpperCase()}';
+      ' ${formatNumber(amount)} ${currency.code.toUpperCase()}';
   final intl = AppLocalizations.of(context)!;
 
   return showCustomDialog(
@@ -78,21 +77,22 @@ Future<void> showSettleUpDialog({
               },
             ),
             const SizedBox(width: 12),
-            CustomButton(
-              text: intl.transfer,
-              size: ButtonSize.medium,
-              onPressed: () {
-                context.pushNamed(
-                  AppRouteNames.transfer,
-                  extra: {
-                    'toUser': receiver,
-                    'amount': amount,
-                    'currency': currency,
-                    'groupId': groupId,
-                  },
-                );
-              },
-            ),
+            // CustomButton(
+            //   text: intl.transfer,
+            //   size: ButtonSize.medium,
+            //   onPressed: () {
+            //     // context.pushNamed(
+            //     //   AppRouteNames.transfer,
+            //     //   extra: {
+            //     //     'toUser': receiver,
+            //     //     'amount': amount,
+            //     //     'currency': currency,
+            //     //     'groupId': groupId,
+            //     //   },
+            //     // );
+            //   },
+            // ),
+          
           ],
         ),
       ],

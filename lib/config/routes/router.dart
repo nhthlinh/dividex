@@ -31,19 +31,7 @@ import 'package:Dividex/features/group/presentation/pages/group_page.dart';
 import 'package:Dividex/features/group/presentation/pages/group_report.dart';
 import 'package:Dividex/features/group/presentation/pages/group_setting.dart';
 import 'package:Dividex/features/group/presentation/pages/hard_delete_expense.dart';
-import 'package:Dividex/features/home/data/models/bank_account_model.dart';
-import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
-import 'package:Dividex/features/home/presentation/bloc/account/verify_account_bloc.dart';
-import 'package:Dividex/features/home/presentation/pages/account_detail_page.dart';
-import 'package:Dividex/features/home/presentation/pages/account_page.dart';
-import 'package:Dividex/features/home/presentation/pages/add_account_page.dart';
 import 'package:Dividex/features/home/presentation/pages/profile_page.dart';
-import 'package:Dividex/features/home/presentation/pages/transfer_confirm_page.dart';
-import 'package:Dividex/features/home/presentation/pages/transfer_page.dart';
-import 'package:Dividex/features/home/presentation/pages/transfer_success_page.dart';
-import 'package:Dividex/features/home/presentation/pages/withdraw_page.dart';
-import 'package:Dividex/features/home/presentation/pages/withdraw_success_page.dart';
-import 'package:Dividex/features/home/presentation/recharge_report.dart';
 import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/image/presentation/pages/expense_ocr_page.dart';
@@ -53,7 +41,6 @@ import 'package:Dividex/features/message/presentation/pages/chat_page.dart';
 import 'package:Dividex/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:Dividex/features/notifications/presentation/pages/noti_page.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
-import 'package:Dividex/features/recharge/presentation/pages/recharge_page.dart';
 import 'package:Dividex/features/search/data/model/filter_model.dart';
 import 'package:Dividex/features/search/presentation/bloc/search_transaction_bloc.dart';
 import 'package:Dividex/features/search/presentation/bloc/search_users_bloc.dart'
@@ -110,6 +97,7 @@ class AppRouteNames {
 
   static const String search = 'search';
   static const String searchUser = 'search-user';
+  
   static const String searchTransaction = 'search-transaction';
   static const String filter = 'filter';
 
@@ -131,21 +119,27 @@ class AppRouteNames {
   static const String expenseDetail = 'expense-detail';
   static const String expenseEdit = 'expense-edit';
 
-  static const String account = 'account';
-  static const String addAccount = 'add-account';
-  static const String accountDetail = 'accountDetail';
+  // Tk để nhận tiền -> xóa
+  // static const String account = 'account';
+  // static const String addAccount = 'add-account';
+  // static const String accountDetail = 'accountDetail';
 
-  static const String transfer = 'transfer';
-  static const String transferConfirm = 'transfer-confirm';
-  static const String transferSuccess = 'transfer-success';
+  // Chuyển trong app -> xóa
+  // static const String transfer = 'transfer';
+  // static const String transferConfirm = 'transfer-confirm';
+  // static const String transferSuccess = 'transfer-success';
 
-  static const String withdraw = 'withdraw';
-  static const String withdrawSuccess = 'withdraw-success';
+  // Rút tiền -> xóa
+  // static const String withdraw = 'withdraw';
+  // static const String withdrawSuccess = 'withdraw-success';
 
-  static const String recharge = 'recharge';
+  // Nạp tiền -> xóa
+  // static const String recharge = 'recharge';
 
   static const String friendProfile = 'friend-profile';
-  static const String walletReport = 'wallet-report';
+  
+  // Báo cáo ví -> xóa
+  // static const String walletReport = 'wallet-report';
   static const String transactionReport = 'transaction-report';
 
   static const String chat = 'chat';
@@ -510,185 +504,185 @@ GoRouter buildRouter(BuildContext context) {
             ],
           ),
 
-          GoRoute(
-            path: 'account',
-            name: AppRouteNames.account,
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              return buildPageWithDefaultTransition(
-                child: BlocProvider(
-                  create: (context) => AccountBloc(),
-                  child: AccountPage(),
-                ),
-              );
-            },
-            routes: [
-              GoRoute(
-                path: 'add-account',
-                name: AppRouteNames.addAccount,
-                pageBuilder: (BuildContext context, GoRouterState state) {
-                  return buildPageWithDefaultTransition(
-                    child: MultiBlocProvider(
-                      providers: [
-                        BlocProvider<AccountBloc>(
-                          create: (context) => AccountBloc(),
-                        ),
-                        BlocProvider<VerifyAccountBloc>(
-                          create: (context) => VerifyAccountBloc(),
-                        ),
-                      ],
-                      child: AddAccountPage()
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: 'account-detail/:id',
-                name: AppRouteNames.accountDetail,
-                pageBuilder: (BuildContext context, GoRouterState state) {
-                  final id = state.pathParameters['id']!;
-                  final account = state.extra as BankAccount?;
-                  return buildPageWithDefaultTransition(
-                    child: BlocProvider<AccountBloc>(
-                      create: (context) => AccountBloc(),
-                      child: AccountDetailPage(id: id, account: account),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+          // GoRoute(
+          //   path: 'account',
+          //   name: AppRouteNames.account,
+          //   pageBuilder: (BuildContext context, GoRouterState state) {
+          //     return buildPageWithDefaultTransition(
+          //       child: BlocProvider(
+          //         create: (context) => AccountBloc(),
+          //         child: AccountPage(),
+          //       ),
+          //     );
+          //   },
+          //   routes: [
+          //     GoRoute(
+          //       path: 'add-account',
+          //       name: AppRouteNames.addAccount,
+          //       pageBuilder: (BuildContext context, GoRouterState state) {
+          //         return buildPageWithDefaultTransition(
+          //           child: MultiBlocProvider(
+          //             providers: [
+          //               BlocProvider<AccountBloc>(
+          //                 create: (context) => AccountBloc(),
+          //               ),
+          //               BlocProvider<VerifyAccountBloc>(
+          //                 create: (context) => VerifyAccountBloc(),
+          //               ),
+          //             ],
+          //             child: AddAccountPage()
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //     GoRoute(
+          //       path: 'account-detail/:id',
+          //       name: AppRouteNames.accountDetail,
+          //       pageBuilder: (BuildContext context, GoRouterState state) {
+          //         final id = state.pathParameters['id']!;
+          //         final account = state.extra as BankAccount?;
+          //         return buildPageWithDefaultTransition(
+          //           child: BlocProvider<AccountBloc>(
+          //             create: (context) => AccountBloc(),
+          //             child: AccountDetailPage(id: id, account: account),
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ],
+          // ),
 
-          GoRoute(
-            path: 'transfer',
-            name: AppRouteNames.transfer,
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              final extra = state.extra as Map<String, dynamic>?;
-              final receiver = extra?['toUser'] as UserModel?;
-              final amount = extra?['amount'] as double?;
-              final currency = extra?['currency'] as CurrencyEnum?;
-              final groupId = extra?['groupId'] as String?;
-              return buildPageWithDefaultTransition(
-                child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider<LoadedFriendsBloc>(
-                      create: (context) => LoadedFriendsBloc(),
-                    ),
-                    BlocProvider<RechargeBloc>(
-                      create: (context) => RechargeBloc(),
-                    ),
-                  ],
-                  child: TransferPage(
-                    toUser: receiver,
-                    amount: amount,
-                    currency: currency,
-                    groupId: groupId,
-                  ),
-                ),
-              );
-            },
-            routes: [
-              GoRoute(
-                path: 'confirm',
-                name: AppRouteNames.transferConfirm,
-                pageBuilder: (BuildContext context, GoRouterState state) {
-                  final extra = state.extra as Map<String, dynamic>?;
-                  final toUser = extra?['toUser'] as UserModel;
-                  final originalAmount = extra?['originalAmount'] as double;
-                  final realAmount = extra?['realAmount'] as double;
-                  final currency = extra?['currency'] as CurrencyEnum?;
-                  final description = extra?['description'] as String?;
-                  final groupId = extra?['groupId'] as String?;
+          // GoRoute(
+          //   path: 'transfer',
+          //   name: AppRouteNames.transfer,
+          //   pageBuilder: (BuildContext context, GoRouterState state) {
+          //     final extra = state.extra as Map<String, dynamic>?;
+          //     final receiver = extra?['toUser'] as UserModel?;
+          //     final amount = extra?['amount'] as double?;
+          //     final currency = extra?['currency'] as CurrencyEnum?;
+          //     final groupId = extra?['groupId'] as String?;
+          //     return buildPageWithDefaultTransition(
+          //       child: MultiBlocProvider(
+          //         providers: [
+          //           BlocProvider<LoadedFriendsBloc>(
+          //             create: (context) => LoadedFriendsBloc(),
+          //           ),
+          //           BlocProvider<RechargeBloc>(
+          //             create: (context) => RechargeBloc(),
+          //           ),
+          //         ],
+          //         child: TransferPage(
+          //           toUser: receiver,
+          //           amount: amount,
+          //           currency: currency,
+          //           groupId: groupId,
+          //         ),
+          //       ),
+          //     );
+          //   },
+          //   routes: [
+          //     GoRoute(
+          //       path: 'confirm',
+          //       name: AppRouteNames.transferConfirm,
+          //       pageBuilder: (BuildContext context, GoRouterState state) {
+          //         final extra = state.extra as Map<String, dynamic>?;
+          //         final toUser = extra?['toUser'] as UserModel;
+          //         final originalAmount = extra?['originalAmount'] as double;
+          //         final realAmount = extra?['realAmount'] as double;
+          //         final currency = extra?['currency'] as CurrencyEnum?;
+          //         final description = extra?['description'] as String?;
+          //         final groupId = extra?['groupId'] as String?;
 
-                  return buildPageWithDefaultTransition(
-                    child: MultiBlocProvider(
-                      providers: [
-                        BlocProvider<RechargeBloc>(
-                          create: (context) => RechargeBloc(),
-                        ),
-                        BlocProvider<UserBloc>(create: (context) => UserBloc()),
-                      ],
-                      child: TransferConfirmPage(
-                        toUser: toUser,
-                        originalAmount: originalAmount,
-                        realAmount: realAmount,
-                        currency: currency ?? CurrencyEnum.vnd,
-                        description: description,
-                        groupId: groupId,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: 'transfer-success',
-                name: AppRouteNames.transferSuccess,
-                pageBuilder: (BuildContext context, GoRouterState state) {
-                  final extra = state.extra as Map<String, dynamic>?;
-                  final toUser = extra?['toUser'] as UserModel;
-                  final amount = extra?['amount'] as double;
-                  final currency = extra?['currency'] as CurrencyEnum?;
-                  return buildPageWithDefaultTransition(
-                    child: TransferSuccessPage(
-                      toUser: toUser,
-                      amount: amount,
-                      currency: currency ?? CurrencyEnum.vnd,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+          //         return buildPageWithDefaultTransition(
+          //           child: MultiBlocProvider(
+          //             providers: [
+          //               BlocProvider<RechargeBloc>(
+          //                 create: (context) => RechargeBloc(),
+          //               ),
+          //               BlocProvider<UserBloc>(create: (context) => UserBloc()),
+          //             ],
+          //             child: TransferConfirmPage(
+          //               toUser: toUser,
+          //               originalAmount: originalAmount,
+          //               realAmount: realAmount,
+          //               currency: currency ?? CurrencyEnum.vnd,
+          //               description: description,
+          //               groupId: groupId,
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //     GoRoute(
+          //       path: 'transfer-success',
+          //       name: AppRouteNames.transferSuccess,
+          //       pageBuilder: (BuildContext context, GoRouterState state) {
+          //         final extra = state.extra as Map<String, dynamic>?;
+          //         final toUser = extra?['toUser'] as UserModel;
+          //         final amount = extra?['amount'] as double;
+          //         final currency = extra?['currency'] as CurrencyEnum?;
+          //         return buildPageWithDefaultTransition(
+          //           child: TransferSuccessPage(
+          //             toUser: toUser,
+          //             amount: amount,
+          //             currency: currency ?? CurrencyEnum.vnd,
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ],
+          // ),
 
-          GoRoute(
-            path: 'withdraw',
-            name: AppRouteNames.withdraw,
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              return buildPageWithDefaultTransition(
-                child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider<RechargeBloc>(
-                      create: (context) => RechargeBloc(),
-                    ),
-                    BlocProvider<AccountBloc>(
-                      create: (context) => AccountBloc(),
-                    ),
-                  ],
-                  child: WithdrawPage(),
-                ),
-              );
-            },
-            routes: [
-              GoRoute(
-                path: 'withdraw-success',
-                name: AppRouteNames.withdrawSuccess,
-                pageBuilder: (BuildContext context, GoRouterState state) {
-                  final extra = state.extra as Map<String, dynamic>?;
-                  final toAccount = extra?['toAccount'] as BankAccount;
-                  final amount = extra?['amount'] as double;
+          // GoRoute(
+          //   path: 'withdraw',
+          //   name: AppRouteNames.withdraw,
+          //   pageBuilder: (BuildContext context, GoRouterState state) {
+          //     return buildPageWithDefaultTransition(
+          //       child: MultiBlocProvider(
+          //         providers: [
+          //           BlocProvider<RechargeBloc>(
+          //             create: (context) => RechargeBloc(),
+          //           ),
+          //           BlocProvider<AccountBloc>(
+          //             create: (context) => AccountBloc(),
+          //           ),
+          //         ],
+          //         child: WithdrawPage(),
+          //       ),
+          //     );
+          //   },
+          //   routes: [
+          //     GoRoute(
+          //       path: 'withdraw-success',
+          //       name: AppRouteNames.withdrawSuccess,
+          //       pageBuilder: (BuildContext context, GoRouterState state) {
+          //         final extra = state.extra as Map<String, dynamic>?;
+          //         final toAccount = extra?['toAccount'] as BankAccount;
+          //         final amount = extra?['amount'] as double;
 
-                  return buildPageWithDefaultTransition(
-                    child: WithdrawSuccessPage(
-                      toAccount: toAccount,
-                      amount: amount,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+          //         return buildPageWithDefaultTransition(
+          //           child: WithdrawSuccessPage(
+          //             toAccount: toAccount,
+          //             amount: amount,
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ],
+          // ),
 
-          GoRoute(
-            path: 'recharge',
-            name: AppRouteNames.recharge,
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              return buildPageWithDefaultTransition(
-                child: BlocProvider<RechargeBloc>(
-                  create: (context) => RechargeBloc(),
-                  child: RechargePage(),
-                ),
-              );
-            },
-          ),
+          // GoRoute(
+          //   path: 'recharge',
+          //   name: AppRouteNames.recharge,
+          //   pageBuilder: (BuildContext context, GoRouterState state) {
+          //     return buildPageWithDefaultTransition(
+          //       child: BlocProvider<RechargeBloc>(
+          //         create: (context) => RechargeBloc(),
+          //         child: RechargePage(),
+          //       ),
+          //     );
+          //   },
+          // ),
 
           GoRoute(
             path: 'transaction-report',
@@ -710,25 +704,25 @@ GoRouter buildRouter(BuildContext context) {
             },
           ),
 
-          GoRoute(
-            path: 'wallet-report',
-            name: AppRouteNames.walletReport,
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              return buildPageWithDefaultTransition(
-                child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider<RechargeBloc>(
-                      create: (context) => RechargeBloc(),
-                    ),
-                    BlocProvider<LoadedHistoryBloc>(
-                      create: (context) => LoadedHistoryBloc(),
-                    ),
-                  ],
-                  child: RechargeReport(),
-                ),
-              );
-            },
-          ),
+          // GoRoute(
+          //   path: 'wallet-report',
+          //   name: AppRouteNames.walletReport,
+          //   pageBuilder: (BuildContext context, GoRouterState state) {
+          //     return buildPageWithDefaultTransition(
+          //       child: MultiBlocProvider(
+          //         providers: [
+          //           BlocProvider<RechargeBloc>(
+          //             create: (context) => RechargeBloc(),
+          //           ),
+          //           BlocProvider<LoadedHistoryBloc>(
+          //             create: (context) => LoadedHistoryBloc(),
+          //           ),
+          //         ],
+          //         child: RechargeReport(),
+          //       ),
+          //     );
+          //   },
+          // ),
         ],
       ),
       GoRoute(
