@@ -7,6 +7,8 @@ class TwoOptionSelector extends StatelessWidget {
   final String leftIcon;
   final String rightLabel;
   final String rightIcon;
+  final Key? leftOptionKey;
+  final Key? rightOptionKey;
   final ValueChanged<int> onSelectionChanged;
   final int
   selectedIndex; // 0 là không chọn gì hết, 1 là chọn trái, 2 là chọn phải
@@ -18,6 +20,8 @@ class TwoOptionSelector extends StatelessWidget {
     required this.leftIcon,
     required this.rightLabel,
     required this.rightIcon,
+    this.leftOptionKey,
+    this.rightOptionKey,
     required this.onSelectionChanged,
     required this.selectedIndex,
   });
@@ -51,6 +55,7 @@ class TwoOptionSelector extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildOption(
+                key: leftOptionKey,
                 context: context,
                 label: leftLabel,
                 icon: leftIcon,
@@ -58,6 +63,7 @@ class TwoOptionSelector extends StatelessWidget {
                 onTap: () => onSelectionChanged(1),
               ),
               _buildOption(
+                key: rightOptionKey,
                 context: context,
                 label: rightLabel,
                 icon: rightIcon,
@@ -72,6 +78,7 @@ class TwoOptionSelector extends StatelessWidget {
   }
 
   Widget _buildOption({
+    Key? key,
     required BuildContext context,
     required String label,
     required String icon,
@@ -82,6 +89,7 @@ class TwoOptionSelector extends StatelessWidget {
     final background = selected ? AppThemes.primary6Color : Colors.transparent;
 
     return GestureDetector(
+      key: key,
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),

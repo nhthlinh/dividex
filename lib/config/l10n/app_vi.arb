@@ -426,7 +426,7 @@
   "friendRequestNotFound": "The friend request was not found.",
   
   "totalAmount": "Tổng số tiền",
-  "amount": "Số tiền",
+  "amountLabel": "Số tiền",
   "splitRemainingEqually": "Chia đều phần còn lại",
   "allocated": "Đã chia",
   "noEventsInGroup": "Chưa có sự kiện nào trong nhóm",
@@ -474,7 +474,7 @@
   "image": "Ảnh",
   "expenseSplitNotMatch": "Số tiền chia không khớp, vui lòng kiểm tra lại",
   "accountNumber": "Số tài khoản",
-  "branch": "Chi nhánh",
+  "bank": "Ngân hàng",
   "accountNumberLabel": "Nhập số tài khoản mới của bạn",
   "chooseBeneficiary": "Chọn người thụ hưởng",
   "findBeneficiary": "Tìm người thụ hưởng",
@@ -678,9 +678,47 @@
   "edited": "Tin nhắn đã chỉnh sửa",
   
   "noAccountError": "Bạn chưa liên kết với tài khoản nào ...",
-  "commingSoon": "Tính năng này sẽ sớm được ra mắt."
+  "commingSoon": "Tính năng này sẽ sớm được ra mắt.",
 
-  
+  "cantReadImage": "Không thể quét ảnh để đọc hóa đơn. Vui lòng thử lại với ảnh rõ nét hơn hoặc kiểm tra kết nối của bạn.",
 
-
+  "showMoreInfo": "Thêm thông tin",
+  "byItem": "Theo món",
+  "byAmount": "Theo số tiền",
+  "reset": "Đặt lại",
+  "noPeople": "Chưa chọn người trả",
+  "expenseSplitNoItems": "Không tìm thấy danh sách món. Hãy quét lại hóa đơn để chia theo món.",
+  "addFee": "Phí/thuế đã được phân bổ",
+  "disFee": "Giảm giá đã được phân bổ",
+  "topUpTitle": "Nạp tiền bằng QR",
+  "scanQrInstruction": "Quét mã QR để nạp tiền",
+  "scanQrDesc": "Vui lòng sử dụng ứng dụng ngân hàng để quét mã QR bên trên.",
+  "noManualTransfer": "Không hỗ trợ chuyển khoản thủ công.",
+  "warningManual": "⚠️ Chuyển khoản không qua QR sẽ không được ghi nhận.",
+  "orderCode": "Mã giao dịch: {code}",
+  "@orderCode": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "amount": "Số tiền: {amount}",
+  "@amount": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "content": "Nội dung: {content}",
+  "@content": {
+    "placeholders": {
+      "content": {}
+    }
+  },
+  "cancelDepositError": "Không thể hủy lệnh nạp tiền.",
+  "cannotOpenBankApp": "Không thể mở ứng dụng ngân hàng",
+  "openInBankApp": "Mở trong ứng dụng ngân hàng",
+  "failedToSaveQr": "Không thể lưu mã QR",
+  "savedToGallery": "Đã lưu mã QR vào thư viện",
+  "downloadQr": "Tải mã QR về máy",
+  "bankAccountIsExist": "Tài khoản ngân hàng đã tồn tại",
+  "accountName": "Tên chủ tài khoản"
 }

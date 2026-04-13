@@ -116,8 +116,8 @@ class _TestDropdownPageState extends State<TestDropdownPage> {
                   if (b.logo != null)
                     Image.network(
                       b.logo!,
-                      width: 50,
-                      height: 50,
+                      width: 100,
+                      height: 100,
                       errorBuilder: (context, error, stackTrace) =>
                           const Icon(Icons.account_balance),
                     )

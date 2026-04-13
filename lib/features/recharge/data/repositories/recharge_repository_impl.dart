@@ -12,8 +12,8 @@ class RechargeRepositoryImpl implements RechargeRepository {
   RechargeRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<String> deposit(double amount, String currency, String bankCode) {
-    return remoteDataSource.deposit(amount, currency, bankCode);
+  Future<PayOSResponseModel> deposit(double amount, String currency) {
+    return remoteDataSource.deposit(amount, currency);
   }
 
   @override
@@ -64,5 +64,15 @@ class RechargeRepositoryImpl implements RechargeRepository {
   @override
   Future<bool> transfer(double originalAmount, double realAmount, String currency, String toAccount, String description, {String? groupId, String? token}) {
     return remoteDataSource.transfer(originalAmount, realAmount, currency, toAccount, description, groupId: groupId, token: token);
+  }
+  
+  @override
+  Future<void> cancelDeposit(int id) {
+    return remoteDataSource.cancelDeposit(id);
+  }
+  
+  @override
+  Future<bool> isDepositSuccessful(String referenceId) {
+    return remoteDataSource.isDepositSuccessful(referenceId);
   }
 }

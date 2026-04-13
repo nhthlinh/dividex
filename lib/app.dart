@@ -37,10 +37,19 @@ class _MyAppState extends State<MyApp> {
 
       final translated = parser.parse(body);
 
-      showCustomNotification(
-        message: translated,
-        type: ToastType.info,
-      );
+      if (body.contains('topped up')) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          showCustomNotification(
+            message: translated,
+            type: ToastType.info,
+          );
+        });
+      } else {
+        showCustomNotification(
+          message: translated,
+          type: ToastType.info,
+        );
+      }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -50,10 +59,19 @@ class _MyAppState extends State<MyApp> {
 
       final translated = parser.parse(body);
 
-      showCustomNotification(
-        message: translated,
-        type: ToastType.info,
-      );
+      if (body.contains('topped up')) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          showCustomNotification(
+            message: translated,
+            type: ToastType.info,
+          );
+        });
+      } else {
+        showCustomNotification(
+          message: translated,
+          type: ToastType.info,
+        );
+      }
     });
   }
 

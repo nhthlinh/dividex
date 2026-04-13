@@ -2108,11 +2108,11 @@ abstract class AppLocalizations {
   /// **'Total amount'**
   String get totalAmount;
 
-  /// No description provided for @amount.
+  /// No description provided for @amountLabel.
   ///
   /// In en, this message translates to:
   /// **'Amount'**
-  String get amount;
+  String get amountLabel;
 
   /// No description provided for @splitRemainingEqually.
   ///
@@ -2342,11 +2342,11 @@ abstract class AppLocalizations {
   /// **'Account number'**
   String get accountNumber;
 
-  /// No description provided for @branch.
+  /// No description provided for @bank.
   ///
   /// In en, this message translates to:
-  /// **'Branch'**
-  String get branch;
+  /// **'Bank'**
+  String get bank;
 
   /// No description provided for @accountNumberLabel.
   ///
@@ -2545,12 +2545,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deposit success'**
   String get createDepositSuccess;
-
-  /// No description provided for @bank.
-  ///
-  /// In en, this message translates to:
-  /// **'Bank'**
-  String get bank;
 
   /// No description provided for @date.
   ///
@@ -2947,6 +2941,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This feature is coming soon.'**
   String get commingSoon;
+
+  /// No description provided for @cantReadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to scan the image to read the bill. Please try again with a clearer image or check your connection.'**
+  String get cantReadImage;
+
+  /// No description provided for @showMoreInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'More information'**
+  String get showMoreInfo;
+
+  /// No description provided for @byItem.
+  ///
+  /// In en, this message translates to:
+  /// **'By Item'**
+  String get byItem;
+
+  /// No description provided for @byAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'By Amount'**
+  String get byAmount;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @noPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'No one selected'**
+  String get noPeople;
+
+  /// No description provided for @expenseSplitNoItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Item list not found. Please scan the receipt again to split by items.'**
+  String get expenseSplitNoItems;
+
+  /// No description provided for @addFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional fees have been distributed'**
+  String get addFee;
+
+  /// No description provided for @disFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount has been applied and distributed'**
+  String get disFee;
+
+  /// No description provided for @topUpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up via QR'**
+  String get topUpTitle;
+
+  /// No description provided for @scanQrInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the QR code to top up'**
+  String get scanQrInstruction;
+
+  /// No description provided for @scanQrDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Please use your banking app to scan the QR code above.'**
+  String get scanQrDesc;
+
+  /// No description provided for @noManualTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual bank transfer is not supported.'**
+  String get noManualTransfer;
+
+  /// No description provided for @warningManual.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Transfers without QR will not be recognized.'**
+  String get warningManual;
+
+  /// No description provided for @orderCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction ID: {code}'**
+  String orderCode(Object code);
+
+  /// No description provided for @amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount: {amount}'**
+  String amount(Object amount);
+
+  /// No description provided for @content.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: {content}'**
+  String content(Object content);
+
+  /// No description provided for @cancelDepositError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to cancel deposit.'**
+  String get cancelDepositError;
+
+  /// No description provided for @cannotOpenBankApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open your bank app'**
+  String get cannotOpenBankApp;
+
+  /// No description provided for @openInBankApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in your bank app'**
+  String get openInBankApp;
+
+  /// No description provided for @failedToSaveQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save QR code'**
+  String get failedToSaveQr;
+
+  /// No description provided for @savedToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to gallery'**
+  String get savedToGallery;
+
+  /// No description provided for @downloadQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Download QR code'**
+  String get downloadQr;
+
+  /// No description provided for @bankAccountIsExist.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank account already exists'**
+  String get bankAccountIsExist;
+
+  /// No description provided for @accountName.
+  ///
+  /// In en, this message translates to:
+  /// **'Account holder name'**
+  String get accountName;
 }
 
 class _AppLocalizationsDelegate

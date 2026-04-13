@@ -57,7 +57,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
           'page_size': pageSize,
         },
       );
-      if (response.data['content'] != []) {
+      if ((response.data['data']['content'] as List).isNotEmpty) {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)
@@ -86,7 +86,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
           'page_size': pageSize,
         },
       );
-      if (response.data['content'] != []) {
+      if ((response.data['data']['content'] as List).isNotEmpty) {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)
@@ -114,7 +114,7 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
           'search': search,
         },
       );
-      if (response.data['content'] != []) {
+      if ((response.data['data']['content'] as List).isNotEmpty) {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)
@@ -128,13 +128,17 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
   }
 
   @override
-  Future<PagingModel<List<UserModel>>> listMutualFriends(String friendshipUid, int page, int pageSize) async {
+  Future<PagingModel<List<UserModel>>> listMutualFriends(
+    String friendshipUid,
+    int page,
+    int pageSize,
+  ) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/friends/$friendshipUid/mutual', queryParameters: {
-        'page': page,
-        'page_size': pageSize,
-      });
-      if (response.data['content'] != []) {
+      final response = await dio.get(
+        '/friends/$friendshipUid/mutual',
+        queryParameters: {'page': page, 'page_size': pageSize},
+      );
+      if ((response.data['data']['content'] as List).isNotEmpty) {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)
@@ -160,13 +164,17 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
   }
 
   @override
-  Future<PagingModel<List<FriendDept>>> getFriendDepts(String friendId, int page, int pageSize) async {
+  Future<PagingModel<List<FriendDept>>> getFriendDepts(
+    String friendId,
+    int page,
+    int pageSize,
+  ) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/friends/$friendId/debt', queryParameters: {
-        'page': page,
-        'page_size': pageSize,
-      });
-      if (response.data['content'] != []) {
+      final response = await dio.get(
+        '/friends/$friendId/debt',
+        queryParameters: {'page': page, 'page_size': pageSize},
+      );
+      if ((response.data['data']['content'] as List).isNotEmpty) {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)

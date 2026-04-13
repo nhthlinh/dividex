@@ -5,4 +5,5 @@ abstract class AccountRemoteDataSource {
   Future<void> updateAccount(BankAccount account);
   Future<void> deleteAccount(String accountId);
   Future<List<BankAccount>> getAccounts(int page, int pageSize);
+  Future<String> verifyAccount(String accountNumber, String bankCode);
 }

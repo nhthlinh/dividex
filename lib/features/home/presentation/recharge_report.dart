@@ -82,7 +82,7 @@ class _RechargeReportState extends State<RechargeReport> {
                             info: state.depositDetail.code,
                           ),
                           CustomRow(
-                            title: intl.amount,
+                            title: intl.amountLabel,
                             info:
                                 '${formatNumber(state.depositDetail.amount)} ${state.depositDetail.currency.code}',
                           ),
@@ -107,7 +107,7 @@ class _RechargeReportState extends State<RechargeReport> {
                             info: state.withdrawDetail.code,
                           ),
                           CustomRow(
-                            title: intl.amount,
+                            title: intl.amountLabel,
                             info:
                                 '${formatNumber(state.withdrawDetail.amount)} ${state.withdrawDetail.bankAccount.currency?.code}',
                           ),
@@ -535,7 +535,7 @@ class InternalExpenseCard extends StatelessWidget {
               CustomRow(title: intl.from, info: expense.fromUser ?? ''),
               CustomRow(title: intl.to, info: expense.toUser ?? ''),
               CustomRow(
-                title: intl.amount,
+                title: intl.amountLabel,
                 info: '${formatNumber(expense.amount ?? 0)} VND',
               ),
               CustomRow(title: intl.code, info: expense.code ?? ''),

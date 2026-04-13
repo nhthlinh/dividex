@@ -4,7 +4,6 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
-import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
@@ -21,6 +20,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 
 class WithdrawPage extends StatefulWidget {
+  static const Key accountDropdownKey = Key('withdraw_account_dropdown');
+  static const Key amountInputKey = Key('withdraw_amount_input');
+  static const Key submitButtonKey = Key('withdraw_submit_button');
+
   const WithdrawPage({super.key});
 
   @override
@@ -139,6 +142,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                               valueListenable: selectedToAccount,
                               builder: (context, value, _) {
                                 return CustomDropdownWidget<BankAccount>(
+                                  key: WithdrawPage.accountDropdownKey,
                                   label: intl.account,
                                   value: selectedToAccount.value,
                                   options: accounts,
@@ -201,11 +205,12 @@ class _WithdrawPageState extends State<WithdrawPage> {
 
                         const SizedBox(height: 16),
                         CustomTextInputWidget(
+                          textFieldKey: WithdrawPage.amountInputKey,
                           size: TextInputSize.large,
                           controller: amountController,
                           keyboardType: TextInputType.number,
                           isReadOnly: false,
-                          label: intl.amount,
+                          label: intl.amountLabel,
                           isRequired: true,
                           validator: (value) =>
                               CustomValidator().validateAmount(value, intl),
@@ -219,8 +224,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                 margin: const EdgeInsets.all(4),
                                 child: CustomButton(
                                   size: ButtonSize.medium,
-                                  text:
-                                      '${formatNumber(amount)} ${HiveService.getUser().preferredCurrency ?? 'VND'}',
+                                  text: formatNumber(amount),
                                   onPressed: () {
                                     setState(() {
                                       if (amountController.text !=
@@ -246,8 +250,9 @@ class _WithdrawPageState extends State<WithdrawPage> {
                   ),
                   const Spacer(),
                   CustomButton(
+                    buttonKey: WithdrawPage.submitButtonKey,
                     text: intl.confirm,
-                    onPressed: (!isValid || isSubmitting)
+                    onPressed: ((!isValid || isSubmitting))
                         ? null
                         : () async {
                             setSubmitting(true);

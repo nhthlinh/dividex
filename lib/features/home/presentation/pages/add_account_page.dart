@@ -2,6 +2,7 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
+import 'package:Dividex/features/home/presentation/bloc/account/verify_account_bloc.dart';
 import 'package:Dividex/shared/models/banks.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
@@ -14,6 +15,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddAccountPage extends StatefulWidget {
+  static const Key accountNumberInputKey = Key('add_account_number_input');
+  static const Key bankDropdownKey = Key('add_account_bank_dropdown');
+  static const Key accountNameInputKey = Key('add_account_name_input');
+  static const Key currencyDropdownKey = Key('add_account_currency_dropdown');
+  static const Key submitButtonKey = Key('add_account_submit_button');
+
   const AddAccountPage({super.key});
 
   @override
@@ -22,6 +29,7 @@ class AddAccountPage extends StatefulWidget {
 
 class _AddAccountPageState extends State<AddAccountPage> {
   final accountNumber = TextEditingController();
+  final accountName = TextEditingController();
   final branch = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<BankInfo?> selectedBranch = ValueNotifier(null);
@@ -34,6 +42,25 @@ class _AddAccountPageState extends State<AddAccountPage> {
   @override
   void initState() {
     super.initState();
+
+    accountNumber.addListener(_checkAndTrigger);
+    selectedBranch.addListener(_checkAndTrigger);
+  }
+
+  void _checkAndTrigger() {
+    final acc = accountNumber.text.trim();
+    final bank = selectedBranch.value;
+
+    if (acc.isNotEmpty && bank != null) {
+      _onAccountBankReady();
+    }
+  }
+
+  void _onAccountBankReady() {
+    String accNumber = accountNumber.text.trim();
+    context.read<VerifyAccountBloc>().add(
+      VerifyAccountEvent(accNumber, selectedBranch.value?.code ?? ''),
+    );
   }
 
   @override
@@ -80,10 +107,12 @@ class _AddAccountPageState extends State<AddAccountPage> {
             FormFieldConfig(controller: accountNumber, isRequired: true),
             FormFieldConfig(selectedValue: selectedBranch, isRequired: true),
             FormFieldConfig(selectedValue: selectedCurrency, isRequired: true),
+            FormFieldConfig(controller: accountName, isRequired: true),
           ],
           builder: (isValid, isSubmitting, setSubmitting) => Column(
             children: [
               CustomTextInputWidget(
+                textFieldKey: AddAccountPage.accountNumberInputKey,
                 size: TextInputSize.large,
                 controller: accountNumber,
                 keyboardType: TextInputType.number,
@@ -96,28 +125,29 @@ class _AddAccountPageState extends State<AddAccountPage> {
                 valueListenable: selectedBranch,
                 builder: (context, value, _) {
                   return CustomDropdownWidget<BankInfo>(
-                    label: intl.branch,
+                    key: AddAccountPage.bankDropdownKey,
+                    label: intl.bank,
                     value: value,
                     options: banksList,
-                    displayString: (b) => '${b.shortName} - ${b.code}',
+                    displayString: (b) => b.shortName,
                     buildOption: (b, selected) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 6,
+                          vertical: 0,
                           horizontal: 4,
                         ),
                         child: Row(
                           children: [
                             Image.network(
                               b.logo,
-                              width: 24,
-                              height: 24,
+                              height: 50,
+                              width: 100,
                               errorBuilder: (context, error, stackTrace) =>
                                   const Icon(Icons.account_balance),
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              b.shortName,
+                              b.code,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     color: selected
@@ -127,18 +157,6 @@ class _AddAccountPageState extends State<AddAccountPage> {
                                   ),
                             ),
                             const SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                b.code,
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      color: selected
-                                          ? AppThemes.primary3Color
-                                          : Colors.grey,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                              ),
-                            ),
                             if (selected)
                               const Icon(
                                 Icons.check,
@@ -156,10 +174,28 @@ class _AddAccountPageState extends State<AddAccountPage> {
                 },
               ),
               const SizedBox(height: 8),
+              BlocListener<VerifyAccountBloc, VerifyAccountState>(
+                listener: (context, state) {
+                  if (state is VerifyAccountSuccessState) {
+                    accountName.text = state.accountName;
+                  }
+                },
+                child: CustomTextInputWidget(
+                  textFieldKey: AddAccountPage.accountNameInputKey,
+                  size: TextInputSize.large,
+                  controller: accountName,
+                  keyboardType: TextInputType.text,
+                  isReadOnly: true,
+                  isRequired: true,
+                  label: intl.accountName,
+                ),
+              ),
+              const SizedBox(height: 8),
               ValueListenableBuilder<CurrencyEnum>(
                 valueListenable: selectedCurrency,
                 builder: (context, value, _) {
                   return CustomDropdownWidget<CurrencyEnum>(
+                    key: AddAccountPage.currencyDropdownKey,
                     label: intl.expenseCurrencyLabel,
                     value: selectedCurrency.value,
                     options: getAllCurrencies().map((e) => e).toList(),
@@ -213,6 +249,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
               ),
               const SizedBox(height: 16),
               CustomButton(
+                buttonKey: AddAccountPage.submitButtonKey,
                 text: intl.add,
                 onPressed: (!isValid || isSubmitting)
                     ? null

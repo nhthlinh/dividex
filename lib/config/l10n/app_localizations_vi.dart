@@ -1109,7 +1109,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get totalAmount => 'Tổng số tiền';
 
   @override
-  String get amount => 'Số tiền';
+  String get amountLabel => 'Số tiền';
 
   @override
   String get splitRemainingEqually => 'Chia đều phần còn lại';
@@ -1239,7 +1239,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get accountNumber => 'Số tài khoản';
 
   @override
-  String get branch => 'Chi nhánh';
+  String get bank => 'Ngân hàng';
 
   @override
   String get accountNumberLabel => 'Nhập số tài khoản mới của bạn';
@@ -1341,9 +1341,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get createDepositSuccess => 'Thanh toán thành công';
-
-  @override
-  String get bank => 'Ngân hàng';
 
   @override
   String get date => 'Ngày thực hiện';
@@ -1577,4 +1574,89 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get commingSoon => 'Tính năng này sẽ sớm được ra mắt.';
+
+  @override
+  String get cantReadImage =>
+      'Không thể quét ảnh để đọc hóa đơn. Vui lòng thử lại với ảnh rõ nét hơn hoặc kiểm tra kết nối của bạn.';
+
+  @override
+  String get showMoreInfo => 'Thêm thông tin';
+
+  @override
+  String get byItem => 'Theo món';
+
+  @override
+  String get byAmount => 'Theo số tiền';
+
+  @override
+  String get reset => 'Đặt lại';
+
+  @override
+  String get noPeople => 'Chưa chọn người trả';
+
+  @override
+  String get expenseSplitNoItems =>
+      'Không tìm thấy danh sách món. Hãy quét lại hóa đơn để chia theo món.';
+
+  @override
+  String get addFee => 'Phí/thuế đã được phân bổ';
+
+  @override
+  String get disFee => 'Giảm giá đã được phân bổ';
+
+  @override
+  String get topUpTitle => 'Nạp tiền bằng QR';
+
+  @override
+  String get scanQrInstruction => 'Quét mã QR để nạp tiền';
+
+  @override
+  String get scanQrDesc =>
+      'Vui lòng sử dụng ứng dụng ngân hàng để quét mã QR bên trên.';
+
+  @override
+  String get noManualTransfer => 'Không hỗ trợ chuyển khoản thủ công.';
+
+  @override
+  String get warningManual =>
+      '⚠️ Chuyển khoản không qua QR sẽ không được ghi nhận.';
+
+  @override
+  String orderCode(Object code) {
+    return 'Mã giao dịch: $code';
+  }
+
+  @override
+  String amount(Object amount) {
+    return 'Số tiền: $amount';
+  }
+
+  @override
+  String content(Object content) {
+    return 'Nội dung: $content';
+  }
+
+  @override
+  String get cancelDepositError => 'Không thể hủy lệnh nạp tiền.';
+
+  @override
+  String get cannotOpenBankApp => 'Không thể mở ứng dụng ngân hàng';
+
+  @override
+  String get openInBankApp => 'Mở trong ứng dụng ngân hàng';
+
+  @override
+  String get failedToSaveQr => 'Không thể lưu mã QR';
+
+  @override
+  String get savedToGallery => 'Đã lưu mã QR vào thư viện';
+
+  @override
+  String get downloadQr => 'Tải mã QR về máy';
+
+  @override
+  String get bankAccountIsExist => 'Tài khoản ngân hàng đã tồn tại';
+
+  @override
+  String get accountName => 'Tên chủ tài khoản';
 }

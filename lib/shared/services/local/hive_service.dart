@@ -9,14 +9,23 @@ class HiveService {
   // Initialize Hive and open all boxes
   static Future<void> initialize({bool reset = false}) async {
     await Hive.initFlutter();
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(UserLocalModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapter(SettingsLocalModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(TokenLocalModelAdapter());
+    }
     if (reset) {
       await Hive.close(); 
       await Hive.deleteFromDisk(); 
     }
-
-    Hive.registerAdapter(SettingsLocalModelAdapter());
-    Hive.registerAdapter(TokenLocalModelAdapter());
-    Hive.registerAdapter(UserLocalModelAdapter());
+    
+    // Hive.registerAdapter(SettingsLocalModelAdapter());
+    // Hive.registerAdapter(TokenLocalModelAdapter());
+    // Hive.registerAdapter(UserLocalModelAdapter());
 
     await Hive.openBox<SettingsLocalModel>(HiveBox.settings);
     await Hive.openBox<TokenLocalModel>(HiveBox.token);

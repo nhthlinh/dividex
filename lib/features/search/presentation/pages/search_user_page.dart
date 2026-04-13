@@ -23,6 +23,10 @@ class SearchUserPage extends StatefulWidget {
 }
 
 class _SearchUserPageState extends State<SearchUserPage> {
+  static const Key searchInputKey = Key('friend_search_input');
+  static const Key searchButtonKey = Key('friend_search_button');
+  static const Key notFoundTextKey = Key('friend_not_found_text');
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -56,7 +60,9 @@ class _SearchUserPageState extends State<SearchUserPage> {
               keyboardType: TextInputType.text,
               label: intl.searchTab,
               controller: _searchController,
+              textFieldKey: searchInputKey,
               suffixIcon: IconButton(
+                key: searchButtonKey,
                 onPressed: () {
                   context.read<search_bloc.SearchUsersBloc>().add(
                     InitialEvent(
@@ -114,6 +120,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
           const SizedBox(height: 16),
           Text(
             intl.noSearchResults,
+            key: notFoundTextKey,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 8),

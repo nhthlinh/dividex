@@ -21,6 +21,12 @@ class ResetPassPage extends StatefulWidget {
 }
 
 class _ResetPassPageState extends State<ResetPassPage> {
+  static const Key passwordInputKey = Key('reset_password_input');
+  static const Key confirmPasswordInputKey = Key(
+    'reset_confirm_password_input',
+  );
+  static const Key submitButtonKey = Key('reset_submit_button');
+
   final _formKey = GlobalKey<FormState>();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -45,8 +51,6 @@ class _ResetPassPageState extends State<ResetPassPage> {
       context.read<AuthBloc>().add(
         AuthResetPasswordRequested(newPassword: password, token: widget.token),
       );
-
-      context.goNamed(AppRouteNames.login);
     }
   }
 
@@ -61,8 +65,12 @@ class _ResetPassPageState extends State<ResetPassPage> {
         return Future.value();
       },
       title: intl.settingChangePass,
-      child: BlocBuilder<AuthBloc, AuthState>(
-        // Use BlocConsumer
+      child: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthResetPasswordSuccess) {
+            context.goNamed(AppRouteNames.login);
+          }
+        },
         builder: (context, state) {
           return resetPassForm(intl, state, theme);
         },
@@ -97,6 +105,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
                 isRequired: true,
                 hintText: intl.passwordLabel,
                 controller: passwordController,
+                textFieldKey: passwordInputKey,
                 obscureText: _obscurePassword,
                 keyboardType: TextInputType.visiblePassword,
                 maxLines: 1, // Add lock icon
@@ -123,6 +132,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
                 isRequired: true,
                 hintText: intl.confirmPasswordLabel,
                 controller: confirmPasswordController,
+                textFieldKey: confirmPasswordInputKey,
                 obscureText: _obscureConfirmPassword,
                 keyboardType: TextInputType.visiblePassword,
                 maxLines: 1, // Add lock icon
@@ -149,6 +159,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
 
               CustomButton(
                 text: intl.settingChangePass,
+                buttonKey: submitButtonKey,
                 onPressed: (!isValid || isSubmitting)
                     ? null
                     : () async {

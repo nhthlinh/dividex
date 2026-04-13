@@ -28,13 +28,27 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AddEventPage extends StatefulWidget {
-  const AddEventPage({super.key});
+  final LoadedGroupsBloc? loadedGroupsBloc;
+
+  const AddEventPage({super.key, this.loadedGroupsBloc});
 
   @override
   State<AddEventPage> createState() => _AddEventPageState();
 }
 
 class _AddEventPageState extends State<AddEventPage> {
+  static const Key eventNameInputKey = Key('event_create_name_input');
+  static const Key eventDescriptionInputKey = Key(
+    'event_create_description_input',
+  );
+  static const Key eventStartDateInputKey = Key(
+    'event_create_start_date_input',
+  );
+  static const Key eventEndDateInputKey = Key('event_create_end_date_input');
+  static const Key eventGroupDropdownKey = Key('event_create_group_dropdown');
+  static const Key addMembersButtonKey = Key('event_create_add_members_button');
+  static const Key submitButtonKey = Key('event_create_submit_button');
+
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController eventNameController = TextEditingController();
@@ -91,7 +105,9 @@ class _AddEventPageState extends State<AddEventPage> {
         ),
       );
 
-      Navigator.of(context).pop(); // Go back after submission
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop(); // Go back after submission
+      }
     }
   }
 
@@ -111,9 +127,10 @@ class _AddEventPageState extends State<AddEventPage> {
           return Future.value();
         },
         title: intl.addEvent,
-        child: BlocProvider(
+        child: BlocProvider<LoadedGroupsBloc>(
           create: (context) =>
-              LoadedGroupsBloc()..add(group_event.InitialEvent('', false)),
+              widget.loadedGroupsBloc ??
+              (LoadedGroupsBloc()..add(group_event.InitialEvent('', false))),
           child: eventForm(intl, theme),
         ),
       ),
@@ -152,6 +169,7 @@ class _AddEventPageState extends State<AddEventPage> {
             label: intl.eventNameLabel,
             hintText: intl.eventNameHint,
             controller: eventNameController,
+            textFieldKey: eventNameInputKey,
             validator: (value) {
               return CustomValidator().validateName(value, intl);
             },
@@ -165,6 +183,7 @@ class _AddEventPageState extends State<AddEventPage> {
             label: intl.eventDescriptionLabel,
             hintText: intl.eventDescriptionHint,
             controller: eventDescriptionController,
+            textFieldKey: eventDescriptionInputKey,
           ),
           const SizedBox(height: 16),
 
@@ -177,6 +196,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   label: intl.eventStartDateLabel,
                   hintText: '13/05/2025',
                   controller: eventStartDateController,
+                  textFieldKey: eventStartDateInputKey,
                   size: TextInputSize.medium,
                   isRequired: true,
                   validator: (value) {
@@ -193,6 +213,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   label: intl.eventEndDateLabel,
                   hintText: '13/05/2025',
                   controller: eventEndDateController,
+                  textFieldKey: eventEndDateInputKey,
                   size: TextInputSize.medium,
                   isRequired: true,
                   validator: (value) {
@@ -233,6 +254,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
           if (selectedGroup.value != null) ...[
             CustomTextButton(
+              key: addMembersButtonKey,
               isRequired: true,
               isLeftAligned: true,
               description: intl.members,
@@ -268,6 +290,7 @@ class _AddEventPageState extends State<AddEventPage> {
           const SizedBox(height: 30),
           CustomButton(
             text: intl.add,
+            buttonKey: submitButtonKey,
             onPressed: (!isValid || isSubmitting || selectedMembers.isEmpty)
                 ? null
                 : () async {
@@ -295,6 +318,7 @@ class _AddEventPageState extends State<AddEventPage> {
       valueListenable: selectedGroup,
       builder: (context, value, _) {
         return CustomDropdownWidget<GroupModel>(
+          key: eventGroupDropdownKey,
           label: intl.eventGroupLabel,
           value: selectedGroup.value,
           options: state.groups,

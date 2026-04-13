@@ -39,6 +39,9 @@ class ChooseMembersPage extends StatefulWidget {
 }
 
 class _ChooseMembersPageState extends State<ChooseMembersPage> {
+  static const Key searchInputKey = Key('choose_member_search_input');
+  static const Key searchButtonKey = Key('choose_member_search_button');
+
   final TextEditingController _searchController = TextEditingController();
   final List<UserModel> _selectedUsers = []; // <-- lưu user đã chọn
 
@@ -93,7 +96,9 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
               keyboardType: TextInputType.text,
               label: intl.searchTab,
               controller: _searchController,
+              textFieldKey: searchInputKey,
               suffixIcon: IconButton(
+                key: searchButtonKey,
                 onPressed: () {
                   context.read<LoadedUsersBloc>().add(
                     InitialEvent(
@@ -247,6 +252,7 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
                 );
               },
               trailing: CustomButton(
+                buttonKey: Key('choose_member_select_${user.id}'),
                 size: ButtonSize.small,
                 text: isSelected ? intl.cancel : intl.add,
                 customColor: isSelected
