@@ -20,6 +20,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 
 class WithdrawPage extends StatefulWidget {
+  static const Key accountDropdownKey = Key('withdraw_account_dropdown');
+  static const Key amountInputKey = Key('withdraw_amount_input');
+  static const Key submitButtonKey = Key('withdraw_submit_button');
+
   const WithdrawPage({super.key});
 
   @override
@@ -138,6 +142,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                               valueListenable: selectedToAccount,
                               builder: (context, value, _) {
                                 return CustomDropdownWidget<BankAccount>(
+                                  key: WithdrawPage.accountDropdownKey,
                                   label: intl.account,
                                   value: selectedToAccount.value,
                                   options: accounts,
@@ -200,6 +205,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
 
                         const SizedBox(height: 16),
                         CustomTextInputWidget(
+                          textFieldKey: WithdrawPage.amountInputKey,
                           size: TextInputSize.large,
                           controller: amountController,
                           keyboardType: TextInputType.number,
@@ -218,8 +224,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                 margin: const EdgeInsets.all(4),
                                 child: CustomButton(
                                   size: ButtonSize.medium,
-                                  text:
-                                      formatNumber(amount),
+                                  text: formatNumber(amount),
                                   onPressed: () {
                                     setState(() {
                                       if (amountController.text !=
@@ -245,6 +250,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                   ),
                   const Spacer(),
                   CustomButton(
+                    buttonKey: WithdrawPage.submitButtonKey,
                     text: intl.confirm,
                     onPressed: ((!isValid || isSubmitting))
                         ? null

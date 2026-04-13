@@ -25,6 +25,9 @@ import 'package:webview_flutter/webview_flutter.dart' as webview;
 import 'package:url_launcher/url_launcher.dart';
 
 class RechargePage extends StatefulWidget {
+  static const Key amountInputKey = Key('recharge_amount_input');
+  static const Key confirmButtonKey = Key('recharge_confirm_button');
+
   const RechargePage({super.key});
 
   @override
@@ -102,6 +105,7 @@ class _RechargePageState extends State<RechargePage> {
                     Divider(height: 1, color: AppThemes.borderColor),
                     const SizedBox(height: 8),
                     CustomTextInputWidget(
+                      textFieldKey: RechargePage.amountInputKey,
                       size: TextInputSize.large,
                       controller: amountController,
                       keyboardType: TextInputType.number,
@@ -146,7 +150,11 @@ class _RechargePageState extends State<RechargePage> {
 
               const Spacer(),
 
-              CustomButton(text: intl.confirm, onPressed: _submit),
+              CustomButton(
+                buttonKey: RechargePage.confirmButtonKey,
+                text: intl.confirm,
+                onPressed: _submit,
+              ),
 
               BlocListener<RechargeBloc, RechargeState>(
                 listener: (context, state) {
@@ -230,6 +238,14 @@ class _RechargePageState extends State<RechargePage> {
 }
 
 class TransferPopup extends StatefulWidget {
+  static const Key bankDropdownKey = Key('recharge_popup_bank_dropdown');
+  static const Key downloadQrButtonKey = Key(
+    'recharge_popup_download_qr_button',
+  );
+  static const Key openInBankAppButtonKey = Key(
+    'recharge_popup_open_in_bank_app_button',
+  );
+
   final String qrData;
   final int orderCode;
   final BuildContext bottomSheetContext;
@@ -269,7 +285,7 @@ class _TransferPopupState extends State<TransferPopup> {
 
   @override
   void dispose() {
-    _timer?.cancel(); 
+    _timer?.cancel();
     selectedBranch.dispose();
     super.dispose();
   }
@@ -359,6 +375,7 @@ class _TransferPopupState extends State<TransferPopup> {
                       const SizedBox(height: 12),
             
                       CustomButton(
+                        buttonKey: TransferPopup.downloadQrButtonKey,
                         text: intl.downloadQr,
                         onPressed: () async {
                           final success = await saveQrImage();
@@ -436,6 +453,7 @@ class _TransferPopupState extends State<TransferPopup> {
                       const SizedBox(height: 12),
             
                       CustomButton(
+                        buttonKey: TransferPopup.openInBankAppButtonKey,
                         text: intl.openInBankApp,
                         onPressed: () async {
                           final uri = Uri.parse(

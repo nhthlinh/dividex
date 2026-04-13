@@ -38,6 +38,22 @@ class _FriendCardState extends State<FriendCard> {
   final controller = TextEditingController();
   final currentUser = HiveService.getUser();
 
+  Key _cardKey() => Key('friend_card_${widget.friend.friendUid}');
+  Key _trailingActionKey() =>
+      Key('friend_trailing_action_${widget.friend.friendUid}');
+  Key _addButtonKey() => Key('friend_add_button_${widget.friend.friendUid}');
+  Key _requestMessageInputKey() =>
+      Key('friend_request_message_input_${widget.friend.friendUid}');
+  Key _sendButtonKey() => Key('friend_send_button_${widget.friend.friendUid}');
+  Key _acceptButtonKey() =>
+      Key('friend_accept_button_${widget.friend.friendUid}');
+  Key _rejectButtonKey() =>
+      Key('friend_reject_button_${widget.friend.friendUid}');
+  Key _requestStatusKey() =>
+      Key('friend_status_request_${widget.friend.friendUid}');
+  Key _acceptedStatusKey() =>
+      Key('friend_status_accepted_${widget.friend.friendUid}');
+
   @override
   void initState() {
     super.initState();
@@ -55,6 +71,7 @@ class _FriendCardState extends State<FriendCard> {
     final intl = AppLocalizations.of(context)!;
 
     return InfoCard(
+      key: _cardKey(),
       title: widget.friend.fullName,
       subtitle:
           widget.friend.messageRequest ??
@@ -71,11 +88,13 @@ class _FriendCardState extends State<FriendCard> {
               ),
       ),
       onTap: () {
-        context.pushNamed(AppRouteNames.friendProfile, pathParameters: {
-          'id': widget.friend.friendUid,
-        });
+        context.pushNamed(
+          AppRouteNames.friendProfile,
+          pathParameters: {'id': widget.friend.friendUid},
+        );
       },
       trailing: IconButton(
+        key: _trailingActionKey(),
         icon: _buildTrailingIcon(intl),
         onPressed: () => _handleAction(context, intl),
       ),
@@ -85,18 +104,21 @@ class _FriendCardState extends State<FriendCard> {
   Widget _buildTrailingIcon(AppLocalizations intl) {
     switch (widget.type) {
       case FriendCardType.acepted:
-        return const Icon(
+        return Icon(
+          key: _acceptedStatusKey(),
           Icons.chevron_right_outlined,
           color: AppThemes.primary3Color,
         );
       case FriendCardType.pending:
       case FriendCardType.response:
-        return const Icon(
+        return Icon(
+          key: _requestStatusKey(),
           Icons.more_horiz_outlined,
           color: AppThemes.primary3Color,
         );
       case FriendCardType.none:
         return CustomButton(
+          buttonKey: _addButtonKey(),
           text: intl.add,
           onPressed: () {
             _handleAction(context, intl);
@@ -111,9 +133,10 @@ class _FriendCardState extends State<FriendCard> {
   void _handleAction(BuildContext context, AppLocalizations intl) {
     switch (widget.type) {
       case FriendCardType.acepted:
-        context.pushNamed(AppRouteNames.friendProfile, pathParameters: {
-          'id': widget.friend.friendUid,
-        });
+        context.pushNamed(
+          AppRouteNames.friendProfile,
+          pathParameters: {'id': widget.friend.friendUid},
+        );
         break;
       case FriendCardType.none:
         if (widget.isSearchPage) {
@@ -147,9 +170,7 @@ class _FriendCardState extends State<FriendCard> {
     return showCustomDialog(
       context: context,
       label: intl.friendRequest(
-        isReceived
-            ? (widget.friend.fullName.split(' ').last)
-            : intl.you,
+        isReceived ? (widget.friend.fullName.split(' ').last) : intl.you,
       ),
       content: Column(
         children: [
@@ -158,6 +179,7 @@ class _FriendCardState extends State<FriendCard> {
           CustomTextInputWidget(
             size: TextInputSize.large,
             controller: controller,
+            textFieldKey: _requestMessageInputKey(),
             keyboardType: TextInputType.text,
             isReadOnly: !isUser,
             label: intl.addFriendMessage,
@@ -175,14 +197,18 @@ class _FriendCardState extends State<FriendCard> {
       children: [
         _userAvaAndName(
           isUserFirst ? currentUser.avatarUrl : widget.friend.avatarUrl,
-          isUserFirst ? AppLocalizations.of(context)!.you : (widget.friend.fullName.split(' ').last),
+          isUserFirst
+              ? AppLocalizations.of(context)!.you
+              : (widget.friend.fullName.split(' ').last),
         ),
         const SizedBox(width: 8),
         Image.asset('lib/assets/images/arrow_image.png', width: 50),
         const SizedBox(width: 8),
         _userAvaAndName(
           isUserFirst ? widget.friend.avatarUrl : currentUser.avatarUrl,
-          isUserFirst ? (widget.friend.fullName.split(' ').last) : AppLocalizations.of(context)!.you,
+          isUserFirst
+              ? (widget.friend.fullName.split(' ').last)
+              : AppLocalizations.of(context)!.you,
         ),
       ],
     );
@@ -199,6 +225,7 @@ class _FriendCardState extends State<FriendCard> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CustomButton(
+            buttonKey: _rejectButtonKey(),
             text: intl.decline,
             onPressed: () {
               context.read<FriendBloc>().add(
@@ -210,6 +237,7 @@ class _FriendCardState extends State<FriendCard> {
             customColor: AppThemes.errorColor,
           ),
           CustomButton(
+            buttonKey: _acceptButtonKey(),
             text: intl.accept,
             onPressed: () {
               context.read<FriendBloc>().add(
@@ -221,7 +249,7 @@ class _FriendCardState extends State<FriendCard> {
             customColor: AppThemes.successColor,
           ),
         ],
-      ); 
+      );
     } else if (isSent) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -254,22 +282,25 @@ class _FriendCardState extends State<FriendCard> {
           ),
           CustomFormWrapper(
             clearTrigger: ValueNotifier(false),
-            fields: [
-              FormFieldConfig(controller: controller, isRequired: true),
-            ],
+            fields: [FormFieldConfig(controller: controller, isRequired: true)],
             builder: (isValid, isSubmitting, setSubmitting) => CustomButton(
+              buttonKey: _sendButtonKey(),
               text: intl.send,
-              onPressed: (controller.text.isEmpty || isSubmitting) ? null : () {
-                setSubmitting(true);
-                context.read<FriendBloc>().add(
-                  SendFriendRequestEvent(
-                    widget.friend.friendUid,
-                    message: controller.text.isEmpty ? null : controller.text,
-                  ),
-                );
-                setSubmitting(false);
-                Navigator.of(context).pop();
-              },
+              onPressed: (controller.text.isEmpty || isSubmitting)
+                  ? null
+                  : () {
+                      setSubmitting(true);
+                      context.read<FriendBloc>().add(
+                        SendFriendRequestEvent(
+                          widget.friend.friendUid,
+                          message: controller.text.isEmpty
+                              ? null
+                              : controller.text,
+                        ),
+                      );
+                      setSubmitting(false);
+                      Navigator.of(context).pop();
+                    },
               size: ButtonSize.medium,
               customColor: AppThemes.primary3Color,
             ),

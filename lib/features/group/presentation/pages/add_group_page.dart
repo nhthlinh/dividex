@@ -30,6 +30,10 @@ class AddGroupPage extends StatefulWidget {
 }
 
 class _AddGroupPageState extends State<AddGroupPage> {
+  static const Key groupNameInputKey = Key('group_create_name_input');
+  static const Key addMembersButtonKey = Key('group_create_add_members_button');
+  static const Key submitButtonKey = Key('group_create_submit_button');
+
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController groupNameController = TextEditingController();
@@ -62,7 +66,9 @@ class _AddGroupPageState extends State<AddGroupPage> {
         ),
       );
 
-      Navigator.of(context).pop();
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -114,6 +120,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
               label: intl.groupNameLabel,
               hintText: intl.groupNameHint,
               controller: groupNameController,
+              textFieldKey: groupNameInputKey,
               keyboardType: TextInputType.text,
               validator: (value) {
                 return CustomValidator().validateName(value, intl);
@@ -157,6 +164,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
 
             const SizedBox(height: 24),
             CustomTextButton(
+              key: addMembersButtonKey,
               isRequired: true,
               isLeftAligned: true,
               description: intl.members,
@@ -191,6 +199,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
             const SizedBox(height: 30),
             CustomButton(
               text: intl.add,
+              buttonKey: submitButtonKey,
               onPressed: (!isValid || isSubmitting || selectedMembers.isEmpty)
                   ? null
                   : () async {

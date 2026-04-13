@@ -29,7 +29,7 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           'order_by': 'updated_at',
         },
       );
-      if (response.data['content'] != []) {
+      if ((response.data['data']['content'] as List).isNotEmpty) {
         return PagingModel.fromJson(
           response.data,
           (jsonList) => (jsonList['content'] as List)
@@ -60,7 +60,7 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
         'order_by': 'updated_at',
       },
     );
-    if (response.data['content'] != []) {
+    if ((response.data['data']['content'] as List).isNotEmpty) {
       return PagingModel.fromJson(
         response.data,
         (jsonList) => (jsonList['content'] as List)
@@ -92,15 +92,14 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
           'sort_type': sortType,
         },
       );
-      if (response.data['content'] != []) {
+      if ((response.data['data']['content'] as List).isNotEmpty) {
         return PagingModel.fromJson(
-          response.data, 
+          response.data,
           (jsonList) => (jsonList['content'] as List)
               .map((item) => UserModel.fromJson(item['user']))
               .toList(),
         );
-      }
-      else {
+      } else {
         throw Exception('Failed to load users');
       }
     });
@@ -110,45 +109,35 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
   Future<UserModel> getMe() async {
     return apiCallWrapper(() async {
       final response = await dio.get('/auth/me');
-      return UserModel.fromJson(response.data['data']); 
+      return UserModel.fromJson(response.data['data']);
     });
   }
 
   @override
   Future<void> reviewApp(int stars) async {
     return apiCallWrapper(() async {
-      await dio.put('/users/review', data: {
-        'rate': stars,
-      });
+      await dio.put('/users/review', data: {'rate': stars});
     });
   }
 
   @override
   Future<void> updateMe(String name, CurrencyEnum currency) async {
     return apiCallWrapper(() async {
-      await dio.put('/auth/me', data: {
-        'full_name': name,
-      });
+      await dio.put('/auth/me', data: {'full_name': name});
     });
   }
 
   @override
   Future<void> createPin(String pin) async {
     return apiCallWrapper(() async {
-      await dio.post('/auth/pin', data: {
-        'pin': pin,
-      });
+      await dio.post('/auth/pin', data: {'pin': pin});
     });
   }
 
   @override
   Future<void> updatePin(String oldPin, String newPin) async {
     return apiCallWrapper(() async {
-      await dio.put('/auth/pin', data: {
-        'old_pin': oldPin,
-        'new_pin': newPin,
-      });
+      await dio.put('/auth/pin', data: {'old_pin': oldPin, 'new_pin': newPin});
     });
   }
-
 }

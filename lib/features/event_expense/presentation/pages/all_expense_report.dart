@@ -26,6 +26,9 @@ class AllExpenseReportPage extends StatefulWidget {
 }
 
 class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
+  static const Key expenseListViewKey = Key('expense_report_list_view');
+  static const Key loadMoreButtonKey = Key('expense_report_load_more_button');
+
   @override
   void initState() {
     super.initState();
@@ -194,6 +197,7 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
         const SizedBox(height: 8),
 
         ListView(
+          key: expenseListViewKey,
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -210,6 +214,7 @@ class _AllExpenseReportPageState extends State<AllExpenseReportPage> {
             create: (context) => context.read<ExpenseDataBloc>(),
             child: CustomButton(
               text: intl.more,
+              buttonKey: loadMoreButtonKey,
               onPressed: () {
                 context.read<ExpenseDataBloc>().add(
                   LoadMoreExpenses(
@@ -260,6 +265,7 @@ List<Widget> buildGroupedExpenseList(
     for (var expense in groupedExpenses[date]!) {
       widgets.add(
         InfoCard(
+          key: Key('expense_report_item_${expense.id ?? ''}'),
           title: (expense.name ?? '').length > 10
               ? '${(expense.name ?? '').substring(0, 10)}...'
               : (expense.name ?? ''),

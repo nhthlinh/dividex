@@ -13,6 +13,7 @@ class CustomButton extends StatelessWidget {
   final ButtonSize size;
   final ButtonType type;
   final Color? customColor;
+  final Key? buttonKey;
 
   const CustomButton({
     super.key,
@@ -21,6 +22,7 @@ class CustomButton extends StatelessWidget {
     this.size = ButtonSize.large,
     this.type = ButtonType.primary,
     this.customColor,
+    this.buttonKey,
   });
 
   @override
@@ -96,6 +98,7 @@ class CustomButton extends StatelessWidget {
     );
 
     return ElevatedButton(
+      key: buttonKey,
       style: style,
       onPressed: onPressed,
       child: Text(

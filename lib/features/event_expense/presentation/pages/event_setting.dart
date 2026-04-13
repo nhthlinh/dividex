@@ -44,6 +44,19 @@ class EventSettingPage extends StatefulWidget {
 }
 
 class _EventSettingPageState extends State<EventSettingPage> {
+  static const Key inviteGroupMembersButtonKey = Key(
+    'event_setting_invite_group_members_button',
+  );
+  static const Key inviteSaveButtonKey = Key(
+    'event_setting_invite_save_button',
+  );
+  static const Key nameInputKey = Key('event_setting_name_input');
+  static const Key descriptionInputKey = Key('event_setting_description_input');
+  static const Key startDateInputKey = Key('event_setting_start_date_input');
+  static const Key endDateInputKey = Key('event_setting_end_date_input');
+  static const Key saveButtonKey = Key('event_setting_save_button');
+  static const Key deleteButtonKey = Key('event_setting_delete_button');
+
   final TextEditingController controller = TextEditingController();
   final TextEditingController eventStartController = TextEditingController();
   final TextEditingController eventEndController = TextEditingController();
@@ -185,6 +198,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                       ),
                       CustomButton(
                         text: intl.groupMember,
+                        buttonKey: inviteGroupMembersButtonKey,
                         onPressed: () {
                           context.pushNamed(
                             AppRouteNames.chooseMember,
@@ -236,6 +250,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                         ),
                         CustomButton(
                           text: intl.save,
+                          buttonKey: inviteSaveButtonKey,
                           onPressed: () {
                             context.read<EventBloc>().add(
                               AddMembersToEvent(
@@ -303,6 +318,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                       CustomTextInputWidget(
                         size: TextInputSize.large,
                         controller: controller,
+                        textFieldKey: nameInputKey,
                         keyboardType: TextInputType.text,
                         isReadOnly: false,
                         hintText: intl.eventNameHint,
@@ -313,6 +329,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                       CustomTextInputWidget(
                         size: TextInputSize.large,
                         controller: descriptionController,
+                        textFieldKey: descriptionInputKey,
                         keyboardType: TextInputType.text,
                         isReadOnly: false,
                         hintText: intl.eventDescriptionHint,
@@ -329,6 +346,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                               label: intl.eventStartDateLabel,
                               hintText: '13/05/2025',
                               controller: eventStartController,
+                              textFieldKey: startDateInputKey,
                               size: TextInputSize.medium,
                               isRequired: true,
                               validator: (value) {
@@ -345,6 +363,7 @@ class _EventSettingPageState extends State<EventSettingPage> {
                               label: intl.eventEndDateLabel,
                               hintText: '13/05/2025',
                               controller: eventEndController,
+                              textFieldKey: endDateInputKey,
                               size: TextInputSize.medium,
                               isRequired: true,
                               validator: (value) {
@@ -422,10 +441,24 @@ class _EventSettingPageState extends State<EventSettingPage> {
 
             CustomButton(
               text: intl.save,
+              buttonKey: saveButtonKey,
               onPressed: () {
                 updateEvent();
               },
               customColor: AppThemes.successColor,
+            ),
+
+            const SizedBox(height: 16),
+
+            CustomButton(
+              text: intl.delete,
+              buttonKey: deleteButtonKey,
+              onPressed: () {
+                context.read<EventBloc>().add(
+                  DeleteEventEvent(eventId: widget.eventId),
+                );
+              },
+              customColor: AppThemes.errorColor,
             ),
 
             const SizedBox(height: 16),
