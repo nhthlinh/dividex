@@ -37,9 +37,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final name = TextEditingController();
   final email = TextEditingController();
   final phone = TextEditingController();
-  final ValueNotifier<CurrencyEnum> selectedCurrency = ValueNotifier(
-    CurrencyEnum.vnd,
-  );
   List<CurrencyEnum> get units => CurrencyEnum.values;
   List<Uint8List> updatedImages = [];
   List<ImageModel> deletedImages = [];
@@ -51,7 +48,6 @@ class _ProfilePageState extends State<ProfilePage> {
     name.dispose();
     email.dispose();
     phone.dispose();
-    selectedCurrency.dispose();
     super.dispose();
   }
 
@@ -68,13 +64,13 @@ class _ProfilePageState extends State<ProfilePage> {
             name.text = user.fullName ?? '';
             email.text = user.email ?? '';
             phone.text = user.phoneNumber ?? '';
-            selectedCurrency.value = user.currency ?? CurrencyEnum.vnd;
 
             return SimpleLayout(
               key: pageKey,
               onRefresh: () {
                 clearFormTrigger.value =
                     !clearFormTrigger.value; // Trigger form reset
+                context.read<UserBloc>().add(GetMeEvent());
                 return Future.value();
               },
               title: intl.profileSetting,
@@ -82,10 +78,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 clearTrigger: clearFormTrigger,
                 fields: [
                   FormFieldConfig(controller: name, isRequired: true),
-                  FormFieldConfig(
-                    selectedValue: selectedCurrency,
-                    isRequired: true,
-                  ),
                 ],
                 builder: (isValid, isSubmitting, setSubmitting) => Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,17 +132,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       isRequired: false,
                       label: intl.phoneLabel,
                     ),
-                    const SizedBox(height: 16),
-                    CustomTextInputWidget(
-                      size: TextInputSize.large,
-                      controller: TextEditingController(
-                        text: selectedCurrency.value.code.toUpperCase(),
-                      ),
-                      keyboardType: TextInputType.text,
-                      isReadOnly: true,
-                      isRequired: false,
-                      label: intl.expenseCurrencyLabel,
-                    ),
                     const SizedBox(height: 24),
                     CustomButton(
                       text: intl.save,
@@ -165,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               context.read<UserBloc>().add(
                                 UpdateMeEvent(
                                   name: name.text,
-                                  currency: selectedCurrency.value,
+                                  currency: CurrencyEnum.vnd,
                                   avatar: updatedImages.isNotEmpty
                                       ? updatedImages[0]
                                       : null,

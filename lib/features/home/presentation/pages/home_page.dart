@@ -123,6 +123,7 @@ class _HomePageState extends State<HomePage> {
       child: Layout(
         onRefresh: () {
           context.read<RechargeBloc>().add(GetWalletInfoEvent());
+          context.read<UserBloc>().add(GetMeEvent());
           return Future.value();
         },
         isHomePage: true,
