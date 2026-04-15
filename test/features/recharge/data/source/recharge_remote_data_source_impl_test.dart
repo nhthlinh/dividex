@@ -77,16 +77,16 @@ void main() {
         ),
       );
 
-      await datasource.deposit(250.5, 'USD');
+      await datasource.deposit(250.5, 'VND');
 
       verify(
         () => dioClient.post(
           '/payment/payos/create-link',
           data: {
             'amount': 250.5,
-            'currency': 'USD',
-            'description': 'Deposit 250.5 USD',
-            'item_name': 'Deposit 250.5 USD',
+            'currency': 'VND',
+            'description': 'Deposit 250.5 VND',
+            'item_name': 'Deposit 250.5 VND',
           },
           queryParameters: null,
           options: null,
@@ -194,14 +194,14 @@ void main() {
         (_) async => Response(
           requestOptions: RequestOptions(path: '/wallet'),
           data: {
-            'data': {'balance': 'invalid', 'currency': 'USD'},
+            'data': {'balance': 'invalid', 'currency': 'VND'},
           },
         ),
       );
 
       final result = await datasource.getWallet();
 
-      expect(result, '0.00 USD');
+      expect(result, '0.00 VND');
     });
 
     test('uses empty string when currency is missing', () async {
@@ -611,7 +611,7 @@ void main() {
       final result = await datasource.transfer(
         50.0,
         49.75,
-        'USD',
+        'VND',
         'user_xyz',
         'Group expense',
         groupId: 'grp_abc',
@@ -625,7 +625,7 @@ void main() {
           data: {
             'original_amount': 50.0,
             'convert_amount': 49.75,
-            'currency': 'USD',
+            'currency': 'VND',
             'user_uid': 'user_xyz',
             'description': 'Group expense',
             'group_uid': 'grp_abc',

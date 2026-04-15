@@ -404,7 +404,7 @@ void main() {
               'name': 'Minimal',
               'category': null,
               'total_amount': 100.5,
-              'currency': 'USD',
+              'currency': 'VND',
               'note': null,
               'expense_date': null,
               'end_date': null,

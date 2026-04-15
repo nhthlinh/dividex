@@ -129,6 +129,8 @@ flutter:
     - .env
     - lib/assets/images/
     - lib/assets/icons/
+    - lib/assets/category/
+    
   fonts:
     - family: Poppins
       fonts:
