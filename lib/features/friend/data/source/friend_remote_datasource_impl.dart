@@ -57,16 +57,24 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
           'page_size': pageSize,
         },
       );
-      if ((response.data['data']['content'] as List).isNotEmpty) {
-        return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => FriendModel.fromJson(item))
-              .toList(),
-        );
-      } else {
-        throw Exception('Failed to load friend requests');
-      }
+      // if ((response.data['data']['content'] as List).isNotEmpty) {
+      //   return PagingModel.fromJson(
+      //     response.data,
+      //     (jsonList) => (jsonList['content'] as List)
+      //         .map((item) => FriendModel.fromJson(item))
+      //         .toList(),
+      //   );
+      // } else {
+      //   throw Exception('Failed to load friend requests');
+      // }
+      final content = (response.data['data']['content'] as List?) ?? [];
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => content
+            .map((item) => FriendModel.fromJson(item))
+            .toList(),
+      );
     });
   }
 
@@ -86,16 +94,24 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
           'page_size': pageSize,
         },
       );
-      if ((response.data['data']['content'] as List).isNotEmpty) {
-        return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => FriendModel.fromJson(item))
-              .toList(),
-        );
-      } else {
-        throw Exception('Failed to load friends');
-      }
+      // if ((response.data['data']['content'] as List).isNotEmpty) {
+      //   return PagingModel.fromJson(
+      //     response.data,
+      //     (jsonList) => (jsonList['content'] as List)
+      //         .map((item) => FriendModel.fromJson(item))
+      //         .toList(),
+      //   );
+      // } else {
+      //   throw Exception('Failed to load friends');
+      // }
+      final content = (response.data['data']['content'] as List?) ?? [];
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => content
+            .map((item) => FriendModel.fromJson(item))
+            .toList(),
+      );
     });
   }
 
@@ -114,16 +130,25 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
           'search': search,
         },
       );
-      if ((response.data['data']['content'] as List).isNotEmpty) {
-        return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => FriendModel.fromJson(item))
-              .toList(),
-        );
-      } else {
-        throw Exception('Failed to load users');
-      }
+      // if ((response.data['data']['content'] as List).isNotEmpty) {
+      //   return PagingModel.fromJson(
+      //     response.data,
+      //     (jsonList) => (jsonList['content'] as List)
+      //         .map((item) => FriendModel.fromJson(item))
+      //         .toList(),
+      //   );
+      // } else {
+      //   throw Exception('Failed to load users');
+      // }
+
+      final content = (response.data['data']['content'] as List?) ?? [];
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => content
+            .map((item) => FriendModel.fromJson(item))
+            .toList(),
+      );
     });
   }
 
@@ -138,16 +163,25 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
         '/friends/$friendshipUid/mutual',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
-      if ((response.data['data']['content'] as List).isNotEmpty) {
-        return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => UserModel.fromJson(item))
-              .toList(),
-        );
-      } else {
-        throw Exception('Failed to load mutual friends');
-      }
+      // if ((response.data['data']['content'] as List).isNotEmpty) {
+      //   return PagingModel.fromJson(
+      //     response.data,
+      //     (jsonList) => (jsonList['content'] as List)
+      //         .map((item) => UserModel.fromJson(item))
+      //         .toList(),
+      //   );
+      // } else {
+      //   throw Exception('Failed to load mutual friends');
+      // }
+
+      final content = (response.data['data']['content'] as List?) ?? [];
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => content
+            .map((item) => UserModel.fromJson(item))
+            .toList(),
+      );
     });
   }
 
@@ -174,16 +208,26 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
         '/friends/$friendId/debt',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
-      if ((response.data['data']['content'] as List).isNotEmpty) {
-        return PagingModel.fromJson(
-          response.data,
-          (jsonList) => (jsonList['content'] as List)
-              .map((item) => FriendDept.fromJson(item))
-              .toList(),
-        );
-      } else {
-        throw Exception('Failed to load friend depts');
-      }
+      // if ((response.data['data']['content'] as List).isNotEmpty) {
+      //   return PagingModel.fromJson(
+      //     response.data,
+      //     (jsonList) => (jsonList['content'] as List)
+      //         .map((item) => FriendDept.fromJson(item))
+      //         .toList(),
+      //   );
+      // } else {
+      //   throw Exception('Failed to load friend depts');
+      // }
+
+      final content = (response.data['data']['content'] as List?) ?? [];
+
+      return PagingModel.fromJson(
+        response.data,
+        (jsonList) => content
+            .map((item) => FriendDept.fromJson(item))
+            .toList(),
+      );
+
     });
   }
 }
