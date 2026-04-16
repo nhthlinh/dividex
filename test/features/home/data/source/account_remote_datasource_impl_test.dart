@@ -66,7 +66,7 @@ void main() {
         id: 'acc-2',
         accountNumber: '9999',
         bankName: 'ACB',
-        currency: CurrencyEnum.usd,
+        currency: CurrencyEnum.vnd,
       );
 
       when(
@@ -91,7 +91,7 @@ void main() {
           data: {
             'bank_name': 'ACB',
             'account_number': '9999',
-            'currency': 'usd',
+            'currency': 'vnd',
           },
           queryParameters: null,
           options: null,
@@ -182,7 +182,7 @@ void main() {
                   'uid': 'a2',
                   'account_number': '222',
                   'bank_name': 'ACB',
-                  'currency': 'usd',
+                  'currency': 'vnd',
                 },
               ],
             },
@@ -197,7 +197,7 @@ void main() {
       expect(result.first.accountNumber, '111');
       expect(result.first.bankName, 'VCB');
       expect(result.first.currency, CurrencyEnum.vnd);
-      expect(result[1].currency, CurrencyEnum.usd);
+      expect(result[1].currency, CurrencyEnum.vnd);
     });
   });
 }

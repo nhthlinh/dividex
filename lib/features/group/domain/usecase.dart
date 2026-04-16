@@ -83,6 +83,14 @@ class GroupUseCase {
   Future<List<CustomBarChartData>> getBarChartData(String groupId, int year) async {
     return repository.getBarChartData(groupId, year);
   }
+
+  Future<void> remindGroup(String groupId, String userId) {
+    return repository.remindGroup(groupId, userId);
+  }
+
+  Future<void> outSideTransfer(String groupId, String userId, double amount) {
+    return repository.outSideTransfer(groupId, userId, amount);
+  }
 }
 
 class ChartData {

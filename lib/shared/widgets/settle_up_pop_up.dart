@@ -1,12 +1,14 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
-import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> showSettleUpDialog({
   required BuildContext context,
@@ -64,19 +66,17 @@ Future<void> showSettleUpDialog({
 
         // Buttons
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomButton(
               text: intl.outSideTransfer,
-              size: ButtonSize.medium,
+              size: ButtonSize.popUp,
               type: ButtonType.secondary,
               onPressed: () => {
-                showCustomToast(
-                  intl.commingSoon,
-                  type: ToastType.info,
-                ),
+                context.read<GroupBloc>().add(OutSideTransferEvent(groupId, receiver.id ?? '', amount))
               },
             ),
-            const SizedBox(width: 12),
+            // const SizedBox(width: 12),
             // CustomButton(
             //   text: intl.transfer,
             //   size: ButtonSize.medium,

@@ -62,7 +62,7 @@ void main() {
         id: 'acc_1',
         accountNumber: '999999',
         bankName: 'ACB',
-        currency: CurrencyEnum.usd,
+        currency: CurrencyEnum.vnd,
       );
 
       when(() => remoteDataSource.updateAccount(account))
@@ -112,7 +112,7 @@ void main() {
           id: 'a2',
           accountNumber: '2222',
           bankName: 'ACB',
-          currency: CurrencyEnum.usd,
+          currency: CurrencyEnum.vnd,
         ),
       ];
 
@@ -123,7 +123,7 @@ void main() {
 
       expect(result.length, 2);
       expect(result.first.id, 'a1');
-      expect(result.last.currency, CurrencyEnum.usd);
+      expect(result.last.currency, CurrencyEnum.vnd);
       verify(() => remoteDataSource.getAccounts(1, 20)).called(1);
       verifyNoMoreInteractions(remoteDataSource);
     });

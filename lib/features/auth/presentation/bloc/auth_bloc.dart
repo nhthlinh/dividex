@@ -9,6 +9,7 @@ import 'package:Dividex/shared/services/local/models/user_local_model.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Dividex/shared/services/notification/fcm.dart';
 
@@ -111,7 +112,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         emit(const AuthAuthenticated());
       } catch (e, stack) {
-        print('Error: $e\nStack: $stack');
+        debugPrint('Error: $e\nStack: $stack');
       }
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;

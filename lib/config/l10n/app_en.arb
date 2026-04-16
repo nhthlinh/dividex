@@ -663,6 +663,15 @@
     }
   },
 
+  "groupCreated": "{user} have created a group {group}",
+  "@groupCreated": {
+    "description": "Notification when someone created a group",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
   "deposit": "You have deposited {amount} {currency}",
   "@deposit": {
     "description": "Notification when user deposits money",
@@ -671,6 +680,15 @@
       "currency": {}
     }
   },
+
+  "remindGroup": "You owe money in group {group}. Click to see details.",
+  "@remindGroup": {
+    "description": "Notification when someone remind you",
+    "placeholders": {
+      "group": {}
+    }
+  },
+
   "enterMessage": "Enter message...",
   "partnerTyping": "Partner is typing...",
   "edit": "Edit",

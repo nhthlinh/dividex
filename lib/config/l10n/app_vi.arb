@@ -663,6 +663,15 @@
     }
   },
 
+  "groupCreated": "{user} đã tạo nhóm {group}",
+  "@groupCreated": {
+    "description": "Thông báo khi ai đó tạo thông tin nhóm",
+    "placeholders": {
+      "user": {},
+      "group": {}
+    }
+  },
+
   "deposit": "Bạn đã nạp {amount} {currency}",
   "@deposit": {
     "description": "Thông báo khi người dùng nạp tiền",
@@ -671,6 +680,15 @@
       "currency": {}
     }
   },
+
+  "remindGroup": "Bạn đang nợ tiền trong nhóm {group}. Nhấn để xem chi tiết.",
+  "@remindGroup": {
+    "description": "Notification when someone remind you",
+    "placeholders": {
+      "group": {}
+    }
+  },
+
   "enterMessage": "Nhập tin nhắn...",
   "partnerTyping": "Đối phương đang nhập...",
   "edit": "Chỉnh sửa",

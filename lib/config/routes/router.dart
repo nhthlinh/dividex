@@ -97,7 +97,7 @@ class AppRouteNames {
 
   static const String search = 'search';
   static const String searchUser = 'search-user';
-  
+
   static const String searchTransaction = 'search-transaction';
   static const String filter = 'filter';
 
@@ -137,7 +137,7 @@ class AppRouteNames {
   // static const String recharge = 'recharge';
 
   static const String friendProfile = 'friend-profile';
-  
+
   // Báo cáo ví -> xóa
   // static const String walletReport = 'wallet-report';
   static const String transactionReport = 'transaction-report';
@@ -335,8 +335,13 @@ GoRouter buildRouter(BuildContext context) {
             name: AppRouteNames.group,
             pageBuilder: (BuildContext context, GoRouterState state) {
               return buildPageWithDefaultTransition(
-                child: BlocProvider<LoadedGroupsBloc>(
-                  create: (context) => LoadedGroupsBloc(),
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider<GroupBloc>(create: (context) => GroupBloc()),
+                    BlocProvider<LoadedGroupsBloc>(
+                      create: (context) => LoadedGroupsBloc(),
+                    ),
+                  ],
                   child: GroupPage(),
                 ),
               );
@@ -683,7 +688,6 @@ GoRouter buildRouter(BuildContext context) {
           //     );
           //   },
           // ),
-
           GoRoute(
             path: 'transaction-report',
             name: AppRouteNames.transactionReport,
@@ -983,7 +987,7 @@ GoRouter buildRouter(BuildContext context) {
               onChanged: (list) =>
                   (extra['onChanged'] as ValueChanged<List<UserDebt>>)(list),
               amount: extra['amount'] as double,
-              items: extra['items'] as List<ImageExpenseItemModel>?
+              items: extra['items'] as List<ImageExpenseItemModel>?,
             ),
           );
         },
@@ -1008,8 +1012,8 @@ GoRouter buildRouter(BuildContext context) {
         },
       ),
       GoRoute(
-        path: '/scan-expense', 
-        name: AppRouteNames.scanExpense, 
+        path: '/scan-expense',
+        name: AppRouteNames.scanExpense,
         pageBuilder: (context, state) =>
             buildPageWithDefaultTransition(child: ExpenseOcrPage()),
       ),

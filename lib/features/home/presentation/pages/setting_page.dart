@@ -2,17 +2,13 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/location/locale_cubit.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
-import 'package:Dividex/config/themes/theme_cubit.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
-import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
-import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
-import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +28,7 @@ class _SettingPageState extends State<SettingPage> {
   final oldPin = TextEditingController();
   final newPin = TextEditingController();
   final confirmNewPin = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final clearFormTrigger = ValueNotifier(false);
 

@@ -84,6 +84,7 @@ enum NotiType {
         //context.pushNamed(AppRouteNames.walletReport);
         break;
 
+      case NotiType.REMINDER:
       case NotiType.GROUP_CREATED:
       case NotiType.GROUP_UPDATED:
       case NotiType.GROUP_LEFT:
@@ -169,7 +170,6 @@ enum NotiType {
         break;
 
       case NotiType.EXPENSE_HARD_DELETED:
-      case NotiType.REMINDER:
       case NotiType.REMINDER2:
       case NotiType.SYSTEM:
       case NotiType.WARNING:  

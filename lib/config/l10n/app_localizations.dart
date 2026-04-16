@@ -2894,11 +2894,23 @@ abstract class AppLocalizations {
   /// **'{user} have updated a group {group}'**
   String groupUpdated(Object user, Object group);
 
+  /// Notification when someone created a group
+  ///
+  /// In en, this message translates to:
+  /// **'{user} have created a group {group}'**
+  String groupCreated(Object user, Object group);
+
   /// Notification when user deposits money
   ///
   /// In en, this message translates to:
   /// **'You have deposited {amount} {currency}'**
   String deposit(Object amount, Object currency);
+
+  /// Notification when someone remind you
+  ///
+  /// In en, this message translates to:
+  /// **'You owe money in group {group}. Click to see details.'**
+  String remindGroup(Object group);
 
   /// No description provided for @enterMessage.
   ///

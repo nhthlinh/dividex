@@ -41,11 +41,17 @@ class NotificationParser {
       RegExp(r"(.+) is new leader of group (.+)") : (m) =>
         intl.leaderChanged(m[1]!, m[2]!),
 
+      RegExp(r"(.+) have created a group (.+)") : (m) =>
+        intl.groupCreated(m[1]!, m[2]!),
+
       RegExp(r"(.+) have updated a group (.+)") : (m) =>
         intl.groupUpdated(m[1]!, m[2]!),
 
       RegExp(r"You have deposited (.+) (.+)") : (m) =>
         intl.deposit(m[1]!, m[2]!),
+
+      RegExp(r"You owe money in group (.+). Click to see details.") : (m) =>
+        intl.remindGroup(m[1]!),
     };
 
     for (final entry in patterns.entries) {
