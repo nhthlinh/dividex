@@ -97,4 +97,14 @@ class GroupRepositoryImpl implements GroupRepository {
   Future<List<CustomBarChartData>> getBarChartData(String groupId, int year) {
     return remoteDataSource.getBarChartData(groupId, year);
   }
+  
+  @override
+  Future<void> remindGroup(String groupId, String userId) {
+    return remoteDataSource.remindGroup(groupId, userId);
+  }
+
+  @override
+  Future<void> outSideTransfer(String groupId, String userId, double amount) {
+    return remoteDataSource.outSideTransfer(groupId, userId, amount);
+  }
 }

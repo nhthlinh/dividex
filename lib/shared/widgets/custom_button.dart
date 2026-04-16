@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 
-enum ButtonSize { large, medium, small }
+enum ButtonSize { large, medium, small, popUp }
 
 enum ButtonType { primary, secondary }
 
@@ -32,11 +32,12 @@ class CustomButton extends StatelessWidget {
       ButtonSize.large: const Size(300, 44),
       ButtonSize.medium: const Size(140, 44),
       ButtonSize.small: const Size(80, 25),
+      ButtonSize.popUp: const Size(250, 44)
     };
 
     // Config text style
     final textStyle = switch (size) {
-      ButtonSize.large ||
+      ButtonSize.large || ButtonSize.popUp ||
       ButtonSize.medium => Theme.of(context).textTheme.bodyMedium?.copyWith(
         fontWeight: FontWeight.w500,
         letterSpacing: 0,
@@ -46,7 +47,7 @@ class CustomButton extends StatelessWidget {
         fontWeight: FontWeight.w500,
         letterSpacing: 0,
         height: 24 / Theme.of(context).textTheme.bodySmall!.fontSize!,
-      ),
+      ), 
     };
 
     // Xác định trạng thái

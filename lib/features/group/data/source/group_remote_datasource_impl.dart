@@ -197,5 +197,28 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
           .toList();
     });
   }
+  
+  @override
+  Future<void> remindGroup(String groupId, String userId) {
+    return apiCallWrapper(() async {
+      await dio.post(
+        '/groups/$groupId/remind',
+        data: {'user_uid': userId},
+      );
+    });
+  }
+
+  @override
+  Future<void> outSideTransfer(String groupId, String userId, double amount) {
+    return apiCallWrapper(() async {
+      await dio.post(
+        '/groups/$groupId/external-transfer',
+        data: {
+          'user_uid': userId,
+          'amount': amount
+        },
+      );
+    });
+  }
 }
 

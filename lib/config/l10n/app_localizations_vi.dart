@@ -1550,8 +1550,18 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String groupCreated(Object user, Object group) {
+    return '$user đã tạo nhóm $group';
+  }
+
+  @override
   String deposit(Object amount, Object currency) {
     return 'Bạn đã nạp $amount $currency';
+  }
+
+  @override
+  String remindGroup(Object group) {
+    return 'Bạn đang nợ tiền trong nhóm $group. Nhấn để xem chi tiết.';
   }
 
   @override

@@ -1552,8 +1552,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String groupCreated(Object user, Object group) {
+    return '$user have created a group $group';
+  }
+
+  @override
   String deposit(Object amount, Object currency) {
     return 'You have deposited $amount $currency';
+  }
+
+  @override
+  String remindGroup(Object group) {
+    return 'You owe money in group $group. Click to see details.';
   }
 
   @override
