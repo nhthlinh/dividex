@@ -1000,6 +1000,7 @@ GoRouter buildRouter(BuildContext context) {
           return MultiBlocProvider(
             providers: [
               BlocProvider<FriendBloc>(create: (context) => FriendBloc()),
+              BlocProvider<GroupBloc>(create: (context) => GroupBloc()),
               BlocProvider<LoadFriendDeptBloc>(
                 create: (context) => LoadFriendDeptBloc(),
               ),

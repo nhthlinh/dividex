@@ -4,6 +4,7 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_state.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_event.dart' as group_event;
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
@@ -26,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 
 class FriendProfilePage extends StatefulWidget {
   final String friendId;
@@ -591,10 +593,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                               groupId: group.id ?? '',
                                             );
                                           } else {
-                                            showCustomToast(
-                                              intl.commingSoon,
-                                              type: ToastType.info,
-                                            );
+                                            context.read<GroupBloc>().add(group_event.RemindGroupEvent(group.id ?? '', deptor.id ?? ''));
                                           }
                                         },
                                         size: ButtonSize.medium,

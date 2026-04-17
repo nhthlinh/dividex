@@ -356,17 +356,17 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      CustomButton(
-                        text: intl.qrCode,
-                        onPressed: () {
-                          showCustomToast(
-                            intl.commingSoon,
-                            type: ToastType.info,
-                          );
-                          // Xử lý QR code
-                        },
-                        size: ButtonSize.medium,
-                      ),
+                      // CustomButton(
+                      //   text: intl.qrCode,
+                      //   onPressed: () {
+                      //     showCustomToast(
+                      //       intl.commingSoon,
+                      //       type: ToastType.info,
+                      //     );
+                      //     // Xử lý QR code
+                      //   },
+                      //   size: ButtonSize.medium,
+                      // ),
                       CustomButton(
                         text: intl.friend,
                         buttonKey: inviteFriendsButtonKey,
