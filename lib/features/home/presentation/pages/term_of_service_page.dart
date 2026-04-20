@@ -83,10 +83,10 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
           const SizedBox(height: 8.0),
           Text(intl.registrationRequirements, style: titleSmall),
           const SizedBox(height: 8.0),
-          _buildBulletPoint(context, intl.ageRequirement),
+          //_buildBulletPoint(context, intl.ageRequirement),
           _buildBulletPoint(context, intl.accurateInfo),
           _buildBulletPoint(context, intl.oneUniqueAccount),
-          _buildBulletPoint(context, intl.emailVerification),
+          //_buildBulletPoint(context, intl.emailVerification),
           const SizedBox(height: 16.0),
           Text(intl.accountSecurity, style: titleSmall),
           const SizedBox(height: 8.0),
@@ -168,9 +168,8 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
           const SizedBox(height: 16.0),
           Text(intl.paidFeatures, style: titleSmall),
           const SizedBox(height: 8.0),
-          _buildBulletPoint(context, intl.premiumFeaturesPayment),
-          _buildBulletPoint(context, intl.transactionsNotified),
-          _buildBulletPoint(context, intl.refundPolicyPublished),
+          _buildBulletPoint(context, intl.noPaidFeatures),
+          _buildBulletPoint(context, intl.futureMonetization),
           const SizedBox(height: 24.0),
 
           // Section 8: Intellectual Property
@@ -261,11 +260,11 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
             intl.dIVIDEXTeam,
             style: bodySmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          _buildBulletPoint(context, intl.email('support@DIVIDEXsports.com')),
+          _buildBulletPoint(context, intl.email('linhnguyen.8023@gmail.com')),
           _buildBulletPoint(
             context,
             intl.address(
-              '12th Floor, FPT Building, 17 Duy Tan, Cau Giay, Hanoi',
+              'Khu phố 6, Phường Linh Trung, Thành phố Thủ Đức, Thành phố Hồ Chí Minh, Việt Nam',
             ),
           ),
           _buildBulletPoint(context, intl.phone('024 3987 1234')),

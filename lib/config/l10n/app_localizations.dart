@@ -1397,7 +1397,7 @@ abstract class AppLocalizations {
   /// No description provided for @freePaidFeatures.
   ///
   /// In en, this message translates to:
-  /// **'7. FREE AND PAID FEATURES'**
+  /// **'7. FREE FEATURES'**
   String get freePaidFeatures;
 
   /// No description provided for @freeFeatures.
@@ -1433,26 +1433,20 @@ abstract class AppLocalizations {
   /// No description provided for @paidFeatures.
   ///
   /// In en, this message translates to:
-  /// **'7.2 Paid Features'**
+  /// **'7.2 No Paid Features'**
   String get paidFeatures;
 
-  /// No description provided for @premiumFeaturesPayment.
+  /// No description provided for @noPaidFeatures.
   ///
   /// In en, this message translates to:
-  /// **'Premium features (e.g., advanced reports or payment integrations) may require payment.'**
-  String get premiumFeaturesPayment;
+  /// **'Currently, DIVIDEX does not offer any paid features or require any form of payment.'**
+  String get noPaidFeatures;
 
-  /// No description provided for @transactionsNotified.
+  /// No description provided for @futureMonetization.
   ///
   /// In en, this message translates to:
-  /// **'All transactions will be clearly notified before completion.'**
-  String get transactionsNotified;
-
-  /// No description provided for @refundPolicyPublished.
-  ///
-  /// In en, this message translates to:
-  /// **'Refund policies will be published separately.'**
-  String get refundPolicyPublished;
+  /// **'If monetization features are introduced in the future, users will be clearly informed and these Terms will be updated accordingly.'**
+  String get futureMonetization;
 
   /// No description provided for @intellectualProperty.
   ///
