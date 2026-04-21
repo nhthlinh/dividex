@@ -64,11 +64,17 @@ class UpdateGroupEvent extends GroupsEvent {
     required this.memberIdsAdd,
     required this.memberIdsRemove,
     this.avatar,
-    this.deletedAvatarUid
+    this.deletedAvatarUid,
   });
 
   @override
-  List<Object?> get props => [name, memberIdsAdd, memberIdsRemove, avatar, deletedAvatarUid];
+  List<Object?> get props => [
+    name,
+    memberIdsAdd,
+    memberIdsRemove,
+    avatar,
+    deletedAvatarUid,
+  ];
 }
 
 class UpdateGroupLeaderEvent extends GroupsEvent {
@@ -129,6 +135,22 @@ class GetSimpleDetailGroupEvent extends GroupsEvent {
   @override
   List<Object?> get props => [groupId];
 }
+
+class RemindGroupEvent extends GroupsEvent {
+  final String groupId;
+  final String userId;
+
+  const RemindGroupEvent(this.groupId, this.userId);
+}
+
+class OutSideTransferEvent extends GroupsEvent {
+  final String groupId;
+  final String userId;
+  final double amount;
+
+  const OutSideTransferEvent(this.groupId, this.userId, this.amount);
+}
+
 class LoadGroupEventsEvent extends Equatable {
   const LoadGroupEventsEvent();
 

@@ -341,8 +341,13 @@ GoRouter buildRouter(BuildContext context) {
             name: AppRouteNames.group,
             pageBuilder: (BuildContext context, GoRouterState state) {
               return buildPageWithDefaultTransition(
-                child: BlocProvider<LoadedGroupsBloc>(
-                  create: (context) => LoadedGroupsBloc(),
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider<GroupBloc>(create: (context) => GroupBloc()),
+                    BlocProvider<LoadedGroupsBloc>(
+                      create: (context) => LoadedGroupsBloc(),
+                    ),
+                  ],
                   child: GroupPage(),
                 ),
               );
@@ -1002,6 +1007,7 @@ GoRouter buildRouter(BuildContext context) {
           return MultiBlocProvider(
             providers: [
               BlocProvider<FriendBloc>(create: (context) => FriendBloc()),
+              BlocProvider<GroupBloc>(create: (context) => GroupBloc()),
               BlocProvider<LoadFriendDeptBloc>(
                 create: (context) => LoadFriendDeptBloc(),
               ),

@@ -4,6 +4,8 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_state.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_event.dart' as group_event;
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
@@ -18,7 +20,6 @@ import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_form_wrapper.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
-import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/settle_up_pop_up.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
@@ -591,10 +592,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                               groupId: group.id ?? '',
                                             );
                                           } else {
-                                            showCustomToast(
-                                              intl.commingSoon,
-                                              type: ToastType.info,
-                                            );
+                                            context.read<GroupBloc>().add(group_event.RemindGroupEvent(group.id ?? '', deptor.id ?? ''));
                                           }
                                         },
                                         size: ButtonSize.medium,

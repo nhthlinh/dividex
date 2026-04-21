@@ -107,6 +107,8 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
     on<UpdateGroupLeaderEvent>(_onUpdateGroupLeader);
     on<GetGroupReportEvent>(_onGetGroupReport);
     on<GetSimpleDetailGroupEvent>(_onGetSimpleDetailGroup);
+    on<RemindGroupEvent>(_onRemindGroup);
+    on<OutSideTransferEvent>(_onOutSideTransfer);
   }
 
   Future _onCreateGroup(CreateGroupEvent event, Emitter emit) async {
@@ -284,13 +286,39 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
     try {
       final useCase = await getIt.getAsync<GroupUseCase>();
       final results = await useCase.getGroupReport(event.groupId);
-      emit(
-        GroupReportState(
-          groupReport: results,
-        ),
-      );
+      emit(GroupReportState(groupReport: results));
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      if (e.toString().contains(MessageCode.groupNotFound)) {
+        showCustomToast(intl.groupNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onRemindGroup(RemindGroupEvent event, Emitter emit) async {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+    try {
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      await useCase.remindGroup(event.groupId, event.userId);
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      if (e.toString().contains(MessageCode.groupNotFound)) {
+        showCustomToast(intl.groupNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onOutSideTransfer(OutSideTransferEvent event, Emitter emit) async {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+    try {
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      await useCase.outSideTransfer(event.groupId, event.userId, event.amount);
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
       if (e.toString().contains(MessageCode.groupNotFound)) {
         showCustomToast(intl.groupNotFound, type: ToastType.error);
       } else {

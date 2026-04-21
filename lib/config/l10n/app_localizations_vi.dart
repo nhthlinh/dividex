@@ -704,7 +704,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Thông tin có thể được chia sẻ với các đối tác dịch vụ để vận hành ứng dụng.';
 
   @override
-  String get freePaidFeatures => '7. TÍNH NĂNG MIỄN PHÍ VÀ CÓ PHÍ';
+  String get freePaidFeatures => '7. TÍNH NĂNG MIỄN PHÍ';
 
   @override
   String get freeFeatures => '7.1 Tính năng miễn phí';
@@ -723,19 +723,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get basicReports => 'Tạo báo cáo chi tiêu cơ bản.';
 
   @override
-  String get paidFeatures => '7.2 Tính năng có phí';
+  String get paidFeatures => '7.2 Không có tính năng trả phí';
 
   @override
-  String get premiumFeaturesPayment =>
-      'Các tính năng cao cấp (như báo cáo nâng cao hoặc tích hợp thanh toán) có thể yêu cầu thanh toán.';
+  String get noPaidFeatures =>
+      'Hiện tại, DIVIDEX không cung cấp bất kỳ tính năng trả phí nào và không yêu cầu người dùng thanh toán dưới bất kỳ hình thức nào.';
 
   @override
-  String get transactionsNotified =>
-      'Tất cả các giao dịch sẽ được thông báo rõ ràng trước khi thực hiện.';
-
-  @override
-  String get refundPolicyPublished =>
-      'Chính sách hoàn tiền sẽ được công bố riêng.';
+  String get futureMonetization =>
+      'Nếu trong tương lai có áp dụng các tính năng thu phí, người dùng sẽ được thông báo rõ ràng và Điều khoản này sẽ được cập nhật tương ứng.';
 
   @override
   String get intellectualProperty => '8. SỞ HỮU TRÍ TUỆ';
@@ -1550,8 +1546,18 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String groupCreated(Object user, Object group) {
+    return '$user đã tạo nhóm $group';
+  }
+
+  @override
   String deposit(Object amount, Object currency) {
     return 'Bạn đã nạp $amount $currency';
+  }
+
+  @override
+  String remindGroup(Object group) {
+    return 'Bạn đang nợ tiền trong nhóm $group. Nhấn để xem chi tiết.';
   }
 
   @override

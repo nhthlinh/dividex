@@ -699,7 +699,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Information may be shared with service partners to operate the App.';
 
   @override
-  String get freePaidFeatures => '7. FREE AND PAID FEATURES';
+  String get freePaidFeatures => '7. FREE FEATURES';
 
   @override
   String get freeFeatures => '7.1 Free Features';
@@ -718,19 +718,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get basicReports => 'Generating basic expense reports.';
 
   @override
-  String get paidFeatures => '7.2 Paid Features';
+  String get paidFeatures => '7.2 No Paid Features';
 
   @override
-  String get premiumFeaturesPayment =>
-      'Premium features (e.g., advanced reports or payment integrations) may require payment.';
+  String get noPaidFeatures =>
+      'Currently, DIVIDEX does not offer any paid features or require any form of payment.';
 
   @override
-  String get transactionsNotified =>
-      'All transactions will be clearly notified before completion.';
-
-  @override
-  String get refundPolicyPublished =>
-      'Refund policies will be published separately.';
+  String get futureMonetization =>
+      'If monetization features are introduced in the future, users will be clearly informed and these Terms will be updated accordingly.';
 
   @override
   String get intellectualProperty => '8. INTELLECTUAL PROPERTY';
@@ -1552,8 +1548,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String groupCreated(Object user, Object group) {
+    return '$user have created a group $group';
+  }
+
+  @override
   String deposit(Object amount, Object currency) {
     return 'You have deposited $amount $currency';
+  }
+
+  @override
+  String remindGroup(Object group) {
+    return 'You owe money in group $group. Click to see details.';
   }
 
   @override

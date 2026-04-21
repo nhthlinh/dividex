@@ -1,12 +1,14 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
-import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 Future<void> showSettleUpDialog({
@@ -71,10 +73,7 @@ Future<void> showSettleUpDialog({
               size: ButtonSize.medium,
               type: ButtonType.secondary,
               onPressed: () => {
-                showCustomToast(
-                  intl.commingSoon,
-                  type: ToastType.info,
-                ),
+                context.read<GroupBloc>().add(OutSideTransferEvent(groupId, receiver.id ?? '', amount))
               },
             ),
             const SizedBox(width: 12),

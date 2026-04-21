@@ -20,7 +20,6 @@ import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
-import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -185,17 +184,17 @@ class _EventSettingPageState extends State<EventSettingPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      CustomButton(
-                        text: intl.qrCode,
-                        onPressed: () {
-                          showCustomToast(
-                            intl.commingSoon,
-                            type: ToastType.info,
-                          );
-                          // Xử lý QR code
-                        },
-                        size: ButtonSize.medium,
-                      ),
+                      // CustomButton(
+                      //   text: intl.qrCode,
+                      //   onPressed: () {
+                      //     showCustomToast(
+                      //       intl.commingSoon,
+                      //       type: ToastType.info,
+                      //     );
+                      //     // Xử lý QR code
+                      //   },
+                      //   size: ButtonSize.medium,
+                      // ),
                       CustomButton(
                         text: intl.groupMember,
                         buttonKey: inviteGroupMembersButtonKey,

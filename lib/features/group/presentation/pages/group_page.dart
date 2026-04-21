@@ -15,7 +15,6 @@ import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_dropdown_widget.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
-import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/settle_up_pop_up.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
@@ -475,10 +474,9 @@ class _GroupPageState extends State<GroupPage> {
                 onPressed: () {
                   if (currentMember.amount != null &&
                       currentMember.amount! > 0) {
-                    showCustomToast(
-                      intl.commingSoon,
-                      type: ToastType.info,
-                    );
+                    if (group.id!.isNotEmpty) {
+                      context.read<GroupBloc>().add(RemindGroupEvent(group.id ?? '', currentMember.user?.id ?? ''));
+                    }
                   } else {
                     showSettleUpDialog(
                       context: context,
