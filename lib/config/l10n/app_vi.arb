@@ -737,5 +737,13 @@
   "savedToGallery": "Đã lưu mã QR vào thư viện",
   "downloadQr": "Tải mã QR về máy",
   "bankAccountIsExist": "Tài khoản ngân hàng đã tồn tại",
-  "accountName": "Tên chủ tài khoản"
+  "accountName": "Tên chủ tài khoản",
+
+  "expenseOcrTitle": "Quét hóa đơn",
+  "takePhoto": "Chụp ảnh",
+  "fromGallery": "Lấy từ thư viện",
+  "rateUsTitle": "Bạn hãy đánh giá trải nghiệm của bạn với Dividex?",
+
+  "recentExpenses": "Chi tiêu gần đây",
+  "viewAll": "Xem tất cả"
 }

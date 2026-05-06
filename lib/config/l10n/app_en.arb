@@ -735,5 +735,13 @@
   "savedToGallery": "Saved to gallery",
   "downloadQr": "Download QR code",
   "bankAccountIsExist": "Bank account already exists",
-  "accountName": "Account holder name"
+  "accountName": "Account holder name",
+
+  "expenseOcrTitle": "Scan bill",
+  "takePhoto": "Take photo",
+  "fromGallery": "From gallery",
+
+  "rateUsTitle": "How would you rate your experience with Dividex?",
+  "recentExpenses": "Recent expenses",
+  "viewAll": "View all"
 }

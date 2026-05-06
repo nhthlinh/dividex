@@ -3097,6 +3097,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account holder name'**
   String get accountName;
+
+  /// No description provided for @expenseOcrTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan bill'**
+  String get expenseOcrTitle;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get takePhoto;
+
+  /// No description provided for @fromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'From gallery'**
+  String get fromGallery;
+
+  /// No description provided for @rateUsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How would you rate your experience with Dividex?'**
+  String get rateUsTitle;
+
+  /// No description provided for @recentExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent expenses'**
+  String get recentExpenses;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get viewAll;
 }
 
 class _AppLocalizationsDelegate

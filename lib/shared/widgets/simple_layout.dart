@@ -42,7 +42,7 @@ class SimpleLayout extends StatelessWidget {
                   onRefresh: onRefresh,
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(top: 24, bottom: 24),
+                    padding: const EdgeInsets.only(top: 0, bottom: 24),
                     child: child,
                   ),
                 ),

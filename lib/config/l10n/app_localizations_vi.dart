@@ -1665,4 +1665,22 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get accountName => 'Tên chủ tài khoản';
+
+  @override
+  String get expenseOcrTitle => 'Quét hóa đơn';
+
+  @override
+  String get takePhoto => 'Chụp ảnh';
+
+  @override
+  String get fromGallery => 'Lấy từ thư viện';
+
+  @override
+  String get rateUsTitle => 'Bạn hãy đánh giá trải nghiệm của bạn với Dividex?';
+
+  @override
+  String get recentExpenses => 'Chi tiêu gần đây';
+
+  @override
+  String get viewAll => 'Xem tất cả';
 }

@@ -1666,4 +1666,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountName => 'Account holder name';
+
+  @override
+  String get expenseOcrTitle => 'Scan bill';
+
+  @override
+  String get takePhoto => 'Take photo';
+
+  @override
+  String get fromGallery => 'From gallery';
+
+  @override
+  String get rateUsTitle => 'How would you rate your experience with Dividex?';
+
+  @override
+  String get recentExpenses => 'Recent expenses';
+
+  @override
+  String get viewAll => 'View all';
 }

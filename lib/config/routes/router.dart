@@ -235,6 +235,9 @@ GoRouter buildRouter(BuildContext context) {
               providers: [
                 BlocProvider<RechargeBloc>(create: (context) => RechargeBloc()),
                 BlocProvider<UserBloc>(create: (context) => UserBloc()),
+                BlocProvider<ExpenseDataBloc>(
+                  create: (context) => ExpenseDataBloc(),
+                ),
               ],
               child: HomePage(),
             ),
