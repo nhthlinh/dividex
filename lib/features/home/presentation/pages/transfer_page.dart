@@ -359,7 +359,7 @@ class _TransferPageState extends State<TransferPage> {
                               padding: EdgeInsets.symmetric(vertical: 20),
                               child: Center(
                                 child: SpinKitFadingCircle(
-                                  color: const Color(0xFF08AE02),
+                                  color: AppThemes.primary3Color,
                                 ),
                               ),
                             );

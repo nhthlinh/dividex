@@ -1038,9 +1038,9 @@ GoRouter buildRouter(BuildContext context) {
         return isSplash ? null : '/';
       }
 
-      if (authState is AuthLoading) {
-        return isLoading ? null : '/loading';
-      }
+      // if (authState is AuthLoading) {
+      //   return isLoading ? null : '/loading';
+      // }
 
       // Nếu chưa login
       if (authState is AuthUnauthenticated) {

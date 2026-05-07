@@ -273,7 +273,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                   padding: EdgeInsets.symmetric(vertical: 20),
                                   child: Center(
                                     child: SpinKitFadingCircle(
-                                      color: const Color(0xFF08AE02),
+                                      color: AppThemes.primary3Color,
                                     ),
                                   ),
                                 );
@@ -400,7 +400,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                 padding: EdgeInsets.symmetric(vertical: 20),
                                 child: Center(
                                   child: SpinKitFadingCircle(
-                                    color: const Color(0xFF08AE02),
+                                    color: AppThemes.primary3Color,
                                   ),
                                 ),
                               );

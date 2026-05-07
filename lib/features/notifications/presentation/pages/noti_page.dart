@@ -119,7 +119,7 @@ class _NotiPageState extends State<NotiPage> {
               return Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Center(
-                  child: SpinKitFadingCircle(color: const Color(0xFF08AE02)),
+                  child: SpinKitFadingCircle(color: AppThemes.primary3Color),
                 ),
               );
             }
