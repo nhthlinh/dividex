@@ -132,7 +132,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
       content: Column(
         children: [
           Text(
-            'Create a expense by: ',
+            intl.createExpenseBy,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
@@ -142,7 +142,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomButton(
-                    text: 'Manually',
+                    text: intl.manually,
                     buttonKey: manualOptionButtonKey,
                     onPressed: () {
                       Navigator.pop(context);
@@ -152,7 +152,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     customColor: AppThemes.errorColor,
                   ),
                   CustomButton(
-                    text: 'Scanning',
+                    text: intl.scanning,
                     buttonKey: scanningOptionButtonKey,
                     onPressed: () async {
                       Navigator.pop(context);

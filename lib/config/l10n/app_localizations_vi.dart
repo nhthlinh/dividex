@@ -1480,7 +1480,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get inOrEx => 'Trong hay ngoài app';
 
   @override
-  String get conected => 'Đã kết nối';
+  String get connected => 'Connected';
 
   @override
   String get lastTransaction => 'Giao dịch cuối';
@@ -1683,4 +1683,25 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get viewAll => 'Xem tất cả';
+
+  @override
+  String get createExpenseBy => 'Tạo chi tiêu bằng: ';
+
+  @override
+  String get manually => 'Nhập tay';
+
+  @override
+  String get scanning => 'Quét';
+
+  @override
+  String get homeTabTitle => 'Trang chủ';
+
+  @override
+  String get searchTabTitle => 'Tìm kiếm';
+
+  @override
+  String get chatTabTitle => 'Nhắn tin';
+
+  @override
+  String get settingTabTitle => 'Cài đặt';
 }

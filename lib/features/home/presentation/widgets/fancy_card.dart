@@ -38,7 +38,7 @@ class _FancyCardState extends State<FancyCard> {
         painter: FancyBackgroundPainter(),
         child: Container(
           width: 327,
-          height: 220,
+          height: 170,
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +79,7 @@ class _FancyCardState extends State<FancyCard> {
                                 borderRadius: BorderRadius.circular(18),
                               ),
                               child: Text(
-                                intl.conected,
+                                intl.connected,
                                 style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(color: Colors.white),
                               ),
@@ -168,67 +168,68 @@ class _FancyCardState extends State<FancyCard> {
                         const SizedBox(height: 16),
 
                         // ---- Footer icons ----
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(Icons.list, color: Colors.white),
-                                const SizedBox(width: 4),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.totalTransactions.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall?.copyWith(color: Colors.white),
-                                    ),
-                                    Text(
-                                      intl.transaction,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: Colors.white70),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //   children: [
+                        //     Row(
+                        //       mainAxisAlignment: MainAxisAlignment.start,
+                        //       children: [
+                        //         const Icon(Icons.list, color: Colors.white),
+                        //         const SizedBox(width: 4),
+                        //         Column(
+                        //           mainAxisAlignment: MainAxisAlignment.start,
+                        //           crossAxisAlignment: CrossAxisAlignment.start,
+                        //           children: [
+                        //             Text(
+                        //               state.totalTransactions.toString(),
+                        //               style: Theme.of(context)
+                        //                   .textTheme
+                        //                   .titleSmall?.copyWith(color: Colors.white),
+                        //             ),
+                        //             Text(
+                        //               intl.transaction,
+                        //               style: Theme.of(context)
+                        //                   .textTheme
+                        //                   .bodyMedium
+                        //                   ?.copyWith(color: Colors.white70),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ],
+                        //     ),
 
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(
-                                  Icons.access_time,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 4),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.latestTime,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall?.copyWith(color: Colors.white),
-                                    ),
-                                    Text(
-                                      intl.lastTransaction,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: Colors.white70),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                        //     Row(
+                        //       mainAxisAlignment: MainAxisAlignment.start,
+                        //       children: [
+                        //         const Icon(
+                        //           Icons.access_time,
+                        //           color: Colors.white,
+                        //         ),
+                        //         const SizedBox(width: 4),
+                        //         Column(
+                        //           mainAxisAlignment: MainAxisAlignment.start,
+                        //           crossAxisAlignment: CrossAxisAlignment.start,
+                        //           children: [
+                        //             Text(
+                        //               state.latestTime,
+                        //               style: Theme.of(context)
+                        //                   .textTheme
+                        //                   .titleSmall?.copyWith(color: Colors.white),
+                        //             ),
+                        //             Text(
+                        //               intl.lastTransaction,
+                        //               style: Theme.of(context)
+                        //                   .textTheme
+                        //                   .bodyMedium
+                        //                   ?.copyWith(color: Colors.white70),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ],
+                        // ),
+                      
                       ],
                     );
                   }

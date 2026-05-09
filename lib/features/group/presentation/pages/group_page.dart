@@ -421,8 +421,10 @@ class _GroupPageState extends State<GroupPage> {
               child: MemberCarousel(
                 members: members,
                 onChanged: (idx) {
+                  if (idx < 0 || idx >= members.length) return;
+
                   setState(() {
-                    if (members[index].id == HiveService.getUser().id) {
+                    if (members[idx].id == HiveService.getUser().id) {
                       _selectedMemberIndices[index] =
                           ((idx + 1) % members.length);
                     } else {
@@ -475,7 +477,12 @@ class _GroupPageState extends State<GroupPage> {
                   if (currentMember.amount != null &&
                       currentMember.amount! > 0) {
                     if (group.id!.isNotEmpty) {
-                      context.read<GroupBloc>().add(RemindGroupEvent(group.id ?? '', currentMember.user?.id ?? ''));
+                      context.read<GroupBloc>().add(
+                        RemindGroupEvent(
+                          group.id ?? '',
+                          currentMember.user?.id ?? '',
+                        ),
+                      );
                     }
                   } else {
                     showSettleUpDialog(

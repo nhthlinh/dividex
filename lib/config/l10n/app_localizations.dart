@@ -2804,11 +2804,11 @@ abstract class AppLocalizations {
   /// **'In or ex app'**
   String get inOrEx;
 
-  /// No description provided for @conected.
+  /// No description provided for @connected.
   ///
   /// In en, this message translates to:
-  /// **'Conected'**
-  String get conected;
+  /// **'Connected'**
+  String get connected;
 
   /// No description provided for @lastTransaction.
   ///
@@ -3133,6 +3133,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View all'**
   String get viewAll;
+
+  /// No description provided for @createExpenseBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Create expense by: '**
+  String get createExpenseBy;
+
+  /// No description provided for @manually.
+  ///
+  /// In en, this message translates to:
+  /// **'Manually'**
+  String get manually;
+
+  /// No description provided for @scanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning'**
+  String get scanning;
+
+  /// No description provided for @homeTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homeTabTitle;
+
+  /// No description provided for @searchTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchTabTitle;
+
+  /// No description provided for @chatTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chatTabTitle;
+
+  /// No description provided for @settingTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting'**
+  String get settingTabTitle;
 }
 
 class _AppLocalizationsDelegate

@@ -553,7 +553,7 @@
   "chooseTypeFilter": "Choose type of transaction",
   "wallet": "Wallet",
   "inOrEx": "In or ex app",
-  "conected": "Conected",
+  "connected": "Connected",
   "lastTransaction": "Last transaction",
 
   "eventUpdated": "{user} have updated an event {event}",
@@ -743,5 +743,14 @@
 
   "rateUsTitle": "How would you rate your experience with Dividex?",
   "recentExpenses": "Recent expenses",
-  "viewAll": "View all"
+  "viewAll": "View all",
+
+  "createExpenseBy": "Create expense by: ",
+  "manually": "Manually",
+  "scanning": "Scanning",
+  "homeTabTitle": "Home",
+  "searchTabTitle": "Search",
+  "chatTabTitle": "Chat",
+  "settingTabTitle": "Setting"
+
 }
