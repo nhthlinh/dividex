@@ -7,6 +7,7 @@ import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
 import 'package:Dividex/features/image/presentation/bloc/image_state.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';

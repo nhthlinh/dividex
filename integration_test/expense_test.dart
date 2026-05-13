@@ -28,6 +28,9 @@ import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
     as user_event;
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
+import 'package:Dividex/shared/bloc/load_user_state.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/pages/choose_members_page.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
