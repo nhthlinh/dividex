@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/data/models/bank_account_model.dart';
@@ -39,21 +41,38 @@ class _AddAccountPageState extends State<AddAccountPage> {
 
   final clearFormTrigger = ValueNotifier(false);
 
+  Timer? _debounce;
+
+  String _lastAccount = '';
+  String? _lastBankCode;
+
+  void _checkAndTrigger() {
+    final acc = accountNumber.text.trim();
+    final bank = selectedBranch.value;
+
+    if (acc.isEmpty || bank == null) return;
+
+    // Không gọi lại nếu dữ liệu không đổi
+    if (_lastAccount == acc && _lastBankCode == bank.code) {
+      return;
+    }
+
+    _debounce?.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      _lastAccount = acc;
+      _lastBankCode = bank.code;
+
+      _onAccountBankReady();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
 
     accountNumber.addListener(_checkAndTrigger);
     selectedBranch.addListener(_checkAndTrigger);
-  }
-
-  void _checkAndTrigger() {
-    final acc = accountNumber.text.trim();
-    final bank = selectedBranch.value;
-
-    if (acc.isNotEmpty && bank != null) {
-      _onAccountBankReady();
-    }
   }
 
   void _onAccountBankReady() {
@@ -67,6 +86,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
   void dispose() {
     accountNumber.dispose();
     branch.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 

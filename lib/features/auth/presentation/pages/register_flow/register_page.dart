@@ -54,28 +54,28 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  Future<void> _submitRegister() async {
-    if (_formKey.currentState!.validate()) {
-      // Lấy dữ liệu hiện có hoặc tạo mới
-      String email = emailController.text.trim();
-      String password = passwordController.text.trim();
-      String name = nameController.text.trim();
-      String number = numberController.text.trim();
+  // Future<void> _submitRegister() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     // Lấy dữ liệu hiện có hoặc tạo mới
+  //     String email = emailController.text.trim();
+  //     String password = passwordController.text.trim();
+  //     String name = nameController.text.trim();
+  //     String number = numberController.text.trim();
 
-      // Gửi sự kiện đăng ký
-      context.read<AuthBloc>().add(
-        AuthRegisterRequested(
-          userData: UserModel(
-            email: email,
-            fullName: name,
-            phoneNumber: number,
-            avatar: null,
-          ),
-          password: password,
-        ),
-      );
-    }
-  }
+  //     // Gửi sự kiện đăng ký
+  //     context.read<AuthBloc>().add(
+  //       AuthRegisterRequested(
+  //         userData: UserModel(
+  //           email: email,
+  //           fullName: name,
+  //           phoneNumber: number,
+  //           avatar: null,
+  //         ),
+  //         password: password,
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

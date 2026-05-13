@@ -1,4 +1,5 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
@@ -13,6 +14,7 @@ import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class TransferConfirmPage extends StatefulWidget {
   static const Key pinInputKey = Key('transfer_confirm_pin_input');
@@ -114,14 +116,14 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
               BlocListener<RechargeBloc, RechargeState>(
                 listener: (context, state) {
                   if (state is RechargeSuccessState) {
-                    // context.pushNamed(
-                    //   AppRouteNames.transferSuccess,
-                    //   extra: {
-                    //     'toUser': widget.toUser,
-                    //     'amount': widget.originalAmount,
-                    //     'currency': widget.currency,
-                    //   },
-                    // );
+                    context.pushNamed(
+                      AppRouteNames.transferSuccess,
+                      extra: {
+                        'toUser': widget.toUser,
+                        'amount': widget.originalAmount,
+                        'currency': widget.currency,
+                      },
+                    );
                   }
                   if (state is CreatePinRequired) {
                     showCreatePinDialog(context: context);

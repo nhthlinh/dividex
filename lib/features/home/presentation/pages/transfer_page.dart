@@ -96,8 +96,8 @@ class _TransferPageState extends State<TransferPage> {
 
   Future<void> _handleTransfer(BuildContext context) async {
     double a = double.parse(originalAmount.text.trim().replaceAll('.', ''));
-    // String des = description.text;
-    // UserModel toUser = selectedToUser.value!;
+    String des = description.text;
+    UserModel toUser = selectedToUser.value!;
     final intl = AppLocalizations.of(context)!;
 
     if (_selectedCurrency.value != CurrencyEnum.vnd) {
@@ -150,17 +150,17 @@ class _TransferPageState extends State<TransferPage> {
 
           // Nếu người dùng đồng ý -> chuyển sang trang xác nhận
           if (confirm == true) {
-            // context.pushNamed(
-            //   AppRouteNames.transferConfirm,
-            //   extra: {
-            //     'toUser': toUser,
-            //     'originalAmount': a,
-            //     'realAmount': converted,
-            //     'currency': _selectedCurrency.value,
-            //     'description': des.isNotEmpty ? des : null,
-            //     'groupId': groupId,
-            //   },
-            // );
+            context.pushNamed(
+              AppRouteNames.transferConfirm,
+              extra: {
+                'toUser': toUser,
+                'originalAmount': a,
+                'realAmount': converted,
+                'currency': _selectedCurrency.value,
+                'description': des.isNotEmpty ? des : null,
+                'groupId': groupId,
+              },
+            );
           }
         } else {
           showCustomToast(
@@ -176,17 +176,17 @@ class _TransferPageState extends State<TransferPage> {
       return;
     }
 
-    // context.pushNamed(
-    //   AppRouteNames.transferConfirm,
-    //   extra: {
-    //     'toUser': toUser,
-    //     'originalAmount': a,
-    //     'realAmount': a,
-    //     'currency': _selectedCurrency.value,
-    //     'description': des.isNotEmpty ? des : null,
-    //     'groupId': groupId,
-    //   },
-    // );
+    context.pushNamed(
+      AppRouteNames.transferConfirm,
+      extra: {
+        'toUser': toUser,
+        'originalAmount': a,
+        'realAmount': a,
+        'currency': _selectedCurrency.value,
+        'description': des.isNotEmpty ? des : null,
+        'groupId': groupId,
+      },
+    );
   }
 
   void _submit() {
@@ -267,131 +267,137 @@ class _TransferPageState extends State<TransferPage> {
                         color: Colors.grey,
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        context.pushNamed(
-                          AppRouteNames.chooseMember,
-                          extra: {
-                            'id': HiveService.getUser().id,
-                            'type': LoadType.friends,
-                            'initialSelected': selectedToUser.value != null
-                                ? [selectedToUser.value!]
-                                : [],
-                            'onChanged': (List<UserModel> users) {
-                              setState(() {
-                                selectedToUser.value = users.isNotEmpty
-                                    ? users.first
-                                    : null;
-                              });
-                            },
-                            'isMultiSelect': false,
-                          },
-                        );
-                      },
-                      child: Text(
-                        intl.findBeneficiary,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontSize: 12,
-                          letterSpacing: 0,
-                          height: 16 / 12,
-                          color: AppThemes.primary3Color,
-                        ),
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     context.pushNamed(
+                    //       AppRouteNames.chooseMember,
+                    //       extra: {
+                    //         'id': HiveService.getUser().id,
+                    //         'type': LoadType.friends,
+                    //         'initialSelected': selectedToUser.value != null
+                    //             ? [selectedToUser.value!]
+                    //             : [],
+                    //         'onChanged': (List<UserModel> users) {
+                    //           print(users.first.fullName);
+                    //           selectedToUser.value = users.isNotEmpty
+                    //               ? users.first
+                    //               : null;
+                    //         },
+                    //         'isMultiSelect': false,
+                    //       },
+                    //     );
+                    //   },
+                    //   child: Text(
+                    //     intl.findBeneficiary,
+                    //     style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    //       fontSize: 12,
+                    //       letterSpacing: 0,
+                    //       height: 16 / 12,
+                    //       color: AppThemes.primary3Color,
+                    //     ),
+                    //   ),
+                    // ),
+                  
                   ],
                 ),
                 const SizedBox(height: 16),
 
                 // Friend
-                BlocBuilder<LoadedFriendsBloc, LoadedFriendsState>(
-                  buildWhen: (p, c) =>
-                      p.requests != c.requests || p.isLoading != c.isLoading,
-                  builder: (context, state) {
-                    if (state.isLoading) {
-                      return Center(
-                        child: ColoredBox(
-                          color: Colors.transparent,
-                          child: SpinKitFadingCircle(
-                            color: AppThemes.primary3Color,
-                          ),
-                        ),
-                      );
-                    }
-
-                    if (state.requests.isEmpty) {
-                      return SizedBox.shrink();
-                    }
-
-                    final friends = state.requests;
-                    final hasMore = state.page < state.totalPage;
-
-                    if (widget.toUser != null &&
-                        !friends.any((f) => f.friendUid == widget.toUser!.id)) {
-                      // Nếu người nhận không có trong danh sách bạn bè, thêm vào đầu danh sách
-                      friends.insert(
-                        0,
-                        FriendModel(
-                          friendUid: widget.toUser!.id!,
-                          fullName: widget.toUser!.fullName!,
-                          avatarUrl: widget.toUser!.avatar,
-                        ),
-                      );
-                    }
-
-                    return Container(
-                      height: 120,
-                      margin: const EdgeInsets.only(top: 8),
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: (friends.length + (hasMore ? 1 : 0)),
-                        itemBuilder: (context, index) {
-                          if (index == friends.length) {
-                            context.read<LoadedFriendsBloc>().add(
-                              event.LoadMoreFriendsEvent(
-                                HiveService.getUser().id,
-                                searchQuery: '',
+                ValueListenableBuilder<UserModel?>(
+                  valueListenable: selectedToUser,
+                  builder: (context, value, _) {
+                    return BlocBuilder<LoadedFriendsBloc, LoadedFriendsState>(
+                      buildWhen: (p, c) =>
+                          p.requests != c.requests ||
+                          p.isLoading != c.isLoading,
+                      builder: (context, state) {
+                        if (state.isLoading) {
+                          return Center(
+                            child: ColoredBox(
+                              color: Colors.transparent,
+                              child: SpinKitFadingCircle(
+                                color: AppThemes.primary3Color,
                               ),
-                            );
-                            return Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              child: Center(
-                                child: SpinKitFadingCircle(
-                                  color: AppThemes.primary3Color,
-                                ),
-                              ),
-                            );
-                          }
-
-                          return SquareUser(
-                            key: ValueKey(friends[index].friendUid),
-                            user: UserModel(
-                              id: friends[index].friendUid,
-                              fullName: friends[index].fullName,
-                              avatar: friends[index].avatarUrl,
                             ),
-                            isSelected:
-                                selectedToUser.value?.id ==
-                                friends[index].friendUid,
-                            onTap: () {
-                              setState(() {
-                                if (selectedToUser.value?.id ==
-                                    friends[index].friendUid) {
-                                  selectedToUser.value = null;
-                                } else {
-                                  selectedToUser.value = UserModel(
-                                    id: friends[index].friendUid,
-                                    fullName: friends[index].fullName,
-                                    avatar: friends[index].avatarUrl,
-                                  );
-                                }
-                              });
-                            },
                           );
-                        },
-                      ),
+                        }
+
+                        if (state.requests.isEmpty) {
+                          return SizedBox.shrink();
+                        }
+
+                        // final friends = state.requests;
+                        final friends = List<FriendModel>.from(state.requests);
+                        final hasMore = state.page < state.totalPage;
+
+                        if (widget.toUser != null &&
+                            !friends.any(
+                              (f) => f.friendUid == widget.toUser!.id,
+                            )) {
+                          // Nếu người nhận không có trong danh sách bạn bè, thêm vào đầu danh sách
+                          friends.insert(
+                            0,
+                            FriendModel(
+                              friendUid: widget.toUser!.id!,
+                              fullName: widget.toUser!.fullName!,
+                              avatarUrl: widget.toUser!.avatar,
+                            ),
+                          );
+                        }
+
+                        return Container(
+                          height: 120,
+                          margin: const EdgeInsets.only(top: 8),
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: (friends.length + (hasMore ? 1 : 0)),
+                            itemBuilder: (context, index) {
+                              if (index == friends.length) {
+                                context.read<LoadedFriendsBloc>().add(
+                                  event.LoadMoreFriendsEvent(
+                                    HiveService.getUser().id,
+                                    searchQuery: '',
+                                  ),
+                                );
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: Center(
+                                    child: SpinKitFadingCircle(
+                                      color: AppThemes.primary3Color,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return SquareUser(
+                                key: ValueKey(friends[index].friendUid),
+                                user: UserModel(
+                                  id: friends[index].friendUid,
+                                  fullName: friends[index].fullName,
+                                  avatar: friends[index].avatarUrl,
+                                ),
+                                isSelected:
+                                    selectedToUser.value?.id == friends[index].friendUid,
+                                onTap: () {
+                                  if (selectedToUser.value?.id ==
+                                      friends[index].friendUid) {
+                                    selectedToUser.value = null;
+                                  } else {
+                                    selectedToUser.value = UserModel(
+                                      id: friends[index].friendUid,
+                                      fullName: friends[index].fullName,
+                                      avatar: friends[index].avatarUrl,
+                                    );
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

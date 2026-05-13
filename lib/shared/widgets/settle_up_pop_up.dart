@@ -1,4 +1,5 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
@@ -9,6 +10,7 @@ import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 Future<void> showSettleUpDialog({
   required BuildContext context,
@@ -70,28 +72,28 @@ Future<void> showSettleUpDialog({
           children: [
             CustomButton(
               text: intl.outSideTransfer,
-              size: ButtonSize.popUp,
+              size: ButtonSize.medium,
               type: ButtonType.secondary,
               onPressed: () => {
                 context.read<GroupBloc>().add(OutSideTransferEvent(groupId, receiver.id ?? '', amount))
               },
             ),
-            // const SizedBox(width: 12),
-            // CustomButton(
-            //   text: intl.transfer,
-            //   size: ButtonSize.medium,
-            //   onPressed: () {
-            //     // context.pushNamed(
-            //     //   AppRouteNames.transfer,
-            //     //   extra: {
-            //     //     'toUser': receiver,
-            //     //     'amount': amount,
-            //     //     'currency': currency,
-            //     //     'groupId': groupId,
-            //     //   },
-            //     // );
-            //   },
-            // ),
+            const SizedBox(width: 12),
+            CustomButton(
+              text: intl.transfer,
+              size: ButtonSize.medium,
+              onPressed: () {
+                context.pushNamed(
+                  AppRouteNames.transfer,
+                  extra: {
+                    'toUser': receiver,
+                    'amount': amount,
+                    'currency': currency,
+                    'groupId': groupId,
+                  },
+                );
+              },
+            ),
           
           ],
         ),

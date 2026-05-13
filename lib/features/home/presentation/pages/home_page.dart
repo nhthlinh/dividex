@@ -2,7 +2,7 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart' as ExpenseDataEvent;
+import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart' as expense_data_event;
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:Dividex/features/notifications/presentation/bloc/notification_state.dart';
@@ -24,7 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -42,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     context.read<RechargeBloc>().add(GetWalletInfoEvent());
     context.read<UserBloc>().add(GetMeEvent());
     context.read<ExpenseDataBloc>().add(
-      ExpenseDataEvent.InitialEvent(id: '', pageSize: 4, type: ExpenseDataEvent.LoadExpenseType.all),
+      expense_data_event.InitialEvent(id: '', pageSize: 4, type: expense_data_event.LoadExpenseType.all),
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -141,7 +140,7 @@ class _HomePageState extends State<HomePage> {
           context.read<RechargeBloc>().add(GetWalletInfoEvent());
           context.read<UserBloc>().add(GetMeEvent());
           context.read<ExpenseDataBloc>().add(
-            ExpenseDataEvent.InitialEvent(id: '', pageSize: 4, type: ExpenseDataEvent.LoadExpenseType.all),
+            expense_data_event.InitialEvent(id: '', pageSize: 4, type: expense_data_event.LoadExpenseType.all),
           );
           return Future.value();
         },
@@ -197,39 +196,39 @@ class _HomePageState extends State<HomePage> {
   SquareButtonsWrap buttonGrid(AppLocalizations intl, BuildContext context) {
     return SquareButtonsWrap(
       items: [
-        // ButtonItem(
-        //   icon: Image.asset(
-        //     'lib/assets/icons/account.png',
-        //     width: 28,
-        //     height: 28,
-        //   ),
-        //   label: intl.account,
-        //   onTap: () {
-        //     context.pushNamed(AppRouteNames.account);
-        //   },
-        // ),
-        // ButtonItem(
-        //   icon: Image.asset(
-        //     'lib/assets/icons/transfer.png',
-        //     width: 28,
-        //     height: 28,
-        //   ),
-        //   label: intl.transfer,
-        //   onTap: () {
-        //     context.pushNamed(AppRouteNames.transfer);
-        //   },
-        // ),
-        // ButtonItem(
-        //   icon: Image.asset(
-        //     'lib/assets/icons/withdraw.png',
-        //     width: 28,
-        //     height: 28,
-        //   ),
-        //   label: intl.withdraw,
-        //   onTap: () {
-        //     context.pushNamed(AppRouteNames.withdraw);
-        //   },
-        // ),
+        ButtonItem(
+          icon: Image.asset(
+            'lib/assets/icons/account.png',
+            width: 28,
+            height: 28,
+          ),
+          label: intl.account,
+          onTap: () {
+            context.pushNamed(AppRouteNames.account);
+          },
+        ),
+        ButtonItem(
+          icon: Image.asset(
+            'lib/assets/icons/transfer.png',
+            width: 28,
+            height: 28,
+          ),
+          label: intl.transfer,
+          onTap: () {
+            context.pushNamed(AppRouteNames.transfer);
+          },
+        ),
+        ButtonItem(
+          icon: Image.asset(
+            'lib/assets/icons/withdraw.png',
+            width: 28,
+            height: 28,
+          ),
+          label: intl.withdraw,
+          onTap: () {
+            context.pushNamed(AppRouteNames.withdraw);
+          },
+        ),
         ButtonItem(
           icon: Image.asset(
             'lib/assets/icons/friend.png',
@@ -263,17 +262,17 @@ class _HomePageState extends State<HomePage> {
             context.pushNamed(AppRouteNames.transactionReport);
           },
         ),
-        // ButtonItem(
-        //   icon: Image.asset(
-        //     'lib/assets/icons/wallet_report.png',
-        //     width: 28,
-        //     height: 28,
-        //   ),
-        //   label: intl.walletReport,
-        //   onTap: () {
-        //     context.pushNamed(AppRouteNames.walletReport);
-        //   },
-        // ),
+        ButtonItem(
+          icon: Image.asset(
+            'lib/assets/icons/wallet_report.png',
+            width: 28,
+            height: 28,
+          ),
+          label: intl.walletReport,
+          onTap: () {
+            context.pushNamed(AppRouteNames.walletReport);
+          },
+        ),
       ],
     );
   }
@@ -407,39 +406,6 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
-    );
-  }
-}
-
-class _QuickAccessChip extends StatelessWidget {
-  final String label;
-  final IconData icon;
-
-  const _QuickAccessChip({required this.label, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: Colors.white),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
-        ],
-      ),
     );
   }
 }

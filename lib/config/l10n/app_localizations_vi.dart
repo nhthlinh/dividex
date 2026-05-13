@@ -1480,7 +1480,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get inOrEx => 'Trong hay ngoài app';
 
   @override
-  String get connected => 'Connected';
+  String get connected => 'Đã kết nối';
 
   @override
   String get lastTransaction => 'Giao dịch cuối';

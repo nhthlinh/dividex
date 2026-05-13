@@ -553,7 +553,7 @@
   "chooseTypeFilter": "Chọn loại giao dịch",
   "wallet": "Ví",
   "inOrEx": "Trong hay ngoài app",
-  "conected": "Đã kết nối",
+  "connected": "Đã kết nối",
   "lastTransaction": "Giao dịch cuối",
 
   "eventUpdated": "{user} đã cập nhật sự kiện {event}",

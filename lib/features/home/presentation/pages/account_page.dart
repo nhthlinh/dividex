@@ -1,4 +1,5 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
@@ -8,6 +9,7 @@ import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -85,11 +87,11 @@ class _AccountPageState extends State<AccountPage> {
                       final account = accounts[index];
                       return ContentCard(
                         onTap: () {
-                          // context.pushNamed(
-                          //   AppRouteNames.accountDetail,
-                          //   pathParameters: {'id': account.id ?? ''},
-                          //   extra: account,
-                          // );
+                          context.pushNamed(
+                            AppRouteNames.accountDetail,
+                            pathParameters: {'id': account.id ?? ''},
+                            extra: account,
+                          );
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +144,7 @@ class _AccountPageState extends State<AccountPage> {
             CustomButton(
               text: intl.addNewAccount,
               onPressed: () {
-                // context.pushNamed(AppRouteNames.addAccount);
+                context.pushNamed(AppRouteNames.addAccount);
               },
             ),
           ],
