@@ -221,6 +221,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
     _selectedCategory.value = CategoryModel.categories.firstWhere(
       (c) => c.key == (imageInfo.category),
+      orElse: () => CategoryModel.categories.firstWhere((c) => c.key == 'miscellaneous'),
     );
     noteController.text = imageInfo.note ?? '';
     dateController.text = DateFormat(

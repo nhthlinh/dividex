@@ -62,18 +62,30 @@ class UserUseCase {
   }
 
   Future<void> updateMe(String name, CurrencyEnum currency) {
+    if (name.trim().isEmpty) {
+      throw Exception("Tên không được để trống");
+    }
     return repository.updateMe(name, currency);
   }
 
   Future<void> createPin(String pin) {
+    if (pin.trim().isEmpty) {
+      throw Exception("Mã PIN không được để trống");
+    }
     return repository.createPin(pin);
   }
 
   Future<void> updatePin(String oldPin, String newPin) {
+    if (oldPin.trim().isEmpty || newPin.trim().isEmpty) {
+      throw Exception("Mã PIN không được để trống");
+    }
     return repository.updatePin(oldPin, newPin);
   }
 
   Future<void> reviewApp(int stars) {
+    if (stars < 1 || stars > 5) {
+      throw Exception("Số sao phải từ 1 đến 5");
+    }
     return repository.reviewApp(stars);
   }
 }
