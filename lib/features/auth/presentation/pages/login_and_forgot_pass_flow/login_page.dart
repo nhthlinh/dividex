@@ -55,56 +55,59 @@ class _LoginPageState extends State<LoginPage> {
         return Future.value();
       },
       title: intl.login,
-      child: BlocListener<AuthBloc, AuthState>(
+      child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
             // Navigate to home page on successful authentication
             context.goNamed(AppRouteNames.home);
           }
         },
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    intl.welcomeBackMessage,
-                    style: theme.textTheme.headlineLarge?.copyWith(
-                      color: AppThemes.primary3Color,
+        builder: (context, state) {
+          return Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      intl.welcomeBackMessage,
+                      style: theme.textTheme.headlineLarge?.copyWith(
+                        color: AppThemes.primary3Color,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    intl.signInAccountPrompt,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
+                    const SizedBox(height: 8),
+                    Text(
+                      intl.signInAccountPrompt,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            const SizedBox(height: 16), // Spacing before logo
+              const SizedBox(height: 16), // Spacing before logo
 
-            Image.asset(
-              'lib/assets/images/login_image.png',
-              width: 220,
-              height: 170,
-            ),
-            const SizedBox(height: 8), // Spacing after logo
+              Image.asset(
+                'lib/assets/images/login_image.png',
+                width: 220,
+                height: 170,
+              ),
+              const SizedBox(height: 8), // Spacing after logo
 
-            loginForm(intl, context, theme),
-          ],
-        ),
+              loginForm(intl, state, context, theme),
+            ],
+          );
+        },
       ),
     );
   }
 
   CustomFormWrapper loginForm(
     AppLocalizations intl,
+    AuthState state,
     BuildContext context,
     ThemeData theme,
   ) {
@@ -179,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
             CustomButton(
               text: intl.login,
               buttonKey: loginButtonKey,
-              onPressed: (!isValid || isSubmitting)
+              onPressed: (!isValid || isSubmitting || state is AuthLoading)
                   ? null
                   : () async {
                       setSubmitting(true);
@@ -193,9 +196,6 @@ class _LoginPageState extends State<LoginPage> {
                         context.read<AuthBloc>().add(
                           AuthLoginRequested(email: email, password: password),
                         );
-                        // Clear the form after submission
-                        clearFormTrigger.value =
-                            !clearFormTrigger.value; // Trigger form reset
                       }
                       setSubmitting(false);
                     },

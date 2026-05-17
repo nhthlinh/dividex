@@ -1,7 +1,7 @@
 name: Dividex
 description: "DACN - 251"
 publish_to: 'none'
-version: 1.0.4+3
+version: 1.0.5+9
 
 environment:
   sdk: ^3.8.0
@@ -130,7 +130,6 @@ flutter:
     - lib/assets/images/
     - lib/assets/icons/
     - lib/assets/category/
-    
   fonts:
     - family: Poppins
       fonts:

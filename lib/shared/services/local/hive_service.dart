@@ -22,7 +22,6 @@ class HiveService {
     if (!Hive.isAdapterRegistered(4)) {
       Hive.registerAdapter(ImageModelAdapter());
     }
-
     if (reset) {
       await Hive.close(); 
       await Hive.deleteFromDisk(); 

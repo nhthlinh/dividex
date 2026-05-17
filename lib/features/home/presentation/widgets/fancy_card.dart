@@ -43,22 +43,6 @@ class _FancyCardState extends State<FancyCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Text(
-              //   widget.title,
-              //   style: Theme.of(
-              //     context,
-              //   ).textTheme.titleLarge?.copyWith(color: Colors.white),
-              // ),
-              // if (widget.subtitle != '') ...[
-              //   const SizedBox(height: 8),
-              //   Text(
-              //     widget.subtitle ?? '',
-              //     style: Theme.of(
-              //       context,
-              //     ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-              //   ),
-              // ],
-              // const SizedBox(height: 8),
               BlocBuilder<RechargeBloc, RechargeState>(
                 builder: (context, state) {
                   if (state is GetWalletInfoSuccessState) {
@@ -79,7 +63,7 @@ class _FancyCardState extends State<FancyCard> {
                                 borderRadius: BorderRadius.circular(18),
                               ),
                               child: Text(
-                                intl.conected,
+                                intl.connected,
                                 style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(color: Colors.white),
                               ),
@@ -161,6 +145,7 @@ class _FancyCardState extends State<FancyCard> {
                                 ),
                               ],
                             ),
+                          
                           ],
                         ),
 
@@ -228,6 +213,7 @@ class _FancyCardState extends State<FancyCard> {
                             ),
                           ],
                         ),
+                      
                       ],
                     );
                   }

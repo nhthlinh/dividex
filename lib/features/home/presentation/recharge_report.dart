@@ -497,6 +497,20 @@ class InternalExpenseCard extends StatelessWidget {
 
   final InternalTransactionModel expense;
 
+  String shortName(String? fullName) {
+    if (fullName == null || fullName.trim().isEmpty) {
+      return '';
+    }
+
+    final parts = fullName.trim().split(RegExp(r'\s+'));
+
+    if (parts.length <= 2) {
+      return fullName;
+    }
+
+    return '${parts[parts.length - 2]} ${parts.last}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final intl = AppLocalizations.of(context)!;
@@ -518,8 +532,8 @@ class InternalExpenseCard extends StatelessWidget {
           ),
           Text(
             (expense.toUser == HiveService.getUser().fullName)
-                ? '${intl.from} ${expense.fromUser}'
-                : '${intl.to} ${expense.toUser}',
+                ? '${intl.from} ${shortName(expense.fromUser)}'
+                : '${intl.to} ${shortName(expense.toUser)}',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w500,
               color: Colors.grey,

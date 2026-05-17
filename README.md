@@ -135,9 +135,6 @@ flutter gen-l10n
 ### 7. Run Ứng Dụng
 
 ```bash
-# Chạy trên web
-flutter run -d chrome
-
 # Hoặc chạy trên thiết bị thực/emulator
 flutter run
 ```

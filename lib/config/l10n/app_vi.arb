@@ -553,7 +553,7 @@
   "chooseTypeFilter": "Chọn loại giao dịch",
   "wallet": "Ví",
   "inOrEx": "Trong hay ngoài app",
-  "conected": "Đã kết nối",
+  "connected": "Đã kết nối",
   "lastTransaction": "Giao dịch cuối",
 
   "eventUpdated": "{user} đã cập nhật sự kiện {event}",
@@ -737,5 +737,21 @@
   "savedToGallery": "Đã lưu mã QR vào thư viện",
   "downloadQr": "Tải mã QR về máy",
   "bankAccountIsExist": "Tài khoản ngân hàng đã tồn tại",
-  "accountName": "Tên chủ tài khoản"
+  "accountName": "Tên chủ tài khoản",
+
+  "expenseOcrTitle": "Quét hóa đơn",
+  "takePhoto": "Chụp ảnh",
+  "fromGallery": "Lấy từ thư viện",
+  "rateUsTitle": "Bạn hãy đánh giá trải nghiệm của bạn với Dividex?",
+
+  "recentExpenses": "Chi tiêu gần đây",
+  "viewAll": "Xem tất cả",
+
+  "createExpenseBy": "Tạo chi tiêu bằng: ",
+  "manually": "Nhập tay",
+  "scanning": "Quét",
+  "homeTabTitle": "Trang chủ",
+  "searchTabTitle": "Tìm kiếm",
+  "chatTabTitle": "Nhắn tin",
+  "settingTabTitle": "Cài đặt"
 }

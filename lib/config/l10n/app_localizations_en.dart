@@ -1482,7 +1482,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inOrEx => 'In or ex app';
 
   @override
-  String get conected => 'Conected';
+  String get connected => 'Connected';
 
   @override
   String get lastTransaction => 'Last transaction';
@@ -1666,4 +1666,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountName => 'Account holder name';
+
+  @override
+  String get expenseOcrTitle => 'Scan bill';
+
+  @override
+  String get takePhoto => 'Take photo';
+
+  @override
+  String get fromGallery => 'From gallery';
+
+  @override
+  String get rateUsTitle => 'How would you rate your experience with Dividex?';
+
+  @override
+  String get recentExpenses => 'Recent expenses';
+
+  @override
+  String get viewAll => 'View all';
+
+  @override
+  String get createExpenseBy => 'Create expense by: ';
+
+  @override
+  String get manually => 'Manually';
+
+  @override
+  String get scanning => 'Scanning';
+
+  @override
+  String get homeTabTitle => 'Home';
+
+  @override
+  String get searchTabTitle => 'Search';
+
+  @override
+  String get chatTabTitle => 'Chat';
+
+  @override
+  String get settingTabTitle => 'Setting';
 }

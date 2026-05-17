@@ -10,9 +10,11 @@ import 'package:Dividex/features/event_expense/presentation/widgets/date_input_f
 import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
-    as user_event;
+
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
+import 'package:Dividex/shared/bloc/load_user_state.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
@@ -132,7 +134,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
       content: Column(
         children: [
           Text(
-            'Create a expense by: ',
+            intl.createExpenseBy,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
@@ -142,7 +144,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomButton(
-                    text: 'Manually',
+                    text: intl.manually,
                     buttonKey: manualOptionButtonKey,
                     onPressed: () {
                       Navigator.pop(context);
@@ -152,7 +154,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     customColor: AppThemes.errorColor,
                   ),
                   CustomButton(
-                    text: 'Scanning',
+                    text: intl.scanning,
                     buttonKey: scanningOptionButtonKey,
                     onPressed: () async {
                       Navigator.pop(context);
@@ -219,6 +221,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
     _selectedCategory.value = CategoryModel.categories.firstWhere(
       (c) => c.key == (imageInfo.category),
+      orElse: () => CategoryModel.categories.firstWhere((c) => c.key == 'miscellaneous'),
     );
     noteController.text = imageInfo.note ?? '';
     dateController.text = DateFormat(

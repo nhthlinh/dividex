@@ -66,6 +66,8 @@ import 'package:Dividex/features/search/presentation/pages/search_user_page.dart
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/pages/choose_members_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/change_pass_page.dart';
@@ -110,6 +112,7 @@ class AppRouteNames {
 
   static const String search = 'search';
   static const String searchUser = 'search-user';
+
   static const String searchTransaction = 'search-transaction';
   static const String filter = 'filter';
 
@@ -131,20 +134,26 @@ class AppRouteNames {
   static const String expenseDetail = 'expense-detail';
   static const String expenseEdit = 'expense-edit';
 
+  // Tk để nhận tiền -> xóa
   static const String account = 'account';
   static const String addAccount = 'add-account';
   static const String accountDetail = 'accountDetail';
 
+  // Chuyển trong app -> xóa
   static const String transfer = 'transfer';
   static const String transferConfirm = 'transfer-confirm';
   static const String transferSuccess = 'transfer-success';
 
+  // Rút tiền -> xóa
   static const String withdraw = 'withdraw';
   static const String withdrawSuccess = 'withdraw-success';
 
+  // Nạp tiền -> xóa
   static const String recharge = 'recharge';
 
   static const String friendProfile = 'friend-profile';
+
+  // Báo cáo ví -> xóa
   static const String walletReport = 'wallet-report';
   static const String transactionReport = 'transaction-report';
 
@@ -241,6 +250,9 @@ GoRouter buildRouter(BuildContext context) {
               providers: [
                 BlocProvider<RechargeBloc>(create: (context) => RechargeBloc()),
                 BlocProvider<UserBloc>(create: (context) => UserBloc()),
+                BlocProvider<ExpenseDataBloc>(
+                  create: (context) => ExpenseDataBloc(),
+                ),
               ],
               child: HomePage(),
             ),
@@ -517,7 +529,7 @@ GoRouter buildRouter(BuildContext context) {
 
           GoRoute(
             path: 'account',
-            name: AppRouteNames.account,
+            name: AppRouteNames.account, 
             pageBuilder: (BuildContext context, GoRouterState state) {
               return buildPageWithDefaultTransition(
                 child: BlocProvider(
@@ -694,7 +706,6 @@ GoRouter buildRouter(BuildContext context) {
               );
             },
           ),
-
           GoRoute(
             path: 'transaction-report',
             name: AppRouteNames.transactionReport,
@@ -952,8 +963,8 @@ GoRouter buildRouter(BuildContext context) {
             child: ChooseMembersPage(
               id: extra['id'] as String?,
               type: extra['type'] as LoadType,
-              initialSelectedMembers:
-                  extra['initialSelected'] as List<UserModel>?,
+              initialSelectedMembers:(extra['initialSelected'] as List?)?.cast<UserModel>(),
+                  // extra['initialSelected'] as List<UserModel>?,
               onSelectedMembersChanged:
                   extra['onChanged'] as ValueChanged<List<UserModel>>,
               isMultiSelect: extra['isMultiSelect'] as bool,
@@ -994,7 +1005,7 @@ GoRouter buildRouter(BuildContext context) {
               onChanged: (list) =>
                   (extra['onChanged'] as ValueChanged<List<UserDebt>>)(list),
               amount: extra['amount'] as double,
-              items: extra['items'] as List<ImageExpenseItemModel>?
+              items: extra['items'] as List<ImageExpenseItemModel>?,
             ),
           );
         },
@@ -1020,8 +1031,8 @@ GoRouter buildRouter(BuildContext context) {
         },
       ),
       GoRoute(
-        path: '/scan-expense', 
-        name: AppRouteNames.scanExpense, 
+        path: '/scan-expense',
+        name: AppRouteNames.scanExpense,
         pageBuilder: (context, state) =>
             buildPageWithDefaultTransition(child: ExpenseOcrPage()),
       ),
@@ -1042,9 +1053,9 @@ GoRouter buildRouter(BuildContext context) {
         return isSplash ? null : '/';
       }
 
-      if (authState is AuthLoading) {
-        return isLoading ? null : '/loading';
-      }
+      // if (authState is AuthLoading) {
+      //   return isLoading ? null : '/loading';
+      // }
 
       // Nếu chưa login
       if (authState is AuthUnauthenticated) {

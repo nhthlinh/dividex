@@ -9,6 +9,7 @@ import 'package:Dividex/shared/services/local/models/user_local_model.dart';
 import 'package:Dividex/shared/utils/message_code.dart';
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Dividex/shared/services/notification/fcm.dart';
 
@@ -86,29 +87,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final loginUseCase = await getIt.getAsync<LoginUseCase>();
       final authResponse = await loginUseCase.call(event.email, event.password);
 
-      await HiveService.saveToken(
-        TokenLocalModel(
-          accessToken: authResponse.accessToken,
-          refreshToken: authResponse.refreshToken,
-        ),
-      );
+      try {
+        await HiveService.saveToken(
+          TokenLocalModel(
+            accessToken: authResponse.accessToken,
+            refreshToken: authResponse.refreshToken,
+          ),
+        );
 
-      await HiveService.saveUser(
-        UserLocalModel(
-          id: authResponse.user.id ?? '',
-          email: authResponse.user.email ?? '',
-          fullName: authResponse.user.fullName ?? '',
-          avatarUrl: authResponse.user.avatar,
-          password: event.password,
-          phoneNumber: authResponse.user.phoneNumber ?? '',
-          countUserLogin: authResponse.countUserLogin,
-        ),
-      );
+        await HiveService.saveUser(
+          UserLocalModel(
+            id: authResponse.user.id ?? '',
+            email: authResponse.user.email ?? '',
+            fullName: authResponse.user.fullName ?? '',
+            avatarUrl: authResponse.user.avatar,
+            password: event.password,
+            phoneNumber: authResponse.user.phoneNumber ?? '',
+            countUserLogin: authResponse.countUserLogin,
+          ),
+        );
 
-      // Gửi FCM token sau khi đăng nhập thành công
-      await sendFcmTokenToBackend(true);
+        // Gửi FCM token sau khi đăng nhập thành công
+        await sendFcmTokenToBackend(true);
 
-      emit(const AuthAuthenticated());
+        emit(const AuthAuthenticated());
+      } catch (e, stack) {
+        debugPrint('Error: $e\nStack: $stack');
+      }
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
 

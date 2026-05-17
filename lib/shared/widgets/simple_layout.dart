@@ -40,12 +40,10 @@ class SimpleLayout extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: RefreshIndicator(
                   onRefresh: onRefresh,
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: child,
-                    ),
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(top: 0, bottom: 24),
+                    child: Center(child: child),
                   ),
                 ),
               ),

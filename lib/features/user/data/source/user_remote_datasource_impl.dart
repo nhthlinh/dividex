@@ -45,9 +45,7 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
 
       return PagingModel.fromJson(
         response.data,
-        (jsonList) => content
-            .map((item) => UserModel.fromJson(item))
-            .toList(),
+        (jsonList) => content.map((item) => UserModel.fromJson(item)).toList(),
       );
     } catch (e) {
       rethrow;
@@ -80,15 +78,12 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
     // } else {
     //   throw Exception('Failed to load users');
     // }
-
     final content = (response.data['data']['content'] as List?) ?? [];
 
-      return PagingModel.fromJson(
-        response.data,
-        (jsonList) => content
-            .map((item) => UserModel.fromJson(item['user']))
-            .toList(),
-      );
+    return PagingModel.fromJson(
+      response.data,
+      (jsonList) => content.map((item) => UserModel.fromJson(item['user'])).toList(),
+    );
   }
 
   @override
@@ -126,9 +121,7 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
 
       return PagingModel.fromJson(
         response.data,
-        (jsonList) => content
-            .map((item) => UserModel.fromJson(item['user']))
-            .toList(),
+        (jsonList) => content.map((item) => UserModel.fromJson(item['user'])).toList(),
       );
     });
   }
@@ -163,7 +156,18 @@ class UserRemoteDatasourceImpl implements UserRemoteDataSource {
   @override
   Future<void> updateMe(String name, CurrencyEnum currency) async {
     return apiCallWrapper(() async {
-      await dio.put('/auth/me', data: {'full_name': name});
+      final response = await dio.put('/auth/me', data: {'full_name': name});
+      final newUser = UserModel.fromJson(response.data['data']);
+
+      await HiveService.saveUser(
+        UserLocalModel(
+          id: newUser.id ?? '',
+          email: newUser.email ?? '',
+          fullName: newUser.fullName ?? '',
+          avatarUrl: newUser.avatar,
+          phoneNumber: newUser.phoneNumber ?? '',
+        ),
+      );
     });
   }
 

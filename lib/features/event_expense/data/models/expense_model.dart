@@ -139,7 +139,6 @@ const _$SplitTypeEnumEnumMap = {
 };
 
 const $CurrencyEnumEnumMap = {
-  CurrencyEnum.vnd: 'vnd',
   // CurrencyEnum.aed: 'aed',
   // CurrencyEnum.afn: 'afn',
   // CurrencyEnum.all: 'all',
@@ -289,7 +288,7 @@ const $CurrencyEnumEnumMap = {
   // CurrencyEnum.uyu: 'uyu',
   // CurrencyEnum.uzs: 'uzs',
   // CurrencyEnum.ves: 'ves',
-  // CurrencyEnum.vnd: 'vnd',
+  CurrencyEnum.vnd: 'vnd',
   // CurrencyEnum.vuv: 'vuv',
   // CurrencyEnum.wst: 'wst',
   // CurrencyEnum.xaf: 'xaf',

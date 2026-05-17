@@ -6,7 +6,7 @@ import 'package:Dividex/features/event_expense/presentation/widgets/user_amount_
 import 'package:Dividex/features/event_expense/presentation/widgets/user_item_table.dart';
 import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';

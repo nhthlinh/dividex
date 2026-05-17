@@ -5,6 +5,7 @@ import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ Future<void> showSettleUpDialog({
   required String groupId,
 }) async {
   final formattedAmount =
-      '${amount.toStringAsFixed(0)} ${currency.code.toUpperCase()}';
+      ' ${formatNumber(amount)} ${currency.code.toUpperCase()}';
   final intl = AppLocalizations.of(context)!;
 
   return showCustomDialog(
@@ -67,6 +68,7 @@ Future<void> showSettleUpDialog({
 
         // Buttons
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomButton(
               text: intl.outSideTransfer,
@@ -92,6 +94,7 @@ Future<void> showSettleUpDialog({
                 );
               },
             ),
+          
           ],
         ),
       ],

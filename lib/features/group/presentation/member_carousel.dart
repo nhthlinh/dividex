@@ -31,6 +31,21 @@ class _MemberCarouselState extends State<MemberCarousel> {
   }
 
   @override
+  void didUpdateWidget(covariant MemberCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.members.length != widget.members.length) {
+      _pageController.jumpToPage(0);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.members.isNotEmpty) {
+          widget.onChanged(0);
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 80, // cao hơn để chứa avatar phóng to
@@ -38,6 +53,7 @@ class _MemberCarouselState extends State<MemberCarousel> {
         controller: _pageController,
         itemCount: widget.members.length,
         onPageChanged: (idx) {
+          if (idx < 0 || idx >= widget.members.length) return;
           widget.onChanged(idx);
         },
         itemBuilder: (context, idx) {
@@ -57,7 +73,8 @@ class _MemberCarouselState extends State<MemberCarousel> {
                 child: Transform.scale(
                   scale: value,
                   child: Opacity(
-                    opacity: value, // càng nhỏ càng mờ (0.0 → trong suốt, 1.0 → rõ nét)
+                    opacity:
+                        value, // càng nhỏ càng mờ (0.0 → trong suốt, 1.0 → rõ nét)
                     child: child,
                   ),
                 ),

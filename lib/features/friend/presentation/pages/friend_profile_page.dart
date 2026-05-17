@@ -4,14 +4,12 @@ import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_event.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_state.dart';
-import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart' as group_event;
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
-    as user_event;
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
+import 'package:Dividex/shared/bloc/load_user_state.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
@@ -27,6 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 
 class FriendProfilePage extends StatefulWidget {
   final String friendId;
@@ -273,7 +272,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                   padding: EdgeInsets.symmetric(vertical: 20),
                                   child: Center(
                                     child: SpinKitFadingCircle(
-                                      color: const Color(0xFF08AE02),
+                                      color: AppThemes.primary3Color,
                                     ),
                                   ),
                                 );
@@ -400,7 +399,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                 padding: EdgeInsets.symmetric(vertical: 20),
                                 child: Center(
                                   child: SpinKitFadingCircle(
-                                    color: const Color(0xFF08AE02),
+                                    color: AppThemes.primary3Color,
                                   ),
                                 ),
                               );

@@ -71,9 +71,8 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
 
       return PagingModel.fromJson(
         response.data,
-        (jsonList) => content
-            .map((item) => FriendModel.fromJson(item))
-            .toList(),
+        (jsonList) =>
+            content.map((item) => FriendModel.fromJson(item)).toList(),
       );
     });
   }
@@ -108,9 +107,8 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
 
       return PagingModel.fromJson(
         response.data,
-        (jsonList) => content
-            .map((item) => FriendModel.fromJson(item))
-            .toList(),
+        (jsonList) =>
+            content.map((item) => FriendModel.fromJson(item)).toList(),
       );
     });
   }
@@ -140,14 +138,12 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
       // } else {
       //   throw Exception('Failed to load users');
       // }
-
       final content = (response.data['data']['content'] as List?) ?? [];
 
       return PagingModel.fromJson(
         response.data,
-        (jsonList) => content
-            .map((item) => FriendModel.fromJson(item))
-            .toList(),
+        (jsonList) =>
+            content.map((item) => FriendModel.fromJson(item)).toList(),
       );
     });
   }
@@ -173,14 +169,11 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
       // } else {
       //   throw Exception('Failed to load mutual friends');
       // }
-
       final content = (response.data['data']['content'] as List?) ?? [];
 
       return PagingModel.fromJson(
         response.data,
-        (jsonList) => content
-            .map((item) => UserModel.fromJson(item))
-            .toList(),
+        (jsonList) => content.map((item) => UserModel.fromJson(item)).toList(),
       );
     });
   }
@@ -189,11 +182,12 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
   Future<FriendOverviewModel> getFriendOverview(String id) {
     return apiCallWrapper(() async {
       final response = await dio.get('/friends/{$id}');
-      if (response.data != null) {
-        return FriendOverviewModel.fromJson(response.data['data']);
-      } else {
-        throw Exception('Failed to load friend overview');
-      }
+      // if (response.data != null) {
+      //   return FriendOverviewModel.fromJson(response.data['data']);
+      // } else {
+      //   throw Exception('Failed to load friend overview');
+      // }
+      return FriendOverviewModel.fromJson(response.data['data']);
     });
   }
 
@@ -218,16 +212,12 @@ class FriendRemoteDatasourceImpl implements FriendRemoteDataSource {
       // } else {
       //   throw Exception('Failed to load friend depts');
       // }
-
       final content = (response.data['data']['content'] as List?) ?? [];
 
       return PagingModel.fromJson(
         response.data,
-        (jsonList) => content
-            .map((item) => FriendDept.fromJson(item))
-            .toList(),
+        (jsonList) => content.map((item) => FriendDept.fromJson(item)).toList(),
       );
-
     });
   }
 }

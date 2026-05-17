@@ -1,3 +1,4 @@
+import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/presentation/widgets/add_button_widget.dart';
@@ -33,6 +34,8 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final intl = AppLocalizations.of(context)!;
+    
     return GestureDetector(
       onDoubleTap: () {
         if (!_isBottomNavVisible) {
@@ -78,11 +81,11 @@ class _AppShellState extends State<AppShell> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildNavItem(context, 0, Icons.home, 'Home'),
-                        _buildNavItem(context, 1, Icons.search, 'Search'),
+                        _buildNavItem(context, 0, Icons.home, intl.homeTabTitle),
+                        _buildNavItem(context, 1, Icons.search, intl.searchTabTitle),
                         const SizedBox(width: 60),
-                        _buildNavItem(context, 2, Icons.chat, 'Chat'),
-                        _buildNavItem(context, 3, Icons.settings_outlined, 'Settings'),
+                        _buildNavItem(context, 2, Icons.chat, intl.chatTabTitle),
+                        _buildNavItem(context, 3, Icons.settings_outlined, intl.settingTabTitle),
                       ],
                     ),
                   ),

@@ -9,19 +9,32 @@ class ChatUseCase {
 
   ChatUseCase(this.repository);
 
-  Future<PagingModel<List<Message>>> getMessages(int page, int pageSize, String groupId) {
+  Future<PagingModel<List<Message>>> getMessages(
+    int page,
+    int pageSize,
+    String groupId,
+  ) {
     return repository.getMessages(page, pageSize, groupId);
   }
 
   Future<Message> sendMessage(String content, String groupId) {
+    if (content.trim().isEmpty) {
+      throw Exception("Nội dung tin nhắn không được để trống");
+    }
     return repository.sendMessage(content, groupId);
   }
 
   Future<void> updateMessage(String messageId, String content) {
+    if (content.trim().isEmpty) {
+      throw Exception("Nội dung tin nhắn không được để trống");
+    }
     return repository.updateMessage(messageId, content);
   }
 
   Future<void> deleteMessage(String messageId) {
+    if (messageId.trim().isEmpty) {
+      throw Exception("ID tin nhắn không được để trống");
+    }
     return repository.deleteMessage(messageId);
   }
 }

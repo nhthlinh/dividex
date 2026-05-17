@@ -2,7 +2,6 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/location/locale_cubit.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
-import 'package:Dividex/config/themes/theme_cubit.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:Dividex/features/auth/presentation/bloc/auth_event.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
@@ -46,6 +45,7 @@ class _SettingPageState extends State<SettingPage> {
         onRefresh: () {
           clearFormTrigger.value =
               !clearFormTrigger.value; // Trigger form reset
+          context.read<UserBloc>().add(GetMeEvent());
           return Future.value();
         },
         title: intl.settings,
@@ -74,46 +74,47 @@ class _SettingPageState extends State<SettingPage> {
                   context.pushNamed(AppRouteNames.changePass);
                 },
               ),
-              SettingOption(
-                label: intl.settingTheme,
-                context: context,
-                onTap: () {
-                  showCustomDialog(
-                    context: context,
-                    label: intl.settingChooseTheme,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SettingOption(
-                          label: intl.settingChooseDark,
-                          context: context,
-                          onTap: () {
-                            final themeBloc = context.read<ThemeCubit>();
-                            themeBloc.setThemeFromString(
-                              'dark',
-                            ); // Handle dark theme selection
-                            // close the dialog after selection
-                            Navigator.pop(context); // Close the dialog
-                          },
-                        ),
-                        SettingOption(
-                          label: intl.settingChooseLight,
-                          context: context,
-                          onTap: () {
-                            final themeBloc = context.read<ThemeCubit>();
-                            themeBloc.setThemeFromString(
-                              'light',
-                            ); // Handle light theme selection
-                            // close the dialog after selection
-                            Navigator.pop(context); // Close the dialog
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+
+              // SettingOption(
+              //   label: intl.settingTheme,
+              //   context: context,
+              //   onTap: () {
+              //     showCustomDialog(
+              //       context: context,
+              //       label: intl.settingChooseTheme,
+              //       content: Column(
+              //         mainAxisSize: MainAxisSize.min,
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           SettingOption(
+              //             label: intl.settingChooseDark,
+              //             context: context,
+              //             onTap: () {
+              //               final themeBloc = context.read<ThemeCubit>();
+              //               themeBloc.setThemeFromString(
+              //                 'dark',
+              //               ); // Handle dark theme selection
+              //               // close the dialog after selection
+              //               Navigator.pop(context); // Close the dialog
+              //             },
+              //           ),
+              //           SettingOption(
+              //             label: intl.settingChooseLight,
+              //             context: context,
+              //             onTap: () {
+              //               final themeBloc = context.read<ThemeCubit>();
+              //               themeBloc.setThemeFromString(
+              //                 'light',
+              //               ); // Handle light theme selection
+              //               // close the dialog after selection
+              //               Navigator.pop(context); // Close the dialog
+              //             },
+              //           ),
+              //         ],
+              //       ),
+              //     );
+              //   },
+              // ),
               SettingOption(
                 label: intl.settingLanguage,
                 context: context,
@@ -250,6 +251,9 @@ class _SettingPageState extends State<SettingPage> {
                                         );
                                       }
 
+                                      clearFormTrigger.value = !clearFormTrigger
+                                          .value; // Trigger form reset
+
                                       setSubmitting(false);
                                     },
                               size: ButtonSize.medium,
@@ -261,6 +265,7 @@ class _SettingPageState extends State<SettingPage> {
                   );
                 },
               ),
+
               const Spacer(),
 
               Center(

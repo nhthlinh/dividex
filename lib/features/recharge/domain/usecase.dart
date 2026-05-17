@@ -10,10 +10,10 @@ class RechargeUseCase {
 
   RechargeUseCase({required this.rechargeRepository});
 
-  Future<PayOSResponseModel> deposit(
-    double amount,
-    String currency,
-  ) async {
+  Future<PayOSResponseModel> deposit(double amount, String currency) async {
+    if (amount <= 0) {
+      throw Exception("Số tiền nạp phải lớn hơn 0");
+    }
     return rechargeRepository.deposit(amount, currency);
   }
 
@@ -22,12 +22,16 @@ class RechargeUseCase {
     String currency,
     String bankCode,
   ) async {
+    if (amount <= 0) {
+      throw Exception("Số tiền nạp phải lớn hơn 0");
+    }
     return rechargeRepository.createDeposit(amount, currency, bankCode);
   }
 
-  Future<void> cancelDeposit(
-    int id
-  ) async {
+  Future<void> cancelDeposit(int id) async {
+    if (id <= 0) {
+      throw Exception("ID giao dịch không hợp lệ");
+    }
     return rechargeRepository.cancelDeposit(id);
   }
 
@@ -40,6 +44,9 @@ class RechargeUseCase {
     String accountNumber,
     String bankCode,
   ) async {
+    if (amount <= 0) {
+      throw Exception("Số tiền rút phải lớn hơn 0");
+    }
     return rechargeRepository.createWithdraw(amount, accountNumber, bankCode);
   }
 
@@ -54,7 +61,7 @@ class RechargeUseCase {
   Future<PagingModel<List<ExternalTransactionModel>>> getExternalHistory(
     int page,
     int pageSize,
-    ExternalTransactionFilterArguments? filter
+    ExternalTransactionFilterArguments? filter,
   ) async {
     return rechargeRepository.getExternalHistory(page, pageSize, filter);
   }
@@ -62,7 +69,7 @@ class RechargeUseCase {
   Future<PagingModel<List<InternalTransactionModel>>> getInternalHistory(
     int page,
     int pageSize,
-    InternalTransactionFilterArguments? filter
+    InternalTransactionFilterArguments? filter,
   ) async {
     return rechargeRepository.getInternalHistory(page, pageSize, filter);
   }
@@ -79,7 +86,23 @@ class RechargeUseCase {
     return rechargeRepository.verifyPin(pin, amount);
   }
 
-  Future<bool> transfer(double originalAmount, double realAmount, String currency, String toAccount, String description, {String? groupId, String? token}) async {
-    return rechargeRepository.transfer(originalAmount, realAmount, currency, toAccount, description, groupId: groupId, token: token);
+  Future<bool> transfer(
+    double originalAmount,
+    double realAmount,
+    String currency,
+    String toAccount,
+    String description, {
+    String? groupId,
+    String? token,
+  }) async {
+    return rechargeRepository.transfer(
+      originalAmount,
+      realAmount,
+      currency,
+      toAccount,
+      description,
+      groupId: groupId,
+      token: token,
+    );
   }
 }

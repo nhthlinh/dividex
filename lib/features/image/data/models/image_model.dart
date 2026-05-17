@@ -1,8 +1,12 @@
 import 'package:hive/hive.dart';
 
+@HiveType(typeId: 4)
 class ImageModel {
+  @HiveField(0)
   final String uid;
+  @HiveField(1)
   final String originalName;
+  @HiveField(2)
   final String publicUrl;
 
   ImageModel({
@@ -59,4 +63,3 @@ class ImageModelAdapter extends TypeAdapter<ImageModel> {
       ..write(obj.publicUrl);
   }
 }
-

@@ -14,6 +14,15 @@ class GroupUseCase {
     required String name,
     required List<String> memberIds,
   }) {
+    name = name.trim();
+    memberIds = memberIds.map((id) => id.trim()).toList();
+
+    if (name.isEmpty) {
+      throw Exception("Tên nhóm không được để trống");
+    }
+    if (memberIds.isEmpty) {
+      throw Exception("Cần ít nhất 1 thành viên trong nhóm");
+    }
     return repository.createGroup(name: name, memberIds: memberIds);
   }
 
@@ -60,6 +69,24 @@ class GroupUseCase {
     required List<String> addMemberIds,
     required List<String> deleteMemberIds,
   }) {
+    name = name.trim();
+    addMemberIds = addMemberIds.map((id) => id.trim()).toList();
+    deleteMemberIds = deleteMemberIds.map((id) => id.trim()).toList();
+
+    if (name.isEmpty) {
+      throw Exception("Tên nhóm không được để trống");
+    }
+
+    // Thêm và xóa ra không trùng nhau
+    final addSet = addMemberIds.toSet();
+    final deleteSet = deleteMemberIds.toSet();
+    final intersection = addSet.intersection(deleteSet);
+    if (intersection.isNotEmpty) {
+      throw Exception(
+        "Các thành viên vừa được thêm vào vừa bị xóa ra không hợp lệ",
+      );
+    }
+
     return repository.updateGroup(
       groupId: groupId,
       name: name,
@@ -80,7 +107,10 @@ class GroupUseCase {
     return repository.getChartData(groupId);
   }
 
-  Future<List<CustomBarChartData>> getBarChartData(String groupId, int year) async {
+  Future<List<CustomBarChartData>> getBarChartData(
+    String groupId,
+    int year,
+  ) async {
     return repository.getBarChartData(groupId, year);
   }
 

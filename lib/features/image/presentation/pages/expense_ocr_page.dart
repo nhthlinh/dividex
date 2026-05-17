@@ -1,4 +1,6 @@
+import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +17,11 @@ class ExpenseOcrPage extends StatefulWidget {
 class _ExpenseOcrPageState extends State<ExpenseOcrPage> {
   bool _loading = false;
   @override
-  @override
   Widget build(BuildContext context) {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Scan expense')),
+      appBar: AppBar(title: Text(intl.expenseOcrTitle)),
       body: _loading
           ? const Center(
               child: ColoredBox(
@@ -31,12 +34,13 @@ class _ExpenseOcrPageState extends State<ExpenseOcrPage> {
   }
 
   Widget _buildButtons(BuildContext context) {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CustomButton(
-            text: 'Take photo',
+            text: intl.takePhoto,
             onPressed: () {
               _pickImage(context, ImageSource.camera);
             },
@@ -45,7 +49,7 @@ class _ExpenseOcrPageState extends State<ExpenseOcrPage> {
           const SizedBox(height: 16),
           CustomButton(
             type: ButtonType.secondary,
-            text: 'From gallery',
+            text: intl.fromGallery,
             onPressed: () {
               _pickImage(context, ImageSource.gallery);
             },
