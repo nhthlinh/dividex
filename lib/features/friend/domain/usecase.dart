@@ -6,6 +6,7 @@ import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
 
 enum FriendRequestStatus { pending, accepted, declined }
+
 enum FriendRequestType { received, sent }
 
 @injectable
@@ -15,29 +16,74 @@ class FriendUseCase {
   FriendUseCase(this.repository);
 
   Future<void> sendFriendRequest(String receiverUid, String? message) async {
+    receiverUid = receiverUid.trim();
+    message = message?.trim();
+
+    // Không gửi request rỗng
+    if (receiverUid.isEmpty) {
+      throw Exception("Không tìm thấy người nhận");
+    }
+
+    // Giới hạn độ dài lời nhắn
+    if ((message?.length ?? 0) > 100) {
+      throw Exception("Tin nhắn tối đa 100 ký tự");
+    }
+
+    // Tin nhắn mặc định
+    if (message == null || message.isEmpty) {
+      message = "Xin chào, kết bạn nhé";
+    }
     await repository.sendFriendRequest(receiverUid, message);
   }
 
   Future<void> acceptFriendRequest(String friendshipUid) async {
+    friendshipUid = friendshipUid.trim();
+
+    if (friendshipUid.isEmpty) {
+      throw Exception("Yêu cầu không hợp lệ");
+    }
     await repository.acceptFriendRequest(friendshipUid);
   }
 
   Future<void> declineFriendRequest(String friendshipUid) async {
+    friendshipUid = friendshipUid.trim();
+
+    if (friendshipUid.isEmpty) {
+      throw Exception("Yêu cầu không hợp lệ");
+    }
     await repository.declineFriendRequest(friendshipUid);
   }
 
-  Future<PagingModel<List<FriendModel>>> getFriendRequests(FriendRequestType type, String? search, int page, int pageSize) async {
+  Future<PagingModel<List<FriendModel>>> getFriendRequests(
+    FriendRequestType type,
+    String? search,
+    int page,
+    int pageSize,
+  ) async {
     return await repository.getFriendRequests(type, search, page, pageSize);
   }
 
-  Future<PagingModel<List<FriendModel>>> getFriends(String? search, int page, int pageSize) async {
+  Future<PagingModel<List<FriendModel>>> getFriends(
+    String? search,
+    int page,
+    int pageSize,
+  ) async {
     return await repository.getFriends(search, page, pageSize);
   }
 
-  Future<PagingModel<List<FriendModel>>> searchUsers(String? search, int page, int pageSize) async {
+  Future<PagingModel<List<FriendModel>>> searchUsers(
+    String? search,
+    int page,
+    int pageSize,
+  ) async {
     return await repository.searchUsers(search, page, pageSize);
   }
-  Future<PagingModel<List<UserModel>>> listMutualFriends(String friendshipUid, int page, int pageSize) async {
+
+  Future<PagingModel<List<UserModel>>> listMutualFriends(
+    String friendshipUid,
+    int page,
+    int pageSize,
+  ) async {
     return await repository.listMutualFriends(friendshipUid, page, pageSize);
   }
 
@@ -45,9 +91,11 @@ class FriendUseCase {
     return await repository.getFriendOverview(id);
   }
 
-  Future<PagingModel<List<FriendDept>>> getFriendDepts(String friendId, int page, int pageSize) async {
+  Future<PagingModel<List<FriendDept>>> getFriendDepts(
+    String friendId,
+    int page,
+    int pageSize,
+  ) async {
     return await repository.getFriendDepts(friendId, page, pageSize);
   }
-
-
 }

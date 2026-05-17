@@ -36,6 +36,7 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
         ),
       );
     } catch (e) {
+      emit(state.copyWith(isLoading: false, groups: const [], totalItems: 0));
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
     }
@@ -91,6 +92,7 @@ class LoadedGroupsBloc extends Bloc<LoadGroupsEvent, LoadedGroupsState> {
         ),
       );
     } catch (e) {
+      emit(state.copyWith(isLoading: false));
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);
     }

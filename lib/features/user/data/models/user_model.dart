@@ -32,8 +32,8 @@ class UserModel {
     avatar: json['avatar_url'] != null
         ? ImageModel.fromJson(json['avatar_url'] as Map<String, dynamic>)
         : (json['user_avatar_url'] != null
-            ? ImageModel.fromJson(json['user_avatar_url']) 
-            : null),
+              ? ImageModel.fromJson(json['user_avatar_url'])
+              : null),
     hasDebt: json['has_debt'] as bool?,
     amount: (json['amount'] as num?)?.toDouble(),
     currency: json['currency'] == null
@@ -44,18 +44,36 @@ class UserModel {
           ),
   );
 
-    Map<String, dynamic> toJson() => <String, dynamic>{
-      'id': id,
-      'email': email,
-      'full_name': fullName,
-      'phone_number': phoneNumber,
-      'avatar_url': avatar,
-      'has_debt': hasDebt,
-      'amount': amount,
-      'currency': currency != null
-          ? $CurrencyEnumEnumMap[currency]!
-          : null,
-    };
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'id': id,
+    'email': email,
+    'full_name': fullName,
+    'phone_number': phoneNumber,
+    'avatar_url': avatar,
+    'has_debt': hasDebt,
+    'amount': amount,
+    'currency': currency != null ? $CurrencyEnumEnumMap[currency]! : null,
+  };
 
-
+  UserModel copyWith({
+    String? id,
+    String? email,
+    String? fullName,
+    String? phoneNumber,
+    ImageModel? avatar,
+    bool? hasDebt,
+    double? amount,
+    CurrencyEnum? currency,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      fullName: fullName ?? this.fullName,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      avatar: avatar ?? this.avatar,
+      hasDebt: hasDebt ?? this.hasDebt,
+      amount: amount ?? this.amount,
+      currency: currency ?? this.currency,
+    );
   }
+}

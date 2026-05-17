@@ -43,7 +43,7 @@ class SimpleLayout extends StatelessWidget {
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.only(top: 0, bottom: 24),
-                    child: child,
+                    child: Center(child: child),
                   ),
                 ),
               ),

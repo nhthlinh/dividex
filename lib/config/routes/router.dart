@@ -66,6 +66,8 @@ import 'package:Dividex/features/search/presentation/pages/search_user_page.dart
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/pages/choose_members_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/change_pass_page.dart';

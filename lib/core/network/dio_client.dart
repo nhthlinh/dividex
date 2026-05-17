@@ -23,8 +23,6 @@ class DioClient {
   Future<Response> delete(String path, {dynamic data, Map<String, dynamic>? queryParameters}) {
     return dio.delete(path, data: data, queryParameters: queryParameters);
   }
-
-  // Thêm các phương thức put, delete... nếu cần
 }
 
 

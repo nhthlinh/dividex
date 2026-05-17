@@ -10,9 +10,11 @@ import 'package:Dividex/features/event_expense/presentation/widgets/date_input_f
 import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
-    as user_event;
+
 import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
+import 'package:Dividex/shared/bloc/load_user_state.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
@@ -219,6 +221,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
     _selectedCategory.value = CategoryModel.categories.firstWhere(
       (c) => c.key == (imageInfo.category),
+      orElse: () => CategoryModel.categories.firstWhere((c) => c.key == 'miscellaneous'),
     );
     noteController.text = imageInfo.note ?? '';
     dateController.text = DateFormat(

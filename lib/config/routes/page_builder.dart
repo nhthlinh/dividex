@@ -1,6 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
+/// Xây dựng `CustomTransitionPage` với transition mặc định
+///
+/// Hiệu ứng: fade nhẹ kết hợp slide rất nhỏ từ phải sang trái.
+/// Dùng cho các route để có chuyển cảnh mượt mà và tinh tế.
 CustomTransitionPage<T> buildPageWithDefaultTransition<T>({
   required Widget child,
 }) {

@@ -12,9 +12,19 @@ class AccountUseCase {
     return repository.getAccounts(page, pageSize);
   }
   Future<void> createAccount(BankAccount account) {
+    account = account.copyWith(
+      accountNumber: account.accountNumber.trim(),
+      bankName: account.bankName.trim(),
+      currency: account.currency,
+    );
     return repository.createAccount(account);
   }
   Future<void> updateAccount(BankAccount account) {
+    account = account.copyWith(
+      accountNumber: account.accountNumber.trim(),
+      bankName: account.bankName.trim(),
+      currency: account.currency,
+    );
     return repository.updateAccount(account);
   }
   Future<void> deleteAccount(String accountId) {
