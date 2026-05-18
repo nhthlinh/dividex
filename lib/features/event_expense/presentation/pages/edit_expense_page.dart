@@ -14,8 +14,6 @@ import 'package:Dividex/features/image/presentation/bloc/image_bloc.dart';
 import 'package:Dividex/features/image/presentation/bloc/image_state.dart';
 import 'package:Dividex/features/image/presentation/widgets/image_update_delete_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/bloc/load_user_bloc.dart';
 import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
 import 'package:Dividex/shared/bloc/load_user_state.dart';

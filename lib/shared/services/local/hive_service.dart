@@ -88,8 +88,21 @@ class HiveService {
   //========================== USER ==========================//
   static Box<UserLocalModel> getUserBox() => Hive.box<UserLocalModel>(HiveBox.user);
 
+  static Future<Box<UserLocalModel>> _getOrOpenUserBox() async {
+    if (Hive.isBoxOpen(HiveBox.user)) {
+      return Hive.box<UserLocalModel>(HiveBox.user);
+    }
+
+    return Hive.openBox<UserLocalModel>(HiveBox.user);
+  }
+
   static Future<void> saveUser(UserLocalModel user) async {
-    await getUserBox().put(HiveKey.user, user);
+    try {
+      final userBox = await _getOrOpenUserBox();
+      await userBox.put(HiveKey.user, user);
+    } on HiveError {
+      return;
+    }
   }
 
   static UserLocalModel getUser() {

@@ -19,15 +19,12 @@ import 'package:Dividex/features/event_expense/presentation/pages/choose_event_p
 import 'package:Dividex/features/event_expense/presentation/pages/edit_expense_page.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/split_page.dart';
 import 'package:Dividex/features/event_expense/presentation/widgets/toggle_tap.dart';
+import 'package:Dividex/features/event_expense/presentation/widgets/user_amount_table.dart';
 import 'package:Dividex/features/event_expense/presentation/widgets/user_item_table.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
-    as user_event;
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/bloc/load_user_bloc.dart';
 import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
 import 'package:Dividex/shared/bloc/load_user_state.dart';
@@ -734,21 +731,14 @@ void main() {
 
         expect(find.byType(SplitPage), findsOneWidget);
 
-        final splitAmountFields = find.byType(TextFormField);
-        expect(splitAmountFields, findsAtLeastNWidgets(3));
-
-        await tester.enterText(splitAmountFields.at(0), '0');
-        await tester.pumpAndSettle();
-        await tester.enterText(splitAmountFields.at(1), '0');
-        await tester.pumpAndSettle();
-        await tester.enterText(splitAmountFields.at(2), '0');
-        await tester.pumpAndSettle();
-
-        await tester.enterText(splitAmountFields.at(0), '50');
-        await tester.pumpAndSettle();
-        await tester.enterText(splitAmountFields.at(1), '30');
-        await tester.pumpAndSettle();
-        await tester.enterText(splitAmountFields.at(2), '20');
+        final userTableWidget = tester.widget<UserTableWidget>(
+          find.byType(UserTableWidget),
+        );
+        userTableWidget.onChanged(<UserDebt>[
+          UserDebt(userId: 'user-1', amount: 50),
+          UserDebt(userId: 'user-2', amount: 30),
+          UserDebt(userId: 'user-3', amount: 20),
+        ]);
         await tester.pumpAndSettle();
 
         final splitAcceptButton = find.descendant(

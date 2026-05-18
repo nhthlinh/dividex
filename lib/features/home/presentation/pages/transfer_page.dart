@@ -10,7 +10,6 @@ import 'package:Dividex/features/home/presentation/widgets/square_user.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/features/recharge/presentation/widgets/balance_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/num.dart';

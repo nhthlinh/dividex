@@ -1,8 +1,12 @@
 import 'package:Dividex/core/network/dio_client.dart';
 import 'package:Dividex/features/user/data/source/user_remote_datasource_impl.dart';
 import 'package:Dividex/shared/models/enum.dart';
+import 'package:Dividex/shared/services/local/hive_boxes.dart';
+import 'package:Dividex/shared/services/local/models/user_local_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_test/hive_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockDioClient extends Mock implements DioClient {}
@@ -10,6 +14,21 @@ class _MockDioClient extends Mock implements DioClient {}
 void main() {
   late DioClient dioClient;
   late UserRemoteDatasourceImpl datasource;
+
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    await setUpTestHive();
+
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(UserLocalModelAdapter());
+    }
+
+    await Hive.openBox<UserLocalModel>(HiveBox.user);
+  });
+
+  tearDownAll(() async {
+    await tearDownTestHive();
+  });
 
   setUp(() {
     dioClient = _MockDioClient();
@@ -438,7 +457,13 @@ void main() {
       ).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: '/auth/me'),
-          data: {},
+          data: {
+            'data': {
+              'uid': 'me-1',
+              'full_name': 'New Name',
+              'phone_number': '0909999999',
+            }
+          },
         ),
       );
 

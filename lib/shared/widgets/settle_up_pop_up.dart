@@ -22,6 +22,7 @@ Future<void> showSettleUpDialog({
   final formattedAmount =
       ' ${formatNumber(amount)} ${currency.code.toUpperCase()}';
   final intl = AppLocalizations.of(context)!;
+  final groupBloc = context.read<GroupBloc>();
 
   return showCustomDialog(
     context: context,
@@ -74,8 +75,10 @@ Future<void> showSettleUpDialog({
               text: intl.outSideTransfer,
               size: ButtonSize.medium,
               type: ButtonType.secondary,
-              onPressed: () => {
-                context.read<GroupBloc>().add(OutSideTransferEvent(groupId, receiver.id ?? '', amount))
+              onPressed: () {
+                groupBloc.add(
+                  OutSideTransferEvent(groupId, receiver.id ?? '', amount),
+                );
               },
             ),
             const SizedBox(width: 12),

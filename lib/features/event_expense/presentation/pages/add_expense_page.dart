@@ -9,9 +9,6 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/features/event_expense/presentation/widgets/date_input_field_widget.dart';
 import 'package:Dividex/features/image/data/models/image_expense_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
 import 'package:Dividex/shared/bloc/load_user_bloc.dart';
 import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
 import 'package:Dividex/shared/bloc/load_user_state.dart';
