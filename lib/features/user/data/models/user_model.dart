@@ -24,16 +24,30 @@ class UserModel {
     this.currency,
   });
 
+  static ImageModel? _parseAvatar(Map<String, dynamic> json) {
+    final rawAvatar = json['avatar_url'] ?? json['user_avatar_url'];
+
+    if (rawAvatar is Map) {
+      return ImageModel.fromJson(Map<String, dynamic>.from(rawAvatar));
+    }
+
+    if (rawAvatar is String && rawAvatar.isNotEmpty) {
+      return ImageModel(
+        uid: '',
+        originalName: '',
+        publicUrl: rawAvatar,
+      );
+    }
+
+    return null;
+  }
+
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     id: json['uid'] ?? json['friend_uid'] as String?,
     email: json['email'] as String?,
     fullName: json['full_name'] as String?,
     phoneNumber: json['phone_number'] as String?,
-    avatar: json['avatar_url'] != null
-        ? ImageModel.fromJson(json['avatar_url'] as Map<String, dynamic>)
-        : (json['user_avatar_url'] != null
-              ? ImageModel.fromJson(json['user_avatar_url'])
-              : null),
+    avatar: _parseAvatar(json),
     hasDebt: json['has_debt'] as bool?,
     amount: (json['amount'] as num?)?.toDouble(),
     currency: json['currency'] == null
@@ -49,7 +63,7 @@ class UserModel {
     'email': email,
     'full_name': fullName,
     'phone_number': phoneNumber,
-    'avatar_url': avatar,
+    'avatar_url': avatar?.toJson(),
     'has_debt': hasDebt,
     'amount': amount,
     'currency': currency != null ? $CurrencyEnumEnumMap[currency]! : null,
