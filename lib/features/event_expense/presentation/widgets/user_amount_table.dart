@@ -1,4 +1,3 @@
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
@@ -23,7 +22,6 @@ class UserShare {
   });
 }
 
-
 class UserTableWidget extends StatefulWidget {
   final List<UserModel> users;
   final List<UserDebt> usersDebt;
@@ -44,7 +42,8 @@ class UserTableWidget extends StatefulWidget {
 
 class _UserTableWidgetState extends State<UserTableWidget> {
   late List<UserShare> users;
-  final List<TextEditingController> _controllers = [];
+  final List<TextEditingController> _amountControllers = [];
+  final List<TextEditingController> _percentControllers = [];
 
   @override
   void initState() {
@@ -68,13 +67,38 @@ class _UserTableWidgetState extends State<UserTableWidget> {
       }
     }
 
-    _controllers.addAll(
+    _amountControllers.addAll(
       List.generate(
         users.length,
         (index) =>
             TextEditingController(text: users[index].amount.toStringAsFixed(0)),
       ),
     );
+
+    _percentControllers.addAll(
+      List.generate(
+        users.length,
+        (index) => TextEditingController(
+          text: users[index].percent.toStringAsFixed(2),
+        ),
+      ),
+    );
+  }
+
+  void _onPercentChanged(int index, String value) {
+    final percent = double.tryParse(value) ?? 0;
+
+    if (percent > 100) return;
+
+    setState(() {
+      users[index].percent = percent;
+
+      users[index].amount = widget.totalAmount * percent / 100;
+
+      _amountControllers[index].text = users[index].amount.toStringAsFixed(0);
+    });
+
+    _notifyParent();
   }
 
   void _recalculate(int index) {
@@ -83,10 +107,29 @@ class _UserTableWidgetState extends State<UserTableWidget> {
         .where((u) => u.selected)
         .fold<double>(0, (sum, u) => sum + u.amount);
 
+    for (int i = 0; i < users.length; i++) {
+      final u = users[i];
+
+      if (u.selected) {
+        u.percent = widget.totalAmount > 0
+            ? u.amount * 100 / widget.totalAmount
+            : 0;
+
+        _percentControllers[i].text = u.percent.toStringAsFixed(2);
+      } else {
+        u.amount = 0;
+        u.percent = 0;
+
+        _amountControllers[i].text = '0';
+
+        _percentControllers[i].text = '0';
+      }
+    }
+
     if (totalEntered > widget.totalAmount) {
       // nếu tổng số tiền nhập lớn hơn tổng số tiền thì reset lại giá trị của user hiện tại
       setState(() {
-        _controllers[index].text = '1';
+        _amountControllers[index].text = '1';
 
         users[index].selected = true;
         users[index].amount = 1;
@@ -115,13 +158,10 @@ class _UserTableWidgetState extends State<UserTableWidget> {
   }
 
   void reset() {
-    for (final u in users) {
-      u.selected = true;
-      u.amount = widget.totalAmount / users.length;
-      u.percent = 100 / users.length;
-    }
-    for (var controller in _controllers) {
-      controller.text = (widget.totalAmount / users.length).toStringAsFixed(0);
+    for (int i = 0; i < users.length; i++) {
+      _amountControllers[i].text = users[i].amount.toStringAsFixed(0);
+
+      _percentControllers[i].text = users[i].percent.toStringAsFixed(2);
     }
     _notifyParent();
   }
@@ -136,7 +176,10 @@ class _UserTableWidgetState extends State<UserTableWidget> {
 
   @override
   void dispose() {
-    for (var controller in _controllers) {
+    for (var controller in _amountControllers) {
+      controller.dispose();
+    }
+    for (var controller in _percentControllers) {
       controller.dispose();
     }
     super.dispose();
@@ -227,7 +270,7 @@ class _UserTableWidgetState extends State<UserTableWidget> {
                 ? (1 / widget.totalAmount) * 100
                 : 0;
           }
-          _controllers[index].text = user.amount.toStringAsFixed(0);
+          _amountControllers[index].text = user.amount.toStringAsFixed(0);
         });
         _recalculate(index);
       },
@@ -262,7 +305,7 @@ class _UserTableWidgetState extends State<UserTableWidget> {
           Expanded(
             flex: 3,
             child: TextFormField(
-              controller: _controllers[index],
+              controller: _amountControllers[index],
               keyboardType: TextInputType.number,
               readOnly: !user.selected,
               onChanged: (value) {
@@ -275,7 +318,10 @@ class _UserTableWidgetState extends State<UserTableWidget> {
               decoration: InputDecoration(
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: AppThemes.borderColor, width: 1),
+                  borderSide: BorderSide(
+                    color: AppThemes.borderColor,
+                    width: 1,
+                  ),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -286,13 +332,37 @@ class _UserTableWidgetState extends State<UserTableWidget> {
                 fontWeight: FontWeight.w500,
                 letterSpacing: 0,
               ),
-            )
+            ),
           ),
 
           const SizedBox(width: 4),
           Expanded(
             flex: 2,
-            child: Center(child: Text(user.percent.toStringAsFixed(2))),
+            child: TextFormField(
+              controller: _percentControllers[index],
+              keyboardType: TextInputType.number,
+              readOnly: !user.selected,
+              onChanged: (value) {
+                _onPercentChanged(index, value);
+              },
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderSide: BorderSide(
+                    color: AppThemes.borderColor,
+                    width: 1,
+                  ),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
+              ),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0,
+              ),
+            ),
           ),
           SizedBox(
             width: 20,
