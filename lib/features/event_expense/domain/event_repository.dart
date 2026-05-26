@@ -37,4 +37,8 @@ abstract class EventRepository {
   Future<void> addMembersToEvent(String eventId, List<String> userIds);
   Future<List<ChartData>> getChartData(String eventId);
   Future<List<CustomBarChartData>> getBarChartData(String eventId, int year);
+
+  Future<List<RestructuredDebtModel>> getBalanceEvent(String eventId);
+  Future<void> outsideTransfer(String eventId, String userId, double amount);
+  Future<void> remindEvent(String eventId, String userId);
 }

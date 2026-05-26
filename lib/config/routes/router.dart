@@ -8,6 +8,7 @@ import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_f
 import 'package:Dividex/features/auth/presentation/pages/login_and_forgot_pass_flow/reset_pass_page.dart';
 import 'package:Dividex/features/auth/presentation/pages/register_flow/register_page.dart';
 import 'package:Dividex/features/event_expense/data/models/event_model.dart';
+import 'package:Dividex/features/event_expense/data/models/payer_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
@@ -18,12 +19,14 @@ import 'package:Dividex/features/event_expense/presentation/pages/choose_event_p
 import 'package:Dividex/features/event_expense/presentation/pages/edit_expense_page.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/event_report.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/event_setting.dart';
+import 'package:Dividex/features/event_expense/presentation/pages/expense_approve_page.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/expense_detail_page.dart';
 import 'package:Dividex/features/event_expense/presentation/pages/split_page.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_request_bloc_and_event.dart'
     as request_bloc;
 import 'package:Dividex/features/friend/presentation/pages/friend_profile_page.dart';
+import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/pages/add_group_page.dart';
 import 'package:Dividex/features/group/presentation/pages/group_detail.dart';
@@ -76,6 +79,7 @@ import 'package:Dividex/features/home/presentation/pages/setting_page.dart';
 import 'package:Dividex/features/home/presentation/pages/term_of_service_page.dart';
 import 'package:Dividex/features/splash/presentation/pages/splash_page.dart';
 import 'package:Dividex/features/splash/presentation/pages/splash_page_2.dart';
+import 'package:Dividex/shared/pages/choose_payers_page.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,6 +94,7 @@ class AppRouteNames {
   static const String splash2 = 'splash-2';
 
   static const String register = 'register';
+  static const String expenseApproval = 'expense-approval';
 
   static const String login = 'login';
 
@@ -121,6 +126,7 @@ class AppRouteNames {
   static const String addEvent = 'add-event';
 
   static const String chooseMember = 'choose-member';
+  static const String choosePayer = 'choose-payer';
   static const String chooseEvent = 'choose-event';
   static const String customSplit = 'custom-split';
 
@@ -296,6 +302,7 @@ GoRouter buildRouter(BuildContext context) {
               );
             },
           ),
+
           GoRoute(
             path: '/expense/:id',
             name: AppRouteNames.expenseDetail,
@@ -399,6 +406,8 @@ GoRouter buildRouter(BuildContext context) {
                   final groupName = extra?['groupName'] as String?;
                   final groupAvatar = extra?['groupAvatar'] as ImageModel?;
                   final leaderId = extra?['leaderId'] as String?;
+                  final debtOptimization =
+                      extra?['debtOptimization'] as DebtOptimization?;
 
                   return buildPageWithDefaultTransition(
                     child: MultiBlocProvider(
@@ -415,6 +424,7 @@ GoRouter buildRouter(BuildContext context) {
                         groupLeaderId: leaderId ?? '',
                         groupName: groupName ?? '',
                         groupAvatarUrl: groupAvatar,
+                        debtOptimization: debtOptimization,
                       ),
                     ),
                   );
@@ -512,6 +522,9 @@ GoRouter buildRouter(BuildContext context) {
                             BlocProvider<EventBloc>(
                               create: (context) => EventBloc(),
                             ),
+                            BlocProvider<EventBalanceBloc>(
+                              create: (context) => EventBalanceBloc(),
+                            ),
                           ],
                           child: EventReportPage(
                             eventId: eventId,
@@ -529,7 +542,7 @@ GoRouter buildRouter(BuildContext context) {
 
           GoRoute(
             path: 'account',
-            name: AppRouteNames.account, 
+            name: AppRouteNames.account,
             pageBuilder: (BuildContext context, GoRouterState state) {
               return buildPageWithDefaultTransition(
                 child: BlocProvider(
@@ -553,7 +566,7 @@ GoRouter buildRouter(BuildContext context) {
                           create: (context) => VerifyAccountBloc(),
                         ),
                       ],
-                      child: AddAccountPage()
+                      child: AddAccountPage(),
                     ),
                   );
                 },
@@ -584,6 +597,7 @@ GoRouter buildRouter(BuildContext context) {
               final amount = extra?['amount'] as double?;
               final currency = extra?['currency'] as CurrencyEnum?;
               final groupId = extra?['groupId'] as String?;
+              final eventId = extra?['eventId'] as String?;
               return buildPageWithDefaultTransition(
                 child: MultiBlocProvider(
                   providers: [
@@ -599,6 +613,7 @@ GoRouter buildRouter(BuildContext context) {
                     amount: amount,
                     currency: currency,
                     groupId: groupId,
+                    eventId: eventId,
                   ),
                 ),
               );
@@ -905,6 +920,21 @@ GoRouter buildRouter(BuildContext context) {
       ),
 
       GoRoute(
+        path: '/expense-approval/:expenseId',
+        name: AppRouteNames.expenseApproval,
+        pageBuilder: (context, state) {
+          return buildPageWithDefaultTransition(
+            child: BlocProvider<ExpenseBloc>(
+              create: (context) => ExpenseBloc(),
+              child: ExpenseApprovePage(
+                expenseId: state.pathParameters['expenseId']!,
+              ),
+            ),
+          );
+        },
+      ),
+
+      GoRoute(
         path: '/add-group',
         name: AppRouteNames.addGroup,
         pageBuilder: (BuildContext context, GoRouterState state) {
@@ -963,10 +993,30 @@ GoRouter buildRouter(BuildContext context) {
             child: ChooseMembersPage(
               id: extra['id'] as String?,
               type: extra['type'] as LoadType,
-              initialSelectedMembers:(extra['initialSelected'] as List?)?.cast<UserModel>(),
-                  // extra['initialSelected'] as List<UserModel>?,
+              initialSelectedMembers: (extra['initialSelected'] as List?)
+                  ?.cast<UserModel>(),
+              // extra['initialSelected'] as List<UserModel>?,
               onSelectedMembersChanged:
                   extra['onChanged'] as ValueChanged<List<UserModel>>,
+              isMultiSelect: extra['isMultiSelect'] as bool,
+              isCanChooseMyself: extra['isCanChooseMyself'] as bool? ?? false,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/choose-payers',
+        name: AppRouteNames.choosePayer,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return BlocProvider(
+            create: (context) => LoadedUsersBloc(),
+            child: ChoosePayersPage(
+              id: extra['id'] as String?,
+              type: extra['type'] as LoadType,
+              initialSelectedPayers: (extra['initialSelectedPayers'] as List?)
+                  ?.cast<PayerModel>(),
+              totalAmount: extra['amount'] as double,
               isMultiSelect: extra['isMultiSelect'] as bool,
               isCanChooseMyself: extra['isCanChooseMyself'] as bool? ?? false,
             ),

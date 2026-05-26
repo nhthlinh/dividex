@@ -38,7 +38,11 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
     return apiCallWrapper(() async {
       final response = await dio.put(
         '/groups/$groupId',
-        data: {'name': name, 'list_add_uids': addMemberIds, 'list_delete_uids': deleteMemberIds},
+        data: {
+          'name': name,
+          'list_add_uids': addMemberIds,
+          'list_delete_uids': deleteMemberIds,
+        },
       );
       return response.data['data']['uid'] as String;
     });
@@ -47,9 +51,12 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
   @override
   Future<GroupModel?> getGroupDetail(String groupId) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/groups/$groupId', queryParameters: {
-        'currency': HiveService.getUser().preferredCurrency ?? 'VND',
-      });
+      final response = await dio.get(
+        '/groups/$groupId',
+        queryParameters: {
+          'currency': HiveService.getUser().preferredCurrency ?? 'VND',
+        },
+      );
       if (response.data['data'] == null) {
         return null;
       }
@@ -121,7 +128,7 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
       );
     });
   }
-  
+
   @override
   Future<void> updateGroupLeader(String groupId, String newLeaderId) async {
     return apiCallWrapper(() async {
@@ -140,7 +147,7 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
   ) async {
     return apiCallWrapper(() async {
       final response = await dio.get(
-        '/groups/balance-members', 
+        '/groups/balance-members',
         queryParameters: {
           'page': page,
           'page_size': pageSize,
@@ -174,7 +181,12 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
   @override
   Future<List<ChartData>> getChartData(String groupId) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/groups/$groupId/members-report', queryParameters: {'currency': HiveService.getUser().preferredCurrency ?? 'VND'});
+      final response = await dio.get(
+        '/groups/$groupId/members-report',
+        queryParameters: {
+          'currency': HiveService.getUser().preferredCurrency ?? 'VND',
+        },
+      );
       if (response.data['data'] == null) {
         return [];
       }
@@ -184,11 +196,16 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
     });
   }
 
-  
   @override
-  Future<List<CustomBarChartData>> getBarChartData(String groupId, int year) async {
+  Future<List<CustomBarChartData>> getBarChartData(
+    String groupId,
+    int year,
+  ) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/groups/$groupId/chart', queryParameters: {'year': year});
+      final response = await dio.get(
+        '/groups/$groupId/chart',
+        queryParameters: {'year': year},
+      );
       if (response.data['data'] == null) {
         return [];
       }
@@ -197,14 +214,11 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
           .toList();
     });
   }
-  
+
   @override
   Future<void> remindGroup(String groupId, String userId) {
     return apiCallWrapper(() async {
-      await dio.post(
-        '/groups/$groupId/remind',
-        data: {'user_uid': userId},
-      );
+      await dio.post('/groups/$groupId/remind', data: {'user_uid': userId});
     });
   }
 
@@ -213,12 +227,23 @@ class GroupRemoteDatasourceImpl implements GroupRemoteDataSource {
     return apiCallWrapper(() async {
       await dio.post(
         '/groups/$groupId/external-transfer',
+        data: {'user_uid': userId, 'amount': amount},
+      );
+    });
+  }
+
+  @override
+  Future<void> changeToDebtOptimization(
+    String groupId,
+    DebtOptimization debtOptimization,
+  ) {
+    return apiCallWrapper(() async {
+      await dio.put(
+        '/groups/$groupId/debt-optimization',
         data: {
-          'user_uid': userId,
-          'amount': amount
+          'debt_optimization': debtOptimization.name.toUpperCase(),
         },
       );
     });
   }
 }
-

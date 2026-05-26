@@ -1,3 +1,4 @@
+import 'package:Dividex/features/event_expense/data/models/expense_approve_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/data/source/expense_remote_datasource.dart';
@@ -22,7 +23,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     String currency,
     String? category,
     String eventId,
-    String? paidById,
+    List<Map<String, double>>? paidByIds,
     String? note,
     String? expenseDate,
     String? remindAt,
@@ -35,7 +36,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
       currency,
       category,
       eventId,
-      paidById,
+      paidByIds,
       note,
       expenseDate,
       remindAt,
@@ -100,5 +101,15 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   @override
   Future<List<CustomBarChartData>> getBarChartData(int year) async {
     return await remoteDataSource.getBarChartData(year);
+  }
+
+  @override
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId) async {
+    return await remoteDataSource.getExpenseApprove(expenseId);
+  }
+
+  @override
+  Future<void> voteOnExpense(String expenseId, String action) async {
+    await remoteDataSource.voteOnExpense(expenseId, action);
   }
 }

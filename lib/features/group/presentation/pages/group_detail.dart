@@ -59,6 +59,8 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
           );
         }
 
+        print("Group detail state: ${state.groupDetail?.debtOptimization}");
+
         return AppShell(
           currentIndex: 0,
           child: Layout(
@@ -86,6 +88,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                     'groupName': state.groupDetail?.name ?? '',
                     'leaderId': state.groupDetail?.leader?.id ?? '',
                     'groupAvatar': state.groupDetail?.avatarUrl,
+                    'debtOptimization': state.groupDetail?.debtOptimization,
                   },
                 );
               },
@@ -337,7 +340,7 @@ List<Widget> buildGroupedExpenseList(
             radius: 20,
             backgroundColor: Colors.grey,
             backgroundImage: AssetImage(
-              getCategoryByKey(expense.category ?? '')?.getImage() ??
+              getCategoryByKey(expense.category?.key ?? '')?.getImage() ??
                   'lib/assets/icons/money-transfer.png',
             ),
           ),

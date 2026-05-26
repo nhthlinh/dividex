@@ -30,5 +30,6 @@ abstract class GroupRemoteDataSource {
 
   Future<void> remindGroup(String groupId, String userId);
   Future<void> outSideTransfer(String groupId, String userId, double amount);
+  Future<void> changeToDebtOptimization(String groupId, DebtOptimization debtOptimization);
 }
 

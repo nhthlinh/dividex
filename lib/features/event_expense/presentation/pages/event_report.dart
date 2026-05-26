@@ -2,6 +2,7 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/category_model.dart';
+import 'package:Dividex/features/event_expense/data/models/event_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart'
@@ -14,6 +15,9 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/group/presentation/pages/group_detail.dart';
 import 'package:Dividex/features/group/presentation/widgets/chart_widget.dart';
+import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:Dividex/shared/utils/change_string.dart';
+import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/bar_chart.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
@@ -52,10 +56,10 @@ class _EventReportPageState extends State<EventReportPage> {
       ),
     );
     context.read<EventBloc>().add(
-      event_event.GetChartDataEvent(
-        eventId: widget.eventId,
-        year: DateTime.now().year,
-      ),
+      event_event.GetEventEvent(eventId: widget.eventId),
+    );
+    context.read<EventBalanceBloc>().add(
+      event_event.EventBalanceSuccessEvent(eventId: widget.eventId),
     );
   }
 
@@ -89,10 +93,7 @@ class _EventReportPageState extends State<EventReportPage> {
             ),
           );
           context.read<EventBloc>().add(
-            event_event.GetChartDataEvent(
-              eventId: widget.eventId,
-              year: DateTime.now().year,
-            ),
+            event_event.GetEventEvent(eventId: widget.eventId),
           );
           return Future.value();
         },
@@ -114,7 +115,7 @@ class _EventReportPageState extends State<EventReportPage> {
           children: [
             BlocBuilder<EventBloc, EventState>(
               builder: (context, state) {
-                if (state is! EventChartDataState) {
+                if (state is! EventLoadedState) {
                   return const Center(
                     child: ColoredBox(
                       color: Colors.transparent,
@@ -124,6 +125,7 @@ class _EventReportPageState extends State<EventReportPage> {
                     ),
                   );
                 }
+
                 return Column(
                   children: [
                     Align(
@@ -138,88 +140,212 @@ class _EventReportPageState extends State<EventReportPage> {
                         ),
                       ),
                     ),
-                    ContentCard(
-                      child: Column(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// STATUS CARD
+                        StatusCard(event: state.event),
+
+                        const SizedBox(height: 8),
+
+                        /// OVERVIEW CARD
+                        ContentCard(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _overviewItem(
+                                  icon: Icons.account_balance_wallet,
+                                  value: formatNumber(state.event.total),
+                                  label: intl.totalAmount,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+
+                              Container(
+                                width: 1.5,
+                                height: 120,
+                                color: Colors.grey.shade300,
+                              ),
+
+                              Expanded(
+                                child: _overviewItem(
+                                  icon: Icons.groups_rounded,
+                                  value: "${state.event.totalMembers}",
+                                  label: intl.members,
+                                  color: Colors.blue,
+                                ),
+                              ),
+
+                              Container(
+                                width: 1.5,
+                                height: 120,
+                                color: Colors.grey.shade300,
+                              ),
+
+                              Expanded(
+                                child: _overviewItem(
+                                  icon: Icons.receipt_long_outlined,
+                                  value: "${state.event.totalExpenses}",
+                                  label: intl.expense,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Text(
+                    //     intl.contributon,
+                    //     style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    //       fontSize: 12,
+                    //       letterSpacing: 0,
+                    //       height: 16 / 12,
+                    //       color: Colors.grey,
+                    //     ),
+                    //   ),
+                    // ),
+                    // ContributionPieChart(chartData: state.chartData),
+
+                    // const SizedBox(height: 5),
+                    // MonthlyBarChart(
+                    //   data: state.barChartData,
+                    //   year: DateTime.now().year,
+                    // ),
+                  ],
+                );
+              },
+            ),
+            const SizedBox(height: 4),
+            BlocBuilder<EventBalanceBloc, EventState>(
+              builder: (context, state) {
+                if (state is! EventBalanceState) {
+                  return const Center(
+                    child: SpinKitFadingCircle(color: AppThemes.primary3Color),
+                  );
+                }
+
+                final myId = HiveService.getUser().id;
+                final balances = state.balances;
+
+                final myDebts = balances
+                    .where((e) => e.debtor?.id == myId)
+                    .toList();
+
+                final othersOweMe = balances
+                    .where((e) => e.creditor?.id == myId)
+                    .toList();
+
+                final totalDebt = myDebts.fold<double>(
+                  0,
+                  (sum, e) => sum + (e.value ?? 0),
+                );
+
+                final totalReceive = othersOweMe.fold<double>(
+                  0,
+                  (sum, e) => sum + (e.value ?? 0),
+                );
+
+                return ContentCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// header
+                      Row(
                         children: [
-                          buildGroupInfoRow(
-                            intl.eventNameLabel,
-                            state.eventData?.name ?? '',
+                          Text(
+                            intl.netBalance,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(fontWeight: FontWeight.bold, color: Colors.grey),
+
                           ),
-                          const Divider(
-                            height: 1,
-                            color: AppThemes.borderColor,
-                          ),
-                          buildGroupInfoRow(
-                            intl.eventStartDateLabel,
-                            DateFormat('dd/MM/yyyy').format(
-                              state.eventData?.eventStart ?? DateTime.now(),
-                            ),
-                          ),
-                          const Divider(
-                            height: 1,
-                            color: AppThemes.borderColor,
-                          ),
-                          buildGroupInfoRow(
-                            intl.eventEndDateLabel,
-                            DateFormat('dd/MM/yyyy').format(
-                              state.eventData?.eventEnd ?? DateTime.now(),
-                            ),
-                          ),
-                          const Divider(
-                            height: 1,
-                            color: AppThemes.borderColor,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 8,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
+
+                          Spacer(),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              if (totalDebt == 0 && totalReceive == 0)
                                 Text(
-                                  intl.eventDescriptionLabel,
-                                  style: Theme.of(context).textTheme.bodySmall
-                                      ?.copyWith(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                  intl.settleUp,
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppThemes.successColor,
+                                  ),
                                 ),
-                                Text(
-                                  state.eventData?.description ?? '',
-                                  style: Theme.of(context).textTheme.titleSmall
-                                      ?.copyWith(
-                                        color: AppThemes.primary3Color,
-                                      ),
+
+                              if (totalDebt != 0)
+                              Text(
+                                "${intl.youOwe}: "
+                                "${formatNumber(totalDebt)} đ",
+
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: AppThemes.errorColor,
                                 ),
-                              ],
-                            ),
+                              ),
+
+                              if (totalReceive != 0)
+
+                              Text(
+                                "${intl.oweYou}: "
+                                "${formatNumber(totalReceive)} đ",
+
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: AppThemes.successColor,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 8),
 
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        intl.contributon,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontSize: 12,
-                          letterSpacing: 0,
-                          height: 16 / 12,
-                          color: Colors.grey,
+                      SizedBox(height: 8),
+
+                      if (myDebts.isNotEmpty) ...[
+                        Text(
+                          intl.youNeedToPay,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
-                      ),
-                    ),
-                    ContributionPieChart(chartData: state.chartData),
 
-                    const SizedBox(height: 5),
-                    MonthlyBarChart(
-                      data: state.barChartData,
-                      year: DateTime.now().year,
-                    ),
-                  ],
+                        SizedBox(height: 8),
+
+                        ...myDebts.map(
+                          (e) => _debtRow(
+                            debtorName: intl.you,
+                            debtorAvatar:
+                                HiveService.getUser().avatarUrl?.publicUrl,
+                            creditorName: e.creditor?.fullName ?? "",
+                            creditorAvatar: e.creditor?.avatar?.publicUrl,
+                            amount: e.value ?? 0,
+                          ),
+                        ),
+                      ],
+
+                      if (othersOweMe.isNotEmpty) ...[
+                        SizedBox(height: 20),
+
+                        Text(
+                          intl.peopleNeedToPayYou,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+
+                        SizedBox(height: 8),
+
+                        ...othersOweMe.map(
+                          (e) => _debtRow(
+                            debtorName: e.debtor?.fullName ?? "",
+                            debtorAvatar: e.debtor?.avatar?.publicUrl,
+                            creditorName: intl.you,
+                            creditorAvatar:
+                                HiveService.getUser().avatarUrl?.publicUrl,
+                            amount: e.value ?? 0,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 );
               },
             ),
@@ -257,27 +383,101 @@ class _EventReportPageState extends State<EventReportPage> {
     );
   }
 
-  Widget buildGroupInfoRow(String title, String value) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+  Widget _debtRow({
+    required String debtorName,
+    required String creditorName,
+    String? debtorAvatar,
+    String? creditorAvatar,
+    required double amount,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 22,
+                  backgroundImage: NetworkImage(
+                    debtorAvatar ??
+                                                    'https://ui-avatars.com/api/?name=${Uri.encodeComponent(debtorName)}&background=random&color=fff&size=128',
+                  ),
+                ),
+
+                SizedBox(height: 8),
+
+                Text(getLastTwoWords(debtorName), textAlign: TextAlign.center),
+              ],
             ),
           ),
-          Text(
-            value,
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(color: AppThemes.primary3Color),
+
+          Column(
+            children: [
+              Image.asset(
+                'lib/assets/images/arrow_image.png',
+                width: 16,
+                height: 16,
+              ),
+
+              Text(
+                formatNumber(amount),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppThemes.successColor,
+                ),
+              ),
+            ],
+          ),
+
+          Expanded(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 22,
+                  backgroundImage: NetworkImage(
+                    creditorAvatar ??
+                        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(creditorName)}&background=random&color=fff&size=128',
+                  ),
+                ),
+
+                SizedBox(height: 8),
+
+                Text(getLastTwoWords(creditorName), textAlign: TextAlign.center),
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _overviewItem({
+    required IconData icon,
+    required String value,
+    required String label,
+    required Color color,
+  }) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 22,
+          backgroundColor: color.withOpacity(.12),
+          child: Icon(icon, color: color),
+        ),
+
+        const SizedBox(height: 12),
+
+        Text(
+          value,
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+        ),
+
+        const SizedBox(height: 4),
+
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
+      ],
     );
   }
 
@@ -399,6 +599,131 @@ class _EventReportPageState extends State<EventReportPage> {
   }
 }
 
+class StatusCard extends StatelessWidget {
+  const StatusCard({super.key, required this.event});
+
+  final EventModel event;
+
+  @override
+  Widget build(BuildContext context) {
+    final intl = AppLocalizations.of(context)!;
+    final now = DateTime.now();
+
+    final eventStart = event.eventStart!;
+    final eventEnd = event.eventEnd!;
+
+    late String title;
+    late String description;
+    late Color color;
+    late IconData icon;
+
+    if (now.isBefore(eventStart)) {
+      /// UPCOMING
+      title = intl.upcoming;
+      description = intl.eventUpcomingDescription;
+      color = AppThemes.infoColor;
+
+      icon = Icons.schedule_rounded;
+    } else if (now.isAfter(eventEnd)) {
+      /// ENDED
+      title = intl.ended;
+      description = intl.eventEndedDescription;
+      color = AppThemes.errorColor;
+
+      icon = Icons.flag_circle_rounded;
+    } else {
+      /// IN PROGRESS
+      title = intl.inProgress;
+      description = intl.eventActiveFrom;
+
+      color = AppThemes.warningColor;
+
+      icon = Icons.show_chart_rounded;
+    }
+    return ContentCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(.1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(icon, color: color, size: 24),
+              ),
+
+              const SizedBox(width: 8),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: color,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    RichText(
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.bodySmall,
+                        children: [
+                          TextSpan(
+                            text: "$description ",
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+
+                          TextSpan(
+                            text:
+                                "${DateFormat('dd/MM').format(eventStart)} - "
+                                "${DateFormat('dd/MM/yyyy').format(eventEnd)}",
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodySmall?.copyWith(color: color),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 18),
+
+          Text(
+            intl.eventDescriptionLabel,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.grey,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          Text(
+            (event.description ?? '') == ''
+                ? intl.noDescription
+                : event.description ?? '',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              height: 1.4,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ExpenseCard extends StatelessWidget {
   const ExpenseCard({super.key, required this.expense, required this.widget});
 
@@ -413,7 +738,7 @@ class ExpenseCard extends StatelessWidget {
         radius: 20,
         backgroundColor: Colors.grey,
         backgroundImage: AssetImage(
-          getCategoryByKey(expense.category ?? '')?.getImage() ??
+          getCategoryByKey(expense.category?.key ?? '')?.getImage() ??
               'lib/assets/icons/money-transfer.png',
         ),
       ),

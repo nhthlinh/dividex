@@ -20,6 +20,10 @@ class DioClient {
     return dio.put(path, data: data, queryParameters: queryParameters, options: options);
   }
 
+  Future<Response> patch(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) {
+    return dio.patch(path, data: data, queryParameters: queryParameters, options: options);
+  }
+
   Future<Response> delete(String path, {dynamic data, Map<String, dynamic>? queryParameters}) {
     return dio.delete(path, data: data, queryParameters: queryParameters);
   }

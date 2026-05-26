@@ -55,7 +55,7 @@ class EventUseCase {
     eventStart = eventStart?.trim();
     eventEnd = eventEnd?.trim();
     description = description?.trim();
-    
+
     await repository.updateEvent(
       eventId: eventId,
       name: name,
@@ -102,5 +102,23 @@ class EventUseCase {
 
   Future<List<ChartData>> getChartData(String eventId) async {
     return await repository.getChartData(eventId);
+  }
+
+  Future<void> remindEvent(String eventId, String userId) async {
+    await repository.remindEvent(eventId, userId);
+  }
+
+  Future<void> outsideTransfer(
+    String eventId,
+    String userId,
+    double amount,
+  ) async {
+    await repository.outsideTransfer(eventId, userId, amount);
+  }
+
+  Future<List<RestructuredDebtModel>> getBalanceEvent(
+    String eventId,
+  ) async {
+    return await repository.getBalanceEvent(eventId);
   }
 }

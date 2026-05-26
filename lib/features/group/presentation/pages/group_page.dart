@@ -33,9 +33,7 @@ class _GroupPageState extends State<GroupPage> {
   final List<GroupModel> _groupList = [];
 
   final _textEditingController = TextEditingController();
-  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(
-    CurrencyEnum.vnd,
-  );
+  final ValueNotifier<CurrencyEnum?> _selectedCurrency = ValueNotifier(null);
   final List<CurrencyEnum> _units = CurrencyEnum.values;
 
   List<int> _selectedMemberIndices = [];
@@ -107,14 +105,14 @@ class _GroupPageState extends State<GroupPage> {
                   const SizedBox(width: 8),
                   Expanded(
                     flex: 3, // 30%
-                    child: ValueListenableBuilder<CurrencyEnum>(
+                    child: ValueListenableBuilder<CurrencyEnum?>(
                       valueListenable: _selectedCurrency,
                       builder: (context, value, _) {
-                        return CustomDropdownWidget<CurrencyEnum>(
+                        return CustomDropdownWidget<CurrencyEnum?>(
                           label: intl.expenseCurrencyLabel,
                           value: _selectedCurrency.value,
                           options: _units,
-                          displayString: (b) => b.code,
+                          displayString: (b) => b?.code ?? '',
                           buildOption: (b, selected) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -134,7 +132,7 @@ class _GroupPageState extends State<GroupPage> {
                                   // else
                                   //   const Icon(Icons.group),
                                   Text(
-                                    b.code,
+                                    b?.code ?? '',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -148,7 +146,7 @@ class _GroupPageState extends State<GroupPage> {
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: Text(
-                                      b.description,
+                                      b?.description ?? '',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -450,7 +448,7 @@ class _GroupPageState extends State<GroupPage> {
                 ),
 
                 Text(
-                  '${formatNumber(currentMember.amount?.abs() ?? 0)} ${_selectedCurrency.value.code}',
+                  '${formatNumber(currentMember.amount?.abs() ?? 0)} ${_selectedCurrency.value?.code ?? 'VND'}',
                   style: TextStyle(
                     color:
                         (currentMember.amount != null &&
@@ -489,7 +487,7 @@ class _GroupPageState extends State<GroupPage> {
                       context: context,
                       receiver: currentMember.user!,
                       amount: currentMember.amount!.abs(),
-                      currency: _selectedCurrency.value,
+                      currency: _selectedCurrency.value ?? CurrencyEnum.vnd,
                       groupId: group.id!,
                     );
                   }

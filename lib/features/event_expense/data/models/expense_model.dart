@@ -1,9 +1,21 @@
+import 'dart:ui';
+
+import 'package:Dividex/config/l10n/app_localizations.dart';
+import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/event_expense/data/models/category_model.dart';
+import 'package:Dividex/features/event_expense/data/models/payer_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/utils/get_time_ago.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:Dividex/features/user/data/models/user_model.dart';
+
+enum ExpenseApprovalActionEnum {
+  create,
+  update,
+  delete,
+}
 
 class ExpenseModel {
   final String? id;
@@ -13,12 +25,12 @@ class ExpenseModel {
   final CurrencyEnum? currency;
   final double? totalAmount;
   final String? note;
-  final String? paidBy;
-  final UserModel? paidByUser;
+  final List<UserDebt>? paidBy;
+  final List<PayerModel>? paidByUser;
   final SplitTypeEnum? splitType;
   final DateTime? expenseDate;
   final DateTime? remindAt;
-  final String? category;
+  final CategoryModel? category;
   final List<UserDebt>? userDebts;
   final List<UserDeptInfo>? userDebtInfos;
   final List<ImageModel>? images;
@@ -26,6 +38,8 @@ class ExpenseModel {
   final String? fromUser;
   final String? toUser;
   final String? status;
+  final ExpenseApprovalActionEnum? pendingAction;
+  final String? pendingUpdateData;
 
   ExpenseModel({
     this.id,
@@ -47,6 +61,8 @@ class ExpenseModel {
     this.fromUser,
     this.toUser,
     this.status,
+    this.pendingAction,
+    this.pendingUpdateData
   });
 
   factory ExpenseModel.fromJson(Map<String, dynamic> json) => ExpenseModel(
@@ -61,32 +77,55 @@ class ExpenseModel {
             $CurrencyEnumEnumMap,
             json['currency'].toString().toLowerCase(),
           ),
-    totalAmount: (json['total_amount'] as num? ?? json['amount'] as num?)?.toDouble(),
+    totalAmount: (json['total_amount'] as num? ?? json['amount'] as num?)
+        ?.toDouble(),
     note: json['note'] as String?,
-    category: json['category'] as String?,
+    category: json['category'] != null
+        ? CategoryModel.categories.firstWhere(
+            (c) => c.key == (json['category']),
+            orElse: () => CategoryModel.categories.firstWhere(
+              (c) => c.key == 'miscellaneous',
+            ),
+          )
+        : null,
     expenseDate: json['created_at'] == null
-          ? json['expense_date'] == null
-              ? null 
-              : DateTime.parse(json['expense_date'] as String)
-          : parseUTCToVN(json['created_at'] as String),
+        ? json['expense_date'] == null
+              ? null
+              : parseUTCToVN(json['expense_date'] as String)
+        : parseUTCToVN(json['created_at'] as String),
     remindAt: json['end_date'] == null
         ? null
         : parseUTCToVN(json['end_date'] as String),
     paidByUser: json['paid_by'] == null
         ? null
-        : UserModel.fromJson(json['paid_by'] as Map<String, dynamic>),
+        : List<PayerModel>.from(
+            (json['paid_by'] as List).map(
+              (e) => PayerModel.fromJson(e as Map<String, dynamic>),
+            ),
+          ),
     splitType: $enumDecodeNullable(_$SplitTypeEnumEnumMap, json['splitType']),
     event: json['event'] as String?,
     images: (json['receipt_url'] as List<dynamic>?)
         ?.map((e) => ImageModel.fromJson(e as Map<String, dynamic>))
         .toList(),
-    userDebts: (json['list_expense_member'] as List<dynamic>?)
-        ?.map((e) => UserDebt.fromJson(e as Map<String, dynamic>))
-        .toList(),
+    // userDebts: (json['list_expense_member'] as List<dynamic>?)
+    //     ?.map((e) => UserDebt.fromJson(e as Map<String, dynamic>))
+    //     .toList(), // này giống cho form gửi đi hơn là nhận về
     userDebtInfos: (json['list_user'] as List<dynamic>?)
         ?.map((e) => UserDeptInfo.fromJson(e as Map<String, dynamic>))
         .toList(),
     status: json['status'] as String?,
+    fromUser: json['updated_by'] as String?,
+    pendingAction: json['pending_action'] == null
+        ? null
+        : json['pending_action'] == 'CREATE'
+            ? ExpenseApprovalActionEnum.create
+            : json['pending_action'] == 'UPDATE'
+                ? ExpenseApprovalActionEnum.update
+                : json['pending_action'] == 'DELETE'
+                    ? ExpenseApprovalActionEnum.delete
+                    : null,
+    pendingUpdateData: json['pending_update_data'] as String?,
   );
 
   factory ExpenseModel.fromListExpenseInGroupJson(Map<String, dynamic> json) {
@@ -95,13 +134,20 @@ class ExpenseModel {
       id: json['uid'] as String?,
       name: json['name'] as String?,
       currency: $enumDecodeNullable(
-              $CurrencyEnumEnumMap,
-              json['currency'].toString().toLowerCase(),
-            ),
+        $CurrencyEnumEnumMap,
+        json['currency'].toString().toLowerCase(),
+      ),
       totalAmount: (json['amount'] != null
-                ? (json['amount'] as num).toDouble()
-                : null),
-      category: json['category'] as String?,
+          ? (json['amount'] as num).toDouble()
+          : null),
+      category: json['category'] != null
+          ? CategoryModel.categories.firstWhere(
+              (c) => c.key == (json['category']),
+              orElse: () => CategoryModel.categories.firstWhere(
+                (c) => c.key == 'miscellaneous',
+              ),
+            )
+          : null,
       toUser: json['to_user'] as String?,
       fromUser: json['from_user'] as String?,
       status: json['status'] as String?,
@@ -124,11 +170,10 @@ class ExpenseModel {
     'splitType': _$SplitTypeEnumEnumMap[instance.splitType],
     'expenseDate': instance.expenseDate?.toIso8601String(),
     'remindAt': instance.remindAt?.toIso8601String(),
-    'category': instance.category,
+    'category': instance.category?.key,
     'list_expense_member': instance.userDebts?.map((e) => e.toJson()).toList(),
     'images': instance.images?.map((e) => e.toJson()).toList(),
-    'paidByUser': instance.paidByUser?.toJson(),
-
+    'paidByUser': instance.paidByUser?.map((e) => e.toJson()).toList(),
   };
 }
 
@@ -137,6 +182,57 @@ const _$SplitTypeEnumEnumMap = {
   SplitTypeEnum.percentage: 'percentage',
   SplitTypeEnum.custom: 'custom',
 };
+
+Color getActionColor(ExpenseApprovalActionEnum? action) {
+  switch (action) {
+    case ExpenseApprovalActionEnum.create:
+      return AppThemes.successColor;
+
+    case ExpenseApprovalActionEnum.update:
+      return AppThemes.warningColor;
+
+    case ExpenseApprovalActionEnum.delete:
+      return AppThemes.errorColor;
+
+    default:
+      return AppThemes.borderColor;
+  }
+}
+
+IconData getActionIcon(ExpenseApprovalActionEnum? action) {
+  switch (action) {
+    case ExpenseApprovalActionEnum.create:
+      return Icons.add_circle;
+
+    case ExpenseApprovalActionEnum.update:
+      return Icons.edit;
+
+    case ExpenseApprovalActionEnum.delete:
+      return Icons.delete;
+
+    default:
+      return Icons.help_outline;
+  }
+}
+
+String getActionLabel(
+  ExpenseApprovalActionEnum? action,
+  AppLocalizations intl,
+) {
+  switch (action) {
+    case ExpenseApprovalActionEnum.create:
+      return intl.create;
+
+    case ExpenseApprovalActionEnum.update:
+      return intl.update;
+
+    case ExpenseApprovalActionEnum.delete:
+      return intl.delete;
+
+    default:
+      return intl.nothingChanged;
+  }
+}
 
 const $CurrencyEnumEnumMap = {
   // CurrencyEnum.aed: 'aed',

@@ -265,7 +265,7 @@ class ExpenseCard extends StatelessWidget {
         radius: 20,
         backgroundColor: Colors.grey,
         backgroundImage: AssetImage(
-          getCategoryByKey(expense.category ?? '')?.getImage() ??
+          getCategoryByKey(expense.category?.key ?? '')?.getImage() ??
               'lib/assets/icons/money-transfer.png',
         ),
       ),

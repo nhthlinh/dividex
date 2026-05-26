@@ -251,14 +251,32 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
                   pathParameters: {'id': user.id ?? ''},
                 );
               },
-              trailing: CustomButton(
-                buttonKey: Key('choose_member_select_${user.id}'),
-                size: ButtonSize.small,
-                text: isSelected ? intl.cancel : intl.add,
-                customColor: isSelected
-                    ? AppThemes.errorColor
-                    : AppThemes.primary3Color,
+              // trailing: CustomButton(
+              //   buttonKey: Key('choose_member_select_${user.id}'),
+              //   size: ButtonSize.small,
+              //   text: isSelected ? intl.cancel : intl.add,
+              //   customColor: isSelected
+              //       ? AppThemes.errorColor
+              //       : AppThemes.primary3Color,
+              //   onPressed: () => _toggleUser(user),
+              // ),
+              trailing: FilledButton(
                 onPressed: () => _toggleUser(user),
+                style: FilledButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(8),
+                  backgroundColor: isSelected
+                      ? AppThemes.primary3Color
+                      : Colors.transparent,
+                  side: BorderSide(
+                    color: isSelected ? AppThemes.primary3Color : Colors.grey,
+                  ),
+                ),
+                child: Icon(
+                  isSelected ? Icons.check : Icons.add,
+                  size: 18,
+                  color: isSelected ? Colors.white : Colors.grey,
+                ),
               ),
             );
           },

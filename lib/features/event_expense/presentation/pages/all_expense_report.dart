@@ -273,7 +273,7 @@ List<Widget> buildGroupedExpenseList(
             radius: 20,
             backgroundColor: Colors.grey,
             backgroundImage: AssetImage(
-              getCategoryByKey(expense.category ?? '')?.getImage() ??
+              getCategoryByKey(expense.category?.key ?? '')?.getImage() ??
                   'lib/assets/icons/money-transfer.png',
             ),
           ),
@@ -309,7 +309,7 @@ List<Widget> buildGroupedExpenseList(
             ],
           ),
           onTap: () {
-            if (expense.category == 'Transfer') return;
+            if (expense.category?.key == 'Transfer') return;
             context.pushNamed(
               AppRouteNames.expenseDetail,
               pathParameters: {"id": expense.id ?? ''},

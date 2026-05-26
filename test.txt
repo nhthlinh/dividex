@@ -1,0 +1,263 @@
+GIAO DỊCH 1: 
+
+V nợ H 101.826,67
+L nợ H 33.000
+C nợ H 106.511,67
+
+GIAO DỊCH 2:
+
+V nợ C 95.000
+L nợ C 47.500
+H nợ C 114.000
+
+GIAO DỊCH 3:
+
+V nợ L 10.350
+H nợ L 22.300
+C nợ L 17.950
+
+GIAO DỊCH 4:
+
+L nợ V 65.584,62
+H nợ V 37.008,46
+C nợ V 50.125,38
+
+GIAO DỊCH 5:
+
+L nợ V 89.653,33
+H nợ V 42.714,58
+C nợ V 16.916,67
+
+GIAO DỊCH 6:
+
+L nợ V 73.125
+H nợ V 131.625
+C nợ V 92.625
+
+GIAO DỊCH 7:
+
+L nợ C 47.500
+V nợ C 118.750
+H nợ C 161.500
+
+GIAO DỊCH 8:
+
+L nợ H 23.750
+C nợ H 90.250
+V nợ H 95.000
+
+
+
+
+
+
+Chia nợ nhanh sau khi bù trừ toàn bộ:
+
+H trả V: 58.809,70
+L trả V: 119.641,67
+L trả C: 209.871,28
+
+
+
+BƯỚC 1 — Cộng toàn bộ công nợ
+V
+V phải trả
+V nợ H: 101.826,67
+V nợ C: 95.000
+V nợ L: 10.350
+V nợ C: 118.750
+V nợ H: 95.000
+
+Tổng V trả:
+
+= 101.826,67 + 95.000 + 10.350 + 118.750 + 95.000
+= 420.926,67
+
+Người khác nợ V
+L nợ V: 65.584,62
+H nợ V: 37.008,46
+C nợ V: 50.125,38
+L nợ V: 89.653,33
+H nợ V: 42.714,58
+C nợ V: 16.916,67
+L nợ V: 73.125
+H nợ V: 131.625
+C nợ V: 92.625
+
+Tổng nhận:
+
+= 599.378,04
+
+Kết quả của V
+
+599.378,04 − 420.926,67
+= +178.451,37
+
+➡ V được nhận 178.451,37
+
+BƯỚC 2 — C
+C phải trả
+C nợ H: 106.511,67
+C nợ L: 17.950
+C nợ V: 50.125,38
+C nợ V: 16.916,67
+C nợ V: 92.625
+C nợ H: 90.250
+
+Tổng trả:
+
+= 374.378,72
+
+Người khác nợ C
+V nợ C: 95.000
+L nợ C: 47.500
+H nợ C: 114.000
+L nợ C: 47.500
+V nợ C: 118.750
+H nợ C: 161.500
+
+Tổng nhận:
+
+= 584.250
+
+Kết quả của C
+
+584.250 − 374.378,72
+= +209.871,28
+
+➡ C được nhận 209.871,28
+
+BƯỚC 3 — H
+H phải trả
+H nợ C: 114.000
+H nợ L: 22.300
+H nợ V: 37.008,46
+H nợ V: 42.714,58
+H nợ V: 131.625
+H nợ C: 161.500
+
+Tổng trả:
+
+= 509.148,04
+
+Người khác nợ H
+V nợ H: 101.826,67
+L nợ H: 33.000
+C nợ H: 106.511,67
+L nợ H: 23.750
+C nợ H: 90.250
+V nợ H: 95.000
+
+Tổng nhận:
+
+= 450.338,34
+
+Kết quả của H
+
+450.338,34 − 509.148,04
+= −58.809,70
+
+➡ H phải trả 58.809,70
+
+BƯỚC 4 — L
+L phải trả
+L nợ H: 33.000
+L nợ C: 47.500
+L nợ V: 65.584,62
+L nợ V: 89.653,33
+L nợ V: 73.125
+L nợ C: 47.500
+L nợ H: 23.750
+
+Tổng trả:
+
+= 380.112,95
+
+Người khác nợ L
+V nợ L: 10.350
+H nợ L: 22.300
+C nợ L: 17.950
+
+Tổng nhận:
+
+= 50.600
+
+Kết quả của L
+
+50.600 − 380.112,95
+= −329.512,95
+
+➡ L phải trả 329.512,95
+
+BƯỚC 5 — Ghép thanh toán tối ưu
+
+Người cần nhận:
+
+V nhận 178.451,37
+C nhận 209.871,28
+
+Người cần trả:
+
+H trả 58.809,70
+L trả 329.512,95
+
+Ghép:
+
+H → V : 58.809,70
+L → V : 119.641,67
+L → C : 209.871,28
+
+
+
+Là xong toàn bộ công nợ.
+
+
+GIAO DỊCH 5:
+
+L nợ V 496.162,27
+H nợ V 1.116.597,25
+C nợ V 1.116.597,25
+
+
+
+- Event external transfer: trả ngoài giải quyết nợ cho event -> NOT DONE
+- Create transaction: chuyển tiền trả nợ trực tiếp trong app -> NOT DONE
+
+- Soft delete expense: không thấy đổi gì -> NOT TEST
+    * Thêm lỗi event_closed
+    * BE lỗi, không xóa được dù báo thành công
+- Restore expense: không thấy đổi gì -> NOT TEST
+    * Thêm lỗi event_closed
+- Update expense: paid_by thành list userDebt (userId, amount) -> NOT TEST
+    * Thêm lỗi event_closed
+
+
+Một expense có nhiều người trả:
+- Create expense: đổi thành nhiều payer -> NOT TEST
+    * OK đã ổn
+    * MORE: ngày tạo không thuộc event
+- MORE: Update expense: không thể cập nhật
+
+Cơ chế đồng thuận:
+- Get expense detail: bị mất cái splitType ròi (cái này cần mà nhỉ), updated_by là Id user (chỗ này dùng hiển thị creator hay sao, chưa hiểu lắm, nếu hiện creator thì trả về cho tên đi, đừng id), pending_action (gồm trạng thái gì vậy?), pending_update_data (là cái string gì đây) -> NOT UNDERSTAND
+    * Thêm xem trạng thái đã thay đổi
+- Vote on expense: NOT DONE
+    * set up page cơ bản
+    * ổn ổn
+- Get approval status: NOT DONE
+    * Thêm thông báo cho yêu cầu chấp thuận
+    * set up page cơ bản
+    * ổn ổn
+    * MORE: cho phép xem sau khi expense không còn pending nữa, hoặc khi người đó đã chấp thuận hoặc từ chối
+- MORE: trang báo cáo hiện đủ dù expense đã bị từ chối tạo
+
+Giải quyết nợ trong event:
+- Update debt otimization: này làm gì không hiểu nè, chuyển trạng thái group từ tối ưu event sang group hả? -> NOT UNDERSTAND
+    * Đã viết xong, đợi test
+    * DONE
+- Get balances by group and member: thêm biến debt_optimization (EVENT hoặc GROUP) -> NOT TEST
+    * bình thường với luồng group cũ
+    * bình thường khi thêm group event mới 
+    * MORE: không chia đúng gì hết trơn
+- Get event: thêm 4 trường creator_id, group_id, total_expenses, total, members nhưng không thêm net balance, sao biết trong event đó chia nợ như nào mà trả. -> NOT UNDERSTAND
+    * lấy net balance từ get event balance -> ok

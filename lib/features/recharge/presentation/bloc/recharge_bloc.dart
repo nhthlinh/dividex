@@ -78,6 +78,7 @@ class TransferEvent extends RechargeEvent {
   final String toAccount;
   final String description;
   final String? groupId;
+  final String? eventId;
   final String pin;
 
   TransferEvent(
@@ -87,6 +88,7 @@ class TransferEvent extends RechargeEvent {
     this.toAccount,
     this.description, {
     this.groupId,
+    this.eventId,
     required this.pin,
   });
 }
@@ -399,6 +401,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
         event.toAccount,
         event.description,
         groupId: event.groupId,
+        eventId: event.eventId,
         token: token,
       );
 

@@ -1,3 +1,5 @@
+import 'package:Dividex/features/group/data/models/group_model.dart';
+
 class EventEvent {}
 
 class CreateEventEvent extends EventEvent {
@@ -113,4 +115,26 @@ class GetChartDataEvent extends EventEvent {
   final String eventId;
 
   GetChartDataEvent({required this.year, required this.eventId});
+}
+
+class EventBalanceSuccessEvent extends EventEvent {
+  final String eventId;
+
+  EventBalanceSuccessEvent({required this.eventId});
+}
+
+
+class RemindEventEvent extends EventEvent {
+  final String eventId;
+  final String userId;
+
+  RemindEventEvent(this.eventId, this.userId);
+}
+
+class OutSideTransferEvent extends EventEvent {
+  final String eventId;
+  final String userId;
+  final double amount;
+
+  OutSideTransferEvent(this.eventId, this.userId, this.amount);
 }

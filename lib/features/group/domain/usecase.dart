@@ -121,6 +121,13 @@ class GroupUseCase {
   Future<void> outSideTransfer(String groupId, String userId, double amount) {
     return repository.outSideTransfer(groupId, userId, amount);
   }
+
+  Future<void> changeToDebtOptimization(
+    String groupId,
+    DebtOptimization debtOptimization,
+  ) {
+    return repository.changeToDebtOptimization(groupId, debtOptimization);
+  }
 }
 
 class ChartData {

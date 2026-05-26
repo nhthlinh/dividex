@@ -152,19 +152,19 @@ class EventRemoteDataSourceImpl implements EventRemoteDataSource {
   @override
   Future<void> addMembersToEvent(String eventId, List<String> userIds) async {
     return apiCallWrapper(() async {
-      await dio.post(
-        '/events/$eventId/add',
-        data: {
-          'user_uids': userIds,
-        },
-      );
+      await dio.post('/events/$eventId/add', data: {'user_uids': userIds});
     });
   }
 
   @override
   Future<List<ChartData>> getChartData(String eventId) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/events/$eventId/spending', queryParameters: {'currency': HiveService.getUser().preferredCurrency ?? 'VND'});
+      final response = await dio.get(
+        '/events/$eventId/spending',
+        queryParameters: {
+          'currency': HiveService.getUser().preferredCurrency ?? 'VND',
+        },
+      );
       if (response.data['data'] == null) {
         return [];
       }
@@ -175,15 +175,59 @@ class EventRemoteDataSourceImpl implements EventRemoteDataSource {
   }
 
   @override
-  Future<List<CustomBarChartData>> getBarChartData(String eventId, int year) async {
+  Future<List<CustomBarChartData>> getBarChartData(
+    String eventId,
+    int year,
+  ) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/events/$eventId/chart', queryParameters: {'year': year});
+      final response = await dio.get(
+        '/events/$eventId/chart',
+        queryParameters: {'year': year},
+      );
       if (response.data['data'] == null) {
         return [];
       }
       return (response.data['data'] as List)
           .map((item) => CustomBarChartData.fromJson(item))
           .toList();
+    });
+  }
+
+  @override
+  Future<List<RestructuredDebtModel>> getBalanceEvent(
+    String eventId,
+  ) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/events/$eventId/balance');
+      if (response.data['data'] == null) {
+        return [];
+      }
+      final data = (response.data['data'] as List)
+          .map((item) => RestructuredDebtModel.fromJson(item))
+          .toList();
+      return data;
+    });
+  }
+
+  // CHƯA CÓ
+  @override
+  Future<void> remindEvent(String eventId, String userId) async {
+    return apiCallWrapper(() async {
+      await dio.post('/events/$eventId/remind', data: {'userId': userId});
+    });
+  }
+
+  @override
+  Future<void> outsideTransfer(
+    String eventId,
+    String userId,
+    double amount,
+  ) async {
+    return apiCallWrapper(() async {
+      await dio.post(
+        '/events/$eventId/external-transfer',
+        data: {'user_uid': userId, 'amount': amount},
+      );
     });
   }
 }

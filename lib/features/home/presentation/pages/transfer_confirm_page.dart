@@ -26,6 +26,7 @@ class TransferConfirmPage extends StatefulWidget {
   final CurrencyEnum currency;
   final String? description;
   final String? groupId;
+  final String? eventId;
 
   const TransferConfirmPage({
     super.key,
@@ -35,6 +36,7 @@ class TransferConfirmPage extends StatefulWidget {
     required this.currency,
     required this.description,
     this.groupId,
+    this.eventId,
   });
 
   @override
@@ -86,6 +88,7 @@ class _TransferConfirmPageState extends State<TransferConfirmPage> {
           widget.description ?? '',
           pin: binController.text,
           groupId: widget.groupId,
+          eventId: widget.eventId,
         ),
       );
     }

@@ -111,6 +111,7 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
     on<GetSimpleDetailGroupEvent>(_onGetSimpleDetailGroup);
     on<RemindGroupEvent>(_onRemindGroup);
     on<OutSideTransferEvent>(_onOutSideTransfer);
+    on<ChangeToDebtOptimizationByGroupEvent>(_onChangeToDebtOptimization);
   }
 
   Future _onCreateGroup(CreateGroupEvent event, Emitter emit) async {
@@ -319,6 +320,24 @@ class GroupBloc extends Bloc<GroupsEvent, GroupState> {
     try {
       final useCase = await getIt.getAsync<GroupUseCase>();
       await useCase.outSideTransfer(event.groupId, event.userId, event.amount);
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      if (e.toString().contains(MessageCode.groupNotFound)) {
+        showCustomToast(intl.groupNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onChangeToDebtOptimization(
+    ChangeToDebtOptimizationByGroupEvent event,
+    Emitter emit,
+  ) async {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+    try {
+      final useCase = await getIt.getAsync<GroupUseCase>();
+      await useCase.changeToDebtOptimization(event.groupId, event.debtOptimization);
       showCustomToast(intl.success, type: ToastType.success);
     } catch (e) {
       if (e.toString().contains(MessageCode.groupNotFound)) {

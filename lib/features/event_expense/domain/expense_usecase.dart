@@ -1,3 +1,4 @@
+import 'package:Dividex/features/event_expense/data/models/expense_approve_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/domain/expense_repository.dart';
@@ -34,7 +35,7 @@ class ExpenseUseCase {
     String currency,
     String? category,
     String eventId,
-    String? paidById,
+    List<Map<String, double>>? paidByIds,
     String? note,
     String? expenseDate,
     String? remindAt,
@@ -66,7 +67,7 @@ class ExpenseUseCase {
       currency,
       category,
       eventId,
-      paidById,
+      paidByIds ?? [],
       note,
       expenseDate,
       remindAt,
@@ -106,21 +107,21 @@ class ExpenseUseCase {
   }
 
   Future<void> updateExpense(ExpenseModel expense) async {
-    if (expense.userDebts!.isNotEmpty) {
+    if (expense.userDebts == null || expense.userDebts!.isEmpty) {
       throw Exception("Cần ít nhất 1 người tham gia chia sẻ chi phí");
     }
 
-    if (expense.splitType == SplitTypeEnum.custom && expense.userDebts!.isNotEmpty) {
+    if (expense.splitType == SplitTypeEnum.custom) {
       final totalDebt = expense.userDebts!.fold<double>(
         0,
-        (previousValue, element) => previousValue + (element.amount),
+        (sum, e) => sum + e.amount,
       );
-      if (totalDebt != expense.totalAmount) {
-        throw Exception(
-          "Tổng số tiền chia sẻ không khớp với tổng số tiền của chi phí",
-        );
+
+      if ((totalDebt - (expense.totalAmount ?? 0)).abs() > 0.01) {
+        throw Exception("Tổng số tiền chia sẻ không khớp với tổng chi phí");
       }
     }
+
     await repository.updateExpense(expense);
   }
 
@@ -142,5 +143,13 @@ class ExpenseUseCase {
 
   Future<List<CustomBarChartData>> getBarChartData(int year) async {
     return await repository.getBarChartData(year);
+  }
+
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId) async {
+    return await repository.getExpenseApprove(expenseId);
+  }
+
+  Future<void> voteOnExpense(String expenseId, String action) async {
+    await repository.voteOnExpense(expenseId, action);
   }
 }

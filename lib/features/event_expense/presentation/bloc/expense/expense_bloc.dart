@@ -2,6 +2,7 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/core/di/injection.dart';
+import 'package:Dividex/features/event_expense/data/models/category_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/domain/event_usecase.dart';
 import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
@@ -30,6 +31,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     on<GetExpenseDetail>(_onGetExpenseDetailEvent);
     on<RestoreExpenseEvent>(_onRestoreExpenseEvent);
     on<GetBarChartData>(_onGetBarChartDataEvent);
+    on<GetExpenseApproveEvent>(_onGetExpenseApproveEvent);
+    on<VoteOnExpenseEvent>(_onVoteOnExpenseEvent);
   }
 
   Future _onCreateEvent(CreateExpenseEvent event, Emitter emit) async {
@@ -41,7 +44,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         event.currency,
         event.category,
         event.eventId,
-        event.paidById,
+        event.paidByIds ?? [],
         event.note,
         event.expenseDate,
         event.remindAt,
@@ -60,6 +63,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
 
       if (e.toString().contains(MessageCode.groupNotFound)) {
         showCustomToast(intl.groupNotFound, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.eventClosed)) {
+        showCustomToast(intl.eventClosed, type: ToastType.error);
       } else {
         showCustomToast(intl.error, type: ToastType.error);
       }
@@ -78,8 +83,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
             (e) => e.name == event.currency,
             orElse: () => CurrencyEnum.values.first,
           ),
-          category: event.category,
-          paidBy: event.paidById,
+          category: CategoryModel.categories.firstWhere(
+            (c) => c.key == (event.category),
+            orElse: () => CategoryModel.categories.firstWhere(
+              (c) => c.key == 'miscellaneous',
+            ),
+          ),
+          paidBy: event.paidByIds,
           note: event.note,
           expenseDate: event.expenseDate != null
               ? DateTime.tryParse(event.expenseDate!)
@@ -99,6 +109,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
 
       if (e.toString().contains(MessageCode.updateIsDenied)) {
         showCustomToast(intl.updateIsDenied, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.eventClosed)) {
+        showCustomToast(intl.eventClosed, type: ToastType.error);
       } else if (e.toString().contains(MessageCode.expenseNotFound)) {
         showCustomToast(intl.expenseNotFound, type: ToastType.error);
       } else {
@@ -111,6 +123,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     try {
       final useCase = await getIt.getAsync<ExpenseUseCase>();
       await useCase.softDeleteExpense(event.expenseId);
+
+      emit(ExpenseDeletedState(expenseId: event.expenseId));
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
 
@@ -118,6 +132,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         showCustomToast(intl.deleteIsDenied, type: ToastType.error);
       } else if (e.toString().contains(MessageCode.eventNotFound)) {
         showCustomToast(intl.eventNotFound, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.eventClosed)) {
+        showCustomToast(intl.eventClosed, type: ToastType.error);
       } else {
         showCustomToast(intl.error, type: ToastType.error);
       }
@@ -136,6 +152,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
 
       if (e.toString().contains(MessageCode.deleteIsDenied)) {
         showCustomToast(intl.deleteIsDenied, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.eventClosed)) {
+        showCustomToast(intl.eventClosed, type: ToastType.error);
       } else if (e.toString().contains(MessageCode.eventNotFound)) {
         showCustomToast(intl.eventNotFound, type: ToastType.error);
       } else {
@@ -175,6 +193,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
 
       if (e.toString().contains(MessageCode.updateIsDenied)) {
         showCustomToast(intl.updateIsDenied, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.eventClosed)) {
+        showCustomToast(intl.eventClosed, type: ToastType.error);
       } else if (e.toString().contains(MessageCode.expenseNotFound)) {
         showCustomToast(intl.expenseNotFound, type: ToastType.error);
       } else {
@@ -189,6 +209,34 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       final data = await useCase.getBarChartData(event.year);
 
       emit(ExpenseBarChartData(data: data));
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future _onGetExpenseApproveEvent(
+    GetExpenseApproveEvent event,
+    Emitter emit,
+  ) async {
+    try {
+      final useCase = await getIt.getAsync<ExpenseUseCase>();
+      final expenseApprove = await useCase.getExpenseApprove(event.expenseId);
+
+      emit(GetExpenseApproveState(expenseApprove: expenseApprove));
+    } catch (e) {
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future _onVoteOnExpenseEvent(VoteOnExpenseEvent event, Emitter emit) async {
+    try {
+      final useCase = await getIt.getAsync<ExpenseUseCase>();
+      await useCase.voteOnExpense(event.expenseId, event.action);
+
+      final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.success, type: ToastType.success);
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
       showCustomToast(intl.error, type: ToastType.error);

@@ -101,6 +101,14 @@ class _NotiPageState extends State<NotiPage> {
     List<NotificationModel>? notis,
     int page,
   ) {
+    bool isExpenseApprovalNotification(NotiType? type) {
+      return type == NotiType.EXPENSE_APPROVAL_REQUESTED ||
+          type == NotiType.EXPENSE_APPROVED ||
+          type == NotiType.EXPENSE_APPROVAL_DECLINED;
+    }
+
+    final intl = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -160,13 +168,62 @@ class _NotiPageState extends State<NotiPage> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          DateFormat(
-                            "yyyy-MM-dd HH:mm",
-                          ).format(notis[index].createdAt),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              DateFormat(
+                                "yyyy-MM-dd HH:mm",
+                              ).format(notis[index].createdAt),
+
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.grey),
+                            ),
+                            if (isExpenseApprovalNotification(
+                              notis[index].type,
+                            ))
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
+                                margin: const EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                  color: switch (notis[index].type) {
+                                    NotiType.EXPENSE_APPROVED =>
+                                      Colors.green.withOpacity(.15),
+
+                                    NotiType.EXPENSE_APPROVAL_DECLINED =>
+                                      Colors.red.withOpacity(.15),
+
+                                    _ => Colors.orange.withOpacity(.15),
+                                  },
+
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  switch (notis[index].type) {
+                                    NotiType.EXPENSE_APPROVED => intl.accept,
+                                    NotiType.EXPENSE_APPROVAL_DECLINED =>
+                                      intl.decline,
+                                    _ => intl.pending,
+                                  },
+
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: switch (notis[index].type) {
+                                      NotiType.EXPENSE_APPROVED => Colors.green,
+
+                                      NotiType.EXPENSE_APPROVAL_DECLINED =>
+                                        Colors.red,
+
+                                      _ => Colors.orange,
+                                    },
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ],
                     ),

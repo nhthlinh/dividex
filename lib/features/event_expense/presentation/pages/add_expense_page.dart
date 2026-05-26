@@ -3,6 +3,7 @@ import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/category_model.dart';
 import 'package:Dividex/features/event_expense/data/models/event_model.dart';
+import 'package:Dividex/features/event_expense/data/models/payer_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
@@ -23,6 +24,7 @@ import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.
 import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
+import 'package:Dividex/shared/widgets/text_button.dart';
 import 'package:Dividex/shared/widgets/two_option_selector_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,7 @@ class AddExpensePage extends StatefulWidget {
   final LoadedUsersBloc? loadedUsersBloc;
   final bool showCreateOptionDialogOnInit;
   final EventModel? initialSelectedEvent;
-  final UserModel? initialSelectedPayer;
+  final List<PayerModel>? initialSelectedPayer;
   final bool bypassValidationForTesting;
 
   const AddExpensePage({
@@ -76,16 +78,13 @@ class _AddExpensePageState extends State<AddExpensePage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController expenseAmountController = TextEditingController();
-  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(
-    CurrencyEnum.vnd,
-  );
+  final ValueNotifier<CurrencyEnum?> _selectedCurrency = ValueNotifier(null);
   final ValueNotifier<CategoryModel?> _selectedCategory = ValueNotifier(null);
   final TextEditingController selectedEventTextEditingController =
       TextEditingController();
   EventModel? _selectedEvent;
-  final TextEditingController selectedPayerTextEditingController =
-      TextEditingController();
-  UserModel? _selectedPayer;
+
+  List<PayerModel> _selectedPayer = [];
   final TextEditingController noteController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController reminderController = TextEditingController();
@@ -111,11 +110,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
       selectedEventTextEditingController.text = _selectedEvent!.name ?? '----';
     }
 
-    _selectedPayer = widget.initialSelectedPayer;
-    if (_selectedPayer != null) {
-      selectedPayerTextEditingController.text =
-          _selectedPayer!.fullName ?? '----';
-    }
+    _selectedPayer = widget.initialSelectedPayer != null
+        ? widget.initialSelectedPayer!
+        : [];
 
     if (widget.showCreateOptionDialogOnInit) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -155,29 +152,63 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     buttonKey: scanningOptionButtonKey,
                     onPressed: () async {
                       Navigator.pop(context);
-                      final result = await context.pushNamed(
-                        AppRouteNames.scanExpense,
-                      );
-                      // final result = {
-                      //   'imageInfo': ImageExpenseModel(
-                      //     items: [
-                      //       ImageExpenseItemModel(name: "Bánh nướng Jambon bát bửu 1Trứng 180g", quantity: 1.0, unitPrice: 60000.0, totalPrice: 60000.0),
-                      //       ImageExpenseItemModel(name: "Bánh nướng Đậu xanh 1Trứng180g (66)", quantity: 1.0, unitPrice: 50370.0, totalPrice: 50370.0),
-                      //       ImageExpenseItemModel(name: "Bánh dẻo Trà Ô Long trái cây 180g trứng (5TTD)", quantity: 1.0, unitPrice: 41480.0, totalPrice: 41480.0),
-                      //       ImageExpenseItemModel(name: "Bánh nướng Gà cuộn rong biển 1Trứng 180g (66GR)", quantity: 1.0, unitPrice: 66000.0, totalPrice: 66000.0),
-                      //       ImageExpenseItemModel(name: "Hộp hoa mẫu đơn size 36*28*8cm", quantity: 1.0, unitPrice: 110000.0, totalPrice: 110000.0),
-                      //       ImageExpenseItemModel(name: "Túi giấy 36*28", quantity: 1.0, unitPrice: 15000.0, totalPrice: 15000.0),
-                      //     ],
-                      //     name: "Bánh trung thu và hộp quà",
-                      //     category: "food",
-                      //     totalAmount: 342850.0,
-                      //     currency: "VND",
-                      //     note: null,
-                      //     expenseDate: DateTime.parse("2025-09-23T00:00:00+07:00"),
-                      //     endDate: null
-                      //   ),
-                      //   'bytes': Uint8List(0)
-                      // };
+                      // final result = await context.pushNamed(
+                      //   AppRouteNames.scanExpense,
+                      // );
+                      final result = {
+                        'imageInfo': ImageExpenseModel(
+                          items: [
+                            ImageExpenseItemModel(
+                              name: "Bánh nướng Jambon bát bửu 1Trứng 180g",
+                              quantity: 1.0,
+                              unitPrice: 60000.0,
+                              totalPrice: 60000.0,
+                            ),
+                            ImageExpenseItemModel(
+                              name: "Bánh nướng Đậu xanh 1Trứng180g (66)",
+                              quantity: 1.0,
+                              unitPrice: 50370.0,
+                              totalPrice: 50370.0,
+                            ),
+                            ImageExpenseItemModel(
+                              name:
+                                  "Bánh dẻo Trà Ô Long trái cây 180g trứng (5TTD)",
+                              quantity: 1.0,
+                              unitPrice: 41480.0,
+                              totalPrice: 41480.0,
+                            ),
+                            ImageExpenseItemModel(
+                              name:
+                                  "Bánh nướng Gà cuộn rong biển 1Trứng 180g (66GR)",
+                              quantity: 1.0,
+                              unitPrice: 66000.0,
+                              totalPrice: 66000.0,
+                            ),
+                            ImageExpenseItemModel(
+                              name: "Hộp hoa mẫu đơn size 36*28*8cm",
+                              quantity: 1.0,
+                              unitPrice: 110000.0,
+                              totalPrice: 110000.0,
+                            ),
+                            ImageExpenseItemModel(
+                              name: "Túi giấy 36*28",
+                              quantity: 1.0,
+                              unitPrice: 15000.0,
+                              totalPrice: 15000.0,
+                            ),
+                          ],
+                          name: "Bánh trung thu và hộp quà",
+                          category: "food",
+                          totalAmount: 342850.0,
+                          currency: "VND",
+                          note: null,
+                          expenseDate: DateTime.parse(
+                            "2025-09-23T00:00:00+07:00",
+                          ),
+                          endDate: null,
+                        ),
+                        'bytes': Uint8List(0),
+                      };
                       if (result != null && mounted) {
                         _handleScanResult(result);
                       } else {
@@ -218,7 +249,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
     _selectedCategory.value = CategoryModel.categories.firstWhere(
       (c) => c.key == (imageInfo.category),
-      orElse: () => CategoryModel.categories.firstWhere((c) => c.key == 'miscellaneous'),
+      orElse: () =>
+          CategoryModel.categories.firstWhere((c) => c.key == 'miscellaneous'),
     );
     noteController.text = imageInfo.note ?? '';
     dateController.text = DateFormat(
@@ -236,7 +268,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
     expenseNameController.dispose();
     expenseAmountController.dispose();
     selectedEventTextEditingController.dispose();
-    selectedPayerTextEditingController.dispose();
     noteController.dispose();
     dateController.dispose();
     reminderController.dispose();
@@ -244,71 +275,158 @@ class _AddExpensePageState extends State<AddExpensePage> {
     super.dispose();
   }
 
-  void submitExpense() {
-    if (widget.bypassValidationForTesting ||
-        (formKey.currentState?.validate() ?? false)) {
-      final intl = AppLocalizations.of(context)!;
+  String? validateExpense() {
+    final intl = AppLocalizations.of(context)!;
+
+    try {
       final selectedEvent = _selectedEvent ?? widget.initialSelectedEvent;
-      final selectedPayer = _selectedPayer ?? widget.initialSelectedPayer;
 
-      if (selectedEvent == null || selectedPayer == null) {
-        return;
+      final selectedPayers = _selectedPayer;
+
+      /// Event
+      if (selectedEvent == null) {
+        return "selectedEvent == null";
       }
 
-      final formattedDate = DateFormat(
-        "yyyy-MM-dd HH:mm",
-      ).format(DateFormat("h:mm a - dd/MM/yyyy").parse(dateController.text));
-
-      String formattedReminder = reminderController.text.isNotEmpty
-          ? DateFormat(
-              "yyyy-MM-dd",
-            ).format(DateFormat("dd/MM/yyyy").parse(reminderController.text))
-          : '';
-
-      if (userDebts.isEmpty) {
-        return;
+      /// Payer
+      if (selectedPayers.isEmpty) {
+        return "selectedPayers is empty";
       }
 
-      if (splitType == SplitTypeEnum.equal && userDebts.isNotEmpty) {
-        userDebts = calculateUserDebts(
-          usersInEvent,
-          double.tryParse(expenseAmountController.text) ?? 0,
-        );
+      /// Amount
+      final totalAmount = double.tryParse(expenseAmountController.text);
+
+      if (totalAmount == null) {
+        return "Amount parse failed";
       }
 
-      if (splitType == SplitTypeEnum.custom && userDebts.isNotEmpty) {
-        final totalDebt = userDebts.fold<double>(
-          0,
-          (previousValue, element) => previousValue + (element.amount),
-        );
-        final totalAmount = double.tryParse(expenseAmountController.text) ?? 0;
-        if (totalDebt != totalAmount) {
-          showCustomToast(intl.expenseSplitNotMatch, type: ToastType.error);
-          return;
+      if (totalAmount <= 0) {
+        return "Amount <= 0";
+      }
+
+      /// Date
+      DateTime parsedExpenseDate;
+
+      try {
+        parsedExpenseDate = DateFormat(
+          "h:mm a - dd/MM/yyyy",
+        ).parse(dateController.text);
+      } catch (e) {
+        return "Expense date parse failed: ${dateController.text}";
+      }
+
+      print(parsedExpenseDate);
+
+      /// Reminder
+      if (reminderController.text.isNotEmpty) {
+        try {
+          DateFormat("dd/MM/yyyy").parse(reminderController.text);
+        } catch (e) {
+          return "Reminder parse failed: ${reminderController.text}";
         }
       }
 
-      context.read<ExpenseBloc>().add(
-        CreateExpenseEvent(
-          expenseNameController.text,
-          double.tryParse(expenseAmountController.text) ?? 0,
-          _selectedCurrency.value.code,
-          _selectedCategory.value?.key,
-          selectedEvent.id!,
-          selectedPayer.id,
-          noteController.text,
-          formattedDate,
-          formattedReminder,
-          splitType,
-          userDebts,
-          images.whereType<Uint8List>().toList(),
-        ),
+      /// User debt
+      if (userDebts.isEmpty) {
+        return "userDebts empty";
+      }
+
+      /// Equal split
+      if (splitType == SplitTypeEnum.equal) {
+        final calculated = calculateUserDebts(usersInEvent, totalAmount);
+
+        if (calculated.isEmpty) {
+          return "calculateUserDebts returns empty";
+        }
+
+        userDebts = calculated;
+      }
+
+      /// Custom split
+      if (splitType == SplitTypeEnum.custom) {
+        final totalDebt = userDebts.fold<double>(0, (sum, e) => sum + e.amount);
+
+        if ((totalDebt - totalAmount).abs() > 0.01) {
+          return """
+Split not match
+Debt:$totalDebt
+Amount:$totalAmount
+""";
+        }
+      }
+
+      /// Payer amount
+      final payerTotal = selectedPayers.fold<double>(
+        0,
+        (sum, e) => sum + (e.amount),
       );
 
-      if (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
+      if ((payerTotal - totalAmount).abs() > 0.01) {
+        return """
+Payer amount mismatch
+Payer:$payerTotal
+Expense:$totalAmount
+""";
       }
+
+      return null;
+    } catch (e, stack) {
+      print(e);
+      print(stack);
+
+      return e.toString();
     }
+  }
+
+  void submitExpense() {
+    if (!(widget.bypassValidationForTesting ||
+        (formKey.currentState?.validate() ?? false))) {
+      return;
+    }
+
+    final error = validateExpense();
+
+    if (error != null) {
+      print("VALIDATION FAILED");
+      print(error);
+
+      showCustomToast(error, type: ToastType.error);
+
+      return;
+    }
+
+    print("VALIDATION SUCCESS");
+
+    final selectedEvent = _selectedEvent ?? widget.initialSelectedEvent;
+
+    final formattedDate = DateFormat(
+      "yyyy-MM-dd HH:mm",
+    ).format(DateFormat("h:mm a - dd/MM/yyyy").parse(dateController.text));
+
+    final formattedReminder = reminderController.text.isNotEmpty
+        ? DateFormat(
+            "yyyy-MM-dd",
+          ).format(DateFormat("dd/MM/yyyy").parse(reminderController.text))
+        : '';
+
+    context.read<ExpenseBloc>().add(
+      CreateExpenseEvent(
+        expenseNameController.text,
+        double.parse(expenseAmountController.text),
+        _selectedCurrency.value?.code ?? CurrencyEnum.vnd.code,
+        _selectedCategory.value?.key,
+        selectedEvent!.id!,
+        _selectedPayer.map((p) => {p.user.id ?? '': p.amount}).toList(),
+        noteController.text,
+        formattedDate,
+        formattedReminder,
+        splitType,
+        userDebts,
+        images.whereType<Uint8List>().toList(),
+      ),
+    );
+
+    print("EVENT SENT");
   }
 
   @override
@@ -344,10 +462,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
         // FormFieldConfig(selectedValue: _selectedCategory, isRequired: true),
         FormFieldConfig(
           controller: selectedEventTextEditingController,
-          isRequired: true,
-        ),
-        FormFieldConfig(
-          controller: selectedPayerTextEditingController,
           isRequired: true,
         ),
         FormFieldConfig(controller: dateController, isRequired: true),
@@ -403,14 +517,14 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 const SizedBox(width: 8),
                 Expanded(
                   flex: 3, // 30%
-                  child: ValueListenableBuilder<CurrencyEnum>(
+                  child: ValueListenableBuilder<CurrencyEnum?>(
                     valueListenable: _selectedCurrency,
                     builder: (context, value, _) {
-                      return CustomDropdownWidget<CurrencyEnum>(
+                      return CustomDropdownWidget<CurrencyEnum?>(
                         label: intl.expenseCurrencyLabel,
                         value: _selectedCurrency.value,
                         options: _units,
-                        displayString: (b) => b.code,
+                        displayString: (b) => b?.code ?? '',
                         buildOption: (b, selected) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
@@ -420,7 +534,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                             child: Row(
                               children: [
                                 Text(
-                                  b.code,
+                                  b?.code ?? '',
                                   style: Theme.of(context).textTheme.bodyMedium
                                       ?.copyWith(
                                         color: selected
@@ -432,7 +546,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Text(
-                                    b.description,
+                                    b?.description ?? '',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -494,46 +608,85 @@ class _AddExpensePageState extends State<AddExpensePage> {
           const SizedBox(height: 8),
 
           if (_selectedEvent != null) ...[
-            CustomTextInputWidget(
-              size: TextInputSize.large,
-              controller: selectedPayerTextEditingController,
-              textFieldKey: payerInputKey,
-              keyboardType: TextInputType.text,
-              isReadOnly: true,
+            CustomTextButton(
+              key: payerInputKey,
               isRequired: true,
-              label: intl.expensePayerLabel,
-              suffixIcon: const Icon(Icons.keyboard_arrow_down),
-              onTap: () {
-                context.pushNamed(
-                  AppRouteNames.chooseMember,
+              isLeftAligned: true,
+              description: intl.expensePayerLabel,
+              label: intl.addMembers,
+              onPressed: () async {
+                final result = await context.pushNamed<List<PayerModel>>(
+                  AppRouteNames.choosePayer,
                   extra: {
                     'id': _selectedEvent?.id,
                     'type': user_event.LoadType.eventParticipants,
-                    'initialSelected': _selectedPayer != null
-                        ? [_selectedPayer!]
-                        : <UserModel>[],
-                    'onChanged': (List<UserModel> user) {
-                      setState(() {
-                        _selectedPayer = user.first;
-                        selectedPayerTextEditingController.text =
-                            user.first.fullName ?? '----';
-                      });
-                    },
-                    'isMultiSelect': false,
+                    'initialSelectedPayers': _selectedPayer,
+                    'amount':
+                        double.tryParse(expenseAmountController.text) ?? 0,
+                    'isMultiSelect': true,
                     'isCanChooseMyself': true,
                   },
                 );
+
+                if (result != null) {
+                  setState(() {
+                    _selectedPayer = result;
+                  });
+                }
               },
             ),
+            const SizedBox(height: 8),
             UserGrid(
-              users: _selectedPayer != null ? [_selectedPayer!] : [],
+              users: _selectedPayer.isNotEmpty
+                  ? _selectedPayer.map((p) => p.user).toList()
+                  : [],
               onTap: (user) {
                 setState(() {
-                  _selectedPayer = null;
-                  selectedPayerTextEditingController.text = '';
+                  _selectedPayer.removeWhere((p) => p.user.id == user.id);
                 });
               },
             ),
+
+            // CustomTextInputWidget(
+            //   size: TextInputSize.large,
+            //   controller: selectedPayerTextEditingController,
+            //   textFieldKey: payerInputKey,
+            //   keyboardType: TextInputType.text,
+            //   isReadOnly: true,
+            //   isRequired: true,
+            //   label: intl.expensePayerLabel,
+            //   suffixIcon: const Icon(Icons.keyboard_arrow_down),
+            //   onTap: () {
+            //     context.pushNamed(
+            //       AppRouteNames.chooseMember,
+            //       extra: {
+            //         'id': _selectedEvent?.id,
+            //         'type': user_event.LoadType.eventParticipants,
+            //         'initialSelected': _selectedPayer != null
+            //             ? [_selectedPayer!]
+            //             : <UserModel>[],
+            //         'onChanged': (List<UserModel> user) {
+            //           setState(() {
+            //             _selectedPayer = user.first;
+            //             selectedPayerTextEditingController.text =
+            //                 user.first.fullName ?? '----';
+            //           });
+            //         },
+            //         'isMultiSelect': true,
+            //         'isCanChooseMyself': true,
+            //       },
+            //     );
+            //   },
+            // ),
+            // UserGrid(
+            //   users: _selectedPayer != null ? [_selectedPayer!] : [],
+            //   onTap: (user) {
+            //     setState(() {
+            //       _selectedPayer = null;
+            //       selectedPayerTextEditingController.text = '';
+            //     });
+            //   },
+            // ),
           ],
           const SizedBox(height: 8),
 

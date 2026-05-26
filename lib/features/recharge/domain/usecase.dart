@@ -93,6 +93,7 @@ class RechargeUseCase {
     String toAccount,
     String description, {
     String? groupId,
+    String? eventId,
     String? token,
   }) async {
     return rechargeRepository.transfer(
@@ -102,6 +103,7 @@ class RechargeUseCase {
       toAccount,
       description,
       groupId: groupId,
+      eventId: eventId,
       token: token,
     );
   }

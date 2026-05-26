@@ -1704,4 +1704,137 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingTabTitle => 'Cài đặt';
+
+  @override
+  String get cannotChangeAmountAndRecipient =>
+      'Không thể thay đổi số tiền và người nhận';
+
+  @override
+  String get eventClosed =>
+      'Sự kiện đã đóng, thay đổi không được chấp nhận nữa.';
+
+  @override
+  String get debtOptimizationEvent => 'Tối ưu theo sự kiện';
+
+  @override
+  String get debtOptimizationGroup => 'Tối ưu theo nhóm';
+
+  @override
+  String get debtOptimizationGroupHint =>
+      'Nếu chọn tùy chọn này, bạn sẽ không thể quay lại tối ưu theo sự kiện.';
+
+  @override
+  String get debtOptimizationEventDescription =>
+      'Giữ công nợ riêng theo từng sự kiện.';
+
+  @override
+  String get debtOptimizationGroupDescription =>
+      'Gộp công nợ toàn nhóm để giảm số giao dịch.';
+
+  @override
+  String get update => 'Cập nhật';
+
+  @override
+  String get create => 'Tạo';
+
+  @override
+  String get nothingChanged => 'Không có nội dung thay đổi';
+
+  @override
+  String approvalRequired(Object user, Object expense, Object event) {
+    return '$user đã tạo khoản chi \"$expense\" trong $event. Cần phê duyệt.';
+  }
+
+  @override
+  String get pending => 'Chờ';
+
+  @override
+  String get newExpenseApprovalRequest => 'Yêu cầu phê duyệt khoản chi mới';
+
+  @override
+  String get expenseApprovalDescription =>
+      'Khoản chi này cần được hơn một nửa thành viên chấp thuận.';
+
+  @override
+  String get approvalStatus => 'Trạng thái phê duyệt';
+
+  @override
+  String approvedCount(Object accepted, Object total) {
+    return '$accepted/$total đã duyệt';
+  }
+
+  @override
+  String needMoreApprovals(Object count) {
+    return 'Cần thêm $count lượt duyệt';
+  }
+
+  @override
+  String get accepted => 'Đã chấp thuận';
+
+  @override
+  String get declined => 'Đã từ chối';
+
+  @override
+  String get showMore => 'Xem thêm';
+
+  @override
+  String get showLess => 'Thu gọn';
+
+  @override
+  String get requestExpireMessage =>
+      'Yêu cầu này sẽ tự động hết hạn sau 24 giờ.';
+
+  @override
+  String get approve => 'Chấp thuận';
+
+  @override
+  String get unknownTime => '--';
+
+  @override
+  String get expenseDetails => 'Chi tiết khoản chi';
+
+  @override
+  String get viewDetails => 'Xem';
+
+  @override
+  String get tapToViewExpenseDetails => 'Nhấn để xem chi tiết khoản chi';
+
+  @override
+  String get removeSelection => 'Bỏ chọn';
+
+  @override
+  String get upcoming => 'Sắp diễn ra';
+
+  @override
+  String get inProgress => 'Đang diễn ra';
+
+  @override
+  String get ended => 'Kết thúc';
+
+  @override
+  String get eventUpcomingDescription => 'Sự kiện sẽ bắt đầu từ ';
+
+  @override
+  String get eventActiveFrom => 'Sự kiện đang diễn ra từ ';
+
+  @override
+  String get eventEndedDescription => 'Sự kiện đã kết thúc vào ';
+
+  @override
+  String get noDescription => 'Không có mô tả';
+
+  @override
+  String get noBalanceData => 'Không có dữ liệu công nợ';
+
+  @override
+  String get youOwe => 'Bạn nợ';
+
+  @override
+  String get oweYou => 'Nợ bạn';
+
+  @override
+  String get youNeedToPay => 'Bạn cần phải trả';
+
+  @override
+  String get peopleNeedToPayYou => 'Người ta cần trả bạn';
 }

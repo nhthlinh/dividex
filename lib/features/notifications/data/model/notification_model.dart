@@ -47,7 +47,17 @@ enum NotiType {
   ANNOUNCEMENT("Announcement", "Announcement Notification"),
   REMINDER2("Reminder", "Reminder"),
 
-  MESSAGE_RECEIVED("MESSAGE_RECEIVED", "Message Received");
+  MESSAGE_RECEIVED("MESSAGE_RECEIVED", "Message Received"),
+
+  EXPENSE_APPROVAL_REQUESTED(
+    "EXPENSE_APPROVAL_REQUESTED",
+    "Expense Approval Requested",
+  ),
+  EXPENSE_APPROVED("EXPENSE_APPROVED", "Expense Approved"),
+  EXPENSE_APPROVAL_DECLINED(
+    "EXPENSE_APPROVAL_DECLINED",
+    "Expense Approval Declined",
+  );
 
   final String code;
   final String description;
@@ -154,25 +164,33 @@ enum NotiType {
       case NotiType.EVENT_DELETED:
         break;
 
+      case NotiType.EXPENSE_APPROVAL_REQUESTED:
+      case NotiType.EXPENSE_APPROVED:
+      case NotiType.EXPENSE_APPROVAL_DECLINED:
+        context.pushNamed(
+          AppRouteNames.expenseApproval,
+          pathParameters: {"expenseId": relatedUid},
+        );
+        break;
+
       case NotiType.EXPENSE_CREATED:
       case NotiType.EXPENSE_UPDATED:
       case NotiType.EXPENSE_RESTORED:
       case NotiType.EXPENSE_SOFT_DELETED:
+      
         context.pushNamed(
           AppRouteNames.expenseDetail,
           pathParameters: {"id": relatedUid},
         );
         break;
       case NotiType.MESSAGE_RECEIVED:
-        context.pushNamed(
-          AppRouteNames.chat,
-        );
+        context.pushNamed(AppRouteNames.chat);
         break;
 
       case NotiType.EXPENSE_HARD_DELETED:
       case NotiType.REMINDER2:
       case NotiType.SYSTEM:
-      case NotiType.WARNING:  
+      case NotiType.WARNING:
       case NotiType.ANNOUNCEMENT:
         showCustomDialog(context: context, content: Text(content));
         break;
@@ -202,16 +220,20 @@ class NotificationModel {
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     try {
       return NotificationModel(
-      fromUser: UserModel.fromJson(json['from_user']),
-      uid: json['uid'],
-      createdAt: parseUTCToVN(json['created_at']),
-      content: json['content'],
-      type: NotiType.fromString(json['type']),
-      relatedUid: json['related_uid'] ?? '',
-      toUsers: List<UserModel>.from(json['to_users'].map((e) => UserModel.fromJson(e))),
-    );
+        fromUser: UserModel.fromJson(json['from_user']),
+        uid: json['uid'],
+        createdAt: parseUTCToVN(json['created_at']),
+        content: json['content'],
+        type: NotiType.fromString(json['type']),
+        relatedUid: json['related_uid'] ?? '',
+        toUsers: List<UserModel>.from(
+          json['to_users'].map((e) => UserModel.fromJson(e)),
+        ),
+      );
     } catch (e, stackTrace) {
-      throw Exception('Failed to parse NotificationModel: $e, StackTrace: $stackTrace');
+      throw Exception(
+        'Failed to parse NotificationModel: $e, StackTrace: $stackTrace',
+      );
     }
   }
 

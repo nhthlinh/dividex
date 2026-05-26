@@ -1705,4 +1705,136 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingTabTitle => 'Setting';
+
+  @override
+  String get cannotChangeAmountAndRecipient =>
+      'Amount and recipient cannot be changed';
+
+  @override
+  String get eventClosed => 'Event is closed. No changes are allowed.';
+
+  @override
+  String get debtOptimizationEvent => 'Optimize by event';
+
+  @override
+  String get debtOptimizationGroup => 'Optimize by group';
+
+  @override
+  String get debtOptimizationGroupHint =>
+      'If you choose this option, you cannot return to event optimization.';
+
+  @override
+  String get debtOptimizationEventDescription =>
+      'Keep debts separated by each event.';
+
+  @override
+  String get debtOptimizationGroupDescription =>
+      'Combine group debts to minimize transactions.';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get nothingChanged => 'Nothing has been changed';
+
+  @override
+  String approvalRequired(Object user, Object expense, Object event) {
+    return '$user created expense \"$expense\" in $event. Approval required.';
+  }
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get newExpenseApprovalRequest => 'New expense approval request';
+
+  @override
+  String get expenseApprovalDescription =>
+      'This expense requires approval from more than half of members.';
+
+  @override
+  String get approvalStatus => 'Approval status';
+
+  @override
+  String approvedCount(Object accepted, Object total) {
+    return '$accepted/$total approved';
+  }
+
+  @override
+  String needMoreApprovals(Object count) {
+    return 'Need $count more approvals';
+  }
+
+  @override
+  String get accepted => 'Accepted';
+
+  @override
+  String get declined => 'Declined';
+
+  @override
+  String get showMore => 'Show more';
+
+  @override
+  String get showLess => 'Show less';
+
+  @override
+  String get requestExpireMessage =>
+      'This request will automatically expire after 24 hours.';
+
+  @override
+  String get approve => 'Approve';
+
+  @override
+  String get unknownTime => '--';
+
+  @override
+  String get expenseDetails => 'Expense details';
+
+  @override
+  String get viewDetails => 'View';
+
+  @override
+  String get tapToViewExpenseDetails => 'Tap to view full expense details';
+
+  @override
+  String get removeSelection => 'Remove';
+
+  @override
+  String get upcoming => 'Upcoming';
+
+  @override
+  String get inProgress => 'In Progress';
+
+  @override
+  String get ended => 'Ended';
+
+  @override
+  String get eventUpcomingDescription => 'Event will start from ';
+
+  @override
+  String get eventActiveFrom => 'Event is currently active from ';
+
+  @override
+  String get eventEndedDescription => 'Event ended on ';
+
+  @override
+  String get noDescription => 'No description';
+
+  @override
+  String get noBalanceData => 'No balance data';
+
+  @override
+  String get youOwe => 'You owe';
+
+  @override
+  String get oweYou => 'Owe you';
+
+  @override
+  String get youNeedToPay => 'You need to pay';
+
+  @override
+  String get peopleNeedToPayYou => 'People need to pay you';
 }

@@ -12,7 +12,7 @@ class CreateExpenseEvent extends ExpenseEvent {
   final String currency;
   final String? category;
   final String eventId;
-  final String? paidById;
+  final List<Map<String, double>>? paidByIds;
 
   final String? note;
   final String? expenseDate;
@@ -28,7 +28,7 @@ class CreateExpenseEvent extends ExpenseEvent {
     this.currency,
     this.category,
     this.eventId,
-    this.paidById,
+    this.paidByIds,
     this.note,
     this.expenseDate,
     this.remindAt,
@@ -44,7 +44,7 @@ class UpdateExpenseEvent extends ExpenseEvent {
   final double totalAmount;
   final String currency;
   final String category;
-  final String? paidById;
+  final List<UserDebt>? paidByIds;
 
   final String? note;
   final String? expenseDate;
@@ -58,7 +58,7 @@ class UpdateExpenseEvent extends ExpenseEvent {
     required this.totalAmount,
     required this.currency,
     required this.category,
-    this.paidById,
+    required this.paidByIds,
     this.note,
     this.expenseDate,
     this.remindAt,
@@ -101,6 +101,19 @@ class GetBarChartData extends ExpenseEvent {
   final int year;
 
   GetBarChartData({required this.year});
+}
+
+class GetExpenseApproveEvent extends ExpenseEvent {
+  final String expenseId;
+
+  GetExpenseApproveEvent({required this.expenseId});
+}
+
+class VoteOnExpenseEvent extends ExpenseEvent {
+  final String expenseId;
+  final String action;
+
+  VoteOnExpenseEvent({required this.expenseId, required this.action});
 }
 
 enum LoadExpenseType { group, event, hasBeenDeleted, all }

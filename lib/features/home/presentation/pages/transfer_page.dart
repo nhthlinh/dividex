@@ -34,6 +34,7 @@ class TransferPage extends StatefulWidget {
   final double? amount;
   final CurrencyEnum? currency;
   final String? groupId;
+  final String? eventId;
 
   const TransferPage({
     super.key,
@@ -41,6 +42,7 @@ class TransferPage extends StatefulWidget {
     this.amount,
     this.currency,
     this.groupId,
+    this.eventId,
   });
 
   @override
@@ -54,10 +56,11 @@ class _TransferPageState extends State<TransferPage> {
   final realAmount = TextEditingController();
   final description = TextEditingController();
   final List<CurrencyEnum> _units = CurrencyEnum.values;
-  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(
-    CurrencyEnum.vnd,
-  );
+  final ValueNotifier<CurrencyEnum?> _selectedCurrency = ValueNotifier(null);
   String? groupId;
+  String? eventId;
+
+  final isCanChangeAmount = ValueNotifier(true);
 
   final clearFormTrigger = ValueNotifier(false);
 
@@ -79,9 +82,13 @@ class _TransferPageState extends State<TransferPage> {
     if (widget.currency != null) {
       _selectedCurrency.value = widget.currency!;
     }
+    if (widget.eventId != null) {
+      eventId = widget.eventId!;
+    }
     if (widget.groupId != null) {
       groupId = widget.groupId!;
     }
+    isCanChangeAmount.value = widget.amount == null;
   }
 
   @override
@@ -112,7 +119,7 @@ class _TransferPageState extends State<TransferPage> {
           'https://api.forexrateapi.com/v1/latest',
           queryParameters: {
             'api_key': '45e110f921a24cf252ade6d4cc09c774',
-            'base': _selectedCurrency.value.name.toUpperCase(), // ví dụ: USD
+            'base': _selectedCurrency.value?.name.toUpperCase() ?? '', // ví dụ: USD
             'currencies': 'VND',
           },
         );
@@ -129,8 +136,8 @@ class _TransferPageState extends State<TransferPage> {
             builder: (context) => AlertDialog(
               title: Text(intl.confirmTransfer),
               content: Text(
-                '${intl.exchangeRateMessage(_selectedCurrency.value.name.toUpperCase(), formatNumber(double.parse(rate.toStringAsFixed(2))))}\n\n${intl.convertedAmountMessage(formatNumber(double.parse(converted.toStringAsFixed(2))))}\n\n${intl.continueQuestion}',
-                // 'Tỉ giá hiện tại: 1 ${_selectedCurrency.value.name.toUpperCase()} = ${rate.toStringAsFixed(2)} VND\n\n'
+                '${intl.exchangeRateMessage(_selectedCurrency.value?.name.toUpperCase() ?? '', formatNumber(double.parse(rate.toStringAsFixed(2))))}\n\n${intl.convertedAmountMessage(formatNumber(double.parse(converted.toStringAsFixed(2))))}\n\n${intl.continueQuestion}',
+                // 'Tỉ giá hiện tại: 1 ${_selectedCurrency.value?.name.toUpperCase() ?? ''} = ${rate.toStringAsFixed(2)} VND\n\n'
                 // 'Số tiền quy đổi: ${converted.toStringAsFixed(0)} VND\n\n'
                 // 'Bạn có muốn tiếp tục không?',
               ),
@@ -158,6 +165,7 @@ class _TransferPageState extends State<TransferPage> {
                 'currency': _selectedCurrency.value,
                 'description': des.isNotEmpty ? des : null,
                 'groupId': groupId,
+                'eventId': eventId,
               },
             );
           }
@@ -184,6 +192,7 @@ class _TransferPageState extends State<TransferPage> {
         'currency': _selectedCurrency.value,
         'description': des.isNotEmpty ? des : null,
         'groupId': groupId,
+        'eventId': eventId,
       },
     );
   }
@@ -266,6 +275,7 @@ class _TransferPageState extends State<TransferPage> {
                         color: Colors.grey,
                       ),
                     ),
+
                     // InkWell(
                     //   onTap: () {
                     //     context.pushNamed(
@@ -296,7 +306,6 @@ class _TransferPageState extends State<TransferPage> {
                     //     ),
                     //   ),
                     // ),
-                  
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -379,17 +388,25 @@ class _TransferPageState extends State<TransferPage> {
                                   avatar: friends[index].avatarUrl,
                                 ),
                                 isSelected:
-                                    selectedToUser.value?.id == friends[index].friendUid,
+                                    selectedToUser.value?.id ==
+                                    friends[index].friendUid,
                                 onTap: () {
-                                  if (selectedToUser.value?.id ==
-                                      friends[index].friendUid) {
-                                    selectedToUser.value = null;
-                                  } else {
-                                    selectedToUser.value = UserModel(
-                                      id: friends[index].friendUid,
-                                      fullName: friends[index].fullName,
-                                      avatar: friends[index].avatarUrl,
+                                  if (isCanChangeAmount.value == false) {
+                                    showCustomToast(
+                                      intl.cannotChangeAmountAndRecipient,
+                                      type: ToastType.error,
                                     );
+                                  } else {
+                                    if (selectedToUser.value?.id ==
+                                        friends[index].friendUid) {
+                                      selectedToUser.value = null;
+                                    } else {
+                                      selectedToUser.value = UserModel(
+                                        id: friends[index].friendUid,
+                                        fullName: friends[index].fullName,
+                                        avatar: friends[index].avatarUrl,
+                                      );
+                                    }
                                   }
                                 },
                               );
@@ -415,7 +432,7 @@ class _TransferPageState extends State<TransferPage> {
                               flex: 7, // 70%
                               child: CustomTextInputWidget(
                                 size: TextInputSize.large,
-                                isReadOnly: false,
+                                isReadOnly: isCanChangeAmount.value == false,
                                 isRequired: true,
                                 label: intl.expenseAmountLabel,
                                 hintText: intl.expenseAmountHint,
@@ -428,14 +445,14 @@ class _TransferPageState extends State<TransferPage> {
                             const SizedBox(width: 8),
                             Expanded(
                               flex: 3, // 30%
-                              child: ValueListenableBuilder<CurrencyEnum>(
+                              child: ValueListenableBuilder<CurrencyEnum?>(
                                 valueListenable: _selectedCurrency,
                                 builder: (context, value, _) {
-                                  return CustomDropdownWidget<CurrencyEnum>(
+                                  return CustomDropdownWidget<CurrencyEnum?>(
                                     label: intl.expenseCurrencyLabel,
                                     value: _selectedCurrency.value,
                                     options: _units,
-                                    displayString: (b) => b.code,
+                                    displayString: (b) => b?.code ?? '',
                                     buildOption: (b, selected) {
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -445,7 +462,7 @@ class _TransferPageState extends State<TransferPage> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              b.code,
+                                              b?.code ?? '',
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyMedium
@@ -460,7 +477,7 @@ class _TransferPageState extends State<TransferPage> {
                                             const SizedBox(width: 16),
                                             Expanded(
                                               child: Text(
-                                                b.description,
+                                                b?.description ?? '',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyMedium

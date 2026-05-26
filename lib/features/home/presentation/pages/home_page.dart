@@ -328,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                   radius: 18,
                   backgroundColor: Colors.grey[300],
                   backgroundImage: AssetImage(
-                    getCategoryByKey(expense.category ?? '')?. getImage() ??
+                    getCategoryByKey(expense.category?.key ?? '')?.getImage() ??
                         'lib/assets/icons/money-transfer.png',
                   ),
                 ),
