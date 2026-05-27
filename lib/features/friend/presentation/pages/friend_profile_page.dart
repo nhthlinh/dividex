@@ -581,7 +581,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                                         onPressed: () {
                                           if (deptor.id ==
                                               HiveService.getUser().id) {
-                                            showSettleUpDialog(
+                                            showSettleUpDialogForGroup(
                                               context: context,
                                               receiver: creditor,
                                               amount: state.depts[index].value

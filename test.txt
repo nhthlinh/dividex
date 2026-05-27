@@ -219,10 +219,6 @@ H nợ V 1.116.597,25
 C nợ V 1.116.597,25
 
 
-
-- Event external transfer: trả ngoài giải quyết nợ cho event -> NOT DONE
-- Create transaction: chuyển tiền trả nợ trực tiếp trong app -> NOT DONE
-
 - Soft delete expense: không thấy đổi gì -> NOT TEST
     * Thêm lỗi event_closed
     * BE lỗi, không xóa được dù báo thành công
@@ -261,3 +257,8 @@ Giải quyết nợ trong event:
     * MORE: không chia đúng gì hết trơn
 - Get event: thêm 4 trường creator_id, group_id, total_expenses, total, members nhưng không thêm net balance, sao biết trong event đó chia nợ như nào mà trả. -> NOT UNDERSTAND
     * lấy net balance từ get event balance -> ok
+- Event external transfer: trả ngoài giải quyết nợ cho event -> NOT DONE
+    * MORE: Chuyển rồi nhưng khi tải lại người đó thì không được cập nhật
+- Create transaction: chuyển tiền trả nợ trực tiếp trong app -> NOT DONE
+    * MORE: lỗi 500 api chuyển tiền /api/wallet
+- MORE: nhắc nhở chưa thấy api hay dùng chung với group

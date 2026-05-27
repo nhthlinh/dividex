@@ -15,6 +15,7 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/group/presentation/pages/group_detail.dart';
 import 'package:Dividex/features/group/presentation/widgets/chart_widget.dart';
+import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/change_string.dart';
 import 'package:Dividex/shared/utils/num.dart';
@@ -24,6 +25,7 @@ import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
+import 'package:Dividex/shared/widgets/settle_up_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -259,8 +261,10 @@ class _EventReportPageState extends State<EventReportPage> {
                           Text(
                             intl.netBalance,
                             style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(fontWeight: FontWeight.bold, color: Colors.grey),
-
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
                           ),
 
                           Spacer(),
@@ -271,31 +275,27 @@ class _EventReportPageState extends State<EventReportPage> {
                               if (totalDebt == 0 && totalReceive == 0)
                                 Text(
                                   intl.settleUp,
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppThemes.successColor,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(color: AppThemes.successColor),
                                 ),
 
                               if (totalDebt != 0)
-                              Text(
-                                "${intl.youOwe}: "
-                                "${formatNumber(totalDebt)} đ",
+                                Text(
+                                  "${intl.youOwe}: "
+                                  "${formatNumber(totalDebt)} đ",
 
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppThemes.errorColor,
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(color: AppThemes.errorColor),
                                 ),
-                              ),
 
                               if (totalReceive != 0)
+                                Text(
+                                  "${intl.oweYou}: "
+                                  "${formatNumber(totalReceive)} đ",
 
-                              Text(
-                                "${intl.oweYou}: "
-                                "${formatNumber(totalReceive)} đ",
-
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppThemes.successColor,
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(color: AppThemes.successColor),
                                 ),
-                              ),
                             ],
                           ),
                         ],
@@ -319,6 +319,15 @@ class _EventReportPageState extends State<EventReportPage> {
                             creditorName: e.creditor?.fullName ?? "",
                             creditorAvatar: e.creditor?.avatar?.publicUrl,
                             amount: e.value ?? 0,
+                            ontap: () {
+                              showSettleUpDialogForEvent(
+                                context: context,
+                                receiver: e.creditor!,
+                                amount: e.value ?? 0,
+                                currency: e.currency ?? CurrencyEnum.vnd,
+                                eventId: widget.eventId,
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -341,6 +350,9 @@ class _EventReportPageState extends State<EventReportPage> {
                             creditorAvatar:
                                 HiveService.getUser().avatarUrl?.publicUrl,
                             amount: e.value ?? 0,
+                            ontap: () {
+                              // Remind
+                            },
                           ),
                         ),
                       ],
@@ -389,64 +401,74 @@ class _EventReportPageState extends State<EventReportPage> {
     String? debtorAvatar,
     String? creditorAvatar,
     required double amount,
+    required Function() ontap,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
+    return InkWell(
+      onTap: ontap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundImage: NetworkImage(
+                      debtorAvatar ??
+                          'https://ui-avatars.com/api/?name=${Uri.encodeComponent(debtorName)}&background=random&color=fff&size=128',
+                    ),
+                  ),
+
+                  SizedBox(height: 8),
+
+                  Text(
+                    getLastTwoWords(debtorName),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+
+            Column(
               children: [
-                CircleAvatar(
-                  radius: 22,
-                  backgroundImage: NetworkImage(
-                    debtorAvatar ??
-                                                    'https://ui-avatars.com/api/?name=${Uri.encodeComponent(debtorName)}&background=random&color=fff&size=128',
+                Image.asset(
+                  'lib/assets/images/arrow_image.png',
+                  width: 16,
+                  height: 16,
+                ),
+
+                Text(
+                  formatNumber(amount),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppThemes.successColor,
                   ),
                 ),
-
-                SizedBox(height: 8),
-
-                Text(getLastTwoWords(debtorName), textAlign: TextAlign.center),
               ],
             ),
-          ),
 
-          Column(
-            children: [
-              Image.asset(
-                'lib/assets/images/arrow_image.png',
-                width: 16,
-                height: 16,
-              ),
-
-              Text(
-                formatNumber(amount),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppThemes.successColor,
-                ),
-              ),
-            ],
-          ),
-
-          Expanded(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 22,
-                  backgroundImage: NetworkImage(
-                    creditorAvatar ??
-                        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(creditorName)}&background=random&color=fff&size=128',
+            Expanded(
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundImage: NetworkImage(
+                      creditorAvatar ??
+                          'https://ui-avatars.com/api/?name=${Uri.encodeComponent(creditorName)}&background=random&color=fff&size=128',
+                    ),
                   ),
-                ),
 
-                SizedBox(height: 8),
+                  SizedBox(height: 8),
 
-                Text(getLastTwoWords(creditorName), textAlign: TextAlign.center),
-              ],
+                  Text(
+                    getLastTwoWords(creditorName),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

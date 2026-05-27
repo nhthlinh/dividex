@@ -64,6 +64,8 @@ class _TransferPageState extends State<TransferPage> {
 
   final clearFormTrigger = ValueNotifier(false);
 
+  String wallet = '0.0';
+
   @override
   void initState() {
     super.initState();
@@ -101,10 +103,24 @@ class _TransferPageState extends State<TransferPage> {
   }
 
   Future<void> _handleTransfer(BuildContext context) async {
-    double a = double.parse(originalAmount.text.trim().replaceAll('.', ''));
+    double a = double.parse(
+      originalAmount.text
+          .trim()
+          .replaceAll('.', '') // bỏ dấu phân cách hàng nghìn
+          .replaceAll(',', '.'), // đổi dấu thập phân
+    );
     String des = description.text;
     UserModel toUser = selectedToUser.value!;
     final intl = AppLocalizations.of(context)!;
+
+    double walletAmount = double.parse(
+      wallet.replaceAll('VND', '').replaceAll('.', '').trim(),
+    );
+
+    if (a > walletAmount) {
+      showCustomToast(intl.insufficientBalance, type: ToastType.error);
+      return;
+    }
 
     if (_selectedCurrency.value != CurrencyEnum.vnd) {
       showCustomDialog(
@@ -119,7 +135,8 @@ class _TransferPageState extends State<TransferPage> {
           'https://api.forexrateapi.com/v1/latest',
           queryParameters: {
             'api_key': '45e110f921a24cf252ade6d4cc09c774',
-            'base': _selectedCurrency.value?.name.toUpperCase() ?? '', // ví dụ: USD
+            'base':
+                _selectedCurrency.value?.name.toUpperCase() ?? '', // ví dụ: USD
             'currencies': 'VND',
           },
         );
@@ -248,6 +265,7 @@ class _TransferPageState extends State<TransferPage> {
                   child: BlocBuilder<RechargeBloc, RechargeState>(
                     builder: (context, state) {
                       if (state is GetWalletSuccessState) {
+                        wallet = state.walletInfo;
                         return BalanceRow(
                           balanceLabel: intl.balance,
                           balance: state.walletInfo,

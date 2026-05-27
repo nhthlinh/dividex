@@ -483,7 +483,7 @@ class _GroupPageState extends State<GroupPage> {
                       );
                     }
                   } else {
-                    showSettleUpDialog(
+                    showSettleUpDialogForGroup(
                       context: context,
                       receiver: currentMember.user!,
                       amount: currentMember.amount!.abs(),
