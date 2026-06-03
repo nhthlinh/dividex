@@ -825,5 +825,6 @@
   "youOwe":"Bạn nợ",
   "oweYou":"Nợ bạn",
   "youNeedToPay":"Bạn cần phải trả",
-  "peopleNeedToPayYou":"Người ta cần trả bạn"
+  "peopleNeedToPayYou":"Người ta cần trả bạn",
+  "expenseTimeInvalid": "Thời gian chi tiêu không hợp lệ."
 }

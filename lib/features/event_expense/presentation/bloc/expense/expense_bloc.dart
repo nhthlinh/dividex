@@ -65,6 +65,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         showCustomToast(intl.groupNotFound, type: ToastType.error);
       } else if (e.toString().contains(MessageCode.eventClosed)) {
         showCustomToast(intl.eventClosed, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.expenseTimeInvalid)) {
+        showCustomToast(intl.expenseTimeInvalid, type: ToastType.error);
       } else {
         showCustomToast(intl.error, type: ToastType.error);
       }
@@ -111,6 +113,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         showCustomToast(intl.updateIsDenied, type: ToastType.error);
       } else if (e.toString().contains(MessageCode.eventClosed)) {
         showCustomToast(intl.eventClosed, type: ToastType.error);
+      } else if (e.toString().contains(MessageCode.expenseTimeInvalid)) {
+        showCustomToast(intl.expenseTimeInvalid, type: ToastType.error);
       } else if (e.toString().contains(MessageCode.expenseNotFound)) {
         showCustomToast(intl.expenseNotFound, type: ToastType.error);
       } else {

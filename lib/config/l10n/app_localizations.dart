@@ -3415,6 +3415,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'People need to pay you'**
   String get peopleNeedToPayYou;
+
+  /// No description provided for @expenseTimeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The expense time is invalid.'**
+  String get expenseTimeInvalid;
 }
 
 class _AppLocalizationsDelegate

@@ -219,46 +219,39 @@ H nợ V 1.116.597,25
 C nợ V 1.116.597,25
 
 
-- Soft delete expense: không thấy đổi gì -> NOT TEST
-    * Thêm lỗi event_closed
-    * BE lỗi, không xóa được dù báo thành công
-- Restore expense: không thấy đổi gì -> NOT TEST
-    * Thêm lỗi event_closed
-- Update expense: paid_by thành list userDebt (userId, amount) -> NOT TEST
-    * Thêm lỗi event_closed
+- Soft delete expense:
+- Restore expense: 
+- Update expense: 
 
 
 Một expense có nhiều người trả:
 - Create expense: đổi thành nhiều payer -> NOT TEST
-    * OK đã ổn
-    * MORE: ngày tạo không thuộc event
-- MORE: Update expense: không thể cập nhật
+    * MORE: expense date là 22/9/2025 vẫn tạo được, nó đâu có thuộc expense đâu?
+- Update expense: 
+    * DONE
 
 Cơ chế đồng thuận:
-- Get expense detail: bị mất cái splitType ròi (cái này cần mà nhỉ), updated_by là Id user (chỗ này dùng hiển thị creator hay sao, chưa hiểu lắm, nếu hiện creator thì trả về cho tên đi, đừng id), pending_action (gồm trạng thái gì vậy?), pending_update_data (là cái string gì đây) -> NOT UNDERSTAND
-    * Thêm xem trạng thái đã thay đổi
-- Vote on expense: NOT DONE
-    * set up page cơ bản
-    * ổn ổn
+- Get expense detail: 
+    * MORE: map<String, dynamic> cho pending_update_data mà thấy chưa đẹp lắm, gửi tao model để có gì map tiếng việt tiếng anh luôn
+- Vote on expense: 
+    * DONE
 - Get approval status: NOT DONE
-    * Thêm thông báo cho yêu cầu chấp thuận
-    * set up page cơ bản
-    * ổn ổn
     * MORE: cho phép xem sau khi expense không còn pending nữa, hoặc khi người đó đã chấp thuận hoặc từ chối
-- MORE: trang báo cáo hiện đủ dù expense đã bị từ chối tạo
+    * MORE: expense được từ chối tự động không chuyển trạng thái, vẫn ở pending
+- MORE: trang báo cáo chi tiêu hiện đủ dù expense đã bị từ chối tạo hay đang pending
 
 Giải quyết nợ trong event:
-- Update debt otimization: này làm gì không hiểu nè, chuyển trạng thái group từ tối ưu event sang group hả? -> NOT UNDERSTAND
-    * Đã viết xong, đợi test
+- Update debt otimization: 
     * DONE
-- Get balances by group and member: thêm biến debt_optimization (EVENT hoặc GROUP) -> NOT TEST
-    * bình thường với luồng group cũ
-    * bình thường khi thêm group event mới 
+- Get balances by group and member: 
     * MORE: không chia đúng gì hết trơn
-- Get event: thêm 4 trường creator_id, group_id, total_expenses, total, members nhưng không thêm net balance, sao biết trong event đó chia nợ như nào mà trả. -> NOT UNDERSTAND
-    * lấy net balance từ get event balance -> ok
+- Get event:
+    * DONE
+- Get event trong group:
+    * MORE: event trong group bị mất hết trơn vậy??
+
 - Event external transfer: trả ngoài giải quyết nợ cho event -> NOT DONE
     * MORE: Chuyển rồi nhưng khi tải lại người đó thì không được cập nhật
 - Create transaction: chuyển tiền trả nợ trực tiếp trong app -> NOT DONE
     * MORE: lỗi 500 api chuyển tiền /api/wallet
-- MORE: nhắc nhở chưa thấy api hay dùng chung với group
+- MORE: nhắc nhở trả nợ cho event là api nào vậy?

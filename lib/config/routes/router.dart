@@ -304,7 +304,7 @@ GoRouter buildRouter(BuildContext context) {
           ),
 
           GoRoute(
-            path: '/expense/:id',
+            path: 'expense/:id',
             name: AppRouteNames.expenseDetail,
             pageBuilder: (context, state) {
               final expenseId = state.pathParameters['id']!;

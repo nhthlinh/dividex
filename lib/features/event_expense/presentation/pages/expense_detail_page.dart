@@ -111,21 +111,34 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                       ).withOpacity(.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Row(
+                    child: Column(
                       children: [
-                        Icon(
-                          getActionIcon(expense.pendingAction),
-                          color: getActionColor(expense.pendingAction),
+                        Row(
+                          children: [
+                            Icon(
+                              getActionIcon(expense.pendingAction),
+                              color: getActionColor(expense.pendingAction),
+                            ),
+                        
+                            const SizedBox(width: 8),
+                        
+                            Text(
+                              getActionLabel(expense.pendingAction, intl),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                color: getActionColor(expense.pendingAction),
+                              ),
+                            ),
+                          ],
                         ),
-
-                        const SizedBox(width: 8),
-
-                        Text(
-                          getActionLabel(expense.pendingAction, intl),
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            color: getActionColor(expense.pendingAction),
+                        if (expense.pendingUpdateData != null) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            expense.pendingUpdateData.toString(),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: getActionColor(expense.pendingAction),
+                            ),
                           ),
-                        ),
+                        ],
                       ],
                     ),
                   ),

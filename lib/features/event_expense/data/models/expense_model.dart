@@ -39,7 +39,7 @@ class ExpenseModel {
   final String? toUser;
   final String? status;
   final ExpenseApprovalActionEnum? pendingAction;
-  final String? pendingUpdateData;
+  final Map<String, dynamic>? pendingUpdateData;
 
   ExpenseModel({
     this.id,
@@ -125,7 +125,7 @@ class ExpenseModel {
                 : json['pending_action'] == 'DELETE'
                     ? ExpenseApprovalActionEnum.delete
                     : null,
-    pendingUpdateData: json['pending_update_data'] as String?,
+    pendingUpdateData: json['pending_update_data'] as Map<String, dynamic>?,
   );
 
   factory ExpenseModel.fromListExpenseInGroupJson(Map<String, dynamic> json) {

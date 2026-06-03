@@ -131,36 +131,7 @@ enum NotiType {
 
       case NotiType.EVENT_CREATED:
       case NotiType.EVENT_UPDATED:
-        {
-          final bloc = context.read<EventBloc>();
-          final completer = Completer<EventModel?>();
-          late final StreamSubscription<EventState> subscription;
-
-          subscription = bloc.stream.listen((state) {
-            if (state is EventLoadedState) {
-              completer.complete(state.event);
-              subscription.cancel();
-            }
-          });
-
-          bloc.add(event_event.GetEventEvent(eventId: relatedUid));
-
-          final event = await completer.future;
-          if (event != null) {
-            context.goNamed(
-              AppRouteNames.eventReport,
-              pathParameters: {
-                'eventId': relatedUid,
-                'groupId': event.group ?? '',
-              },
-              extra: {'eventName': event.name ?? ''},
-            );
-          } else {
-            showCustomToast(intl.groupNotFound, type: ToastType.error);
-          }
-        }
-        break;
-
+      // relatedUid ở đây là eventId, nên không lấy được groupUid, không mở trang được
       case NotiType.EVENT_DELETED:
         break;
 

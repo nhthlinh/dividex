@@ -820,5 +820,6 @@
   "youOwe":"You owe",
   "oweYou":"Owe you",
   "youNeedToPay":"You need to pay",
-  "peopleNeedToPayYou":"People need to pay you"
+  "peopleNeedToPayYou":"People need to pay you",
+  "expenseTimeInvalid": "The expense time is invalid."
 }

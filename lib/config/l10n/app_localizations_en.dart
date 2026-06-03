@@ -1837,4 +1837,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get peopleNeedToPayYou => 'People need to pay you';
+
+  @override
+  String get expenseTimeInvalid => 'The expense time is invalid.';
 }

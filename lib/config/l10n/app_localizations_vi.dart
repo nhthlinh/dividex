@@ -1837,4 +1837,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get peopleNeedToPayYou => 'Người ta cần trả bạn';
+
+  @override
+  String get expenseTimeInvalid => 'Thời gian chi tiêu không hợp lệ.';
 }
