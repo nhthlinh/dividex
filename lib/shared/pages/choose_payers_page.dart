@@ -47,8 +47,8 @@ class _ChoosePayersPageState extends State<ChoosePayersPage> {
   static const Key searchButtonKey = Key('choose_payer_search_button');
 
   final TextEditingController _searchController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
   final List<PayerModel> _selectedPayers = []; // <-- lưu payer đã chọn
+  late Map<String, TextEditingController> _amountControllers;
 
   double get _selectedTotal {
     return _selectedPayers.fold(0, (sum, e) => sum + (e.amount ?? 0));
@@ -61,24 +61,34 @@ class _ChoosePayersPageState extends State<ChoosePayersPage> {
   @override
   void initState() {
     super.initState();
+    _amountControllers = {};
     _selectedPayers.addAll(widget.initialSelectedPayers ?? []);
     context.read<LoadedUsersBloc>().add(InitialEvent(widget.id, widget.type));
   }
 
-  void _togglePayer(PayerModel payer) {
+  @override
+  void dispose() {
+    _searchController.dispose();
+    for (var controller in _amountControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _updatePayerAmount(UserModel user, double amount) {
     setState(() {
-      if (!widget.isMultiSelect) {
-        _selectedPayers.clear();
-      }
+      final index = _selectedPayers.indexWhere((p) => p.user.id == user.id);
 
-      final index = _selectedPayers.indexWhere(
-        (p) => p.user.id == payer.user.id,
-      );
-
-      if (index != -1) {
-        _selectedPayers.removeAt(index);
+      if (amount > 0) {
+        if (index != -1) {
+          _selectedPayers[index] = PayerModel(user: user, amount: amount);
+        } else {
+          _selectedPayers.add(PayerModel(user: user, amount: amount));
+        }
       } else {
-        _selectedPayers.add(payer);
+        if (index != -1) {
+          _selectedPayers.removeAt(index);
+        }
       }
     });
   }
@@ -289,181 +299,61 @@ class _ChoosePayersPageState extends State<ChoosePayersPage> {
                 ? _selectedPayers[selectedPayerIndex]
                 : null;
 
-            return InfoCard(
-              title: getLastTwoWords(user.fullName),
-              subtitle: selectedPayer?.amount != null
-                  ? formatNumber(selectedPayer!.amount)
-                  : null,
-              leading: CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.grey,
-                backgroundImage:
-                    (user.avatar != null && user.avatar!.publicUrl.isNotEmpty)
-                    ? NetworkImage(user.avatar!.publicUrl)
-                    : NetworkImage(
-                        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
-                      ),
-              ),
-              onTap: () {
-                context.pushNamed(
-                  AppRouteNames.friendProfile,
-                  pathParameters: {'id': user.id ?? ''},
-                );
-              },
-              trailing: FilledButton(
-                onPressed: () {
-                  showCustomDialog(
-                    context: context,
-                    label: intl.addMembers,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        /// User card
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade50,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundImage: NetworkImage(
-                                  (user.avatar != null &&
-                                          user.avatar!.publicUrl.isNotEmpty)
-                                      ? user.avatar!.publicUrl
-                                      : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
-                                ),
-                              ),
+            // Initialize controller if needed
+            if (!_amountControllers.containsKey(user.id)) {
+              _amountControllers[user.id ?? ''] = TextEditingController(
+                text: selectedPayer?.amount?.toString() ?? '0',
+              );
+            }
 
-                              const SizedBox(width: 12),
-
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      user.fullName ?? 'User',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium
-                                          ?.copyWith(
-                                            fontSize: 14,
-                                            letterSpacing: 0,
-                                            height: 20 / 14,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              Icon(
-                                Icons.swap_horiz,
-                                color: AppThemes.primary3Color,
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        CustomTextInputWidget(
-                          size: TextInputSize.large,
-                          isReadOnly: false,
-                          keyboardType: TextInputType.number,
-                          label: intl.amountLabel,
-                          controller: _amountController,
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _amountChip("100 K"),
-                            _amountChip("200 K"),
-                            _amountChip("500 K"),
-                          ],
-                        ),
-                      ],
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Column(
+                children: [
+                  InfoCard(
+                    title: getLastTwoWords(user.fullName),
+                    subtitle: selectedPayer?.amount != null
+                        ? formatNumber(selectedPayer!.amount)
+                        : null,
+                    leading: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.grey,
+                      backgroundImage:
+                          (user.avatar != null &&
+                              user.avatar!.publicUrl.isNotEmpty)
+                          ? NetworkImage(user.avatar!.publicUrl)
+                          : NetworkImage(
+                              'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
+                            ),
                     ),
-                    actions: [
-                      if (isSelected)
-                        Center(
-                          child: CustomButton(
-                            text: intl.removeSelection,
-                            customColor: AppThemes.errorColor,
-                            size: ButtonSize.popUp,
-                            onPressed: () {
-                              _togglePayer(PayerModel(user: user, amount: 0));
-
-                              _amountController.clear();
-
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-
-                      if (!isSelected)
-                        Center(
-                          child: CustomButton(
-                            text: intl.confirm,
-                            customColor: AppThemes.primary3Color,
-                            size: ButtonSize.popUp,
-                            onPressed: () {
-                              final amount = double.tryParse(
-                                _amountController.text,
-                              );
-
-                              if (amount == null) return;
-
-                              _togglePayer(
-                                PayerModel(user: user, amount: amount),
-                              );
-
-                              _amountController.clear();
-
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                    ],
-                  );
-                },
-                style: FilledButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(8),
-                  backgroundColor: isSelected
-                      ? AppThemes.primary3Color
-                      : Colors.transparent,
-                  side: BorderSide(
-                    color: isSelected ? AppThemes.primary3Color : Colors.grey,
+                    onTap: () {
+                      context.pushNamed(
+                        AppRouteNames.friendProfile,
+                        pathParameters: {'id': user.id ?? ''},
+                      );
+                    },
+                    trailing: null,
                   ),
-                ),
-                child: Icon(
-                  isSelected ? Icons.check : Icons.add,
-                  size: 18,
-                  color: isSelected ? Colors.white : Colors.grey,
-                ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    child: CustomTextInputWidget(
+                      size: TextInputSize.large,
+                      isReadOnly: false,
+                      keyboardType: TextInputType.number,
+                      label: intl.amountLabel,
+                      controller: _amountControllers[user.id]!,
+                      onChanged: (value) {
+                        final amount = double.tryParse(value) ?? 0;
+                        _updatePayerAmount(user, amount);
+                      },
+                    ),
+                  ),
+                ],
               ),
             );
           },
         ),
       ],
-    );
-  }
-
-  Widget _amountChip(String text) {
-    return OutlinedButton(
-      onPressed: () {
-        _amountController.text = text.replaceAll(' K', '000');
-      },
-      style: OutlinedButton.styleFrom(
-        minimumSize: const Size(60, 40),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      ),
-      child: Text(text),
     );
   }
 }

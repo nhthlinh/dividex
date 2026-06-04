@@ -122,7 +122,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           intl.report,
-                          style: Theme.of(context).textTheme.titleSmall
+                          style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
                                 fontSize: 12,
                                 letterSpacing: 0,

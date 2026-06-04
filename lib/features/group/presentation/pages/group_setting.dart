@@ -293,7 +293,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         intl.deleteExpense,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontSize: 12,
                           letterSpacing: 0,
                           height: 16 / 12,
