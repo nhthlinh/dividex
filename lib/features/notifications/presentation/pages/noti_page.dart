@@ -139,6 +139,12 @@ class _NotiPageState extends State<NotiPage> {
                   context,
                   notis[index].fromUser,
                   notis[index].content,
+                  notis[index].type == NotiType.EXPENSE_APPROVAL_REQUESTED ||
+                          notis[index].type == NotiType.EXPENSE_APPROVED ||
+                          notis[index].type ==
+                              NotiType.EXPENSE_APPROVAL_DECLINED
+                      ? notis[index].actionType
+                      : null,
                 ),
               },
               child: Row(
@@ -206,7 +212,15 @@ class _NotiPageState extends State<NotiPage> {
                                     NotiType.EXPENSE_APPROVED => intl.accept,
                                     NotiType.EXPENSE_APPROVAL_DECLINED =>
                                       intl.decline,
-                                    _ => intl.pending,
+                                    _ =>
+                                      intl.pending +
+                                          (notis[index].actionType != null
+                                              ? ': ${notis[index].actionType == 'CREATE'
+                                                    ? intl.create
+                                                    : notis[index].actionType == 'UPDATE'
+                                                    ? intl.update
+                                                    : intl.delete}'
+                                              : ''),
                                   },
 
                                   style: TextStyle(

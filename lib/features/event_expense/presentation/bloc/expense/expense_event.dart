@@ -105,8 +105,9 @@ class GetBarChartData extends ExpenseEvent {
 
 class GetExpenseApproveEvent extends ExpenseEvent {
   final String expenseId;
+  final String actionType;
 
-  GetExpenseApproveEvent({required this.expenseId});
+  GetExpenseApproveEvent({required this.expenseId, required this.actionType});
 }
 
 class VoteOnExpenseEvent extends ExpenseEvent {

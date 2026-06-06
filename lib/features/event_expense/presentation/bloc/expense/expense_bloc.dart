@@ -225,7 +225,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
   ) async {
     try {
       final useCase = await getIt.getAsync<ExpenseUseCase>();
-      final expenseApprove = await useCase.getExpenseApprove(event.expenseId);
+      final expenseApprove = await useCase.getExpenseApprove(event.expenseId, event.actionType);
 
       emit(GetExpenseApproveState(expenseApprove: expenseApprove));
     } catch (e) {

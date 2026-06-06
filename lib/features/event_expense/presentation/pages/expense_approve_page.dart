@@ -20,8 +20,9 @@ import 'package:intl/intl.dart';
 
 class ExpenseApprovePage extends StatefulWidget {
   final String expenseId;
+  final String actionType;
 
-  const ExpenseApprovePage({super.key, required this.expenseId});
+  const ExpenseApprovePage({super.key, required this.expenseId, required this.actionType});
 
   @override
   State<ExpenseApprovePage> createState() => _ExpenseApprovePageState();
@@ -35,7 +36,7 @@ class _ExpenseApprovePageState extends State<ExpenseApprovePage> {
     super.initState();
     // Trigger both events separately
     context.read<ExpenseBloc>().add(
-      GetExpenseApproveEvent(expenseId: widget.expenseId),
+      GetExpenseApproveEvent(expenseId: widget.expenseId, actionType: widget.actionType),
     );
   }
 
@@ -49,7 +50,7 @@ class _ExpenseApprovePageState extends State<ExpenseApprovePage> {
       child: Layout(
         onRefresh: () async {
           context.read<ExpenseBloc>().add(
-            GetExpenseApproveEvent(expenseId: widget.expenseId),
+            GetExpenseApproveEvent(expenseId: widget.expenseId, actionType: widget.actionType),
           );
           return Future.value();
         },
@@ -143,7 +144,7 @@ class _ExpenseApprovePageState extends State<ExpenseApprovePage> {
                         style: TextStyle(
                           color: AppThemes.primary3Color,
                           fontWeight: FontWeight.w600,
-                          fontSize: 12,
+                          fontSize: 16,
                         ),
                       ),
 

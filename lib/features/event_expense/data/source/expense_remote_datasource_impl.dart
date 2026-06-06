@@ -228,9 +228,9 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
   }
 
   @override
-  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId) async {
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId, String actionType) async {
     return apiCallWrapper(() async {
-      final response = await dio.get('/expenses/$expenseId/approval-status');
+      final response = await dio.get('/expenses/$expenseId/approval-status', queryParameters: {'action_type': actionType});
       return ExpenseApprovalModel.fromJson(response.data['data']);
     });
   }

@@ -104,8 +104,8 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   }
 
   @override
-  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId) async {
-    return await remoteDataSource.getExpenseApprove(expenseId);
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId, String actionType) async {
+    return await remoteDataSource.getExpenseApprove(expenseId, actionType);
   }
 
   @override

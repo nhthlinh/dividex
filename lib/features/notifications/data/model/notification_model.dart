@@ -76,6 +76,7 @@ enum NotiType {
     BuildContext context,
     UserModel fromUser,
     String content,
+    String? actionType
   ) async {
     final intl = AppLocalizations.of(context)!;
 
@@ -140,7 +141,7 @@ enum NotiType {
       case NotiType.EXPENSE_APPROVAL_DECLINED:
         context.pushNamed(
           AppRouteNames.expenseApproval,
-          pathParameters: {"expenseId": relatedUid},
+          pathParameters: {"expenseId": relatedUid, "actionType": actionType ?? 'CREATE'},
         );
         break;
 
@@ -177,6 +178,7 @@ class NotificationModel {
   final NotiType type;
   final String relatedUid;
   final List<UserModel> toUsers;
+  final String? actionType;
 
   NotificationModel({
     required this.fromUser,
@@ -186,6 +188,7 @@ class NotificationModel {
     required this.type,
     required this.relatedUid,
     required this.toUsers,
+    this.actionType,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -200,6 +203,7 @@ class NotificationModel {
         toUsers: List<UserModel>.from(
           json['to_users'].map((e) => UserModel.fromJson(e)),
         ),
+        actionType: json['action_type'],
       );
     } catch (e, stackTrace) {
       throw Exception(
@@ -216,6 +220,7 @@ class NotificationModel {
     NotiType? type,
     String? relatedUid,
     List<UserModel>? toUsers,
+    String? actionType,
   }) {
     return NotificationModel(
       fromUser: fromUser ?? this.fromUser,
@@ -225,6 +230,7 @@ class NotificationModel {
       type: type ?? this.type,
       relatedUid: relatedUid ?? this.relatedUid,
       toUsers: toUsers ?? this.toUsers,
+      actionType: actionType ?? this.actionType,
     );
   }
 }

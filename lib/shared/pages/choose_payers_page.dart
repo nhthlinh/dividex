@@ -308,47 +308,34 @@ class _ChoosePayersPageState extends State<ChoosePayersPage> {
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: Column(
-                children: [
-                  InfoCard(
-                    title: getLastTwoWords(user.fullName),
-                    subtitle: selectedPayer?.amount != null
-                        ? formatNumber(selectedPayer!.amount)
-                        : null,
-                    leading: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.grey,
-                      backgroundImage:
-                          (user.avatar != null &&
-                              user.avatar!.publicUrl.isNotEmpty)
-                          ? NetworkImage(user.avatar!.publicUrl)
-                          : NetworkImage(
-                              'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
-                            ),
-                    ),
-                    onTap: () {
-                      context.pushNamed(
-                        AppRouteNames.friendProfile,
-                        pathParameters: {'id': user.id ?? ''},
-                      );
+              child: InfoCard(
+                title: getLastTwoWords(user.fullName),
+                subtitle: null,
+                leading: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.grey,
+                  backgroundImage:
+                      (user.avatar != null &&
+                          user.avatar!.publicUrl.isNotEmpty)
+                      ? NetworkImage(user.avatar!.publicUrl)
+                      : NetworkImage(
+                          'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=random&color=fff&size=128',
+                        ),
+                ),
+                trailing: SizedBox(
+                  width: 120,
+                  child: CustomTextInputWidget(
+                    size: TextInputSize.small,
+                    isReadOnly: false,
+                    keyboardType: TextInputType.number,
+                    hintText: intl.amountLabel,
+                    controller: _amountControllers[user.id]!,
+                    onChanged: (value) {
+                      final amount = double.tryParse(value) ?? 0;
+                      _updatePayerAmount(user, amount);
                     },
-                    trailing: null,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                    child: CustomTextInputWidget(
-                      size: TextInputSize.large,
-                      isReadOnly: false,
-                      keyboardType: TextInputType.number,
-                      label: intl.amountLabel,
-                      controller: _amountControllers[user.id]!,
-                      onChanged: (value) {
-                        final amount = double.tryParse(value) ?? 0;
-                        _updatePayerAmount(user, amount);
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           },

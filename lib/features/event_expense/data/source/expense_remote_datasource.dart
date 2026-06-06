@@ -50,6 +50,6 @@ abstract class ExpenseRemoteDataSource {
   Future<void> restoreExpense(String id);
   Future<List<CustomBarChartData>> getBarChartData(int year);
 
-  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId);
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId, String actionType);
   Future<void> voteOnExpense(String expenseId, String action);
 }

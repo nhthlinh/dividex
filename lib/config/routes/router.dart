@@ -920,7 +920,7 @@ GoRouter buildRouter(BuildContext context) {
       ),
 
       GoRoute(
-        path: '/expense-approval/:expenseId',
+        path: '/expense-approval/:expenseId/:actionType',
         name: AppRouteNames.expenseApproval,
         pageBuilder: (context, state) {
           return buildPageWithDefaultTransition(
@@ -928,6 +928,7 @@ GoRouter buildRouter(BuildContext context) {
               create: (context) => ExpenseBloc(),
               child: ExpenseApprovePage(
                 expenseId: state.pathParameters['expenseId']!,
+                actionType: state.pathParameters['actionType']!,
               ),
             ),
           );

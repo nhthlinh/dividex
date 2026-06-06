@@ -124,9 +124,8 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                           intl.report,
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
-                                fontSize: 12,
+                                fontSize: 16,
                                 letterSpacing: 0,
-                                height: 16 / 12,
                                 color: Colors.grey,
                               ),
                         ),

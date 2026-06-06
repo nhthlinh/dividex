@@ -145,8 +145,8 @@ class ExpenseUseCase {
     return await repository.getBarChartData(year);
   }
 
-  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId) async {
-    return await repository.getExpenseApprove(expenseId);
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId, String actionType) async {
+    return await repository.getExpenseApprove(expenseId, actionType);
   }
 
   Future<void> voteOnExpense(String expenseId, String action) async {

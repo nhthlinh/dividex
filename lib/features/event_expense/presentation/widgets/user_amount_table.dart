@@ -292,11 +292,16 @@ class _UserTableWidgetState extends State<UserTableWidget> {
                         ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  (user.user?.fullName != null &&
-                          user.user!.fullName!.trim().isNotEmpty)
-                      ? user.user!.fullName!.trim().split(' ').last
-                      : '',
+                SizedBox(
+                  width: 40,
+                  child: Text(
+                    (user.user?.fullName != null &&
+                            user.user!.fullName!.trim().isNotEmpty)
+                        ? user.user!.fullName!.trim().split(' ').last
+                        : '',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 ),
               ],
             ),
