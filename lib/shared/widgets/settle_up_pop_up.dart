@@ -1,5 +1,7 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart' as event_event;
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
@@ -10,7 +12,7 @@ import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-Future<void> showSettleUpDialog({
+Future<void> showSettleUpDialogForGroup({
   required BuildContext context,
   required UserModel receiver,
   required double amount,
@@ -20,6 +22,7 @@ Future<void> showSettleUpDialog({
   final formattedAmount =
       ' ${formatNumber(amount)} ${currency.code.toUpperCase()}';
   final intl = AppLocalizations.of(context)!;
+  final groupBloc = context.read<GroupBloc>();
 
   return showCustomDialog(
     context: context,
@@ -70,10 +73,13 @@ Future<void> showSettleUpDialog({
           children: [
             CustomButton(
               text: intl.outSideTransfer,
+              // size: ButtonSize.medium,
               size: ButtonSize.popUp,
               type: ButtonType.secondary,
-              onPressed: () => {
-                context.read<GroupBloc>().add(OutSideTransferEvent(groupId, receiver.id ?? '', amount))
+              onPressed: () {
+                groupBloc.add(
+                  OutSideTransferEvent(groupId, receiver.id ?? '', amount),
+                );
               },
             ),
             // const SizedBox(width: 12),
@@ -81,15 +87,15 @@ Future<void> showSettleUpDialog({
             //   text: intl.transfer,
             //   size: ButtonSize.medium,
             //   onPressed: () {
-            //     // context.pushNamed(
-            //     //   AppRouteNames.transfer,
-            //     //   extra: {
-            //     //     'toUser': receiver,
-            //     //     'amount': amount,
-            //     //     'currency': currency,
-            //     //     'groupId': groupId,
-            //     //   },
-            //     // );
+            //     context.pushNamed(
+            //       AppRouteNames.transfer,
+            //       extra: {
+            //         'toUser': receiver,
+            //         'amount': amount,
+            //         'currency': currency,
+            //         'groupId': groupId,
+            //       },
+            //     );
             //   },
             // ),
           
@@ -99,3 +105,98 @@ Future<void> showSettleUpDialog({
     ),
   );
 }
+
+Future<void> showSettleUpDialogForEvent({
+  required BuildContext context,
+  required UserModel receiver,
+  required double amount,
+  required CurrencyEnum currency,
+  required String eventId,
+}) async {
+  final formattedAmount =
+      ' ${formatNumber(amount)} ${currency.code.toUpperCase()}';
+  final intl = AppLocalizations.of(context)!;
+  final eventBloc = context.read<EventBloc>();
+
+  return showCustomDialog(
+    context: context,
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Title
+        Text.rich(
+          TextSpan(
+            text: intl.pay,
+            style: Theme.of(context).textTheme.titleSmall,
+            children: [
+              TextSpan(
+                text: receiver.fullName != null ? ' ${receiver.fullName}' : '',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: AppThemes.primary3Color,
+                ),
+              ),
+            ],
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 12),
+
+        // Description
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: intl.pay, style: const TextStyle(fontSize: 15)),
+              TextSpan(
+                text: formattedAmount,
+                style: const TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              TextSpan(text: intl.toSettleUpDebtInGroup),
+            ],
+          ),
+          textAlign: TextAlign.center,
+        ),
+
+        const SizedBox(height: 24),
+
+        // Buttons
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomButton(
+              text: intl.outSideTransfer,
+              // size: ButtonSize.medium,
+              size: ButtonSize.popUp,
+              type: ButtonType.secondary,
+              onPressed: () {
+                eventBloc.add(
+                  event_event.OutSideTransferEvent(eventId, receiver.id ?? '', amount),
+                );
+              },
+            ),
+            // const SizedBox(width: 12),
+            // CustomButton(
+            //   text: intl.transfer,
+            //   size: ButtonSize.medium,
+            //   onPressed: () {
+            //     context.pushNamed(
+            //       AppRouteNames.transfer,
+            //       extra: {
+            //         'toUser': receiver,
+            //         'amount': amount,
+            //         'currency': currency,
+            //         'eventId': eventId,
+            //       },
+            //     );
+            //   },
+            // ),
+          
+          ],
+        ),
+      ],
+    ),
+  );
+}
+

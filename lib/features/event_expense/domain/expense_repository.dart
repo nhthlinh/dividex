@@ -1,3 +1,4 @@
+import 'package:Dividex/features/event_expense/data/models/expense_approve_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/domain/expense_usecase.dart';
@@ -13,7 +14,7 @@ abstract class ExpenseRepository {
     String currency,
     String? category,
     String eventId,
-    String? paidById,
+    List<Map<String, double>>? paidByIds,
     String? note,
     String? expenseDate,
     String? remindAt,
@@ -43,4 +44,6 @@ abstract class ExpenseRepository {
   Future<ExpenseModel?> getExpenseDetail(String expenseId);
   Future<void> restoreExpense(String id);
   Future<List<CustomBarChartData>> getBarChartData(int year);
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId, String actionType);
+  Future<void> voteOnExpense(String expenseId, String action);
 }

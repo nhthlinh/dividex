@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart'
     as group_bloc;
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
@@ -13,16 +14,15 @@ import 'package:Dividex/features/image/presentation/bloc/image_state.dart';
 import 'package:Dividex/features/image/presentation/widgets/image_picker_widget.dart';
 import 'package:Dividex/features/image/presentation/widgets/image_update_delete_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart';
+import 'package:Dividex/shared/bloc/load_user_state.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
-import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -36,12 +36,15 @@ class GroupSettingPage extends StatefulWidget {
   final String groupLeaderId;
   final String groupName;
   final ImageModel? groupAvatarUrl;
+  final DebtOptimization? debtOptimization;
+
   const GroupSettingPage({
     super.key,
     required this.groupId,
     required this.groupLeaderId,
     required this.groupName,
     required this.groupAvatarUrl,
+    required this.debtOptimization,
   });
 
   @override
@@ -79,6 +82,7 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
   List<Uint8List> updatedImages = [];
 
   UserModel? leader;
+  bool isDebtFollowEvent = false;
 
   @override
   void initState() {
@@ -86,6 +90,12 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
     context.read<LoadedUsersBloc>().add(
       InitialEvent(widget.groupId, LoadType.groupMembers, searchQuery: ''),
     );
+
+    if (widget.debtOptimization == DebtOptimization.event) {
+      isDebtFollowEvent = true;
+    } else {
+      isDebtFollowEvent = false;
+    }
 
     controller.text = widget.groupName;
   }
@@ -283,10 +293,9 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         intl.deleteExpense,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontSize: 12,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontSize: 16,
                           letterSpacing: 0,
-                          height: 16 / 12,
                           color: Colors.grey,
                         ),
                       ),
@@ -470,6 +479,119 @@ class _GroupSettingPageState extends State<GroupSettingPage> {
                     //     ),
                     //   ],
                     // ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                isDebtFollowEvent
+                                    ? intl.debtOptimizationEvent
+                                    : intl.debtOptimizationGroup,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontSize: 12,
+                                  letterSpacing: 0,
+                                  height: 16 / 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+
+                              const SizedBox(height: 4),
+
+                              Text(
+                                isDebtFollowEvent
+                                    ? intl.debtOptimizationEventDescription
+                                    : intl.debtOptimizationGroupDescription,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 11,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(width: 12),
+
+                        FilledButton(
+                          onPressed: isDebtFollowEvent
+                              ? () {
+                                  showCustomDialog(
+                                    context: context,
+                                    label: intl.debtOptimizationGroup,
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          intl.debtOptimizationGroupHint,
+                                          style: theme.textTheme.bodyMedium,
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CustomButton(
+                                            text: intl.cancel,
+                                            customColor: AppThemes.errorColor,
+                                            type: ButtonType.secondary,
+                                            size: ButtonSize.medium,
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+
+                                          const SizedBox(width: 12),
+
+                                          CustomButton(
+                                            text: intl.confirm,
+                                            customColor:
+                                                AppThemes.primary3Color,
+                                            size: ButtonSize.medium,
+                                            onPressed: () {
+                                              Navigator.pop(context);
+
+                                              context
+                                                  .read<group_bloc.GroupBloc>()
+                                                  .add(
+                                                    group_event.ChangeToDebtOptimizationByGroupEvent(
+                                                      groupId: widget.groupId,
+                                                      debtOptimization:
+                                                          DebtOptimization
+                                                              .group,
+                                                    ),
+                                                  );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                }
+                              : null,
+                          style: FilledButton.styleFrom(
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(8),
+                            backgroundColor: isDebtFollowEvent
+                                ? AppThemes.primary3Color
+                                : Colors.grey.shade300,
+                            side: BorderSide(
+                              color: isDebtFollowEvent
+                                  ? AppThemes.primary3Color
+                                  : Colors.grey,
+                            ),
+                          ),
+                          child: Icon(
+                            isDebtFollowEvent ? Icons.swap_horiz : Icons.lock,
+                          ),
+                        ),
+                      ],
+                    ),
                     BlocProvider(
                       create: (context) => ImageBloc(),
                       child: BlocBuilder<ImageBloc, ImageState>(

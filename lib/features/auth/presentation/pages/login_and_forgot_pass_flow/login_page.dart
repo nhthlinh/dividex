@@ -196,9 +196,6 @@ class _LoginPageState extends State<LoginPage> {
                         context.read<AuthBloc>().add(
                           AuthLoginRequested(email: email, password: password),
                         );
-                        // // Clear the form after submission
-                        // clearFormTrigger.value =
-                        //     !clearFormTrigger.value; // Trigger form reset
                       }
                       setSubmitting(false);
                     },

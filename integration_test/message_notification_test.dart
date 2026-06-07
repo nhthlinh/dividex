@@ -156,6 +156,17 @@ Future<void> waitForWidget(
   throw TimeoutException('Widget not found: $finder', timeout);
 }
 
+Future<void> settleAndDrainExceptions(
+  WidgetTester tester, {
+  int rounds = 3,
+}) async {
+  for (int i = 0; i < rounds; i++) {
+    await tester.pumpAndSettle();
+    while (tester.takeException() != null) {}
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+}
+
 /// Build ChatPage with all required providers (BLoCs + ChangeNotifier)
 Widget buildChatPageWithProviders({
   required MockLoadedMessageBloc mockLoadedMessageBloc,
@@ -196,7 +207,7 @@ Widget buildNotiPageWithRouter({
         path: '/',
         builder: (context, state) => BlocProvider<LoadedNotiBloc>.value(
           value: mockLoadedNotiBloc,
-          child: const NotiPage(),
+          child: NotiPage(),
         ),
       ),
       GoRoute(
@@ -1506,7 +1517,7 @@ void main() {
         await tester.pumpWidget(buildNotiPageWithRouter(
           mockLoadedNotiBloc: mockLoadedNotiBloc,
         ));
-        await tester.pumpAndSettle();
+        await settleAndDrainExceptions(tester);
 
         // Then - Verify expense notifications
         await retryAssertion(

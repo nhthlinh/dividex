@@ -32,4 +32,7 @@ class MessageCode {
   static const String pinIncorrect = 'PIN_INCORRECT';
 
   static const String bankAccountIsExist = 'BANK_ACCOUNT_IS_EXISTS';
+
+  static const String eventClosed = 'EVENT_CLOSED';
+  static const String expenseTimeInvalid = 'EXPENSE_TIME_INVALID';
 }

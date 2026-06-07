@@ -23,9 +23,9 @@
 // import 'package:Dividex/features/home/presentation/pages/transfer_success_page.dart';
 // import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 // import 'package:Dividex/features/user/data/models/user_model.dart';
-// import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-// import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
-// import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+// import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+// import 'package:Dividex/shared/bloc/load_user_event.dart';
+// import 'package:Dividex/shared/bloc/load_user_state.dart';
 // import 'package:Dividex/shared/models/enum.dart';
 // import 'package:Dividex/shared/services/local/hive_service.dart';
 // import 'package:Dividex/shared/services/local/models/user_local_model.dart';
@@ -188,6 +188,7 @@
 
 // /// Build router for group page testing
 // GoRouter buildGroupRouter({
+//   required MockGroupBloc groupBloc,
 //   required MockLoadedGroupsBloc groupsBloc,
 //   required MockRechargeBloc rechargeBloc,
 //   required MockLoadedFriendsBloc friendsBloc,
@@ -199,8 +200,11 @@
 //         path: '/group-test',
 //         name: 'group',
 //         builder: (BuildContext context, GoRouterState state) {
-//           return BlocProvider<LoadedGroupsBloc>.value(
-//             value: groupsBloc,
+//           return MultiBlocProvider(
+//             providers: [
+//               BlocProvider<GroupBloc>.value(value: groupBloc),
+//               BlocProvider<LoadedGroupsBloc>.value(value: groupsBloc),
+//             ],
 //             child: const GroupPage(),
 //           );
 //         },
@@ -620,8 +624,10 @@
 //     late MockLoadedFriendsBloc mockFriendsBloc;
 //     late StreamController<LoadedGroupsState> groupsStateController;
 //     late StreamController<RechargeState> rechargeStateController;
+//     late MockGroupBloc mockGroupBloc;
 
 //     setUp(() {
+//       mockGroupBloc = MockGroupBloc();
 //       mockGroupsBloc = MockLoadedGroupsBloc();
 //       mockRechargeBloc = MockRechargeBloc();
 //       mockFriendsBloc = MockLoadedFriendsBloc();
@@ -652,6 +658,10 @@
 //       when(() => mockGroupsBloc.add(any())).thenAnswer((_) {});
 //       when(() => mockGroupsBloc.close()).thenAnswer((_) async {});
 
+//       when(() => mockGroupBloc.state).thenReturn(const GroupState());
+//       when(() => mockGroupBloc.stream).thenAnswer((_) => Stream.empty());
+//       when(() => mockGroupBloc.add(any())).thenAnswer((_) {});
+//       when(() => mockGroupBloc.close()).thenAnswer((_) async {});
 //       // Setup RechargeBloc mock
 //       when(() => mockRechargeBloc.state).thenReturn(RechargeState());
 //       when(
@@ -692,6 +702,7 @@
 //       WidgetTester tester,
 //     ) async {
 //       final router = buildGroupRouter(
+//         groupBloc: mockGroupBloc,
 //         groupsBloc: mockGroupsBloc,
 //         rechargeBloc: mockRechargeBloc,
 //         friendsBloc: mockFriendsBloc,
@@ -709,6 +720,7 @@
 //       WidgetTester tester,
 //     ) async {
 //       final router = buildGroupRouter(
+//         groupBloc: mockGroupBloc,
 //         groupsBloc: mockGroupsBloc,
 //         rechargeBloc: mockRechargeBloc,
 //         friendsBloc: mockFriendsBloc,
@@ -726,6 +738,7 @@
 //       'Debt_3 - Pay outside option dismisses popup and stays on group page',
 //       (WidgetTester tester) async {
 //         final router = buildGroupRouter(
+//           groupBloc: mockGroupBloc,
 //           groupsBloc: mockGroupsBloc,
 //           rechargeBloc: mockRechargeBloc,
 //           friendsBloc: mockFriendsBloc,
@@ -758,6 +771,7 @@
 //       'Debt_4 - Pay in app navigates to TransferPage with correct user',
 //       (WidgetTester tester) async {
 //         final router = buildGroupRouter(
+//           groupBloc: mockGroupBloc,
 //           groupsBloc: mockGroupsBloc,
 //           rechargeBloc: mockRechargeBloc,
 //           friendsBloc: mockFriendsBloc,

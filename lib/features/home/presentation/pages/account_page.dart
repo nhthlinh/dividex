@@ -2,6 +2,7 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/home/presentation/bloc/account/account_bloc.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:Dividex/shared/utils/change_string.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -51,7 +52,7 @@ class _AccountPageState extends State<AccountPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              currentUser.fullName ?? '',
+              getLastTwoWords(currentUser.fullName),
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(color: AppThemes.primary3Color),

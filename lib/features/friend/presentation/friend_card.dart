@@ -117,13 +117,19 @@ class _FriendCardState extends State<FriendCard> {
           color: AppThemes.primary3Color,
         );
       case FriendCardType.none:
-        return CustomButton(
-          buttonKey: _addButtonKey(),
-          text: intl.add,
-          onPressed: () {
-            _handleAction(context, intl);
-          },
-          size: ButtonSize.small,
+        // return CustomButton(
+        //   buttonKey: _addButtonKey(),
+        //   text: intl.add,
+        //   onPressed: () {
+        //     _handleAction(context, intl);
+        //   },
+        //   size: ButtonSize.small,
+        // );
+        return Icon(
+          key: _addButtonKey(),
+          Icons.add,
+          size: 18,
+          color: Colors.grey,
         );
       default:
         return const SizedBox();

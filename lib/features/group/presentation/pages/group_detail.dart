@@ -59,6 +59,8 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
           );
         }
 
+        debugPrint("Group detail state: ${state.groupDetail?.debtOptimization}");
+
         return AppShell(
           currentIndex: 0,
           child: Layout(
@@ -86,6 +88,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                     'groupName': state.groupDetail?.name ?? '',
                     'leaderId': state.groupDetail?.leader?.id ?? '',
                     'groupAvatar': state.groupDetail?.avatarUrl,
+                    'debtOptimization': state.groupDetail?.debtOptimization,
                   },
                 );
               },
@@ -119,11 +122,10 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           intl.report,
-                          style: Theme.of(context).textTheme.titleSmall
+                          style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
-                                fontSize: 12,
+                                fontSize: 16,
                                 letterSpacing: 0,
-                                height: 16 / 12,
                                 color: Colors.grey,
                               ),
                         ),
@@ -337,7 +339,7 @@ List<Widget> buildGroupedExpenseList(
             radius: 20,
             backgroundColor: Colors.grey,
             backgroundImage: AssetImage(
-              getCategoryByKey(expense.category ?? '')?.getImage() ??
+              getCategoryByKey(expense.category?.key ?? '')?.getImage() ??
                   'lib/assets/icons/money-transfer.png',
             ),
           ),
@@ -360,7 +362,7 @@ List<Widget> buildGroupedExpenseList(
               ),
               const SizedBox(height: 4),
               Text(
-                (expense.totalAmount != null && expense.category != 'Transfer')
+                (expense.totalAmount != null && expense.category?.key != 'Transfer')
                     ? (expense.totalAmount! >= 0
                           ? intl.youLent
                           : intl.youBorrowed)
@@ -373,7 +375,7 @@ List<Widget> buildGroupedExpenseList(
             ],
           ),
           onTap: () {
-            if (expense.category == 'Transfer') return;
+            if (expense.category?.key == 'Transfer') return;
             context.pushNamed(
               AppRouteNames.expenseDetail,
               pathParameters: {"id": expense.id ?? ''},

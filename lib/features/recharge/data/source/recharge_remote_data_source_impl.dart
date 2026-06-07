@@ -227,6 +227,7 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
     String toAccount,
     String description, {
     String? groupId,
+    String? eventId,
     String? token,
   }) {
     return apiCallWrapper(() async {
@@ -239,6 +240,9 @@ class RechargeRemoteDatasourceImpl implements RechargeRemoteDataSource {
       };
       if (groupId != null) {
         data['group_uid'] = groupId;
+      }
+      if (eventId != null) {
+        data['event_uid'] = eventId;
       }
       if (token != null) {
         data['transfer_token'] = token;

@@ -35,5 +35,6 @@ abstract class GroupRepository {
 
   Future<void> remindGroup(String groupId, String userId);
 
+  Future<void> changeToDebtOptimization(String groupId, DebtOptimization debtOptimization);
   Future<void> outSideTransfer(String groupId, String userId, double amount);
 }

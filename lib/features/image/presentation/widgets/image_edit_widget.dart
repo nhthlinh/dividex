@@ -65,6 +65,7 @@ class _SimpleImageEditorPageState extends State<SimpleImageEditorPage> {
                 alignment: Alignment.center,
                 transform: Matrix4.identity()
                   ..rotateZ(_rotation)
+                  // ignore: deprecated_member_use
                   ..scale(_flipX ? -1.0 : 1.0, _flipY ? -1.0 : 1.0),
                 child: Image.memory(widget.imageBytes),
               ),

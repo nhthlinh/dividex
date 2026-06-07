@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/notifications/data/model/notification_model.dart';
@@ -101,6 +103,14 @@ class _NotiPageState extends State<NotiPage> {
     List<NotificationModel>? notis,
     int page,
   ) {
+    bool isExpenseApprovalNotification(NotiType? type) {
+      return type == NotiType.EXPENSE_APPROVAL_REQUESTED ||
+          type == NotiType.EXPENSE_APPROVED ||
+          type == NotiType.EXPENSE_APPROVAL_DECLINED;
+    }
+
+    final intl = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -131,6 +141,12 @@ class _NotiPageState extends State<NotiPage> {
                   context,
                   notis[index].fromUser,
                   notis[index].content,
+                  notis[index].type == NotiType.EXPENSE_APPROVAL_REQUESTED ||
+                          notis[index].type == NotiType.EXPENSE_APPROVED ||
+                          notis[index].type ==
+                              NotiType.EXPENSE_APPROVAL_DECLINED
+                      ? notis[index].actionType
+                      : null,
                 ),
               },
               child: Row(
@@ -160,13 +176,70 @@ class _NotiPageState extends State<NotiPage> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          DateFormat(
-                            "yyyy-MM-dd HH:mm",
-                          ).format(notis[index].createdAt),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              DateFormat(
+                                "yyyy-MM-dd HH:mm",
+                              ).format(notis[index].createdAt),
+
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.grey),
+                            ),
+                            if (isExpenseApprovalNotification(
+                              notis[index].type,
+                            ))
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
+                                margin: const EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                  color: switch (notis[index].type) {
+                                    NotiType.EXPENSE_APPROVED =>
+                                      Colors.green.withOpacity(.15),
+
+                                    NotiType.EXPENSE_APPROVAL_DECLINED =>
+                                      Colors.red.withOpacity(.15),
+
+                                    _ => Colors.orange.withOpacity(.15),
+                                  },
+
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  switch (notis[index].type) {
+                                    NotiType.EXPENSE_APPROVED => intl.accept,
+                                    NotiType.EXPENSE_APPROVAL_DECLINED =>
+                                      intl.decline,
+                                    _ =>
+                                      intl.pending +
+                                          (notis[index].actionType != null
+                                              ? ': ${notis[index].actionType == 'CREATE'
+                                                    ? intl.create
+                                                    : notis[index].actionType == 'UPDATE'
+                                                    ? intl.update
+                                                    : intl.delete}'
+                                              : ''),
+                                  },
+
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: switch (notis[index].type) {
+                                      NotiType.EXPENSE_APPROVED => Colors.green,
+
+                                      NotiType.EXPENSE_APPROVAL_DECLINED =>
+                                        Colors.red,
+
+                                      _ => Colors.orange,
+                                    },
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ],
                     ),

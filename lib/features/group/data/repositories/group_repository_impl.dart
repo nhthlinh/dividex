@@ -97,7 +97,7 @@ class GroupRepositoryImpl implements GroupRepository {
   Future<List<CustomBarChartData>> getBarChartData(String groupId, int year) {
     return remoteDataSource.getBarChartData(groupId, year);
   }
-  
+
   @override
   Future<void> remindGroup(String groupId, String userId) {
     return remoteDataSource.remindGroup(groupId, userId);
@@ -106,5 +106,13 @@ class GroupRepositoryImpl implements GroupRepository {
   @override
   Future<void> outSideTransfer(String groupId, String userId, double amount) {
     return remoteDataSource.outSideTransfer(groupId, userId, amount);
+  }
+
+  @override
+  Future<void> changeToDebtOptimization(
+    String groupId,
+    DebtOptimization debtOptimization,
+  ) {
+    return remoteDataSource.changeToDebtOptimization(groupId, debtOptimization);
   }
 }

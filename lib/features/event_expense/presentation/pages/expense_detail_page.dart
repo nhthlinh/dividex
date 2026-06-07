@@ -3,12 +3,15 @@ import 'dart:typed_data';
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
+import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
+import 'package:Dividex/features/event_expense/data/models/payer_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_bloc.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_event.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/image/presentation/pages/image_page.dart';
+import 'package:Dividex/shared/utils/change_string.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -96,6 +99,53 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: getActionColor(
+                        expense.pendingAction,
+                      // ignore: deprecated_member_use
+                      ).withOpacity(.12),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              getActionIcon(expense.pendingAction),
+                              color: getActionColor(expense.pendingAction),
+                            ),
+                        
+                            const SizedBox(width: 8),
+                        
+                            Text(
+                              getActionLabel(expense.pendingAction, intl),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                color: getActionColor(expense.pendingAction),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (expense.pendingUpdateData != null) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            expense.pendingUpdateData.toString(),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: getActionColor(expense.pendingAction),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -105,7 +155,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                           children: [
                             Text(
                               expense.name ?? '',
-                              maxLines: 1, 
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 color: AppThemes.primary3Color,
@@ -141,17 +191,41 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                   ),
                   buildGroupInfoRow(
                     intl.expenseCategoryLabel,
-                    expense.category ?? '',
+                    expense.category?.key ?? '',
                   ),
-                  buildGroupInfoRow(
-                    intl.expensePayerLabel,
-                    expense.paidByUser?.fullName ?? '',
-                  ),
+
                   buildGroupInfoRow(intl.dueDay, formattedReminder),
 
                   const SizedBox(height: 16),
 
-                  //Image
+                  Text(
+                    intl.expensePayerLabel,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: expense.paidByUser?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final userPayer = expense.paidByUser![index];
+                      try {
+                        return PayerCard(
+                          payer: userPayer,
+                          totalAmount: expense.totalAmount ?? 1,
+                          currency: expense.currency?.code ?? '',
+                        );
+                      } catch (e) {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
                   Text(
                     intl.image,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -275,7 +349,6 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
 
-                  // actions
                   const SizedBox(height: 16),
 
                   if (expense.status == 'DELETED') ...[
@@ -345,7 +418,7 @@ class ExpenseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InfoCard(
-      title: expense.user.fullName ?? '',
+      title: getLastTwoWords(expense.user.fullName),
       leading: CircleAvatar(
         radius: 20,
         backgroundColor: Colors.grey,
@@ -357,8 +430,7 @@ class ExpenseCard extends StatelessWidget {
                 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(expense.user.fullName ?? '')}&background=random&color=fff&size=128',
               ),
       ),
-      subtitle:
-          '${formatNumber(expense.amount.abs() / totalAmount * 100)} %',
+      subtitle: '${formatNumber(expense.amount.abs() / totalAmount * 100)} %',
       trailing: Column(
         children: [
           Text(
@@ -367,6 +439,62 @@ class ExpenseCard extends StatelessWidget {
                 : '- ${formatNumber(expense.amount.abs())} $currency'),
             style: TextStyle(
               color: (expense.amount >= 0)
+                  ? AppThemes.successColor
+                  : AppThemes.minusMoney,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 4),
+          // Text(
+          //   expense.status == ExpenseStatus.done ? intl.done : intl.notYet,
+          //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          //     color: expense.status == ExpenseStatus.done
+          //         ? AppThemes.successColor
+          //         : AppThemes.minusMoney,
+          //   ),
+          // ),
+        ],
+      ),
+    );
+  }
+}
+
+class PayerCard extends StatelessWidget {
+  const PayerCard({
+    super.key,
+    required this.payer,
+    required this.totalAmount,
+    required this.currency,
+  });
+
+  final PayerModel payer;
+  final double totalAmount;
+  final String currency;
+
+  @override
+  Widget build(BuildContext context) {
+    return InfoCard(
+      title: getLastTwoWords(payer.user.fullName),
+      leading: CircleAvatar(
+        radius: 20,
+        backgroundColor: Colors.grey,
+        backgroundImage:
+            (payer.user.avatar?.publicUrl != null &&
+                payer.user.avatar!.publicUrl.isNotEmpty)
+            ? NetworkImage(payer.user.avatar!.publicUrl)
+            : NetworkImage(
+                'https://ui-avatars.com/api/?name=${Uri.encodeComponent(payer.user.fullName ?? '')}&background=random&color=fff&size=128',
+              ),
+      ),
+      subtitle: '${formatNumber(payer.amount.abs() / totalAmount * 100)} %',
+      trailing: Column(
+        children: [
+          Text(
+            (payer.amount >= 0
+                ? '+ ${formatNumber(payer.amount)} $currency'
+                : '- ${formatNumber(payer.amount.abs())} $currency'),
+            style: TextStyle(
+              color: (payer.amount >= 0)
                   ? AppThemes.successColor
                   : AppThemes.minusMoney,
               fontWeight: FontWeight.bold,

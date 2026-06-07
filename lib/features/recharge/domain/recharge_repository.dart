@@ -15,5 +15,5 @@ abstract class RechargeRepository {
   Future<PagingModel<List<ExternalTransactionModel>>> getExternalHistory(int page, int pageSize, ExternalTransactionFilterArguments? filter);
   Future<PagingModel<List<InternalTransactionModel>>> getInternalHistory(int page, int pageSize, InternalTransactionFilterArguments? filter);
   Future<String?> verifyPin(String pin, double amount);
-  Future<bool> transfer(double originalAmount, double realAmount, String currency, String toAccount, String description, {String? groupId, String? token});
+  Future<bool> transfer(double originalAmount, double realAmount, String currency, String toAccount, String description, {String? groupId, String? eventId, String? token});
 }

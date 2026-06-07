@@ -1,10 +1,13 @@
 import 'package:Dividex/features/event_expense/data/models/event_model.dart';
+import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/group/data/models/group_member_model.dart';
 import 'package:Dividex/features/image/data/models/image_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/utils/get_time_ago.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+enum DebtOptimization { event, group }
 
 class GroupModel {
   final String? id;
@@ -28,6 +31,8 @@ class GroupModel {
   final int? membersTotal;
   final int? sharedExpensesTotal;
 
+  final DebtOptimization? debtOptimization;
+
   GroupModel({
     this.id,
     this.name,
@@ -45,6 +50,7 @@ class GroupModel {
     this.eventsTotal,
     this.membersTotal,
     this.sharedExpensesTotal,
+    this.debtOptimization,
   });
 
   factory GroupModel.fromJson(Map<String, dynamic> json) {
@@ -54,7 +60,7 @@ class GroupModel {
       avatarUrl: json['avatar_url'] != null
           ? ImageModel.fromJson(json['avatar_url'] as Map<String, dynamic>)
           : (json['group_avatar_url'] != null
-                ? ImageModel.fromJson( json['group_avatar_url'])
+                ? ImageModel.fromJson(json['group_avatar_url'])
                 : null),
       createdAt: json['createdAt'] == null
           ? null
@@ -72,11 +78,17 @@ class GroupModel {
                   json['list_event'] as List<dynamic>?)
               ?.map((e) => EventModel.fromJson(e as Map<String, dynamic>))
               .toList(),
+      debtOptimization: json['debt_optimization'] != null
+          ? json['debt_optimization'] == "EVENT"
+                ? DebtOptimization.event
+                : DebtOptimization.group
+          : null,
     );
   }
 
   factory GroupModel.fromDetailJson(Map<String, dynamic> json) {
     final groupJson = json['group'] as Map<String, dynamic>?;
+    final debtOptimization = groupJson?['debt_optimization'] as String?;
 
     return GroupModel(
       id: groupJson?['uid'] as String?,
@@ -98,6 +110,11 @@ class GroupModel {
             (e) => RestructuredDebtModel.fromJson(e as Map<String, dynamic>),
           )
           .toList(),
+      debtOptimization: debtOptimization != null
+          ? debtOptimization == "EVENT"
+                ? DebtOptimization.event
+                : DebtOptimization.group
+          : null,
     );
   }
 
@@ -117,7 +134,7 @@ class GroupModel {
           : null,
       eventsTotal: json['events'] as int?,
       sharedExpensesTotal: json['shared_expenses'] as int?,
-      totalAmount: (json['total_amount'] as num?)?.toDouble(), 
+      totalAmount: (json['total_amount'] as num?)?.toDouble(),
       membersTotal: json['members'] as int?,
     );
   }
@@ -143,8 +160,14 @@ class RestructuredDebtModel {
   final UserModel? debtor;
   final UserModel? creditor;
   final double? value;
+  final CurrencyEnum? currency;
 
-  RestructuredDebtModel({this.debtor, this.creditor, this.value});
+  RestructuredDebtModel({
+    this.debtor,
+    this.creditor,
+    this.value,
+    this.currency,
+  });
 
   factory RestructuredDebtModel.fromJson(Map<String, dynamic> json) {
     return RestructuredDebtModel(
@@ -155,6 +178,12 @@ class RestructuredDebtModel {
           ? UserModel.fromJson(json['creditor'] as Map<String, dynamic>)
           : null,
       value: (json['value'] as num?)?.toDouble(),
+      currency: json['currency'] == null
+          ? null
+          : $enumDecodeNullable(
+              $CurrencyEnumEnumMap,
+              json['currency'].toString().toLowerCase(),
+            ),
     );
   }
 }

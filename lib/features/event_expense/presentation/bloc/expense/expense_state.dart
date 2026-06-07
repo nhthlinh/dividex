@@ -1,3 +1,4 @@
+import 'package:Dividex/features/event_expense/data/models/expense_approve_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -50,3 +51,15 @@ class ExpenseDataState extends Equatable {
     );
   }
 }
+
+class ExpenseDeletedState extends ExpenseState {
+  final String expenseId;
+
+  ExpenseDeletedState({required this.expenseId});
+}
+
+class GetExpenseApproveState extends ExpenseState {
+  final ExpenseApprovalModel expenseApprove;
+
+  GetExpenseApproveState({required this.expenseApprove});
+}   

@@ -38,27 +38,11 @@ class _FancyCardState extends State<FancyCard> {
         painter: FancyBackgroundPainter(),
         child: Container(
           width: 327,
-          height: 170,
+          height: 220,
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Text(
-              //   widget.title,
-              //   style: Theme.of(
-              //     context,
-              //   ).textTheme.titleLarge?.copyWith(color: Colors.white),
-              // ),
-              // if (widget.subtitle != '') ...[
-              //   const SizedBox(height: 8),
-              //   Text(
-              //     widget.subtitle ?? '',
-              //     style: Theme.of(
-              //       context,
-              //     ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-              //   ),
-              // ],
-              // const SizedBox(height: 8),
               BlocBuilder<RechargeBloc, RechargeState>(
                 builder: (context, state) {
                   if (state is GetWalletInfoSuccessState) {
@@ -129,38 +113,38 @@ class _FancyCardState extends State<FancyCard> {
                                 ),
                               ],
                             ),
-                            // Column(
-                            //   mainAxisAlignment: MainAxisAlignment.end,
-                            //   children: [
-                            //     Row(
-                            //       children: [
-                            //         Text(
-                            //           intl.balance,
-                            //           style: Theme.of(context)
-                            //               .textTheme
-                            //               .titleSmall
-                            //               ?.copyWith(color: Colors.white),
-                            //         ),
-                            //         const SizedBox(width: 6),
-                            //         GestureDetector(
-                            //           onTap: onToggleBalance,
-                            //           child: Icon(
-                            //             hideBalance
-                            //                 ? Icons.visibility_off
-                            //                 : Icons.visibility,
-                            //             color: Colors.white,
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //     // ---- Balance ----
-                            //     Text(
-                            //       hideBalance ? "••••••••" : state.balance,
-                            //       style: Theme.of(context).textTheme.titleLarge
-                            //           ?.copyWith(color: Colors.white),
-                            //     ),
-                            //   ],
-                            // ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      intl.balance,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: Colors.white),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    GestureDetector(
+                                      onTap: onToggleBalance,
+                                      child: Icon(
+                                        hideBalance
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // ---- Balance ----
+                                Text(
+                                  hideBalance ? "••••••••" : state.balance,
+                                  style: Theme.of(context).textTheme.titleLarge
+                                      ?.copyWith(color: Colors.white),
+                                ),
+                              ],
+                            ),
                           
                           ],
                         ),
@@ -168,67 +152,67 @@ class _FancyCardState extends State<FancyCard> {
                         const SizedBox(height: 16),
 
                         // ---- Footer icons ----
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        //   children: [
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.start,
-                        //       children: [
-                        //         const Icon(Icons.list, color: Colors.white),
-                        //         const SizedBox(width: 4),
-                        //         Column(
-                        //           mainAxisAlignment: MainAxisAlignment.start,
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: [
-                        //             Text(
-                        //               state.totalTransactions.toString(),
-                        //               style: Theme.of(context)
-                        //                   .textTheme
-                        //                   .titleSmall?.copyWith(color: Colors.white),
-                        //             ),
-                        //             Text(
-                        //               intl.transaction,
-                        //               style: Theme.of(context)
-                        //                   .textTheme
-                        //                   .bodyMedium
-                        //                   ?.copyWith(color: Colors.white70),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ],
-                        //     ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Icon(Icons.list, color: Colors.white),
+                                const SizedBox(width: 4),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.totalTransactions.toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall?.copyWith(color: Colors.white),
+                                    ),
+                                    Text(
+                                      intl.transaction,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(color: Colors.white70),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
 
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.start,
-                        //       children: [
-                        //         const Icon(
-                        //           Icons.access_time,
-                        //           color: Colors.white,
-                        //         ),
-                        //         const SizedBox(width: 4),
-                        //         Column(
-                        //           mainAxisAlignment: MainAxisAlignment.start,
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: [
-                        //             Text(
-                        //               state.latestTime,
-                        //               style: Theme.of(context)
-                        //                   .textTheme
-                        //                   .titleSmall?.copyWith(color: Colors.white),
-                        //             ),
-                        //             Text(
-                        //               intl.lastTransaction,
-                        //               style: Theme.of(context)
-                        //                   .textTheme
-                        //                   .bodyMedium
-                        //                   ?.copyWith(color: Colors.white70),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Icon(
+                                  Icons.access_time,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 4),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.latestTime,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall?.copyWith(color: Colors.white),
+                                    ),
+                                    Text(
+                                      intl.lastTransaction,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(color: Colors.white70),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       
                       ],
                     );

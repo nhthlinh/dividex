@@ -1,5 +1,6 @@
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
+import 'package:Dividex/shared/utils/change_string.dart';
 import 'package:flutter/material.dart';
 
 class SquareIconUser extends StatefulWidget {
@@ -86,7 +87,7 @@ class _SquareIconUserState extends State<SquareIconUser> {
                     // Label (allow multi-line, centered)
                     Flexible(
                       child: Text(
-                        widget.user.fullName ?? '',
+                        getLastTwoWords(widget.user.fullName),
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

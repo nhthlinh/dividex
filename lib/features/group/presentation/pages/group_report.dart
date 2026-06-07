@@ -9,11 +9,11 @@ import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
 import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/group/presentation/widgets/chart_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
-    as load_user_event;
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart' as load_user_event;
+import 'package:Dividex/shared/bloc/load_user_state.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
+import 'package:Dividex/shared/utils/change_string.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
@@ -480,7 +480,7 @@ class _GroupReportPageState extends State<GroupReportPage> {
             final user = users[index];
 
             return InfoCard(
-              title: user.fullName ?? '',
+              title: getLastTwoWords(user.fullName),
               leading: CircleAvatar(
                 radius: 20,
                 backgroundColor: Colors.grey,

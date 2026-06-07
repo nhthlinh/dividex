@@ -34,6 +34,7 @@ abstract class RechargeRemoteDataSource {
     String toAccount,
     String description, {
     String? groupId,
+    String? eventId,
     String? token,
   });
 }

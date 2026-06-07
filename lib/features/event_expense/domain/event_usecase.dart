@@ -19,6 +19,17 @@ class EventUseCase {
     String? description,
     List<String>? memberIds,
   ) async {
+    name = name.trim();
+    groupId = groupId.trim();
+    eventStart = eventStart.trim();
+    eventEnd = eventEnd?.trim();
+    description = description?.trim();
+    memberIds = memberIds?.map((id) => id.trim()).toList();
+
+    // phải có ít nhất 1 thành viên
+    if (memberIds == null || memberIds.isEmpty) {
+      throw Exception("Sự kiện cần ít nhất 1 thành viên");
+    }
     return await repository.createEvent(
       name: name,
       groupId: groupId,
@@ -40,6 +51,11 @@ class EventUseCase {
     String? eventEnd,
     String? description,
   ) async {
+    name = name?.trim();
+    eventStart = eventStart?.trim();
+    eventEnd = eventEnd?.trim();
+    description = description?.trim();
+
     await repository.updateEvent(
       eventId: eventId,
       name: name,
@@ -55,20 +71,54 @@ class EventUseCase {
 
   Future<void> joinEvent(String eventId, String userId) async {
     await repository.joinEvent(eventId, userId);
-  } 
+  }
 
-  Future<PagingModel<List<GroupModel>>> listEventsGroups(int page, int pageSize, String searchQuery, {String orderBy = "name", String sortType = "asc"}) async {
-    return await repository.listEventsGroups(page, pageSize, searchQuery, orderBy: orderBy, sortType: sortType);
+  Future<PagingModel<List<GroupModel>>> listEventsGroups(
+    int page,
+    int pageSize,
+    String searchQuery, {
+    String orderBy = "name",
+    String sortType = "asc",
+  }) async {
+    return await repository.listEventsGroups(
+      page,
+      pageSize,
+      searchQuery,
+      orderBy: orderBy,
+      sortType: sortType,
+    );
   }
 
   Future<void> addMembersToEvent(String eventId, List<String> userIds) async {
     await repository.addMembersToEvent(eventId, userIds);
   }
 
-  Future<List<CustomBarChartData>> getBarChartData(String eventId, int year) async {
+  Future<List<CustomBarChartData>> getBarChartData(
+    String eventId,
+    int year,
+  ) async {
     return await repository.getBarChartData(eventId, year);
   }
+
   Future<List<ChartData>> getChartData(String eventId) async {
     return await repository.getChartData(eventId);
+  }
+
+  Future<void> remindEvent(String eventId, String userId) async {
+    await repository.remindEvent(eventId, userId);
+  }
+
+  Future<void> outsideTransfer(
+    String eventId,
+    String userId,
+    double amount,
+  ) async {
+    await repository.outsideTransfer(eventId, userId, amount);
+  }
+
+  Future<List<RestructuredDebtModel>> getBalanceEvent(
+    String eventId,
+  ) async {
+    return await repository.getBalanceEvent(eventId);
   }
 }

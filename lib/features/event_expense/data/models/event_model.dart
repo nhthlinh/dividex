@@ -11,6 +11,10 @@ class EventModel {
   final String? group;
   final String? groupName;
   final List<String>? memberIds;
+  final String? groupId;
+  final int totalExpenses;
+  final int totalMembers;
+  final double total;
 
   EventModel({
     this.id,
@@ -23,6 +27,10 @@ class EventModel {
     this.group,
     this.groupName,
     this.memberIds,
+    this.groupId,
+    this.totalExpenses = 0,
+    this.totalMembers = 0,
+    this.total = 0,
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
@@ -30,7 +38,8 @@ class EventModel {
     name: json['name'] as String? ?? json['event_name'] as String?,
     creator: json['creator'] as String?,
     group: json['group'] as String?,
-    description: json['description'] as String? ?? json['event_description'] as String?,
+    description:
+        json['description'] as String? ?? json['event_description'] as String?,
     eventStart: json['event_start'] == null
         ? null
         : parseUTCToVN(json['event_start'] as String),
@@ -44,7 +53,15 @@ class EventModel {
     memberIds: (json['member_ids'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
+    groupId: json['group_id'] as String?,
+
+    totalExpenses: (json['total_expenses'] as num?)?.toInt() ?? 0,
+
+    totalMembers: (json['members'] as num?)?.toInt() ?? 0,
+
+    total: (json['total'] as num?)?.toDouble() ?? 0,
   );
+
   Map<String, dynamic> toJson() => <String, dynamic>{
     'id': id,
     'name': name,

@@ -7,7 +7,7 @@ String formatNumber(num value) {
 }
 
 class ThousandsFormatter extends TextInputFormatter {
-  final NumberFormat _formatter = NumberFormat("#,###", "vi_VN");
+  final NumberFormat _formatter = NumberFormat("#.###", "vi_VN");
 
   @override
   TextEditingValue formatEditUpdate(

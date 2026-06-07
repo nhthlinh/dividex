@@ -20,7 +20,7 @@ class LoadedNotiBloc extends Bloc<LoadNotiEvent, LoadedNotiState> {
     int page,
   ) async {
     final useCase = await getIt.getAsync<NotiUseCase>();
-    return await useCase.getNotifications(page, 20);
+    return await useCase.getNotifications(page, 10);
   }
 
   Future _onInitial(InitialEvent event, Emitter emit) async {

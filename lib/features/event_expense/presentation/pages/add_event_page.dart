@@ -10,8 +10,7 @@ import 'package:Dividex/features/group/presentation/bloc/group_event.dart'
     as group_event;
 import 'package:Dividex/features/group/presentation/bloc/group_state.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
-    as user_event;
+import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
@@ -79,14 +78,6 @@ class _AddEventPageState extends State<AddEventPage> {
 
   Future<void> submitEvent() async {
     if (_formKey.currentState!.validate()) {
-      // Submit the event data
-      // debugPrint('Event Name: ${eventNameController.text}');
-      // debugPrint('Event Description: ${eventDescriptionController.text}');
-      // debugPrint('Event Start Date: ${eventStartDateController.text}');
-      // debugPrint('Event End Date: ${eventEndDateController.text}');
-      // debugPrint('Selected Group: ${selectedGroup.value?.name ?? ''}');
-      // debugPrint('Selected Members: $selectedMembers');
-
       context.read<EventBloc>().add(
         CreateEventEvent(
           name: eventNameController.text,

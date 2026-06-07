@@ -1,4 +1,3 @@
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/core/di/injection.dart';
@@ -18,6 +17,9 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     on<JoinEvent>(_onJoinEvent);
     on<AddMembersToEvent>(_onAddMembersToEvent);
     on<GetChartDataEvent>(_onGetChartData);
+    on<RemindEventEvent>(_onRemindEvent);
+    on<OutSideTransferEvent>(_onOutSideTransfer);
+    on<EventBalanceSuccessEvent>(_onEventBalanceSuccess);
   }
 
   Future _onCreateEvent(CreateEventEvent event, Emitter emit) async {
@@ -156,11 +158,84 @@ class EventBloc extends Bloc<EventEvent, EventState> {
       final useCase = await getIt.getAsync<EventUseCase>();
       final eventData = await useCase.getEvent(event.eventId);
       final chartData = await useCase.getChartData(event.eventId);
-      final barChartData = await useCase.getBarChartData(event.eventId, event.year);
+      final barChartData = await useCase.getBarChartData(
+        event.eventId,
+        event.year,
+      );
 
-      emit(EventChartDataState(chartData: chartData, barChartData: barChartData, eventData: eventData));
+      emit(
+        EventChartDataState(
+          chartData: chartData,
+          barChartData: barChartData,
+          eventData: eventData,
+        ),
+      );
     } catch (e) {
       final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+
+  Future _onRemindEvent(RemindEventEvent event, Emitter emit) async {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+    try {
+      final useCase = await getIt.getAsync<EventUseCase>();
+      await useCase.remindEvent(event.eventId, event.userId);
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      if (e.toString().contains(MessageCode.eventNotFound)) {
+        showCustomToast(intl.eventNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onOutSideTransfer(OutSideTransferEvent event, Emitter emit) async {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+    try {
+      final useCase = await getIt.getAsync<EventUseCase>();
+      await useCase.outsideTransfer(event.eventId, event.userId, event.amount);
+      showCustomToast(intl.success, type: ToastType.success);
+    } catch (e) {
+      if (e.toString().contains(MessageCode.eventNotFound)) {
+        showCustomToast(intl.eventNotFound, type: ToastType.error);
+      } else {
+        showCustomToast(intl.error, type: ToastType.error);
+      }
+    }
+  }
+
+  Future _onEventBalanceSuccess(
+    EventBalanceSuccessEvent event,
+    Emitter emit,
+  ) async {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+    try {
+      final useCase = await getIt.getAsync<EventUseCase>();
+      final balances = await useCase.getBalanceEvent(event.eventId);
+      emit(EventBalanceState(balances: balances));
+    } catch (e) {
+      showCustomToast(intl.error, type: ToastType.error);
+    }
+  }
+}
+
+class EventBalanceBloc extends Bloc<EventEvent, EventState> {
+  EventBalanceBloc() : super((EventState())) {
+    on<EventBalanceSuccessEvent>(_onEventBalanceSuccess);
+  }
+
+  Future _onEventBalanceSuccess(
+    EventBalanceSuccessEvent event,
+    Emitter emit,
+  ) async {
+    final intl = AppLocalizations.of(navigatorKey.currentContext!)!;
+    try {
+      final useCase = await getIt.getAsync<EventUseCase>();
+      final balances = await useCase.getBalanceEvent(event.eventId);
+      emit(EventBalanceState(balances: balances));
+    } catch (e) {
       showCustomToast(intl.error, type: ToastType.error);
     }
   }
@@ -172,11 +247,17 @@ class EventDataBloc extends Bloc<EventEvent, EventDataState> {
     on<LoadMoreEventsGroups>(_onLoadMoreEventsGroups);
     on<RefreshEventsGroups>(_onRefreshEventsGroups);
   }
-  
+
   Future _onInitialEvent(InitialEvent event, Emitter emit) async {
     try {
       final useCase = await getIt.getAsync<EventUseCase>();
-      final groups = await useCase.listEventsGroups(event.page, event.pageSize, event.searchQuery, orderBy: event.orderBy, sortType: event.sortType);
+      final groups = await useCase.listEventsGroups(
+        event.page,
+        event.pageSize,
+        event.searchQuery,
+        orderBy: event.orderBy,
+        sortType: event.sortType,
+      );
 
       emit(
         state.copyWith(
@@ -192,11 +273,20 @@ class EventDataBloc extends Bloc<EventEvent, EventDataState> {
       showCustomToast(intl.error, type: ToastType.error);
     }
   }
-  
-  Future _onLoadMoreEventsGroups(LoadMoreEventsGroups event, Emitter emit) async {
+
+  Future _onLoadMoreEventsGroups(
+    LoadMoreEventsGroups event,
+    Emitter emit,
+  ) async {
     try {
       final useCase = await getIt.getAsync<EventUseCase>();
-      final groups = await useCase.listEventsGroups(event.page, event.pageSize, event.searchQuery, orderBy: event.orderBy, sortType: event.sortType);
+      final groups = await useCase.listEventsGroups(
+        event.page,
+        event.pageSize,
+        event.searchQuery,
+        orderBy: event.orderBy,
+        sortType: event.sortType,
+      );
 
       emit(
         state.copyWith(
@@ -219,7 +309,13 @@ class EventDataBloc extends Bloc<EventEvent, EventDataState> {
       emit(state.copyWith(isLoading: true));
 
       final useCase = await getIt.getAsync<EventUseCase>();
-      final groups = await useCase.listEventsGroups(event.page, event.pageSize, event.searchQuery, orderBy: event.orderBy, sortType: event.sortType);
+      final groups = await useCase.listEventsGroups(
+        event.page,
+        event.pageSize,
+        event.searchQuery,
+        orderBy: event.orderBy,
+        sortType: event.sortType,
+      );
 
       emit(
         state.copyWith(

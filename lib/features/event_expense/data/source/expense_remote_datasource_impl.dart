@@ -1,4 +1,5 @@
 import 'package:Dividex/core/network/dio_client.dart';
+import 'package:Dividex/features/event_expense/data/models/expense_approve_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/data/source/expense_remote_datasource.dart';
@@ -23,7 +24,7 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
     String currency,
     String? category,
     String eventId,
-    String? paidById,
+    List<Map<String, double>>? paidByIds,
     String? note,
     String? expenseDate,
     String? remindAt,
@@ -39,7 +40,10 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
           'currency': currency,
           if (category != null) 'category': category,
           'event_uid': eventId,
-          if (paidById != null) 'paid_by': paidById,
+          if (paidByIds != null) 'paid_by': paidByIds.map((e) => e.entries.first).map((entry) => {
+                'user_uid': entry.key,
+                'amount': entry.value,
+              }).toList(),
           if (note != null) 'note': note,
           if (expenseDate != null) 'expense_date': expenseDate,
           if (remindAt != null) 'end_date': remindAt,
@@ -156,8 +160,10 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
           'name': expense.name,
           'total_amount': expense.totalAmount,
           'currency': expense.currency?.code,
-          'category': expense.category,
-          if (expense.paidBy != null) 'paid_by': expense.paidBy!,
+          'category': expense.category?.key,
+          if (expense.paidBy != null) 'paid_by': expense.paidBy!
+              .map((e) => e.toJson())
+              .toList(),
           if (expense.note != null) 'note': expense.note,
           if (formattedDate != null) 'expense_date': formattedDate,
           if (formattedRemindAt != null) 'end_date': formattedRemindAt,
@@ -216,6 +222,21 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
       return (response.data['data'] as List)
           .map((item) => CustomBarChartData.fromJson(item))
           .toList();
+    });
+  }
+
+  @override
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId, String actionType) async {
+    return apiCallWrapper(() async {
+      final response = await dio.get('/expenses/$expenseId/approval-status', queryParameters: {'action_type': actionType});
+      return ExpenseApprovalModel.fromJson(response.data['data']);
+    });
+  }
+
+  @override
+  Future<void> voteOnExpense(String expenseId, String action) async {
+    return apiCallWrapper(() {
+      return dio.patch('/expenses/$expenseId/vote', data: {'action': action});
     });
   }
 }

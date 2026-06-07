@@ -22,6 +22,7 @@ class CategoryModel {
         CategoryModel(id: '8', key: 'education'),
         CategoryModel(id: '9', key: 'savings'),
         CategoryModel(id: '10', key: 'miscellaneous'),
+        CategoryModel(id: '11', key: 'Transfer'), // Add Transfer category
       ];
 
   String getImage() {
@@ -46,6 +47,8 @@ class CategoryModel {
         return 'lib/assets/category/savings.png';
       case 'miscellaneous':
         return 'lib/assets/category/miscellaneous.png';
+      case 'Transfer':
+        return 'lib/assets/category/transfer.png';
       default:
         return 'lib/assets/category/miscellaneous.png'; // fallback
     }
@@ -75,6 +78,8 @@ class CategoryModel {
         return intl.savings;
       case 'miscellaneous':
         return intl.miscellaneous;
+      case 'Transfer':
+        return intl.transfer;
       default:
         return key; // fallback
     }

@@ -1,5 +1,4 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
@@ -10,7 +9,6 @@ import 'package:Dividex/features/home/presentation/widgets/square_user.dart';
 import 'package:Dividex/features/recharge/presentation/bloc/recharge_bloc.dart';
 import 'package:Dividex/features/recharge/presentation/widgets/balance_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/num.dart';
@@ -28,13 +26,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:go_router/go_router.dart';
 
 class TransferPage extends StatefulWidget {
   final UserModel? toUser;
   final double? amount;
   final CurrencyEnum? currency;
   final String? groupId;
+  final String? eventId;
 
   const TransferPage({
     super.key,
@@ -42,6 +40,7 @@ class TransferPage extends StatefulWidget {
     this.amount,
     this.currency,
     this.groupId,
+    this.eventId,
   });
 
   @override
@@ -55,12 +54,15 @@ class _TransferPageState extends State<TransferPage> {
   final realAmount = TextEditingController();
   final description = TextEditingController();
   final List<CurrencyEnum> _units = CurrencyEnum.values;
-  final ValueNotifier<CurrencyEnum> _selectedCurrency = ValueNotifier(
-    CurrencyEnum.vnd,
-  );
+  final ValueNotifier<CurrencyEnum?> _selectedCurrency = ValueNotifier(null);
   String? groupId;
+  String? eventId;
+
+  final isCanChangeAmount = ValueNotifier(true);
 
   final clearFormTrigger = ValueNotifier(false);
+
+  String wallet = '0.0';
 
   @override
   void initState() {
@@ -80,9 +82,13 @@ class _TransferPageState extends State<TransferPage> {
     if (widget.currency != null) {
       _selectedCurrency.value = widget.currency!;
     }
+    if (widget.eventId != null) {
+      eventId = widget.eventId!;
+    }
     if (widget.groupId != null) {
       groupId = widget.groupId!;
     }
+    isCanChangeAmount.value = widget.amount == null;
   }
 
   @override
@@ -95,10 +101,24 @@ class _TransferPageState extends State<TransferPage> {
   }
 
   Future<void> _handleTransfer(BuildContext context) async {
-    double a = double.parse(originalAmount.text.trim().replaceAll('.', ''));
+    double a = double.parse(
+      originalAmount.text
+          .trim()
+          .replaceAll('.', '') // bỏ dấu phân cách hàng nghìn
+          .replaceAll(',', '.'), // đổi dấu thập phân
+    );
     // String des = description.text;
     // UserModel toUser = selectedToUser.value!;
     final intl = AppLocalizations.of(context)!;
+
+    double walletAmount = double.parse(
+      wallet.replaceAll('VND', '').replaceAll('.', '').trim(),
+    );
+
+    if (a > walletAmount) {
+      showCustomToast(intl.insufficientBalance, type: ToastType.error);
+      return;
+    }
 
     if (_selectedCurrency.value != CurrencyEnum.vnd) {
       showCustomDialog(
@@ -113,7 +133,8 @@ class _TransferPageState extends State<TransferPage> {
           'https://api.forexrateapi.com/v1/latest',
           queryParameters: {
             'api_key': '45e110f921a24cf252ade6d4cc09c774',
-            'base': _selectedCurrency.value.name.toUpperCase(), // ví dụ: USD
+            'base':
+                _selectedCurrency.value?.name.toUpperCase() ?? '', // ví dụ: USD
             'currencies': 'VND',
           },
         );
@@ -130,8 +151,8 @@ class _TransferPageState extends State<TransferPage> {
             builder: (context) => AlertDialog(
               title: Text(intl.confirmTransfer),
               content: Text(
-                '${intl.exchangeRateMessage(_selectedCurrency.value.name.toUpperCase(), formatNumber(double.parse(rate.toStringAsFixed(2))))}\n\n${intl.convertedAmountMessage(formatNumber(double.parse(converted.toStringAsFixed(2))))}\n\n${intl.continueQuestion}',
-                // 'Tỉ giá hiện tại: 1 ${_selectedCurrency.value.name.toUpperCase()} = ${rate.toStringAsFixed(2)} VND\n\n'
+                '${intl.exchangeRateMessage(_selectedCurrency.value?.name.toUpperCase() ?? '', formatNumber(double.parse(rate.toStringAsFixed(2))))}\n\n${intl.convertedAmountMessage(formatNumber(double.parse(converted.toStringAsFixed(2))))}\n\n${intl.continueQuestion}',
+                // 'Tỉ giá hiện tại: 1 ${_selectedCurrency.value?.name.toUpperCase() ?? ''} = ${rate.toStringAsFixed(2)} VND\n\n'
                 // 'Số tiền quy đổi: ${converted.toStringAsFixed(0)} VND\n\n'
                 // 'Bạn có muốn tiếp tục không?',
               ),
@@ -159,6 +180,7 @@ class _TransferPageState extends State<TransferPage> {
             //     'currency': _selectedCurrency.value,
             //     'description': des.isNotEmpty ? des : null,
             //     'groupId': groupId,
+            //     'eventId': eventId,
             //   },
             // );
           }
@@ -185,6 +207,7 @@ class _TransferPageState extends State<TransferPage> {
     //     'currency': _selectedCurrency.value,
     //     'description': des.isNotEmpty ? des : null,
     //     'groupId': groupId,
+    //     'eventId': eventId,
     //   },
     // );
   }
@@ -240,6 +263,7 @@ class _TransferPageState extends State<TransferPage> {
                   child: BlocBuilder<RechargeBloc, RechargeState>(
                     builder: (context, state) {
                       if (state is GetWalletSuccessState) {
+                        wallet = state.walletInfo;
                         return BalanceRow(
                           balanceLabel: intl.balance,
                           balance: state.walletInfo,
@@ -267,131 +291,145 @@ class _TransferPageState extends State<TransferPage> {
                         color: Colors.grey,
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        context.pushNamed(
-                          AppRouteNames.chooseMember,
-                          extra: {
-                            'id': HiveService.getUser().id,
-                            'type': LoadType.friends,
-                            'initialSelected': selectedToUser.value != null
-                                ? [selectedToUser.value!]
-                                : [],
-                            'onChanged': (List<UserModel> users) {
-                              setState(() {
-                                selectedToUser.value = users.isNotEmpty
-                                    ? users.first
-                                    : null;
-                              });
-                            },
-                            'isMultiSelect': false,
-                          },
-                        );
-                      },
-                      child: Text(
-                        intl.findBeneficiary,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontSize: 12,
-                          letterSpacing: 0,
-                          height: 16 / 12,
-                          color: AppThemes.primary3Color,
-                        ),
-                      ),
-                    ),
+
+                    // InkWell(
+                    //   onTap: () {
+                    //     context.pushNamed(
+                    //       AppRouteNames.chooseMember,
+                    //       extra: {
+                    //         'id': HiveService.getUser().id,
+                    //         'type': LoadType.friends,
+                    //         'initialSelected': selectedToUser.value != null
+                    //             ? [selectedToUser.value!]
+                    //             : [],
+                    //         'onChanged': (List<UserModel> users) {
+                    //           print(users.first.fullName);
+                    //           selectedToUser.value = users.isNotEmpty
+                    //               ? users.first
+                    //               : null;
+                    //         },
+                    //         'isMultiSelect': false,
+                    //       },
+                    //     );
+                    //   },
+                    //   child: Text(
+                    //     intl.findBeneficiary,
+                    //     style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    //       fontSize: 12,
+                    //       letterSpacing: 0,
+                    //       height: 16 / 12,
+                    //       color: AppThemes.primary3Color,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 16),
 
                 // Friend
-                BlocBuilder<LoadedFriendsBloc, LoadedFriendsState>(
-                  buildWhen: (p, c) =>
-                      p.requests != c.requests || p.isLoading != c.isLoading,
-                  builder: (context, state) {
-                    if (state.isLoading) {
-                      return Center(
-                        child: ColoredBox(
-                          color: Colors.transparent,
-                          child: SpinKitFadingCircle(
-                            color: AppThemes.primary3Color,
-                          ),
-                        ),
-                      );
-                    }
-
-                    if (state.requests.isEmpty) {
-                      return SizedBox.shrink();
-                    }
-
-                    final friends = state.requests;
-                    final hasMore = state.page < state.totalPage;
-
-                    if (widget.toUser != null &&
-                        !friends.any((f) => f.friendUid == widget.toUser!.id)) {
-                      // Nếu người nhận không có trong danh sách bạn bè, thêm vào đầu danh sách
-                      friends.insert(
-                        0,
-                        FriendModel(
-                          friendUid: widget.toUser!.id!,
-                          fullName: widget.toUser!.fullName!,
-                          avatarUrl: widget.toUser!.avatar,
-                        ),
-                      );
-                    }
-
-                    return Container(
-                      height: 120,
-                      margin: const EdgeInsets.only(top: 8),
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: (friends.length + (hasMore ? 1 : 0)),
-                        itemBuilder: (context, index) {
-                          if (index == friends.length) {
-                            context.read<LoadedFriendsBloc>().add(
-                              event.LoadMoreFriendsEvent(
-                                HiveService.getUser().id,
-                                searchQuery: '',
+                ValueListenableBuilder<UserModel?>(
+                  valueListenable: selectedToUser,
+                  builder: (context, value, _) {
+                    return BlocBuilder<LoadedFriendsBloc, LoadedFriendsState>(
+                      buildWhen: (p, c) =>
+                          p.requests != c.requests ||
+                          p.isLoading != c.isLoading,
+                      builder: (context, state) {
+                        if (state.isLoading) {
+                          return Center(
+                            child: ColoredBox(
+                              color: Colors.transparent,
+                              child: SpinKitFadingCircle(
+                                color: AppThemes.primary3Color,
                               ),
-                            );
-                            return Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              child: Center(
-                                child: SpinKitFadingCircle(
-                                  color: AppThemes.primary3Color,
-                                ),
-                              ),
-                            );
-                          }
-
-                          return SquareUser(
-                            key: ValueKey(friends[index].friendUid),
-                            user: UserModel(
-                              id: friends[index].friendUid,
-                              fullName: friends[index].fullName,
-                              avatar: friends[index].avatarUrl,
                             ),
-                            isSelected:
-                                selectedToUser.value?.id ==
-                                friends[index].friendUid,
-                            onTap: () {
-                              setState(() {
-                                if (selectedToUser.value?.id ==
-                                    friends[index].friendUid) {
-                                  selectedToUser.value = null;
-                                } else {
-                                  selectedToUser.value = UserModel(
-                                    id: friends[index].friendUid,
-                                    fullName: friends[index].fullName,
-                                    avatar: friends[index].avatarUrl,
-                                  );
-                                }
-                              });
-                            },
                           );
-                        },
-                      ),
+                        }
+
+                        if (state.requests.isEmpty) {
+                          return SizedBox.shrink();
+                        }
+
+                        // final friends = state.requests;
+                        final friends = List<FriendModel>.from(state.requests);
+                        final hasMore = state.page < state.totalPage;
+
+                        if (widget.toUser != null &&
+                            !friends.any(
+                              (f) => f.friendUid == widget.toUser!.id,
+                            )) {
+                          // Nếu người nhận không có trong danh sách bạn bè, thêm vào đầu danh sách
+                          friends.insert(
+                            0,
+                            FriendModel(
+                              friendUid: widget.toUser!.id!,
+                              fullName: widget.toUser!.fullName!,
+                              avatarUrl: widget.toUser!.avatar,
+                            ),
+                          );
+                        }
+
+                        return Container(
+                          height: 120,
+                          margin: const EdgeInsets.only(top: 8),
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: (friends.length + (hasMore ? 1 : 0)),
+                            itemBuilder: (context, index) {
+                              if (index == friends.length) {
+                                context.read<LoadedFriendsBloc>().add(
+                                  event.LoadMoreFriendsEvent(
+                                    HiveService.getUser().id,
+                                    searchQuery: '',
+                                  ),
+                                );
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: Center(
+                                    child: SpinKitFadingCircle(
+                                      color: AppThemes.primary3Color,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return SquareUser(
+                                key: ValueKey(friends[index].friendUid),
+                                user: UserModel(
+                                  id: friends[index].friendUid,
+                                  fullName: friends[index].fullName,
+                                  avatar: friends[index].avatarUrl,
+                                ),
+                                isSelected:
+                                    selectedToUser.value?.id ==
+                                    friends[index].friendUid,
+                                onTap: () {
+                                  if (isCanChangeAmount.value == false) {
+                                    showCustomToast(
+                                      intl.cannotChangeAmountAndRecipient,
+                                      type: ToastType.error,
+                                    );
+                                  } else {
+                                    if (selectedToUser.value?.id ==
+                                        friends[index].friendUid) {
+                                      selectedToUser.value = null;
+                                    } else {
+                                      selectedToUser.value = UserModel(
+                                        id: friends[index].friendUid,
+                                        fullName: friends[index].fullName,
+                                        avatar: friends[index].avatarUrl,
+                                      );
+                                    }
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -410,7 +448,7 @@ class _TransferPageState extends State<TransferPage> {
                               flex: 7, // 70%
                               child: CustomTextInputWidget(
                                 size: TextInputSize.large,
-                                isReadOnly: false,
+                                isReadOnly: isCanChangeAmount.value == false,
                                 isRequired: true,
                                 label: intl.expenseAmountLabel,
                                 hintText: intl.expenseAmountHint,
@@ -423,14 +461,14 @@ class _TransferPageState extends State<TransferPage> {
                             const SizedBox(width: 8),
                             Expanded(
                               flex: 3, // 30%
-                              child: ValueListenableBuilder<CurrencyEnum>(
+                              child: ValueListenableBuilder<CurrencyEnum?>(
                                 valueListenable: _selectedCurrency,
                                 builder: (context, value, _) {
-                                  return CustomDropdownWidget<CurrencyEnum>(
+                                  return CustomDropdownWidget<CurrencyEnum?>(
                                     label: intl.expenseCurrencyLabel,
                                     value: _selectedCurrency.value,
                                     options: _units,
-                                    displayString: (b) => b.code,
+                                    displayString: (b) => b?.code ?? '',
                                     buildOption: (b, selected) {
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -440,7 +478,7 @@ class _TransferPageState extends State<TransferPage> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              b.code,
+                                              b?.code ?? '',
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyMedium
@@ -455,7 +493,7 @@ class _TransferPageState extends State<TransferPage> {
                                             const SizedBox(width: 16),
                                             Expanded(
                                               child: Text(
-                                                b.description,
+                                                b?.description ?? '',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyMedium

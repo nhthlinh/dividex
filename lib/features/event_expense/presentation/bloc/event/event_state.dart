@@ -19,6 +19,12 @@ class EventLoadedState extends EventState {
   EventLoadedState({required this.event});
 }
 
+class EventBalanceState extends EventState {
+  final List<RestructuredDebtModel> balances;
+
+  EventBalanceState({required this.balances});
+}
+
 class EventDataState extends Equatable {
   const EventDataState({
     this.isLoading = true,

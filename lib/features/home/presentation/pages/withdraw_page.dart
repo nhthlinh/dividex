@@ -97,12 +97,12 @@ class _WithdrawPageState extends State<WithdrawPage> {
                             //   amountController.text.trim().replaceAll('.', ''),
                             // );
                             // BankAccount toAccount = selectedToAccount.value!;
-                            if (state is RechargeSuccessState) {
-                              // context.pushNamed(
-                              //   AppRouteNames.withdrawSuccess,
-                              //   extra: {'toAccount': toAccount, 'amount': a},
-                              // );
-                            }
+                            // if (state is RechargeSuccessState) {
+                            //   context.pushNamed(
+                            //     AppRouteNames.withdrawSuccess,
+                            //     extra: {'toAccount': toAccount, 'amount': a},
+                            //   );
+                            // }
                           },
                           child: SizedBox.shrink(),
                         ),

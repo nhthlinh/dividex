@@ -8,19 +8,15 @@ import 'package:Dividex/features/event_expense/presentation/bloc/event/event_eve
 import 'package:Dividex/features/event_expense/presentation/bloc/event/event_state.dart';
 import 'package:Dividex/features/event_expense/presentation/widgets/date_input_field_widget.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart'
-    as user_bloc;
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart'
-    as user_event;
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart'
-    as user_state;
+import 'package:Dividex/shared/bloc/load_user_bloc.dart' as user_bloc;
+import 'package:Dividex/shared/bloc/load_user_event.dart' as user_event;
+import 'package:Dividex/shared/bloc/load_user_state.dart' as user_state;
 import 'package:Dividex/shared/utils/validation_input.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/layout.dart';
-import 'package:Dividex/shared/widgets/push_noti_in_app_widget.dart';
 import 'package:Dividex/shared/widgets/user_grid_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

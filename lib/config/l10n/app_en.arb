@@ -751,6 +751,75 @@
   "homeTabTitle": "Home",
   "searchTabTitle": "Search",
   "chatTabTitle": "Chat",
-  "settingTabTitle": "Setting"
+  "settingTabTitle": "Setting",
+  "cannotChangeAmountAndRecipient": "Amount and recipient cannot be changed",
+  "eventClosed": "Event is closed. No changes are allowed.",
+  "debtOptimizationEvent": "Optimize by event",
+  "debtOptimizationGroup": "Optimize by group",
+  "debtOptimizationGroupHint": "If you choose this option, you cannot return to event optimization.",
+  "debtOptimizationEventDescription": "Keep debts separated by each event.",
+  "debtOptimizationGroupDescription": "Combine group debts to minimize transactions.",
+  "update": "Update",
+  "create": "Create",
+  "nothingChanged": "Nothing has been changed",
+  "approvalRequired": "{user} created expense \"{expense}\" in {event}. Approval required.",
+    "@approvalRequired": {
+      "placeholders": {
+        "user": {},
+        "expense": {},
+        "event": {}
+      }
+    },
+  "pending": "Pending",
+  
+  "newExpenseApprovalRequest": "New expense approval request",
+  "expenseApprovalDescription": "This expense requires approval from more than half of members.",
 
+  "approvalStatus": "Approval status",
+  "approvedCount": "{accepted}/{total} approved",
+  "@approvedCount": {
+    "placeholders": {
+      "accepted": {},
+      "total": {}
+    }
+  },
+
+  "needMoreApprovals": "Need {count} more approvals",
+  "@needMoreApprovals": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+  "accepted": "Accepted",
+  "declined": "Declined",
+
+  "showMore": "Show more",
+  "showLess": "Show less",
+
+  "requestExpireMessage":
+      "This request will automatically expire after 24 hours.",
+
+  "approve": "Approve",
+  "unknownTime": "--",
+  "expenseDetails":"Expense details",
+  "viewDetails":"View",
+  "tapToViewExpenseDetails":"Tap to view full expense details",
+  "removeSelection":"Remove",
+
+  "upcoming":"Upcoming",
+  "inProgress":"In Progress",
+  "ended":"Ended",
+
+  "eventUpcomingDescription":"Event will start from ",
+  "eventActiveFrom":"Event is currently active from ",
+  "eventEndedDescription":"Event ended on ",
+
+  "noDescription":"No description",
+  "noBalanceData":"No balance data",
+  "youOwe":"You owe",
+  "oweYou":"Owe you",
+  "youNeedToPay":"You need to pay",
+  "peopleNeedToPayYou":"People need to pay you",
+  "expenseTimeInvalid": "The expense time is invalid."
 }

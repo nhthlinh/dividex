@@ -8,6 +8,9 @@ class NotificationParser {
   String parse(String message) {
     // Tất cả pattern backend gửi về
     final patterns = <RegExp, String Function(RegExpMatch)>{
+      RegExp(r"(.+) created expense '(.+)' in event '(.+)' — approval required.") : (m) =>
+        intl.approvalRequired(m[1]!, m[2]!, m[3]!),
+
       RegExp(r"(.+) have updated an event (.+)") : (m) =>
         intl.eventUpdated(m[1]!, m[2]!),
 

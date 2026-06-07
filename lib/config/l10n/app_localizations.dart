@@ -3175,6 +3175,252 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Setting'**
   String get settingTabTitle;
+
+  /// No description provided for @cannotChangeAmountAndRecipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount and recipient cannot be changed'**
+  String get cannotChangeAmountAndRecipient;
+
+  /// No description provided for @eventClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Event is closed. No changes are allowed.'**
+  String get eventClosed;
+
+  /// No description provided for @debtOptimizationEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Optimize by event'**
+  String get debtOptimizationEvent;
+
+  /// No description provided for @debtOptimizationGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Optimize by group'**
+  String get debtOptimizationGroup;
+
+  /// No description provided for @debtOptimizationGroupHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If you choose this option, you cannot return to event optimization.'**
+  String get debtOptimizationGroupHint;
+
+  /// No description provided for @debtOptimizationEventDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep debts separated by each event.'**
+  String get debtOptimizationEventDescription;
+
+  /// No description provided for @debtOptimizationGroupDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Combine group debts to minimize transactions.'**
+  String get debtOptimizationGroupDescription;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// No description provided for @nothingChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing has been changed'**
+  String get nothingChanged;
+
+  /// No description provided for @approvalRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'{user} created expense \"{expense}\" in {event}. Approval required.'**
+  String approvalRequired(Object user, Object expense, Object event);
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @newExpenseApprovalRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'New expense approval request'**
+  String get newExpenseApprovalRequest;
+
+  /// No description provided for @expenseApprovalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This expense requires approval from more than half of members.'**
+  String get expenseApprovalDescription;
+
+  /// No description provided for @approvalStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Approval status'**
+  String get approvalStatus;
+
+  /// No description provided for @approvedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{accepted}/{total} approved'**
+  String approvedCount(Object accepted, Object total);
+
+  /// No description provided for @needMoreApprovals.
+  ///
+  /// In en, this message translates to:
+  /// **'Need {count} more approvals'**
+  String needMoreApprovals(Object count);
+
+  /// No description provided for @accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get accepted;
+
+  /// No description provided for @declined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get declined;
+
+  /// No description provided for @showMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Show more'**
+  String get showMore;
+
+  /// No description provided for @showLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get showLess;
+
+  /// No description provided for @requestExpireMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This request will automatically expire after 24 hours.'**
+  String get requestExpireMessage;
+
+  /// No description provided for @approve.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get approve;
+
+  /// No description provided for @unknownTime.
+  ///
+  /// In en, this message translates to:
+  /// **'--'**
+  String get unknownTime;
+
+  /// No description provided for @expenseDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense details'**
+  String get expenseDetails;
+
+  /// No description provided for @viewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get viewDetails;
+
+  /// No description provided for @tapToViewExpenseDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view full expense details'**
+  String get tapToViewExpenseDetails;
+
+  /// No description provided for @removeSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get removeSelection;
+
+  /// No description provided for @upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get upcoming;
+
+  /// No description provided for @inProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get inProgress;
+
+  /// No description provided for @ended.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get ended;
+
+  /// No description provided for @eventUpcomingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Event will start from '**
+  String get eventUpcomingDescription;
+
+  /// No description provided for @eventActiveFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Event is currently active from '**
+  String get eventActiveFrom;
+
+  /// No description provided for @eventEndedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Event ended on '**
+  String get eventEndedDescription;
+
+  /// No description provided for @noDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No description'**
+  String get noDescription;
+
+  /// No description provided for @noBalanceData.
+  ///
+  /// In en, this message translates to:
+  /// **'No balance data'**
+  String get noBalanceData;
+
+  /// No description provided for @youOwe.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe'**
+  String get youOwe;
+
+  /// No description provided for @oweYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Owe you'**
+  String get oweYou;
+
+  /// No description provided for @youNeedToPay.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to pay'**
+  String get youNeedToPay;
+
+  /// No description provided for @peopleNeedToPayYou.
+  ///
+  /// In en, this message translates to:
+  /// **'People need to pay you'**
+  String get peopleNeedToPayYou;
+
+  /// No description provided for @expenseTimeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The expense time is invalid.'**
+  String get expenseTimeInvalid;
 }
 
 class _AppLocalizationsDelegate

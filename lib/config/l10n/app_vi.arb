@@ -553,7 +553,7 @@
   "chooseTypeFilter": "Chọn loại giao dịch",
   "wallet": "Ví",
   "inOrEx": "Trong hay ngoài app",
-  "conected": "Đã kết nối",
+  "connected": "Đã kết nối",
   "lastTransaction": "Giao dịch cuối",
 
   "eventUpdated": "{user} đã cập nhật sự kiện {event}",
@@ -753,5 +753,78 @@
   "homeTabTitle": "Trang chủ",
   "searchTabTitle": "Tìm kiếm",
   "chatTabTitle": "Nhắn tin",
-  "settingTabTitle": "Cài đặt"
+  "settingTabTitle": "Cài đặt",
+  "cannotChangeAmountAndRecipient": "Không thể thay đổi số tiền và người nhận",
+  "eventClosed": "Sự kiện đã đóng, thay đổi không được chấp nhận nữa.",
+  "debtOptimizationEvent": "Tối ưu theo sự kiện",
+  "debtOptimizationGroup": "Tối ưu theo nhóm",
+  "debtOptimizationGroupHint": "Nếu chọn tùy chọn này, bạn sẽ không thể quay lại tối ưu theo sự kiện.",
+  "debtOptimizationEventDescription": "Giữ công nợ riêng theo từng sự kiện.",
+  "debtOptimizationGroupDescription": "Gộp công nợ toàn nhóm để giảm số giao dịch.",
+  "update": "Cập nhật",
+  "create": "Tạo",
+  "nothingChanged": "Không có nội dung thay đổi",
+  "approvalRequired": "{user} đã tạo khoản chi \"{expense}\" trong {event}. Cần phê duyệt.",
+    "@approvalRequired": {
+      "placeholders": {
+        "user": {},
+        "expense": {},
+        "event": {}
+      }
+    },
+  "pending": "Chờ",
+
+  "newExpenseApprovalRequest": "Yêu cầu phê duyệt khoản chi mới",
+  "expenseApprovalDescription": "Khoản chi này cần được hơn một nửa thành viên chấp thuận.",
+
+  "approvalStatus": "Trạng thái phê duyệt",
+
+  "approvedCount": "{accepted}/{total} đã duyệt",
+  "@approvedCount": {
+    "placeholders": {
+      "accepted": {},
+      "total": {}
+    }
+  },
+
+  "needMoreApprovals": "Cần thêm {count} lượt duyệt",
+  "@needMoreApprovals": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+  "accepted": "Đã chấp thuận",
+  "declined": "Đã từ chối",
+
+  "showMore": "Xem thêm",
+  "showLess": "Thu gọn",
+
+  "requestExpireMessage":
+      "Yêu cầu này sẽ tự động hết hạn sau 24 giờ.",
+
+  "approve": "Chấp thuận",
+
+  "unknownTime": "--",
+
+  "expenseDetails":"Chi tiết khoản chi",
+  "viewDetails":"Xem",
+  "tapToViewExpenseDetails":"Nhấn để xem chi tiết khoản chi",
+  "removeSelection":"Bỏ chọn",
+
+  "upcoming":"Sắp diễn ra",
+  "inProgress":"Đang diễn ra",
+  "ended":"Kết thúc",
+
+  "eventUpcomingDescription":"Sự kiện sẽ bắt đầu từ ",
+  "eventActiveFrom":"Sự kiện đang diễn ra từ ",
+  "eventEndedDescription":"Sự kiện đã kết thúc vào ",
+
+  "noDescription":"Không có mô tả",
+  "noBalanceData":"Không có dữ liệu công nợ",
+  "youOwe":"Bạn nợ",
+  "oweYou":"Nợ bạn",
+  "youNeedToPay":"Bạn cần phải trả",
+  "peopleNeedToPayYou":"Người ta cần trả bạn",
+  "expenseTimeInvalid": "Thời gian chi tiêu không hợp lệ."
 }

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoadGroupsEvent extends Equatable {
@@ -88,6 +89,19 @@ class UpdateGroupLeaderEvent extends GroupsEvent {
 
   @override
   List<Object?> get props => [groupId, newLeaderId];
+}
+
+class ChangeToDebtOptimizationByGroupEvent extends GroupsEvent {
+  final String groupId;
+  final DebtOptimization debtOptimization;
+
+  const ChangeToDebtOptimizationByGroupEvent({
+    required this.groupId,
+    required this.debtOptimization,
+  });
+
+  @override
+  List<Object?> get props => [groupId, debtOptimization];
 }
 
 class DeleteGroupEvent extends GroupsEvent {

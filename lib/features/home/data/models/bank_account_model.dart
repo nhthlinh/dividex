@@ -37,4 +37,18 @@ class BankAccount {
       'currency': currency != null ? $CurrencyEnumEnumMap[currency] : null,
     };
   }
+
+  BankAccount copyWith({
+    String? id,
+    String? accountNumber,
+    String? bankName,
+    CurrencyEnum? currency,
+  }) {
+    return BankAccount(
+      id: id ?? this.id,
+      accountNumber: accountNumber ?? this.accountNumber,
+      bankName: bankName ?? this.bankName,
+      currency: currency ?? this.currency,
+    );
+  }
 }

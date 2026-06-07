@@ -4,11 +4,6 @@ import 'dart:async';
 
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
-import 'package:Dividex/features/event_expense/data/models/event_model.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart'
-    as event_event;
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_state.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
@@ -47,7 +42,17 @@ enum NotiType {
   ANNOUNCEMENT("Announcement", "Announcement Notification"),
   REMINDER2("Reminder", "Reminder"),
 
-  MESSAGE_RECEIVED("MESSAGE_RECEIVED", "Message Received");
+  MESSAGE_RECEIVED("MESSAGE_RECEIVED", "Message Received"),
+
+  EXPENSE_APPROVAL_REQUESTED(
+    "EXPENSE_APPROVAL_REQUESTED",
+    "Expense Approval Requested",
+  ),
+  EXPENSE_APPROVED("EXPENSE_APPROVED", "Expense Approved"),
+  EXPENSE_APPROVAL_DECLINED(
+    "EXPENSE_APPROVAL_DECLINED",
+    "Expense Approval Declined",
+  );
 
   final String code;
   final String description;
@@ -66,6 +71,7 @@ enum NotiType {
     BuildContext context,
     UserModel fromUser,
     String content,
+    String? actionType
   ) async {
     final intl = AppLocalizations.of(context)!;
 
@@ -81,7 +87,7 @@ enum NotiType {
       case NotiType.TRANSFER:
       case NotiType.DEPOSIT:
       case NotiType.WITHDRAW:
-        //context.pushNamed(AppRouteNames.walletReport);
+        // context.pushNamed(AppRouteNames.walletReport);
         break;
 
       case NotiType.REMINDER:
@@ -121,58 +127,37 @@ enum NotiType {
 
       case NotiType.EVENT_CREATED:
       case NotiType.EVENT_UPDATED:
-        {
-          final bloc = context.read<EventBloc>();
-          final completer = Completer<EventModel?>();
-          late final StreamSubscription<EventState> subscription;
-
-          subscription = bloc.stream.listen((state) {
-            if (state is EventLoadedState) {
-              completer.complete(state.event);
-              subscription.cancel();
-            }
-          });
-
-          bloc.add(event_event.GetEventEvent(eventId: relatedUid));
-
-          final event = await completer.future;
-          if (event != null) {
-            context.goNamed(
-              AppRouteNames.eventReport,
-              pathParameters: {
-                'eventId': relatedUid,
-                'groupId': event.group ?? '',
-              },
-              extra: {'eventName': event.name ?? ''},
-            );
-          } else {
-            showCustomToast(intl.groupNotFound, type: ToastType.error);
-          }
-        }
+      // relatedUid ở đây là eventId, nên không lấy được groupUid, không mở trang được
+      case NotiType.EVENT_DELETED:
         break;
 
-      case NotiType.EVENT_DELETED:
+      case NotiType.EXPENSE_APPROVAL_REQUESTED:
+      case NotiType.EXPENSE_APPROVED:
+      case NotiType.EXPENSE_APPROVAL_DECLINED:
+        context.pushNamed(
+          AppRouteNames.expenseApproval,
+          pathParameters: {"expenseId": relatedUid, "actionType": actionType ?? 'CREATE'},
+        );
         break;
 
       case NotiType.EXPENSE_CREATED:
       case NotiType.EXPENSE_UPDATED:
       case NotiType.EXPENSE_RESTORED:
       case NotiType.EXPENSE_SOFT_DELETED:
+      
         context.pushNamed(
           AppRouteNames.expenseDetail,
           pathParameters: {"id": relatedUid},
         );
         break;
       case NotiType.MESSAGE_RECEIVED:
-        context.pushNamed(
-          AppRouteNames.chat,
-        );
+        context.pushNamed(AppRouteNames.chat);
         break;
 
       case NotiType.EXPENSE_HARD_DELETED:
       case NotiType.REMINDER2:
       case NotiType.SYSTEM:
-      case NotiType.WARNING:  
+      case NotiType.WARNING:
       case NotiType.ANNOUNCEMENT:
         showCustomDialog(context: context, content: Text(content));
         break;
@@ -188,6 +173,7 @@ class NotificationModel {
   final NotiType type;
   final String relatedUid;
   final List<UserModel> toUsers;
+  final String? actionType;
 
   NotificationModel({
     required this.fromUser,
@@ -197,21 +183,27 @@ class NotificationModel {
     required this.type,
     required this.relatedUid,
     required this.toUsers,
+    this.actionType,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     try {
       return NotificationModel(
-      fromUser: UserModel.fromJson(json['from_user']),
-      uid: json['uid'],
-      createdAt: parseUTCToVN(json['created_at']),
-      content: json['content'],
-      type: NotiType.fromString(json['type']),
-      relatedUid: json['related_uid'] ?? '',
-      toUsers: List<UserModel>.from(json['to_users'].map((e) => UserModel.fromJson(e))),
-    );
+        fromUser: UserModel.fromJson(json['from_user']),
+        uid: json['uid'],
+        createdAt: parseUTCToVN(json['created_at']),
+        content: json['content'],
+        type: NotiType.fromString(json['type']),
+        relatedUid: json['related_uid'] ?? '',
+        toUsers: List<UserModel>.from(
+          json['to_users'].map((e) => UserModel.fromJson(e)),
+        ),
+        actionType: json['action_type'],
+      );
     } catch (e, stackTrace) {
-      throw Exception('Failed to parse NotificationModel: $e, StackTrace: $stackTrace');
+      throw Exception(
+        'Failed to parse NotificationModel: $e, StackTrace: $stackTrace',
+      );
     }
   }
 
@@ -223,6 +215,7 @@ class NotificationModel {
     NotiType? type,
     String? relatedUid,
     List<UserModel>? toUsers,
+    String? actionType,
   }) {
     return NotificationModel(
       fromUser: fromUser ?? this.fromUser,
@@ -232,6 +225,7 @@ class NotificationModel {
       type: type ?? this.type,
       relatedUid: relatedUid ?? this.relatedUid,
       toUsers: toUsers ?? this.toUsers,
+      actionType: actionType ?? this.actionType,
     );
   }
 }

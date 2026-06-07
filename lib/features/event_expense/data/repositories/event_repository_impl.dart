@@ -6,7 +6,6 @@ import 'package:Dividex/features/group/domain/usecase.dart';
 import 'package:Dividex/shared/models/paging_model.dart';
 import 'package:injectable/injectable.dart';
 
-
 @Injectable(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
   final EventRemoteDataSource remoteDataSource;
@@ -31,7 +30,7 @@ class EventRepositoryImpl implements EventRepository {
       memberIds: memberIds,
     );
   }
-  
+
   @override
   Future<EventModel?> getEvent(String eventId) async {
     return await remoteDataSource.getEvent(eventId);
@@ -90,8 +89,31 @@ class EventRepositoryImpl implements EventRepository {
   Future<List<ChartData>> getChartData(String eventId) async {
     return await remoteDataSource.getChartData(eventId);
   }
+
   @override
-  Future<List<CustomBarChartData>> getBarChartData(String eventId, int year) async {
+  Future<List<CustomBarChartData>> getBarChartData(
+    String eventId,
+    int year,
+  ) async {
     return await remoteDataSource.getBarChartData(eventId, year);
+  }
+
+  @override
+  Future<List<RestructuredDebtModel>> getBalanceEvent(String eventId) async {
+    return await remoteDataSource.getBalanceEvent(eventId);
+  }
+
+  @override
+  Future<void> outsideTransfer(
+    String eventId,
+    String userId,
+    double amount,
+  ) async {
+    return await remoteDataSource.outsideTransfer(eventId, userId, amount);
+  }
+
+  @override
+  Future<void> remindEvent(String eventId, String userId) async {
+    return await remoteDataSource.remindEvent(eventId, userId);
   }
 }

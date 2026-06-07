@@ -2,12 +2,11 @@ import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_bloc.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_event.dart';
-import 'package:Dividex/features/user/presentation/bloc/user_state.dart';
+import 'package:Dividex/shared/bloc/load_user_bloc.dart';
+import 'package:Dividex/shared/bloc/load_user_event.dart';
+import 'package:Dividex/shared/bloc/load_user_state.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
-import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
@@ -251,14 +250,32 @@ class _ChooseMembersPageState extends State<ChooseMembersPage> {
                   pathParameters: {'id': user.id ?? ''},
                 );
               },
-              trailing: CustomButton(
-                buttonKey: Key('choose_member_select_${user.id}'),
-                size: ButtonSize.small,
-                text: isSelected ? intl.cancel : intl.add,
-                customColor: isSelected
-                    ? AppThemes.errorColor
-                    : AppThemes.primary3Color,
+              // trailing: CustomButton(
+              //   buttonKey: Key('choose_member_select_${user.id}'),
+              //   size: ButtonSize.small,
+              //   text: isSelected ? intl.cancel : intl.add,
+              //   customColor: isSelected
+              //       ? AppThemes.errorColor
+              //       : AppThemes.primary3Color,
+              //   onPressed: () => _toggleUser(user),
+              // ),
+              trailing: FilledButton(
                 onPressed: () => _toggleUser(user),
+                style: FilledButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(8),
+                  backgroundColor: isSelected
+                      ? AppThemes.primary3Color
+                      : Colors.transparent,
+                  side: BorderSide(
+                    color: isSelected ? AppThemes.primary3Color : Colors.grey,
+                  ),
+                ),
+                child: Icon(
+                  isSelected ? Icons.check : Icons.add,
+                  size: 18,
+                  color: isSelected ? Colors.white : Colors.grey,
+                ),
               ),
             );
           },

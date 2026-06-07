@@ -1,3 +1,4 @@
+import 'package:Dividex/features/event_expense/data/models/expense_approve_model.dart';
 import 'package:Dividex/features/event_expense/data/models/expense_model.dart';
 import 'package:Dividex/features/event_expense/data/models/user_debt.dart';
 import 'package:Dividex/features/event_expense/domain/expense_repository.dart';
@@ -15,26 +16,58 @@ class ExpenseUseCase {
 
   ExpenseUseCase(this.repository);
 
+  List<UserDebt> calculateUserDebts(
+    List<UserDebt> members,
+    double totalAmount,
+  ) {
+    return members.map((m) {
+      if (totalAmount <= 0 || members.isEmpty) {
+        return UserDebt(userId: m.userId, amount: 0);
+      }
+      final balance = totalAmount / members.length;
+      return UserDebt(userId: m.userId, amount: balance);
+    }).toList();
+  }
+
   Future<String> createExpense(
     String name,
     double totalAmount,
     String currency,
     String? category,
     String eventId,
-    String? paidById,
+    List<Map<String, double>>? paidByIds,
     String? note,
     String? expenseDate,
     String? remindAt,
     SplitTypeEnum splitType,
     List<UserDebt> userDebts,
   ) async {
+    if (userDebts.isEmpty) {
+      throw Exception("Cần ít nhất 1 người tham gia chia sẻ chi phí");
+    }
+
+    if (splitType == SplitTypeEnum.equal && userDebts.isNotEmpty) {
+      userDebts = calculateUserDebts(userDebts, totalAmount);
+    }
+
+    if (splitType == SplitTypeEnum.custom && userDebts.isNotEmpty) {
+      final totalDebt = userDebts.fold<double>(
+        0,
+        (previousValue, element) => previousValue + (element.amount),
+      );
+      if (totalDebt != totalAmount) {
+        throw Exception(
+          "Tổng số tiền chia sẻ không khớp với tổng số tiền của chi phí",
+        );
+      }
+    }
     return await repository.createExpense(
       name,
       totalAmount,
       currency,
       category,
       eventId,
-      paidById,
+      paidByIds ?? [],
       note,
       expenseDate,
       remindAt,
@@ -57,8 +90,14 @@ class ExpenseUseCase {
     int pageSize,
     ExpenseStatusEnum status,
   ) async {
-    return await repository.listExpensesInGroup(groupId, page, pageSize, status);
+    return await repository.listExpensesInGroup(
+      groupId,
+      page,
+      pageSize,
+      status,
+    );
   }
+
   Future<PagingModel<List<ExpenseModel>>> listAllExpenses(
     int page,
     int pageSize,
@@ -68,6 +107,21 @@ class ExpenseUseCase {
   }
 
   Future<void> updateExpense(ExpenseModel expense) async {
+    if (expense.userDebts == null || expense.userDebts!.isEmpty) {
+      throw Exception("Cần ít nhất 1 người tham gia chia sẻ chi phí");
+    }
+
+    if (expense.splitType == SplitTypeEnum.custom) {
+      final totalDebt = expense.userDebts!.fold<double>(
+        0,
+        (sum, e) => sum + e.amount,
+      );
+
+      if ((totalDebt - (expense.totalAmount ?? 0)).abs() > 0.01) {
+        throw Exception("Tổng số tiền chia sẻ không khớp với tổng chi phí");
+      }
+    }
+
     await repository.updateExpense(expense);
   }
 
@@ -86,7 +140,16 @@ class ExpenseUseCase {
   Future<void> restoreExpense(String id) async {
     await repository.restoreExpense(id);
   }
+
   Future<List<CustomBarChartData>> getBarChartData(int year) async {
     return await repository.getBarChartData(year);
+  }
+
+  Future<ExpenseApprovalModel> getExpenseApprove(String expenseId, String actionType) async {
+    return await repository.getExpenseApprove(expenseId, actionType);
+  }
+
+  Future<void> voteOnExpense(String expenseId, String action) async {
+    await repository.voteOnExpense(expenseId, action);
   }
 }
