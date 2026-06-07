@@ -196,39 +196,39 @@ class _HomePageState extends State<HomePage> {
   SquareButtonsWrap buttonGrid(AppLocalizations intl, BuildContext context) {
     return SquareButtonsWrap(
       items: [
-        ButtonItem(
-          icon: Image.asset(
-            'lib/assets/icons/account.png',
-            width: 28,
-            height: 28,
-          ),
-          label: intl.account,
-          onTap: () {
-            context.pushNamed(AppRouteNames.account);
-          },
-        ),
-        ButtonItem(
-          icon: Image.asset(
-            'lib/assets/icons/transfer.png',
-            width: 28,
-            height: 28,
-          ),
-          label: intl.transfer,
-          onTap: () {
-            context.pushNamed(AppRouteNames.transfer);
-          },
-        ),
-        ButtonItem(
-          icon: Image.asset(
-            'lib/assets/icons/withdraw.png',
-            width: 28,
-            height: 28,
-          ),
-          label: intl.withdraw,
-          onTap: () {
-            context.pushNamed(AppRouteNames.withdraw);
-          },
-        ),
+        // ButtonItem(
+        //   icon: Image.asset(
+        //     'lib/assets/icons/account.png',
+        //     width: 28,
+        //     height: 28,
+        //   ),
+        //   label: intl.account,
+        //   onTap: () {
+        //     context.pushNamed(AppRouteNames.account);
+        //   },
+        // ),
+        // ButtonItem(
+        //   icon: Image.asset(
+        //     'lib/assets/icons/transfer.png',
+        //     width: 28,
+        //     height: 28,
+        //   ),
+        //   label: intl.transfer,
+        //   onTap: () {
+        //     context.pushNamed(AppRouteNames.transfer);
+        //   },
+        // ),
+        // ButtonItem(
+        //   icon: Image.asset(
+        //     'lib/assets/icons/withdraw.png',
+        //     width: 28,
+        //     height: 28,
+        //   ),
+        //   label: intl.withdraw,
+        //   onTap: () {
+        //     context.pushNamed(AppRouteNames.withdraw);
+        //   },
+        // ),
         ButtonItem(
           icon: Image.asset(
             'lib/assets/icons/friend.png',
@@ -262,17 +262,17 @@ class _HomePageState extends State<HomePage> {
             context.pushNamed(AppRouteNames.transactionReport);
           },
         ),
-        ButtonItem(
-          icon: Image.asset(
-            'lib/assets/icons/wallet_report.png',
-            width: 28,
-            height: 28,
-          ),
-          label: intl.walletReport,
-          onTap: () {
-            context.pushNamed(AppRouteNames.walletReport);
-          },
-        ),
+        // ButtonItem(
+        //   icon: Image.asset(
+        //     'lib/assets/icons/wallet_report.png',
+        //     width: 28,
+        //     height: 28,
+        //   ),
+        //   label: intl.walletReport,
+        //   onTap: () {
+        //     context.pushNamed(AppRouteNames.walletReport);
+        //   },
+        // ),
       ],
     );
   }
@@ -355,7 +355,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 onTap: () {
-                  if (expense.category == 'Transfer') return;
+                  if (expense.category?.key == 'Transfer') return;
                   context.pushNamed(
                     AppRouteNames.expenseDetail,
                     pathParameters: {"id": expense.id ?? ''},

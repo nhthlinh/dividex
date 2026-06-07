@@ -1,5 +1,3 @@
-import 'package:Dividex/features/group/data/models/group_model.dart';
-
 class EventEvent {}
 
 class CreateEventEvent extends EventEvent {

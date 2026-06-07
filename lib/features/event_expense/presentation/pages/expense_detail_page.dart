@@ -108,6 +108,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                     decoration: BoxDecoration(
                       color: getActionColor(
                         expense.pendingAction,
+                      // ignore: deprecated_member_use
                       ).withOpacity(.12),
                       borderRadius: BorderRadius.circular(12),
                     ),

@@ -4,11 +4,6 @@ import 'dart:async';
 
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/routes/router.dart';
-import 'package:Dividex/features/event_expense/data/models/event_model.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart'
-    as event_event;
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_state.dart';
 import 'package:Dividex/features/group/data/models/group_model.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
@@ -92,7 +87,7 @@ enum NotiType {
       case NotiType.TRANSFER:
       case NotiType.DEPOSIT:
       case NotiType.WITHDRAW:
-        context.pushNamed(AppRouteNames.walletReport);
+        // context.pushNamed(AppRouteNames.walletReport);
         break;
 
       case NotiType.REMINDER:

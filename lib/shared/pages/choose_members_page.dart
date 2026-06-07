@@ -7,7 +7,6 @@ import 'package:Dividex/shared/bloc/load_user_event.dart';
 import 'package:Dividex/shared/bloc/load_user_state.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
-import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';

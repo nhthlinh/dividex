@@ -89,6 +89,7 @@ class _ExpenseApprovePageState extends State<ExpenseApprovePage> {
                     Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
+                        // ignore: deprecated_member_use
                         color: AppThemes.primary3Color.withOpacity(.1),
                         shape: BoxShape.circle,
                       ),
@@ -167,6 +168,7 @@ class _ExpenseApprovePageState extends State<ExpenseApprovePage> {
                   rightWidget: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
+                      // ignore: deprecated_member_use
                       color: AppThemes.successColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),

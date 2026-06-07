@@ -14,13 +14,11 @@ import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense
     as expense_event;
 import 'package:Dividex/features/event_expense/presentation/bloc/expense/expense_state.dart';
 import 'package:Dividex/features/group/presentation/pages/group_detail.dart';
-import 'package:Dividex/features/group/presentation/widgets/chart_widget.dart';
 import 'package:Dividex/shared/models/enum.dart';
 import 'package:Dividex/shared/services/local/hive_service.dart';
 import 'package:Dividex/shared/utils/change_string.dart';
 import 'package:Dividex/shared/utils/num.dart';
 import 'package:Dividex/shared/widgets/app_shell.dart';
-import 'package:Dividex/shared/widgets/bar_chart.dart';
 import 'package:Dividex/shared/widgets/content_card.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
@@ -483,6 +481,7 @@ class _EventReportPageState extends State<EventReportPage> {
       children: [
         CircleAvatar(
           radius: 22,
+          // ignore: deprecated_member_use
           backgroundColor: color.withOpacity(.12),
           child: Icon(icon, color: color),
         ),
@@ -671,6 +670,7 @@ class StatusCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
+                  // ignore: deprecated_member_use
                   color: color.withOpacity(.1),
                   borderRadius: BorderRadius.circular(14),
                 ),

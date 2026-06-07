@@ -1,5 +1,4 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/payer_model.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
@@ -13,7 +12,6 @@ import 'package:Dividex/shared/widgets/app_shell.dart';
 import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/custom_text_input_widget.dart';
 import 'package:Dividex/shared/widgets/info_card.dart';
-import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:Dividex/shared/widgets/simple_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,7 +49,7 @@ class _ChoosePayersPageState extends State<ChoosePayersPage> {
   late Map<String, TextEditingController> _amountControllers;
 
   double get _selectedTotal {
-    return _selectedPayers.fold(0, (sum, e) => sum + (e.amount ?? 0));
+    return _selectedPayers.fold(0, (sum, e) => sum + (e.amount));
   }
 
   bool get _canConfirm {
@@ -291,7 +289,7 @@ class _ChoosePayersPageState extends State<ChoosePayersPage> {
             }
 
             final user = users[index];
-            final isSelected = _selectedPayers.any((p) => p.user.id == user.id);
+            // final isSelected = _selectedPayers.any((p) => p.user.id == user.id);
             final selectedPayerIndex = _selectedPayers.indexWhere(
               (p) => p.user.id == user.id,
             );
@@ -302,7 +300,7 @@ class _ChoosePayersPageState extends State<ChoosePayersPage> {
             // Initialize controller if needed
             if (!_amountControllers.containsKey(user.id)) {
               _amountControllers[user.id ?? ''] = TextEditingController(
-                text: selectedPayer?.amount?.toString() ?? '0',
+                text: selectedPayer?.amount.toString() ?? '0',
               );
             }
 

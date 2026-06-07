@@ -222,7 +222,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   }
 
   String? validateExpense() {
-    final intl = AppLocalizations.of(context)!;
+    // final intl = AppLocalizations.of(context)!;
 
     try {
       final selectedEvent = _selectedEvent ?? widget.initialSelectedEvent;
@@ -261,7 +261,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
         return "Expense date parse failed: ${dateController.text}";
       }
 
-      print(parsedExpenseDate);
+      debugPrint(parsedExpenseDate.toString());
 
       /// Reminder
       if (reminderController.text.isNotEmpty) {
@@ -317,8 +317,8 @@ Expense:$totalAmount
 
       return null;
     } catch (e, stack) {
-      print(e);
-      print(stack);
+      debugPrint(e.toString());
+      debugPrint(stack.toString());
 
       return e.toString();
     }
@@ -333,15 +333,15 @@ Expense:$totalAmount
     final error = validateExpense();
 
     if (error != null) {
-      print("VALIDATION FAILED");
-      print(error);
+      debugPrint("VALIDATION FAILED");
+      debugPrint(error);
 
       showCustomToast(error, type: ToastType.error);
 
       return;
     }
 
-    print("VALIDATION SUCCESS");
+    debugPrint("VALIDATION SUCCESS");
 
     final selectedEvent = _selectedEvent ?? widget.initialSelectedEvent;
 
@@ -372,7 +372,7 @@ Expense:$totalAmount
       ),
     );
 
-    print("EVENT SENT");
+    debugPrint("EVENT SENT");
   }
 
   @override

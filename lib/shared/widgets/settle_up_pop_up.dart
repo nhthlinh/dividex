@@ -1,8 +1,7 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/presentation/bloc/event/event_bloc.dart';
-import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart' as eventEvent;
+import 'package:Dividex/features/event_expense/presentation/bloc/event/event_event.dart' as event_event;
 import 'package:Dividex/features/group/presentation/bloc/group_bloc.dart';
 import 'package:Dividex/features/group/presentation/bloc/group_event.dart';
 import 'package:Dividex/features/user/data/models/user_model.dart';
@@ -12,7 +11,6 @@ import 'package:Dividex/shared/widgets/custom_button.dart';
 import 'package:Dividex/shared/widgets/show_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 Future<void> showSettleUpDialogForGroup({
   required BuildContext context,
@@ -75,7 +73,8 @@ Future<void> showSettleUpDialogForGroup({
           children: [
             CustomButton(
               text: intl.outSideTransfer,
-              size: ButtonSize.medium,
+              // size: ButtonSize.medium,
+              size: ButtonSize.popUp,
               type: ButtonType.secondary,
               onPressed: () {
                 groupBloc.add(
@@ -83,22 +82,22 @@ Future<void> showSettleUpDialogForGroup({
                 );
               },
             ),
-            const SizedBox(width: 12),
-            CustomButton(
-              text: intl.transfer,
-              size: ButtonSize.medium,
-              onPressed: () {
-                context.pushNamed(
-                  AppRouteNames.transfer,
-                  extra: {
-                    'toUser': receiver,
-                    'amount': amount,
-                    'currency': currency,
-                    'groupId': groupId,
-                  },
-                );
-              },
-            ),
+            // const SizedBox(width: 12),
+            // CustomButton(
+            //   text: intl.transfer,
+            //   size: ButtonSize.medium,
+            //   onPressed: () {
+            //     context.pushNamed(
+            //       AppRouteNames.transfer,
+            //       extra: {
+            //         'toUser': receiver,
+            //         'amount': amount,
+            //         'currency': currency,
+            //         'groupId': groupId,
+            //       },
+            //     );
+            //   },
+            // ),
           
           ],
         ),
@@ -106,8 +105,6 @@ Future<void> showSettleUpDialogForGroup({
     ),
   );
 }
-
-
 
 Future<void> showSettleUpDialogForEvent({
   required BuildContext context,
@@ -170,30 +167,31 @@ Future<void> showSettleUpDialogForEvent({
           children: [
             CustomButton(
               text: intl.outSideTransfer,
-              size: ButtonSize.medium,
+              // size: ButtonSize.medium,
+              size: ButtonSize.popUp,
               type: ButtonType.secondary,
               onPressed: () {
                 eventBloc.add(
-                  eventEvent.OutSideTransferEvent(eventId, receiver.id ?? '', amount),
+                  event_event.OutSideTransferEvent(eventId, receiver.id ?? '', amount),
                 );
               },
             ),
-            const SizedBox(width: 12),
-            CustomButton(
-              text: intl.transfer,
-              size: ButtonSize.medium,
-              onPressed: () {
-                context.pushNamed(
-                  AppRouteNames.transfer,
-                  extra: {
-                    'toUser': receiver,
-                    'amount': amount,
-                    'currency': currency,
-                    'eventId': eventId,
-                  },
-                );
-              },
-            ),
+            // const SizedBox(width: 12),
+            // CustomButton(
+            //   text: intl.transfer,
+            //   size: ButtonSize.medium,
+            //   onPressed: () {
+            //     context.pushNamed(
+            //       AppRouteNames.transfer,
+            //       extra: {
+            //         'toUser': receiver,
+            //         'amount': amount,
+            //         'currency': currency,
+            //         'eventId': eventId,
+            //       },
+            //     );
+            //   },
+            // ),
           
           ],
         ),

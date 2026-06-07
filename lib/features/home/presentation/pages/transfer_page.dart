@@ -1,5 +1,4 @@
 import 'package:Dividex/config/l10n/app_localizations.dart';
-import 'package:Dividex/config/routes/router.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/friend/data/models/friend_model.dart';
 import 'package:Dividex/features/friend/presentation/bloc/friend_bloc.dart';
@@ -27,7 +26,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:go_router/go_router.dart';
 
 class TransferPage extends StatefulWidget {
   final UserModel? toUser;
@@ -109,8 +107,8 @@ class _TransferPageState extends State<TransferPage> {
           .replaceAll('.', '') // bỏ dấu phân cách hàng nghìn
           .replaceAll(',', '.'), // đổi dấu thập phân
     );
-    String des = description.text;
-    UserModel toUser = selectedToUser.value!;
+    // String des = description.text;
+    // UserModel toUser = selectedToUser.value!;
     final intl = AppLocalizations.of(context)!;
 
     double walletAmount = double.parse(
@@ -173,18 +171,18 @@ class _TransferPageState extends State<TransferPage> {
 
           // Nếu người dùng đồng ý -> chuyển sang trang xác nhận
           if (confirm == true) {
-            context.pushNamed(
-              AppRouteNames.transferConfirm,
-              extra: {
-                'toUser': toUser,
-                'originalAmount': a,
-                'realAmount': converted,
-                'currency': _selectedCurrency.value,
-                'description': des.isNotEmpty ? des : null,
-                'groupId': groupId,
-                'eventId': eventId,
-              },
-            );
+            // context.pushNamed(
+            //   AppRouteNames.transferConfirm,
+            //   extra: {
+            //     'toUser': toUser,
+            //     'originalAmount': a,
+            //     'realAmount': converted,
+            //     'currency': _selectedCurrency.value,
+            //     'description': des.isNotEmpty ? des : null,
+            //     'groupId': groupId,
+            //     'eventId': eventId,
+            //   },
+            // );
           }
         } else {
           showCustomToast(
@@ -200,18 +198,18 @@ class _TransferPageState extends State<TransferPage> {
       return;
     }
 
-    context.pushNamed(
-      AppRouteNames.transferConfirm,
-      extra: {
-        'toUser': toUser,
-        'originalAmount': a,
-        'realAmount': a,
-        'currency': _selectedCurrency.value,
-        'description': des.isNotEmpty ? des : null,
-        'groupId': groupId,
-        'eventId': eventId,
-      },
-    );
+    // context.pushNamed(
+    //   AppRouteNames.transferConfirm,
+    //   extra: {
+    //     'toUser': toUser,
+    //     'originalAmount': a,
+    //     'realAmount': a,
+    //     'currency': _selectedCurrency.value,
+    //     'description': des.isNotEmpty ? des : null,
+    //     'groupId': groupId,
+    //     'eventId': eventId,
+    //   },
+    // );
   }
 
   void _submit() {

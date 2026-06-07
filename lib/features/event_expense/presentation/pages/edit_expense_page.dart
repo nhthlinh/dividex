@@ -124,7 +124,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
   }
 
   String? validateExpense() {
-    final intl = AppLocalizations.of(context)!;
+    // final intl = AppLocalizations.of(context)!;
 
     try {
       final selectedPayers = _selectedPayer;
@@ -156,7 +156,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
         return "Expense date parse failed: ${dateController.text}";
       }
 
-      print(parsedExpenseDate);
+      debugPrint(parsedExpenseDate.toString());
 
       /// Reminder
       if (reminderController.text.isNotEmpty) {
@@ -212,8 +212,8 @@ Expense:$totalAmount
 
       return null;
     } catch (e, stack) {
-      print(e);
-      print(stack);
+      debugPrint(e.toString());
+      debugPrint(stack.toString());
 
       return e.toString();
     }
@@ -227,15 +227,15 @@ Expense:$totalAmount
     final error = validateExpense();
 
     if (error != null) {
-      print("VALIDATION FAILED");
-      print(error);
+      debugPrint("VALIDATION FAILED");
+      debugPrint(error);
 
       showCustomToast(error, type: ToastType.error);
 
       return;
     }
 
-    print("VALIDATION SUCCESS");
+    debugPrint("VALIDATION SUCCESS");
 
     final formattedDate = DateFormat(
       "yyyy-MM-dd HH:mm",
@@ -266,7 +266,7 @@ Expense:$totalAmount
       ),
     );
 
-    print("EVENT SENT");
+    debugPrint("EVENT SENT");
   }
 
   @override
@@ -342,7 +342,7 @@ Expense:$totalAmount
       );
 
       _selectedCategory.value = CategoryModel.categories.firstWhere(
-        (c) => c.key == (expense.category),
+        (c) => c.key == (expense.category.toString().split('.').last),
         orElse: () => CategoryModel.categories.firstWhere(
           (c) => c.key == 'miscellaneous',
         ),

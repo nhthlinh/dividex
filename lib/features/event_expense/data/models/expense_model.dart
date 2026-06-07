@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/event_expense/data/models/category_model.dart';

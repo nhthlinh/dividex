@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:Dividex/config/l10n/app_localizations.dart';
 import 'package:Dividex/config/themes/app_theme.dart';
 import 'package:Dividex/features/notifications/data/model/notification_model.dart';

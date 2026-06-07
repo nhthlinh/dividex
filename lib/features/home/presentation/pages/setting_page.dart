@@ -167,13 +167,13 @@ class _SettingPageState extends State<SettingPage> {
                   context.pushNamed(AppRouteNames.profile);
                 },
               ),
-              SettingOption(
-                label: intl.rechargeIntoApp,
-                context: context,
-                onTap: () {
-                  context.pushNamed(AppRouteNames.recharge);
-                },
-              ),
+              // SettingOption(
+              //   label: intl.rechargeIntoApp,
+              //   context: context,
+              //   onTap: () {
+              //     context.pushNamed(AppRouteNames.recharge);
+              //   },
+              // ),
               SettingOption(
                 label: intl.updatePin,
                 context: context,
