@@ -174,97 +174,97 @@ class _SettingPageState extends State<SettingPage> {
               //     context.pushNamed(AppRouteNames.recharge);
               //   },
               // ),
-              SettingOption(
-                label: intl.updatePin,
-                context: context,
-                onTap: () {
-                  showCustomDialog(
-                    context: context,
-                    content: CustomFormWrapper(
-                      clearTrigger: clearFormTrigger,
-                      formKey: _formKey,
-                      fields: [
-                        FormFieldConfig(controller: oldPin, isRequired: true),
-                        FormFieldConfig(controller: newPin, isRequired: true),
-                        FormFieldConfig(
-                          controller: confirmNewPin,
-                          isRequired: true,
-                        ),
-                      ],
-                      builder: (isValid, isSubmitting, setSubmitting) => Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            intl.updatePinGuide,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(color: AppThemes.primary3Color),
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextInputWidget(
-                            label: intl.currentPin,
-                            size: TextInputSize.large,
-                            controller: oldPin,
-                            keyboardType: TextInputType.number,
-                            isReadOnly: false,
-                            isRequired: true,
-                            validator: (value) =>
-                                CustomValidator().validatePin(value, intl),
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextInputWidget(
-                            label: intl.newPin,
-                            size: TextInputSize.large,
-                            controller: newPin,
-                            keyboardType: TextInputType.number,
-                            isReadOnly: false,
-                            isRequired: true,
-                            validator: (value) =>
-                                CustomValidator().validatePin(value, intl),
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextInputWidget(
-                            label: intl.confirmPin,
-                            size: TextInputSize.large,
-                            controller: confirmNewPin,
-                            keyboardType: TextInputType.number,
-                            isReadOnly: false,
-                            isRequired: true,
-                            validator: (value) => CustomValidator()
-                                .validateConfirmPassword(value, intl, newPin),
-                          ),
-                          const SizedBox(height: 16),
-                          Center(
-                            child: CustomButton(
-                              text: intl.save,
-                              onPressed: (!isValid || isSubmitting)
-                                  ? null
-                                  : () async {
-                                      setSubmitting(true);
+              // SettingOption(
+              //   label: intl.updatePin,
+              //   context: context,
+              //   onTap: () {
+              //     showCustomDialog(
+              //       context: context,
+              //       content: CustomFormWrapper(
+              //         clearTrigger: clearFormTrigger,
+              //         formKey: _formKey,
+              //         fields: [
+              //           FormFieldConfig(controller: oldPin, isRequired: true),
+              //           FormFieldConfig(controller: newPin, isRequired: true),
+              //           FormFieldConfig(
+              //             controller: confirmNewPin,
+              //             isRequired: true,
+              //           ),
+              //         ],
+              //         builder: (isValid, isSubmitting, setSubmitting) => Column(
+              //           mainAxisSize: MainAxisSize.min,
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             Text(
+              //               intl.updatePinGuide,
+              //               style: Theme.of(context).textTheme.titleMedium
+              //                   ?.copyWith(color: AppThemes.primary3Color),
+              //             ),
+              //             const SizedBox(height: 16),
+              //             CustomTextInputWidget(
+              //               label: intl.currentPin,
+              //               size: TextInputSize.large,
+              //               controller: oldPin,
+              //               keyboardType: TextInputType.number,
+              //               isReadOnly: false,
+              //               isRequired: true,
+              //               validator: (value) =>
+              //                   CustomValidator().validatePin(value, intl),
+              //             ),
+              //             const SizedBox(height: 16),
+              //             CustomTextInputWidget(
+              //               label: intl.newPin,
+              //               size: TextInputSize.large,
+              //               controller: newPin,
+              //               keyboardType: TextInputType.number,
+              //               isReadOnly: false,
+              //               isRequired: true,
+              //               validator: (value) =>
+              //                   CustomValidator().validatePin(value, intl),
+              //             ),
+              //             const SizedBox(height: 16),
+              //             CustomTextInputWidget(
+              //               label: intl.confirmPin,
+              //               size: TextInputSize.large,
+              //               controller: confirmNewPin,
+              //               keyboardType: TextInputType.number,
+              //               isReadOnly: false,
+              //               isRequired: true,
+              //               validator: (value) => CustomValidator()
+              //                   .validateConfirmPassword(value, intl, newPin),
+              //             ),
+              //             const SizedBox(height: 16),
+              //             Center(
+              //               child: CustomButton(
+              //                 text: intl.save,
+              //                 onPressed: (!isValid || isSubmitting)
+              //                     ? null
+              //                     : () async {
+              //                         setSubmitting(true);
 
-                                      if (_formKey.currentState!.validate()) {
-                                        context.read<UserBloc>().add(
-                                          UpdatePinEvent(
-                                            oldPin: oldPin.text,
-                                            newPin: newPin.text,
-                                          ),
-                                        );
-                                      }
+              //                         if (_formKey.currentState!.validate()) {
+              //                           context.read<UserBloc>().add(
+              //                             UpdatePinEvent(
+              //                               oldPin: oldPin.text,
+              //                               newPin: newPin.text,
+              //                             ),
+              //                           );
+              //                         }
 
-                                      clearFormTrigger.value = !clearFormTrigger
-                                          .value; // Trigger form reset
+              //                         clearFormTrigger.value = !clearFormTrigger
+              //                             .value; // Trigger form reset
 
-                                      setSubmitting(false);
-                                    },
-                              size: ButtonSize.medium,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+              //                         setSubmitting(false);
+              //                       },
+              //                 size: ButtonSize.medium,
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
 
               const Spacer(),
 
