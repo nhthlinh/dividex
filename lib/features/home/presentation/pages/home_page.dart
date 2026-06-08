@@ -355,7 +355,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 onTap: () {
-                  if (expense.category == 'Transfer') return;
+                  if (expense.category?.key == 'Transfer') return;
                   context.pushNamed(
                     AppRouteNames.expenseDetail,
                     pathParameters: {"id": expense.id ?? ''},

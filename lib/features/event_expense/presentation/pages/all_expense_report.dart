@@ -296,7 +296,7 @@ List<Widget> buildGroupedExpenseList(
               ),
               const SizedBox(height: 4),
               Text(
-                (expense.totalAmount != null && expense.category != 'Transfer')
+                (expense.totalAmount != null && expense.category?.key != 'Transfer')
                     ? (expense.totalAmount! >= 0
                           ? intl.youLent
                           : intl.youBorrowed)

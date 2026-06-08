@@ -351,7 +351,7 @@ Widget expenseCard(
         ),
         const SizedBox(height: 4),
         Text(
-          (expense.totalAmount != null && expense.category != 'Transfer')
+          (expense.totalAmount != null && expense.category?.key != 'Transfer')
               ? (expense.totalAmount! >= 0 ? intl.youLent : intl.youBorrowed)
               : intl.transfer,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -362,7 +362,7 @@ Widget expenseCard(
       ],
     ),
     onTap: () {
-      if (expense.category == 'Transfer') return;
+      if (expense.category?.key == 'Transfer') return;
       context.pushNamed(
         AppRouteNames.expenseDetail,
         pathParameters: {"id": expense.id ?? ''},
